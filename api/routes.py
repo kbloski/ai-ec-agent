@@ -1,6 +1,6 @@
 from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
-
+from .knowledge.knowledge_routes import register_knowledge_routes
 
 class Routes:
 
@@ -35,3 +35,5 @@ class Routes:
         @self.router.get("/health")
         def health():
             return {"status": "ok"}
+        
+        register_knowledge_routes( self.router )
