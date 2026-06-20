@@ -5,6 +5,8 @@ import ollama
 import logging
 import time
 
+from api.routes import Routes
+
 # =========================
 # LOGGING SETUP
 # =========================
@@ -26,68 +28,64 @@ logger = logging.getLogger("ai-app")
 
 app = FastAPI()
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+routes = Routes( app );
+routes.register();
 
 messages = []
 
 
-@app.get("/", response_class=HTMLResponse)
-def home():
-    logger.info("GET / (frontend loaded)")
+# @app.get("/", response_class=HTMLResponse)
+# def home():
+#     logger.info("GET / (frontend loaded)")
 
-    with open("index.html", "r", encoding="utf-8") as f:
-        return f.read()
-
-
-# 📦 lista modeli z Ollamy
-@app.get("/models")
-def models():
-    logger.info("GET /models")
-
-    res = ollama.list()
-    model_list = [m["model"] for m in res["models"]]
-
-    logger.info(f"Available models: {model_list}")
-
-    return {"models": model_list}
+#     with open("index.html", "r", encoding="utf-8") as f:
+#         return f.read()
 
 
-@app.post("/chat")
-def chat(data: dict):
-    global messages
+# # 📦 lista modeli z Ollamy
+# @app.get("/models")
+# def models():
+#     logger.info("GET /models")
 
-    start_time = time.time()
+#     res = ollama.list()
+#     model_list = [m["model"] for m in res["models"]]
 
-    model = data["model"]
-    user_message = data["message"]
+#     logger.info(f"Available models: {model_list}")
 
-    logger.info(f"User message: {user_message}")
-    logger.info(f"Selected model: {model}")
+#     return {"models": model_list}
 
-    messages.append({"role": "user", "content": user_message})
 
-    try:
-        response = ollama.chat(
-            model=model,
-            messages=messages
-        )
+# @app.post("/chat")
+# def chat(data: dict):
+#     global messages
 
-        reply = response["message"]["content"]
+#     start_time = time.time()
 
-        messages.append({"role": "assistant", "content": reply})
+#     model = data["model"]
+#     user_message = data["message"]
 
-        duration = round(time.time() - start_time, 3)
+#     logger.info(f"User message: {user_message}")
+#     logger.info(f"Selected model: {model}")
 
-        logger.info(f"AI response: {reply}")
-        logger.info(f"Response time: {duration}s")
+#     messages.append({"role": "user", "content": user_message})
 
-        return {"response": reply}
+#     try:
+#         response = ollama.chat(
+#             model=model,
+#             messages=messages
+#         )
 
-    except Exception as e:
-        logger.error(f"Ollama error: {str(e)}")
-        return {"response": "Błąd AI"}
+#         reply = response["message"]["content"]
+
+#         messages.append({"role": "assistant", "content": reply})
+
+#         duration = round(time.time() - start_time, 3)
+
+#         logger.info(f"AI response: {reply}")
+#         logger.info(f"Response time: {duration}s")
+
+#         return {"response": reply}
+
+#     except Exception as e:
+#         logger.error(f"Ollama error: {str(e)}")
+#         return {"response": "Błąd AI"}

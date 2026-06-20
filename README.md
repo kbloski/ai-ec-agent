@@ -6,7 +6,7 @@ D:\Python\3.14\python.exe -m venv venv
 
 // Instalacja pakietow
 python.exe -m pip install -r requirements.txt
-D:\Python\3.14\python.exe -m pip install -r requirements.txt
+(w venv)
 
 // Zapisywanie nowej konfiguracji pakietow 
 pip freeze > requirements.txt (musi byc wywolane w venv)
