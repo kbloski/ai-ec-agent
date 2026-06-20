@@ -6,25 +6,36 @@ import time
 import logging
 from api.routes import Routes
 from di.container import Container
+import uvicorn
 
-def main():
-    container = Container()
+# container = Container()
+# logger = container.logger()
+# logger.error("Application Start")
 
-    logger = container.logger()
-
-    logger.info("test")
-
-
-main()
 
 # =========================
 # FASTAPI APP
 # =========================
+app = FastAPI()
+routes = Routes( app )
+routes.register()
 
-# app = FastAPI()
+if __name__ == "__main__":
 
-# routes = Routes( app );
-# routes.register();
+    # =========================
+    # DI
+    # =========================
+    container = Container()
+    logger = container.logger()
+    logger.info("Application started successfully")
+
+    uvicorn.run(
+        "main:app",
+        host="0.0.0.0",
+        port=8001,
+        reload=True
+    )
+
 
 # messages = []
 # @app.get("/", response_class=HTMLResponse)

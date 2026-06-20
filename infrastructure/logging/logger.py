@@ -1,9 +1,12 @@
 import logging
-
+import os
 
 class Logger:
     def __init__(self, name: str = "app-logger"):
         self._logger = logging.getLogger(name)
+
+        # 👉 tworzenie folderu logs jeśli nie istnieje
+        os.makedirs("logs", exist_ok=True)
 
         logging.basicConfig(
             level=logging.INFO,

@@ -3,14 +3,22 @@ from fastapi.middleware.cors import CORSMiddleware
 
 
 class Routes:
+
     def __init__(self, app: FastAPI):
         self.app = app
         self.router = APIRouter()
 
-        self.add_middleware()
+        self._add_middleware()
+        self._add_endpoints()
         self.register()
 
-    def add_middleware(self):
+    def register(self):
+        self.app.include_router(self.router)
+
+    # -------------------------
+    # MIDDLEWARE
+    # -------------------------
+    def _add_middleware(self):
         self.app.add_middleware(
             CORSMiddleware,
             allow_origins=["*"],
@@ -19,9 +27,11 @@ class Routes:
             allow_headers=["*"],
         )
 
-    def register(self):
+    # -------------------------
+    # ROUTES
+    # -------------------------
+    def _add_endpoints(self):
+
         @self.router.get("/health")
         def health():
             return {"status": "ok"}
-
-        self.app.include_router(self.router)
