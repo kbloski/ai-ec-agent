@@ -2,23 +2,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 import ollama
-import logging
 import time
-
+import logging
 from api.routes import Routes
 
-# =========================
-# LOGGING SETUP
-# =========================
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s | %(levelname)s | %(message)s",
-    handlers=[
-        logging.FileHandler("app.log", encoding="utf-8"),
-        logging.StreamHandler()
-    ]
-)
 
 logger = logging.getLogger("ai-app")
 
@@ -31,9 +19,7 @@ app = FastAPI()
 routes = Routes( app );
 routes.register();
 
-messages = []
-
-
+# messages = []
 # @app.get("/", response_class=HTMLResponse)
 # def home():
 #     logger.info("GET / (frontend loaded)")
