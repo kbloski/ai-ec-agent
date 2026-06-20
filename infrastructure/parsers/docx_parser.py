@@ -5,7 +5,7 @@ class DocxParser:
     def __init__(self, logger : Logger ):
         self.logger = logger
 
-    def extract(self, path: str) -> str:
+    def parse(self, path: str) -> str:
         self.logger.info(f"Opening file: {path}")
         doc = Document(path)
 

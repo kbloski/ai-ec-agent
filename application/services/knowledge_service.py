@@ -1,23 +1,62 @@
+from application.services.memory_service import MemoryService
+from infrastructure.services.path_service import PathService
 from infrastructure.logging.logger import Logger
 from infrastructure.parsers.docx_parser import DocxParser
+from infrastructure.parsers.txt_parser import TxtParser
 
 class KnowledgeService:
 
     def __init__(
-            self, 
-            logger : Logger,
-            docx_parser : DocxParser
-            # parser, 
-            # llm, 
-            # storage
-        ):
+        self,
+        logger: Logger,
+        docx_parser: DocxParser,
+        txt_parser: TxtParser,
+        memory_service: MemoryService,
+        path_service: PathService,
+    ):
         self.logger = logger
         self.docx_parser = docx_parser
+        self.memory_service = memory_service
+        self.path_service = path_service
+        self.txt_parser = txt_parser
 
+    def build_knowledge_from_materials_raw(self):
+        self.logger.info("Build knowledge from materials raw start")
 
-    def build_knowledge_from_materials_raw( self ):
-        self.logger.info("Bild knowledge from materials raw start")
+        # 🔹 folder RAW
+        raw_folder = self.path_service.RAW_ECOMMERCE_KNOWLEDGE
+
+        # 🔹 zbieranie plików (AI-friendly)
+        allowed_ext = {".docx", ".txt"}
+        files = [
+            f for f in raw_folder.iterdir()
+            if f.is_file() and f.suffix in allowed_ext
+        ]
+        self.logger.info(f"Found {len(files)} raw files")
+
+        # 🔹 parsing (DOCX na razie)
+        parsed_documents = []
+
+        for file in files:
+            try:
+                if file.suffix == ".docx":
+                    text = self.docx_parser.parse(file)
+                else:
+                    text = self.txt_parser.parse(file)
+
+                parsed_documents.append({
+                    "file": str(file),
+                    "content": text
+                })
+
+            except Exception as e:
+                self.logger.error(f"Failed to parse file {file}: {str(e)}")
+
+        self.logger.info(f"Parsed {len(parsed_documents)} documents")
 
         return {
-            "Dzialania sa wykonywane "
+            "message": "Knowledge build completed",
+            "files_count": len(files),
+            "parsed_count": len(parsed_documents),
+            "documents": parsed_documents
         }

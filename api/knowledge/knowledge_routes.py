@@ -10,9 +10,10 @@ def register_knowledge_routes(router: APIRouter):
 
         knowledge_service = container.knowledge_service()
 
-        knowledge_service.build_knowledge_from_materials_raw()
+        res = knowledge_service.build_knowledge_from_materials_raw()
 
         return {
             "status": "ok",
-            "knowledge_build": True
+            "knowledge_build": True,
+            "result" : res
         }
