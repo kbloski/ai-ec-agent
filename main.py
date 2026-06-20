@@ -5,19 +5,26 @@ import ollama
 import time
 import logging
 from api.routes import Routes
+from di.container import Container
+
+def main():
+    container = Container()
+
+    logger = container.logger()
+
+    logger.info("test")
 
 
-
-logger = logging.getLogger("ai-app")
+main()
 
 # =========================
 # FASTAPI APP
 # =========================
 
-app = FastAPI()
+# app = FastAPI()
 
-routes = Routes( app );
-routes.register();
+# routes = Routes( app );
+# routes.register();
 
 # messages = []
 # @app.get("/", response_class=HTMLResponse)
