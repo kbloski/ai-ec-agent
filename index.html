@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>AI Chat</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #111;
+    color: white;
+    display: flex;
+    justify-content: center;
+    padding: 30px;
+}
+
+.box { width: 600px; }
+
+.chat {
+    height: 450px;
+    overflow-y: auto;
+    background: #222;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+input, select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+}
+
+button {
+    padding: 10px;
+    width: 100%;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+    <h2>🤖 AI Chat (Ollama)</h2>
+
+    <!-- 🔽 wybór modelu -->
+    <select id="model"></select>
+
+    <div id="chat" class="chat"></div>
+
+    <input id="input" placeholder="Napisz wiadomość...">
+    <button onclick="send()">Wyślij</button>
+</div>
+
+<script>
+
+let selectedModel = "";
+let loading = false;
+
+async function loadModels() {
+    const res = await fetch("/models");
+    const data = await res.json();
+
+    const select = document.getElementById("model");
+
+    data.models.forEach(m => {
+        const opt = document.createElement("option");
+        opt.value = m;
+        opt.innerText = m;
+        select.appendChild(opt);
+    });
+
+    selectedModel = data.models[0];
+    select.onchange = () => selectedModel = select.value;
+}
+
+loadModels();
+
+function setLoading(state) {
+    loading = state;
+
+    document.getElementById("input").disabled = state;
+    document.querySelector("button").disabled = state;
+}
+
+function showTyping() {
+    const chat = document.getElementById("chat");
+    const el = document.createElement("div");
+    el.id = "typing";
+    el.innerHTML = "<i>AI pisze...</i>";
+    chat.appendChild(el);
+    chat.scrollTop = chat.scrollHeight;
+}
+
+function removeTyping() {
+    const el = document.getElementById("typing");
+    if (el) el.remove();
+}
+
+async function send() {
+    if (loading) return;
+
+    const input = document.getElementById("input");
+    const text = input.value.trim();
+    if (!text) return;
+
+    input.value = "";
+    add("Ty", text);
+
+    setLoading(true);
+    showTyping();
+
+    try {
+        const res = await fetch("/chat", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                message: text,
+                model: selectedModel
+            })
+        });
+
+        const data = await res.json();
+
+        removeTyping();
+        add("AI", data.response);
+
+    } catch (e) {
+        removeTyping();
+        add("AI", "❌ Błąd połączenia");
+    }
+
+    setLoading(false);
+}
+
+function add(who, text) {
+    const chat = document.getElementById("chat");
+    chat.innerHTML += `<div><b>${who}:</b> ${text}</div>`;
+    chat.scrollTop = chat.scrollHeight;
+}
+
+</script>
+
+</body>
+</html>
