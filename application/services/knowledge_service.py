@@ -3,6 +3,7 @@ from infrastructure.services.path_service import PathService
 from infrastructure.logging.logger import Logger
 from infrastructure.parsers.docx_parser import DocxParser
 from infrastructure.parsers.txt_parser import TxtParser
+from application.services.ollama_service import OllamaService
 
 class KnowledgeService:
 
@@ -12,6 +13,7 @@ class KnowledgeService:
         docx_parser: DocxParser,
         txt_parser: TxtParser,
         memory_service: MemoryService,
+        ollama_service: OllamaService,
         path_service: PathService,
     ):
         self.logger = logger
@@ -19,6 +21,7 @@ class KnowledgeService:
         self.memory_service = memory_service
         self.path_service = path_service
         self.txt_parser = txt_parser
+        self.ollama_service = ollama_service
 
     def build_knowledge_from_materials_raw(self):
         self.logger.info("Build knowledge from materials raw start")
@@ -52,11 +55,12 @@ class KnowledgeService:
             except Exception as e:
                 self.logger.error(f"Failed to parse file {file}: {str(e)}")
 
-        self.logger.info(f"Parsed {len(parsed_documents)} documents")
+
+
 
         return {
             "message": "Knowledge build completed",
             "files_count": len(files),
             "parsed_count": len(parsed_documents),
-            "documents": parsed_documents
+            # "documents": parsed_documents
         }

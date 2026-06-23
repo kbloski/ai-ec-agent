@@ -1,43 +1,27 @@
 from .memory_service import MemoryService
+from infrastructure.logging.logger import Logger
 import requests
 
 
 class OllamaService:
-    model = "qwen2.5:7"
+    # model = "qwen2.5:7"
+    model = "qwen3:14b"
     ollamaUrl = "http://localhost:11434/api/chat"
 
-    def __init__(self, memory_service: MemoryService):
+    def __init__(self, logger : Logger, memory_service: MemoryService):
         self.memory_service = memory_service
+        self.logger = Logger
 
     def chat(self, chat_id: str, messages: list[dict]):
-        # 1. pobierz historię z memory
-        history = self.memory_service.get(chat_id)
+        response = self._call_ollama(
+            self.memory_service.get(chat_id) + messages
+        ) 
 
-        # 2. zbuduj pełny kontekst
-        full_messages = [
-            {
-                "role": "system",
-                "content": "Jesteś asystentem AI dla ecommerce i sprzedaży."
-            },
-            *history,
-            *messages
-        ]
-
-        # 3. call do Ollama
-        response = self._call_ollama(full_messages)
-
-        # 4. zapis do memory
-        last_user_msg = next(
-            (m for m in reversed(messages) if m["role"] == "user"),
+        if user_msg := next(
+            (m["content"] for m in reversed(messages) if m["role"] == "user"),
             None
-        )
-
-        if last_user_msg:
-            self.memory_service.save(
-                chat_id,
-                last_user_msg["content"],
-                response
-            )
+        ):
+            self.memory_service.save(chat_id, user_msg, response)
 
         return response
 
