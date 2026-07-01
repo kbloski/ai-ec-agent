@@ -17,3 +17,18 @@ Aby skorzysta z venv w powershell
 Aby uruchomi aplikacje
 .\venv\Scripts\python.exe .\main.py      
 
+
+
+
+// Migracje
+alembic revision --autogenerate -m "opis zmiany" - dodawanie migracji
+alembic upgrade head --sql      - test updatu
+alembic upgrade head            - aplikowanie migracji
+
+
+alembic upgrade +1 - migracja do przodu
+alembic upgrade <revision_id> - konkretna
+alembic downgrade -1 - migracja do tylu
+
+alembic history - lista migracji
+alembic current - aktualna wersja db

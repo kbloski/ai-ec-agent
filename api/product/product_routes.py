@@ -7,8 +7,8 @@ import json
 
 def register_product_routes(router: APIRouter):
 
-    @router.get("/product/offer-generation")
-    def offer_generation():
+    @router.get("/product/analyze")
+    def product_analyze():
         container = Container()
         ollama_service = container.ollama_service()
         path_service = container.path_service()
@@ -46,12 +46,10 @@ def register_product_routes(router: APIRouter):
         # messages.append(response)
 
         return {
-            "name" : "offer-generation",
+            "name" : "product-analyze",
             "status": "ok",
             "data" : data,
             "result": {
-                # "strategy_path" : str(json_path),
-                # "workflow_json" : workflow_json,
                 "messages" : messages
             }
         }

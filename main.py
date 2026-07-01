@@ -9,6 +9,7 @@ from di.container import Container
 import uvicorn
 from dotenv import load_dotenv
 import os 
+import infrastructure.database.init_db as init_db
 
 load_dotenv()
 
@@ -20,6 +21,7 @@ routes = Routes( app )
 routes.register()
 
 if __name__ == "__main__":
+    init_db.init_db
 
     # =========================
     # DI
