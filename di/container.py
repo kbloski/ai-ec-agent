@@ -61,7 +61,9 @@ class Container(containers.DeclarativeContainer):
 
     product_service = providers.Singleton(
         ProductService,
-        logger=logger
+        logger=logger,
+        product_repository=product_repository,
+        ollama_service=ollama_service
     )
     
 

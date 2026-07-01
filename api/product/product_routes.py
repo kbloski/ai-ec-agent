@@ -56,8 +56,9 @@ def register_product_routes(router: APIRouter):
 
     @router.get("/products/{product_id}/analyze")
     def product_analyze(product_id: int):
-        return {
-            "name": "product-analyze",
-            "status": "ok",
-            "product_id": product_id,
-        }
+        container = Container()
+        product_service = container.product_service()
+
+        analyze_result = product_service.analyze_product(product_id)
+
+        return analyze_result
