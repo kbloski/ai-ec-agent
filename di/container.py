@@ -6,12 +6,17 @@ from infrastructure.logging.logger import Logger
 from infrastructure.parsers.docx_parser import DocxParser
 from infrastructure.services.path_service import PathService
 from infrastructure.parsers.txt_parser import TxtParser
+from core.settings import Settings
 
 class Container(containers.DeclarativeContainer):
 
     logger = providers.Singleton(
         Logger,
         name="app-logger"
+    )
+
+    settings = providers.Singleton(
+        Settings
     )
 
     docx_parser = providers.Singleton(
@@ -37,7 +42,8 @@ class Container(containers.DeclarativeContainer):
     ollama_service =  providers.Singleton(
         OllamaService,
         logger=logger,
-        memory_service=memory_service
+        memory_service=memory_service,
+        settings=settings
     )
 
     knowledge_service = providers.Singleton(

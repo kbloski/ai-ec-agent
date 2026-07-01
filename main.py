@@ -7,6 +7,10 @@ import logging
 from api.routes import Routes
 from di.container import Container
 import uvicorn
+from dotenv import load_dotenv
+import os 
+
+load_dotenv()
 
 # =========================
 # FASTAPI APP
@@ -23,6 +27,10 @@ if __name__ == "__main__":
     container = Container()
     logger = container.logger()
     logger.info("Application started successfully")
+
+    settings = container.settings()
+    model = settings.get_ollama_model()
+    logger.info(f"Using Ollama model: {model}")
 
     uvicorn.run(
         "main:app",

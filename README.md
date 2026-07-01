@@ -9,7 +9,7 @@ D:\Python\3.14\python.exe -m venv venv
 (w venv)
 
 // Zapisywanie nowej konfiguracji pakietow 
-.\venv\Scripts\python.exe pip freeze > requirements.txt (musi byc wywolane w venv)
+.\venv\Scripts\python.exe -m pip freeze > requirements.txt (musi byc wywolane w venv)
 
 Aby skorzysta z venv w powershell
 .\venv\Scripts\Activate.ps1     

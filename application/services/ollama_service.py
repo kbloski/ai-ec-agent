@@ -1,14 +1,15 @@
+from core.settings import Settings
 from .memory_service import MemoryService
 from infrastructure.logging.logger import Logger
 import requests
-
 
 class OllamaService:
     # model = "qwen2.5:7"
     model = "qwen3:14b"
     ollamaUrl = "http://localhost:11434/api/chat"
 
-    def __init__(self, logger : Logger, memory_service: MemoryService):
+    def __init__(self, logger : Logger, memory_service: MemoryService, settings : Settings):
+        self.model = settings.get_ollama_model()
         self.memory_service = memory_service
         self.logger = Logger
 
