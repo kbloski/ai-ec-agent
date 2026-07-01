@@ -32,3 +32,4 @@ alembic downgrade -1 - migracja do tylu
 
 alembic history - lista migracji
 alembic current - aktualna wersja db
+alembic downgrade base

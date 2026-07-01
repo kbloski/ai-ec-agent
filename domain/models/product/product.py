@@ -13,8 +13,8 @@ class Product(Base):
     name = Column(String, nullable=False)
 
     # pricing
-    buying_price = Column(Numeric(10, 2), nullable=False)  # REQUIRED
-    selling_price = Column(Numeric(10, 2), nullable=True)  # OPTIONAL
+    buying_price = Column(Numeric(10, 2), nullable=True)  # REQUIRED
+    selling_price = Column(Numeric(10, 2), nullable=False)  # OPTIONAL
 
     # (user-provided fact)
     description = Column(String, nullable=True)
