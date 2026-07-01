@@ -63,7 +63,8 @@ class Container(containers.DeclarativeContainer):
         ProductService,
         logger=logger,
         product_repository=product_repository,
-        ollama_service=ollama_service
+        ollama_service=ollama_service,
+        path_service=path_service
     )
     
 

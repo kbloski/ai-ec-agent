@@ -1,9 +1,9 @@
 from sqlalchemy import Column, Integer, String, Numeric, JSON, DateTime
 from sqlalchemy.sql import func
 from infrastructure.database.db import Base
+from common.mixins.json_serializable import JSONSerializable
 
-
-class Product(Base):
+class Product(Base, JSONSerializable):
     __tablename__ = "products"
 
     # primary key auto-increment
