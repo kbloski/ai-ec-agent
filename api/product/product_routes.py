@@ -1,55 +1,63 @@
 from fastapi import APIRouter
+from sqlalchemy import Column
 
 from di.container import Container
 from domain.models.ollama.ollama_message import OllamaMessage
 from domain.enums.ollama.ollama_message_role import OllamaMessageRole
+from domain.models.product.product import Product
 import json
 
 def register_product_routes(router: APIRouter):
-
-    @router.get("/product/analyze")
-    def product_analyze():
+    @router.get("/products/delete")
+    def delete_all_products():
         container = Container()
-        ollama_service = container.ollama_service()
-        path_service = container.path_service()
+        product_repository = container.product_repository()
 
-        data = []
+        deleted_count = product_repository.delete_all()
+        return {"deleted_count": deleted_count}
 
-        workflowPath = path_service.BASE_DIR / "infrastructure/ai/workflows/offer_generation.json"
-        with open(workflowPath, "r", encoding="utf-8") as f:
-            workflow_json = json.load(f)
-        
-        data.append("Workflow JSON loaded successfully.")
+    @router.get("/products")
+    def get_all_products():
+        container = Container()
+        product_repository = container.product_repository()
 
-        system_prompt = workflow_json["config"]["system_prompt"]
-        messages = [
-            OllamaMessage(
-                role=OllamaMessageRole.SYSTEM,
-                content=system_prompt
-            ),
-            OllamaMessage(
-                role=OllamaMessageRole.USER,
-                content="Powiedz cześć do mnie i to kim jestes."
-            ),
-        ]
+        products = product_repository.get_all()
+        return products
 
-        messages.append(ollama_service.chat(messages))
 
-        # messages.append(assistant_message)
-        # messages.append(OllamaMessage(
-        #     role=OllamaMessageRole.USER,
-        #     content="Czy lubisz mnie?"
-        # ))
+    @router.get("/products/add")
+    def add_product():
+        container = Container()
+        product_repository = container.product_repository()
 
-        # response = ollama_service.chat(messages)
+        product = Product(
+            name="Prosty blender kuchenny",
+            buying_price=120,
+            description="Blender do robienia smoothie i jedzenia. Czasem działa szybko, czasem wolno.",
+            target_audience=[
+                "ludzie, którzy nie lubią gotować",
+                "studenci",
+                "osoby zmęczone po pracy",
+                "osoby, które chcą jeść zdrowiej"
+            ],
+            pain_points=[
+                "brak czasu na gotowanie",
+                "nie chce się myć wielu naczyń",
+                "chęć szybkiego jedzenia",
+                "brak pomysłów co zjeść",
+                "zmęczenie po całym dniu"
+            ]
+        )
 
-        # messages.append(response)
+        product = product_repository.create(product)
 
+        return product
+
+
+    @router.get("/products/{product_id}/analyze")
+    def product_analyze(product_id: int):
         return {
-            "name" : "product-analyze",
+            "name": "product-analyze",
             "status": "ok",
-            "data" : data,
-            "result": {
-                "messages" : messages
-            }
+            "product_id": product_id,
         }

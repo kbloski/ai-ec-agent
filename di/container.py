@@ -4,11 +4,15 @@ from application.services.ollama_service import OllamaService
 from application.services.product_service import ProductService
 from infrastructure.logging.logger import Logger
 from infrastructure.parsers.docx_parser import DocxParser
+from infrastructure.repositories.products_repository import ProductRepository
 from infrastructure.services.path_service import PathService
 from infrastructure.parsers.txt_parser import TxtParser
 from core.settings import Settings
-
+from infrastructure.database.db import SessionLocal
 class Container(containers.DeclarativeContainer):
+    db = providers.Factory(
+        SessionLocal
+    )
 
     logger = providers.Singleton(
         Logger,
@@ -34,6 +38,11 @@ class Container(containers.DeclarativeContainer):
         logger=logger,
     )
 
+    product_repository =  providers.Singleton(
+        ProductRepository,
+        logger=logger,
+        db=db
+    )
 
     ollama_service =  providers.Singleton(
         OllamaService,
