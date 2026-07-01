@@ -21,7 +21,7 @@ routes = Routes( app )
 routes.register()
 
 if __name__ == "__main__":
-    init_db.init_db
+    init_db.init_db()
 
     # =========================
     # DI

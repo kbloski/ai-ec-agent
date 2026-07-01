@@ -1,16 +1,28 @@
 from sqlalchemy import Column, Integer, String, Numeric, JSON, DateTime
-from datetime import datetime
+from sqlalchemy.sql import func
 from infrastructure.database.db import Base
+
 
 class Product(Base):
     __tablename__ = "products"
 
-    id = Column(Integer, primary_key=True)
+    # primary key auto-increment
+    id = Column(Integer, primary_key=True, autoincrement=True)
+
+    # basic info
     name = Column(String, nullable=False)
-    buying_price = Column(Numeric, nullable=True)
 
-    raw_description = Column(String, nullable=True)
-    raw_problems = Column(JSON, nullable=True)
-    raw_audience = Column(JSON, nullable=True)
+    # pricing
+    buying_price = Column(Numeric(10, 2), nullable=False)  # REQUIRED
+    selling_price = Column(Numeric(10, 2), nullable=True)  # OPTIONAL
 
-    # created_at = Column(DateTime, default=datetime.utcnow)
+    # (user-provided fact)
+    description = Column(String, nullable=True)
+
+    # (user-provided fact)
+    target_audience = Column(JSON, nullable=True)  # list[str]
+    pain_points = Column(JSON, nullable=True)      # list[str]
+
+    # timestamps
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
