@@ -25,17 +25,21 @@ if __name__ == "__main__":
     # DI
     # =========================
     container = Container()
-    logger = container.logger()
-    logger.info("Application started successfully")
-
     settings = container.settings()
+    logger = container.logger()
+
+    host = settings.get_host()
+    port = settings.get_port()
     model = settings.get_ollama_model()
+
+
+    logger.info(f"Application started successfully url=http://{host}:{port}")
     logger.info(f"Using Ollama model: {model}")
 
     uvicorn.run(
         "main:app",
-        host="0.0.0.0",
-        port=8001,
+        host=host,
+        port=port,
         reload=True
     )
 

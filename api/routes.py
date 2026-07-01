@@ -1,6 +1,8 @@
 from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 from .knowledge.knowledge_routes import register_knowledge_routes
+from .test.test_routes import register_test_routes
+from .product.product_routes import register_product_routes
 
 class Routes:
 
@@ -32,8 +34,13 @@ class Routes:
     # -------------------------
     def _add_endpoints(self):
 
-        @self.router.get("/health")
-        def health():
-            return {"status": "ok"}
+        @self.router.get("/")
+        def home():
+            return {
+                "status": "ok",
+                "running": True
+            }
         
         register_knowledge_routes( self.router )
+        register_test_routes( self.router )
+        register_product_routes( self.router )

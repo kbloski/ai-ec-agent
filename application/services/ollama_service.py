@@ -1,39 +1,37 @@
-from core.settings import Settings
-from .memory_service import MemoryService
+from ollama import Client
 from infrastructure.logging.logger import Logger
-import requests
+from core.settings import Settings
+
+from domain.models.ollama.ollama_message import OllamaMessage
+from domain.enums.ollama.ollama_message_role import OllamaMessageRole
 
 class OllamaService:
-    # model = "qwen2.5:7"
-    model = "qwen3:14b"
-    ollamaUrl = "http://localhost:11434/api/chat"
-
-    def __init__(self, logger : Logger, memory_service: MemoryService, settings : Settings):
+    def __init__(self, logger: Logger, settings: Settings):
+        self.logger = logger
         self.model = settings.get_ollama_model()
-        self.memory_service = memory_service
-        self.logger = Logger
+        self.num_ctx = settings.get_ollama_num_ctx()
+        self.temperature = settings.get_ollama_temperature()
 
-    def chat(self, chat_id: str, messages: list[dict]):
-        response = self._call_ollama(
-            self.memory_service.get(chat_id) + messages
-        ) 
-
-        if user_msg := next(
-            (m["content"] for m in reversed(messages) if m["role"] == "user"),
-            None
-        ):
-            self.memory_service.save(chat_id, user_msg, response)
-
-        return response
-
-    def _call_ollama(self, messages):
-        res = requests.post(
-            self.ollamaUrl,
-            json={
-                "model": self.model,
-                "messages": messages,
-                "stream": False
-            }
+        self.client = Client(
+            host=settings.get_ollama_url()
         )
 
-        return res.json()["message"]["content"]
+    def chat(self, messages: list[OllamaMessage]) -> OllamaMessage:
+        try:
+            response = self.client.chat(
+                model=self.model,
+                messages=[message.to_dict() for message in messages],
+                options={
+                    "num_ctx": self.num_ctx,
+                    "temperature": self.temperature,
+                },
+            )
+
+            return OllamaMessage(
+                role=OllamaMessageRole.ASSISTANT,
+                content=response["message"]["content"]
+            )
+
+        except Exception as e:
+            self.logger.error(f"Ollama chat error: {e}")
+            raise

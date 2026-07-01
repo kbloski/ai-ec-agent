@@ -1,7 +1,7 @@
 from dependency_injector import containers, providers
 from application.services.knowledge_service import KnowledgeService
-from application.services.memory_service import MemoryService
 from application.services.ollama_service import OllamaService
+from application.services.product_service import ProductService
 from infrastructure.logging.logger import Logger
 from infrastructure.parsers.docx_parser import DocxParser
 from infrastructure.services.path_service import PathService
@@ -34,15 +34,10 @@ class Container(containers.DeclarativeContainer):
         logger=logger,
     )
 
-    memory_service = providers.Singleton(
-        MemoryService,
-        logger=logger,
-    )
 
     ollama_service =  providers.Singleton(
         OllamaService,
         logger=logger,
-        memory_service=memory_service,
         settings=settings
     )
 
@@ -51,8 +46,13 @@ class Container(containers.DeclarativeContainer):
         logger=logger,
         docx_parser=docx_parser,
         txt_parser=txt_parser,
-        memory_service=memory_service,
         path_service=path_service,
         ollama_service=ollama_service
     )
+
+    product_service = providers.Singleton(
+        ProductService,
+        logger=logger
+    )
+    
 

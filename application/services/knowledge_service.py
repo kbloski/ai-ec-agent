@@ -1,4 +1,3 @@
-from application.services.memory_service import MemoryService
 from infrastructure.services.path_service import PathService
 from infrastructure.logging.logger import Logger
 from infrastructure.parsers.docx_parser import DocxParser
@@ -12,13 +11,11 @@ class KnowledgeService:
         logger: Logger,
         docx_parser: DocxParser,
         txt_parser: TxtParser,
-        memory_service: MemoryService,
         ollama_service: OllamaService,
         path_service: PathService,
     ):
         self.logger = logger
         self.docx_parser = docx_parser
-        self.memory_service = memory_service
         self.path_service = path_service
         self.txt_parser = txt_parser
         self.ollama_service = ollama_service
