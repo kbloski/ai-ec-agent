@@ -12,9 +12,7 @@ from application.handlers.products.get_products import get_products
 def register_products_routes(router: APIRouter):
     @router.get("/products")
     def get_all_products(page: int = 1):
-        return get_products(
-            page=page
-        )
+        return get_products( page=page )
         
     # @router.get("/products/{id}/delete")
     # def delete_all_products(id : str):
@@ -32,21 +30,6 @@ def register_products_routes(router: APIRouter):
 
 
 
-
-    # @router.get("/products/seeds")
-    # def add_product(mock: bool = False):
-    #     container = Container()
-    #     product_repository = container.product_repository()
-    #     product_service = container.product_service()
-
-    #     product = None
-    #     if mock:
-    #         seed_products()
-    #     else:
-    #         return "Not implemented yet"
-
-    #     product = product_repository.create(product)
-    #     return product
 
 
     # @router.get("/products/{product_id}/analyze")
