@@ -14,6 +14,10 @@ D:\Python\3.14\python.exe -m venv venv
 Aby skorzysta z venv w powershell
 .\venv\Scripts\Activate.ps1     
 
+Aby skorzysta z venv w ubuntu terminal
+source .\venv\bin\activate
+
+
 Aby uruchomi aplikacje
 .\venv\Scripts\python.exe .\main.py      
 
