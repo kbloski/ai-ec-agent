@@ -8,7 +8,7 @@ from domain.enums.ollama.ollama_message_role import OllamaMessageRole
 class OllamaService:
     def __init__(self, logger: Logger, settings: Settings):
         self.logger = logger
-        self.model = settings.get_ollama_model()
+        self.llm_model = settings.get_ollama_llm_model()
         self.num_ctx = settings.get_ollama_num_ctx()
         self.temperature = settings.get_ollama_temperature()
 
@@ -19,7 +19,7 @@ class OllamaService:
     def chat(self, messages: list[OllamaMessage]) -> OllamaMessage:
         try:
             response = self.client.chat(
-                model=self.model,
+                model=self.llm_model,
                 messages=[message.to_dict() for message in messages],
                 options={
                     "num_ctx": self.num_ctx,

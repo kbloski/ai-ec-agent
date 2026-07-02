@@ -32,7 +32,7 @@ if __name__ == "__main__":
 
     host = settings.get_host()
     port = settings.get_port()
-    model = settings.get_ollama_model()
+    model = settings.get_ollama_llm_model()
 
 
     logger.info(f"Application started successfully url=http://{host}:{port}")
