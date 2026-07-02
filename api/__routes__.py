@@ -1,8 +1,6 @@
 from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
-from .knowledge.knowledge_routes import register_knowledge_routes
-from .test.test_routes import register_test_routes
-from .product.product_routes import register_product_routes
+from api.routes.products_routes import register_products_routes
 
 class Routes:
 
@@ -41,6 +39,6 @@ class Routes:
                 "running": True
             }
         
-        register_knowledge_routes( self.router )
-        register_test_routes( self.router )
-        register_product_routes( self.router )
+        # register_knowledge_routes( self.router )
+        # register_test_routes( self.router )
+        register_products_routes( self.router )

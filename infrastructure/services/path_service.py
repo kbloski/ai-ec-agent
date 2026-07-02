@@ -7,7 +7,11 @@ class PathService:
         ):
 
         self.BASE_DIR = Path(__file__).resolve().parent.parent.parent
-        self.DATA_DIR = self.BASE_DIR / "data"
 
-        self.RAW_ECOMMERCE_KNOWLEDGE = self.DATA_DIR / "raw" / "ecommerce_knowledge"
-        self.ECOMMERCE_KNOWLEDGE = self.DATA_DIR / "knowledge" / "ecommerce"
+        self.UPLOADS_DEV = self.BASE_DIR / "uploads" / "dev"
+        self.UPLOADS_PROD = self.BASE_DIR / "uploads" / "prod"
+        
+        # self.DATA_DIR = self.BASE_DIR / "data"
+        # self.RAW_ECOMMERCE_KNOWLEDGE = self.DATA_DIR / "raw" / "ecommerce_knowledge"
+        # self.ECOMMERCE_KNOWLEDGE = self.DATA_DIR / "knowledge" / "ecommerce"
+

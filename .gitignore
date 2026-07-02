@@ -1,6 +1,8 @@
-# Custom logs
+# Custom
 logs/
 app.db
+uploads/*
+!uploads/dev/
 
 # Environments
 # .env

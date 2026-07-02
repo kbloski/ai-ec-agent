@@ -4,7 +4,7 @@ from fastapi.responses import HTMLResponse
 import ollama
 import time
 import logging
-from api.routes import Routes
+from api.__routes__ import Routes
 from di.container import Container
 import uvicorn
 from dotenv import load_dotenv
