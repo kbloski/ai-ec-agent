@@ -17,8 +17,8 @@ class OffersRepository:
         return offer
 
     # 🔍 GET BY ID
-    def get_by_id(self, offer_id: int) -> Optional[Offer]:
-        return self.db.query(Offer).filter(Offer.id == offer_id).first()
+    def get_by_id(self, id: int) -> Optional[Offer]:
+        return self.db.query(Offer).filter(Offer.id == id).first()
 
     def search(self, page: int = 1, page_size: int = 20) -> PaginatedResult[Offer]:
             page = max(1, page)

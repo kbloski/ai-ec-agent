@@ -22,7 +22,7 @@ def seed_full_offer():
                 new_offer = Offer(
                     name=payload["name"],
                     buying_price=payload["buying_price"],
-                    description=payload["description"],
+                    details=payload["details"],
                     target_audience=payload["target_audience"],
                     pain_points=payload["pain_points"],
                 )

@@ -18,7 +18,7 @@ class Offer(Base, JSONSerializable):
     selling_price = Column(Numeric(10, 2), nullable=True)  # OPTIONAL
 
     # (user-provided fact)
-    description = Column(String, nullable=True)
+    details = Column(String, nullable=True)
 
     # (user-provided fact)
     target_audience = Column(JSON, nullable=True)  # list[str]

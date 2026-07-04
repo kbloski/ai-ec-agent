@@ -2,18 +2,20 @@ from fastapi import APIRouter
 
 from application.handlers.offers.get_offers import get_offers
 from application.handlers.offers.seed_full_offer import seed_full_offer
-
+from application.handlers.offers.get_offer import get_offer_handler
 
 def register_offers_routes(router: APIRouter):
     @router.get("/offers")
     def offers(page: int = 1):
         return get_offers( page=page )
         
-    
     @router.get("/offers/seed-full")
     def seed_full(page: int = 1):
         return seed_full_offer()
 
+    @router.get("/offers/{id}")
+    def get_offer_details(id: int):
+        return get_offer_handler(id=id)
 
     # @router.get("/products/{product_id}/analyze")
     # def product_analyze(product_id: int):
