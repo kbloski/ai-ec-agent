@@ -1,9 +1,9 @@
 from infrastructure.logging.logger import Logger
-from infrastructure.repositories.products_repository import ProductRepository
+from infrastructure.repositories.offers_repository import OffersRepository
 from infrastructure.services.path_service import PathService
 from .ollama_service import OllamaService
 import json
-from domain.models.ollama.ollama_message import OllamaMessage
+from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
 from domain.enums.ollama.ollama_message_role import OllamaMessageRole
 
 
@@ -12,12 +12,12 @@ class ProductService:
         self,
         logger: Logger,
         path_service: PathService,
-        product_repository: ProductRepository,
+        offers_repository: OffersRepository,
         ollama_service: OllamaService,
     ):
         self.logger = logger
         self.path_service = path_service
-        self.product_repo = product_repository
+        self.offers_repo = offers_repository
         self.ollama_service = ollama_service
 
         self.ai_workflows_path = self.path_service.BASE_DIR / "infrastructure/ai/workflows"
@@ -25,7 +25,7 @@ class ProductService:
     def analyze_product(self, product_id: int):
         self.logger.info("Analyzing product data...")
 
-        product = self.product_repo.get_by_id(product_id)
+        product = self.offers_repo.get_by_id(product_id)
         if not product:
             self.logger.error(f"Product with ID {product_id} not found.")
             return {"error": f"Product with ID {product_id} not found."}
@@ -47,15 +47,15 @@ class ProductService:
 
         # --- build chat ---
         chat = [
-            OllamaMessage(
+            LlmOllamaMessage(
                 role=OllamaMessageRole.SYSTEM,
                 content=workflow_config.get("system_prompt", "")
             ),
-            OllamaMessage(
+            LlmOllamaMessage(
                 role=OllamaMessageRole.USER,
                 content="product_data: " + json.dumps(product.to_dict(), default=str)
             ),
-            OllamaMessage(
+            LlmOllamaMessage(
                 role=OllamaMessageRole.USER,
                 content=input_prompt
             )

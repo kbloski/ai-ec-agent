@@ -2,9 +2,10 @@ from sqlalchemy import Column, Integer, String, Numeric, JSON, DateTime
 from sqlalchemy.sql import func
 from infrastructure.database.db import Base
 from common.mixins.json_serializable import JSONSerializable
+from domain.enums.table_name import TableName
 
-class Product(Base, JSONSerializable):
-    __tablename__ = "products"
+class Offer(Base, JSONSerializable):
+    __tablename__ = TableName.OFFERS
 
     # primary key auto-increment
     id = Column(Integer, primary_key=True, autoincrement=True)

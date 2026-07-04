@@ -13,5 +13,12 @@
     "zachodzące drzewa i krzewy na działce",
     "używanie siekiery co jest męczące",
     "ludzie starsi nie mogą już dzwigać ciężkiej siekiery"
-  ]
+  ],
+  "offer_items": [
+  {
+    "name": "Akumulatorowa minipiła łańcuchowa",
+    "quantity": 1,
+    "details": "Wykonana z wytrzymałego tworzywa sztucznego ABS oraz stali szybkotnącej."
+  }
+]
 }

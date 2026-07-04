@@ -1,33 +1,33 @@
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 from typing import List, Optional
-from domain.models.product.product import Product
+from domain.models.offers.offer import Offer
 from infrastructure.logging.logger import Logger
 from common.results.paginated_result import PaginatedResult
 
-class ProductRepository:
+class OffersRepository:
     def __init__(self, logger : Logger, db: Session):
         self.db = db
 
     # ➕ CREATE
-    def create(self, product : Product) -> Product:
-        self.db.add(product)
+    def create(self, offer : Offer) -> Offer:
+        self.db.add(offer)
         self.db.commit()
-        self.db.refresh(product)
-        return product
+        self.db.refresh(offer)
+        return offer
 
     # 🔍 GET BY ID
-    def get_by_id(self, product_id: int) -> Optional[Product]:
-        return self.db.query(Product).filter(Product.id == product_id).first()
+    def get_by_id(self, offer_id: int) -> Optional[Offer]:
+        return self.db.query(Offer).filter(Offer.id == offer_id).first()
 
-    def search(self, page: int = 1, page_size: int = 20) -> PaginatedResult[Product]:
+    def search(self, page: int = 1, page_size: int = 20) -> PaginatedResult[Offer]:
             page = max(1, page)
             page_size = max(1, page_size)
 
-            total_items = self.db.query(func.count(Product.id)).scalar()
+            total_items = self.db.query(func.count(Offer.id)).scalar()
 
             items = (
-                self.db.query(Product)
+                self.db.query(Offer)
                 .offset((page - 1) * page_size)
                 .limit(page_size)
                 .all()
@@ -41,31 +41,31 @@ class ProductRepository:
             )
 
     # # ✏️ UPDATE
-    # def update(self, product_id: int, name: str = None, price: float = None) -> Optional[Product]:
-    #     product = self.get_by_id(product_id)
-    #     if not product:
+    # def update(self, offer_id: int, name: str = None, price: float = None) -> Optional[offer]:
+    #     offer = self.get_by_id(offer_id)
+    #     if not offer:
     #         return None
 
     #     if name is not None:
-    #         product.name = name
+    #         offer.name = name
     #     if price is not None:
-    #         product.price = price
+    #         offer.price = price
 
     #     self.db.commit()
-    #     self.db.refresh(product)
-    #     return product
+    #     self.db.refresh(offer)
+    #     return offer
 
     # # ❌ DELETE
-    # def delete(self, product_id: int) -> bool:
-    #     product = self.get_by_id(product_id)
-    #     if not product:
+    # def delete(self, offer_id: int) -> bool:
+    #     offer = self.get_by_id(offer_id)
+    #     if not offer:
     #         return False
 
-    #     self.db.delete(product)
+    #     self.db.delete(offer)
     #     self.db.commit()
     #     return True
 
     def delete_all(self) -> int:
-        deleted = self.db.query(Product).delete()
+        deleted = self.db.query(Offer).delete()
         self.db.commit()
         return deleted

@@ -1,19 +1,28 @@
 from fastapi import APIRouter
-from sqlalchemy import Column
-from di.container import Container
-from domain.models.ollama.ollama_message import OllamaMessage
-from domain.enums.ollama.ollama_message_role import OllamaMessageRole
-from domain.models.product.product import Product
-import json
 
-from application.handlers.products.get_products import get_products
+from application.handlers.offers.get_offers import get_offers
+from application.handlers.offers.seed_full_offer import seed_full_offer
 
 
-def register_products_routes(router: APIRouter):
-    @router.get("/products")
-    def get_all_products(page: int = 1):
-        return get_products( page=page )
+def register_offers_routes(router: APIRouter):
+    @router.get("/offers")
+    def offers(page: int = 1):
+        return get_offers( page=page )
         
+    
+    @router.get("/offers/seed-full")
+    def seed_full(page: int = 1):
+        return seed_full_offer()
+
+
+    # @router.get("/products/{product_id}/analyze")
+    # def product_analyze(product_id: int):
+    #     container = Container()
+    #     product_service = container.product_service()
+
+    #     analyze_result = product_service.analyze_product(product_id)
+
+    #     return analyze_result
     # @router.get("/products/{id}/delete")
     # def delete_all_products(id : str):
     #     deleted_count = 0

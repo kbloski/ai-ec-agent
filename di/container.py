@@ -4,7 +4,8 @@ from application.services.ollama_service import OllamaService
 from application.services.product_service import ProductService
 from infrastructure.logging.logger import Logger
 from infrastructure.parsers.docx_parser import DocxParser
-from infrastructure.repositories.products_repository import ProductRepository
+from infrastructure.repositories.offers_repository import OffersRepository
+from infrastructure.repositories.offer_items_repository import OfferItemsRepository
 from infrastructure.services.path_service import PathService
 from infrastructure.parsers.txt_parser import TxtParser
 from core.settings import Settings
@@ -38,8 +39,14 @@ class Container(containers.DeclarativeContainer):
         logger=logger,
     )
 
-    product_repository =  providers.Singleton(
-        ProductRepository,
+    offers_repository =  providers.Singleton(
+        OffersRepository,
+        logger=logger,
+        db=db
+    )
+
+    offer_items_repository =  providers.Singleton(
+        OfferItemsRepository,
         logger=logger,
         db=db
     )
@@ -62,7 +69,7 @@ class Container(containers.DeclarativeContainer):
     product_service = providers.Singleton(
         ProductService,
         logger=logger,
-        product_repository=product_repository,
+        offers_repository=offers_repository,
         ollama_service=ollama_service,
         path_service=path_service
     )

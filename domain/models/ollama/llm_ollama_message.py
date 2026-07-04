@@ -1,7 +1,7 @@
 from ...enums.ollama.ollama_message_role import OllamaMessageRole
 
 
-class OllamaMessage:
+class LlmOllamaMessage:
     def __init__(self, role: OllamaMessageRole, content: str):
         self.role = role
         self.content = content

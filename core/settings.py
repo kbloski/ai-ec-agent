@@ -6,6 +6,7 @@ load_dotenv()
 class Settings:
     def __init__(self):
         self._ollama_llm_model = os.getenv("OLLAMA_LLM_MODEL")
+        self._ollama_vlm_model = os.getenv("OLLAMA_VLM_MODEL")
 
     def get_host(self) -> str:
         return os.getenv("HOST", "0.0.0.0")
@@ -15,7 +16,7 @@ class Settings:
 
     def get_ollama_llm_model(self) -> str:
         return self._ollama_llm_model
-
+    
     def get_ollama_url(self) -> str:
         return os.getenv("OLLAMA_URL", "http://localhost:11434")
     
