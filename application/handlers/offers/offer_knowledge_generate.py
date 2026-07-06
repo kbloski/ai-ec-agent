@@ -5,6 +5,10 @@ from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
 from domain.enums.ollama.ollama_message_role import OllamaMessageRole
 
 
+# =====================================================
+# BASE ROLE
+# =====================================================
+
 BASE_SYSTEM_PROMPT = """
 You are a senior product strategist AI specialized in product analysis,
 market research, customer psychology, and marketing strategy.
@@ -34,12 +38,17 @@ Do not add explanations outside JSON.
 """
 
 
-PRODUCT_UNDERSTANDING_PROMPT = """
-Analyze the product information provided.
+# =====================================================
+# STEP 1
+# =====================================================
 
-Your goal is to build a deep understanding of the product.
+PRODUCT_UNDERSTANDING_PROMPT = """
+Analyze the product information.
+
+Build a deep understanding of the product.
 
 Analyze:
+
 - What the product is
 - What problem it solves
 - Who it is designed for
@@ -51,7 +60,8 @@ Analyze:
 Focus only on understanding the product.
 Do not generate customer insights yet.
 
-Return JSON:
+Return:
+
 {
     "product_summary": "",
     "problem_solved": "",
@@ -64,36 +74,48 @@ Return JSON:
 """
 
 
-MARKET_ANALYSIS_PROMPT = """
-Analyze the market context of the product.
+# =====================================================
+# STEP 2
+# =====================================================
 
-Use the product understanding provided.
+MARKET_ANALYSIS_PROMPT = """
+Analyze the market context.
+
+Use product understanding.
 
 Analyze:
+
 - Market category
-- Potential customer segments
+- Customer segments
 - Competitive positioning
 - Market opportunities
-- Possible risks
-- Reasons why customers may choose this product
+- Market risks
+- Alternative solutions customers currently use
 
-Return JSON:
+Return:
+
 {
     "market_category": "",
     "customer_segments": [],
     "competitive_positioning": "",
+    "alternatives": [],
     "market_opportunities": [],
     "market_risks": []
 }
 """
 
 
-CUSTOMER_ANALYSIS_PROMPT = """
-Analyze customer psychology for this product.
+# =====================================================
+# STEP 3
+# =====================================================
 
-Use the product understanding and market analysis.
+CUSTOMER_ANALYSIS_PROMPT = """
+Analyze customer psychology.
+
+Use product understanding and market analysis.
 
 Identify:
+
 - Customer motivations
 - Buying triggers
 - Emotional drivers
@@ -101,7 +123,8 @@ Identify:
 - Decision factors
 - Reasons preventing purchase
 
-Return JSON:
+Return:
+
 {
     "customer_motivations": [],
     "buying_triggers": [],
@@ -112,35 +135,136 @@ Return JSON:
 """
 
 
-INSIGHT_GENERATION_PROMPT = """
-Generate actionable product insights.
+# =====================================================
+# STEP 4
+# =====================================================
+
+ICP_GENERATION_PROMPT = """
+Generate Ideal Customer Profiles.
+
+Create realistic buyer profiles.
+
+Analyze:
+
+- Who they are
+- Their situation
+- Their needs
+- Their problems
+- Why they buy
+- Purchase triggers
+
+Avoid generic audiences.
+
+Return:
+
+{
+    "customer_profiles": [
+        {
+            "name": "",
+            "description": "",
+            "situation": "",
+            "needs": [],
+            "problems": [],
+            "purchase_trigger": "",
+            "buying_motivation": ""
+        }
+    ]
+}
+"""
+
+
+# =====================================================
+# STEP 5
+# =====================================================
+
+JTBD_ANALYSIS_PROMPT = """
+Analyze Jobs To Be Done.
+
+Understand why customers hire this product.
+
+Identify:
+
+- Functional jobs
+- Emotional jobs
+- Social jobs
+- Desired outcomes
+
+Return:
+
+{
+    "jobs_to_be_done": [
+        {
+            "job": "",
+            "situation": "",
+            "motivation": "",
+            "desired_outcome": ""
+        }
+    ]
+}
+"""
+
+
+# =====================================================
+# STEP 6
+# =====================================================
+
+MARKETING_ANGLES_PROMPT = """
+Create marketing angles.
 
 Use:
+
 - Product understanding
-- Market analysis
 - Customer psychology
+- JTBD
 
 Generate:
 
-1. Target audience:
-Who is most likely to buy this product.
+- Selling angles
+- Emotional hooks
+- Customer-focused messages
 
-2. Pain points:
-Problems, frustrations, and unmet needs.
+Return:
 
-3. Desires:
-Expected outcomes, goals, and motivations.
+{
+    "marketing_angles": [
+        {
+            "angle": "",
+            "customer_problem": "",
+            "message": "",
+            "reason_it_works": ""
+        }
+    ]
+}
+"""
 
-4. Objections:
-Reasons customers may hesitate before purchase.
 
-Rules:
-- Do not repeat previous analysis verbatim
-- Generate specific insights
-- Include reasonable assumptions when useful
-- Focus on marketing usefulness
+# =====================================================
+# STEP 7
+# =====================================================
 
-Return JSON:
+INSIGHT_GENERATION_PROMPT = """
+Generate final product insights.
+
+Use:
+
+- Product understanding
+- Market analysis
+- Customer psychology
+- Customer profiles
+- JTBD
+- Marketing angles
+
+Generate:
+
+1. Target audience
+2. Pain points
+3. Desires
+4. Objections
+5. Buying triggers
+
+
+Return:
+
 {
     "target_audience": [
         {
@@ -148,19 +272,29 @@ Return JSON:
             "score": 0.0
         }
     ],
+
     "pain_points": [
         {
             "value": "",
             "score": 0.0
         }
     ],
+
     "desires": [
         {
             "value": "",
             "score": 0.0
         }
     ],
+
     "objections": [
+        {
+            "value": "",
+            "score": 0.0
+        }
+    ],
+
+    "buying_triggers": [
         {
             "value": "",
             "score": 0.0
@@ -170,7 +304,12 @@ Return JSON:
 """
 
 
+# =====================================================
+# LLM CALL
+# =====================================================
+
 def call_llm(ollama_service, prompt):
+
     chat = [
         LlmOllamaMessage(
             role=OllamaMessageRole.SYSTEM,
@@ -186,53 +325,70 @@ def call_llm(ollama_service, prompt):
 
     try:
         return json.loads(response.content)
+
     except Exception:
         raise ValueError(
-            f"Invalid JSON from LLM: {response.content}"
+            f"Invalid JSON from LLM:\n{response.content}"
         )
 
 
+# =====================================================
+# MAIN PIPELINE
+# =====================================================
+
 def offer_knowledge_generate_handler(offer_id: int):
+
     container = Container()
 
     offers_repository = container.offers_repository()
     offer_items_repository = container.offer_items_repository()
     ollama_service = container.ollama_service()
 
-    # 1. Load offer data
+
+    # ----------------------------
+    # LOAD DATA
+    # ----------------------------
+
     offer = offers_repository.get_by_id(offer_id)
 
     if not offer:
-        raise ValueError(f"Offer {offer_id} not found")
+        raise ValueError(
+            f"Offer {offer_id} not found"
+        )
 
-    offer_items = offer_items_repository.get_by_offer_id(offer_id)
 
-    offer_json = offer.to_dict() if hasattr(offer, "to_dict") else {
-        "id": offer.id,
-        "name": offer.name,
-        "buying_price": float(offer.buying_price),
-        "selling_price": float(offer.selling_price)
-            if offer.selling_price else None,
-        "details": offer.details,
-        "target_audience": offer.target_audience,
-        "pain_points": offer.pain_points,
-    }
+    offer_items = offer_items_repository.get_by_offer_id(
+        offer_id
+    )
+
+
+    offer_json = (
+        offer.to_dict()
+        if hasattr(offer, "to_dict")
+        else {
+            "id": offer.id,
+            "name": offer.name,
+            "details": offer.details,
+            "selling_price": float(offer.selling_price)
+                if offer.selling_price else None,
+        }
+    )
+
 
     offer_json["offer_items"] = [
         item.to_dict()
         if hasattr(item, "to_dict")
         else {
-            "id": item.id,
             "name": item.name,
             "details": item.details,
-            "quantity": getattr(item, "quantity", None),
         }
         for item in offer_items
     ]
 
-    # ----------------------------------
-    # STEP 1 - PRODUCT UNDERSTANDING
-    # ----------------------------------
+
+    # ----------------------------
+    # 1 PRODUCT UNDERSTANDING
+    # ----------------------------
 
     product_understanding = call_llm(
         ollama_service,
@@ -248,14 +404,14 @@ TASK:
     )
 
 
-    # ----------------------------------
-    # STEP 2 - MARKET ANALYSIS
-    # ----------------------------------
+    # ----------------------------
+    # 2 MARKET ANALYSIS
+    # ----------------------------
 
     market_analysis = call_llm(
         ollama_service,
         f"""
-PRODUCT UNDERSTANDING:
+PRODUCT:
 
 {json.dumps(product_understanding, ensure_ascii=False)}
 
@@ -266,22 +422,20 @@ TASK:
     )
 
 
-    # ----------------------------------
-    # STEP 3 - CUSTOMER PSYCHOLOGY
-    # ----------------------------------
+    # ----------------------------
+    # 3 CUSTOMER PSYCHOLOGY
+    # ----------------------------
 
     customer_analysis = call_llm(
         ollama_service,
         f"""
-PRODUCT UNDERSTANDING:
+PRODUCT:
 
 {json.dumps(product_understanding, ensure_ascii=False)}
 
-
-MARKET ANALYSIS:
+MARKET:
 
 {json.dumps(market_analysis, ensure_ascii=False)}
-
 
 TASK:
 
@@ -290,27 +444,102 @@ TASK:
     )
 
 
-    # ----------------------------------
-    # STEP 4 - INSIGHTS
-    # ----------------------------------
+    # ----------------------------
+    # 4 ICP
+    # ----------------------------
+
+    customer_profiles = call_llm(
+        ollama_service,
+        f"""
+PRODUCT:
+
+{json.dumps(product_understanding, ensure_ascii=False)}
+
+CUSTOMER:
+
+{json.dumps(customer_analysis, ensure_ascii=False)}
+
+TASK:
+
+{ICP_GENERATION_PROMPT}
+"""
+    )
+
+
+    # ----------------------------
+    # 5 JTBD
+    # ----------------------------
+
+    jtbd = call_llm(
+        ollama_service,
+        f"""
+CUSTOMER PROFILES:
+
+{json.dumps(customer_profiles, ensure_ascii=False)}
+
+CUSTOMER ANALYSIS:
+
+{json.dumps(customer_analysis, ensure_ascii=False)}
+
+TASK:
+
+{JTBD_ANALYSIS_PROMPT}
+"""
+    )
+
+
+    # ----------------------------
+    # 6 MARKETING ANGLES
+    # ----------------------------
+
+    marketing_angles = call_llm(
+        ollama_service,
+        f"""
+PRODUCT:
+
+{json.dumps(product_understanding, ensure_ascii=False)}
+
+JTBD:
+
+{json.dumps(jtbd, ensure_ascii=False)}
+
+TASK:
+
+{MARKETING_ANGLES_PROMPT}
+"""
+    )
+
+
+    # ----------------------------
+    # 7 FINAL INSIGHTS
+    # ----------------------------
 
     insights = call_llm(
         ollama_service,
         f"""
-PRODUCT UNDERSTANDING:
+PRODUCT:
 
 {json.dumps(product_understanding, ensure_ascii=False)}
 
-
-MARKET ANALYSIS:
+MARKET:
 
 {json.dumps(market_analysis, ensure_ascii=False)}
 
-
-CUSTOMER PSYCHOLOGY:
+CUSTOMER:
 
 {json.dumps(customer_analysis, ensure_ascii=False)}
 
+ICP:
+
+{json.dumps(customer_profiles, ensure_ascii=False)}
+
+JTBD:
+
+{json.dumps(jtbd, ensure_ascii=False)}
+
+MARKETING:
+
+{json.dumps(marketing_angles, ensure_ascii=False)}
 
 TASK:
 
@@ -323,5 +552,8 @@ TASK:
         "product_understanding": product_understanding,
         "market_analysis": market_analysis,
         "customer_analysis": customer_analysis,
+        "customer_profiles": customer_profiles,
+        "jtbd": jtbd,
+        "marketing_angles": marketing_angles,
         "insights": insights,
     }
