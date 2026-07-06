@@ -28,10 +28,7 @@ class OfferInsight(Base, JSONSerializable):
     value = Column(String, nullable=False)
 
     # draft | approved | rejected | archived
-    status = Column(String(20), nullable=False, default="draft", index=True)
-
-    # ai | manual
-    source = Column(String(20), nullable=False, default="ai")
+    status = Column(String(20), nullable=False, index=True)
 
     # optional scoring (AI confidence / business importance)
     score = Column(Float, nullable=True)
