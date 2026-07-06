@@ -97,17 +97,17 @@ INPUT:
         raise ValueError(f"Invalid JSON from LLM: {response}")
 
     # 8. SAVE TO DB
-    knowledge = OfferKnowledge(
-        offer_id=offer_id,
-        status="completed",
-        product_understanding=result.get("product_understanding"),
-        market_analysis=result.get("market_analysis"),
-        target_audience=result.get("target_audience"),
-        pain_points=result.get("pain_points"),
-        desires=result.get("desires"),
-        objections=result.get("objections"),
-        unique_value=result.get("unique_value"),
-    )
+    # knowledge = OfferKnowledge(
+    #     offer_id=offer_id,
+    #     status="completed",
+    #     product_understanding=result.get("product_understanding"),
+    #     market_analysis=result.get("market_analysis"),
+    #     target_audience=result.get("target_audience"),
+    #     pain_points=result.get("pain_points"),
+    #     desires=result.get("desires"),
+    #     objections=result.get("objections"),
+    #     unique_value=result.get("unique_value"),
+    # )
 
     # container.offer_knowledge_repository().save(knowledge)
 
