@@ -1,10 +1,11 @@
 from sqlalchemy import Column, Integer, String, Numeric, JSON, DateTime, ForeignKey
 from sqlalchemy.sql import func
+from common.mixins.json_serializable import JSONSerializable
 from infrastructure.database.db import Base
 from domain.enums.table_name import TableName
 
 
-class OfferItem(Base):
+class OfferItem(Base, JSONSerializable):
     __tablename__ = TableName.OFFER_ITEMS
 
     id = Column(Integer, primary_key=True, autoincrement=True)
