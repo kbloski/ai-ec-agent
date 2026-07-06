@@ -54,11 +54,23 @@ OUTPUT SCHEMA:
 {
   "product_understanding": "string",
   "market_analysis": "string",
-  "target_audience": ["string"],
-  "pain_points": ["string"],
-  "desires": ["string"],
-  "objections": ["string"],
-  "unique_value": "string"
+  "unique_value": "string",
+  "target_audience": [{
+    "value": "string",
+    "score": "float"
+  }],
+  "pain_points": [{
+    "value": "string",
+    "score": "float"
+  }],
+  "desires": [{
+    "value": "string",
+    "score": "float"
+  }],
+  "objections": [{
+    "value": "string",
+    "score": "float"
+  }]
 }
 
 RULES:
