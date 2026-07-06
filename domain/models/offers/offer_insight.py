@@ -15,7 +15,7 @@ class OfferInsight(Base, JSONSerializable):
     # Relation to offer
     offer_id = Column(
         Integer,
-        ForeignKey(f"{TableName.OFFERS}.id"),
+        ForeignKey(TableName.OFFERS + ".id"),
         nullable=False,
         index=True,
     )

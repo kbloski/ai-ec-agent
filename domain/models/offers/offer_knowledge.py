@@ -7,7 +7,7 @@ from domain.enums.table_name import TableName
 
 
 class OfferKnowledge(Base, JSONSerializable):
-    __tablename__ = TableName.OFFER_UNDERSTANDINGS
+    __tablename__ = TableName.OFFER_KNOWLEDGE
 
     # Primary key
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -15,7 +15,7 @@ class OfferKnowledge(Base, JSONSerializable):
     # Related offer
     offer_id = Column(
         Integer,
-        ForeignKey(f"{TableName.OFFERS}.id"),
+        ForeignKey(TableName.OFFERS+".id"),
         nullable=False,
     )
 
