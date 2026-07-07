@@ -6,6 +6,7 @@ from .offer_item_dto import OfferItemDto
 class OfferDto:
     def __init__(
         self,
+        id: int,
         name: str,
         buying_price: Decimal,
         selling_price: Decimal,
@@ -14,6 +15,7 @@ class OfferDto:
         pain_points : List[str],
         offer_items: List[OfferItemDto],
     ):
+        self.id = id
         self.name = name
         self.buying_price = buying_price
         self.selling_price = selling_price

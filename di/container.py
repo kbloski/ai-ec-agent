@@ -10,6 +10,7 @@ from infrastructure.services.path_service import PathService
 from infrastructure.parsers.txt_parser import TxtParser
 from core.settings import Settings
 from infrastructure.database.db import SessionLocal
+from application.assemblers.offer_assembler import OfferAssembler
 class Container(containers.DeclarativeContainer):
     db = providers.Factory(
         SessionLocal
@@ -50,6 +51,14 @@ class Container(containers.DeclarativeContainer):
         logger=logger,
         db=db
     )
+
+    offer_assembler = providers.Singleton(
+        OfferAssembler,
+        logger=logger,
+        offers_repository=offers_repository,
+        offer_items_repository=offer_items_repository
+    )
+
 
     ollama_service =  providers.Singleton(
         OllamaService,

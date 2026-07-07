@@ -6,6 +6,7 @@ class OfferMapper:
     @staticmethod
     def to_dto(item : Offer) -> OfferDto:
         return OfferDto(
+            id = item.id,
             name=item.name,
             buying_price=item.buying_price,
             selling_price=item.selling_price,

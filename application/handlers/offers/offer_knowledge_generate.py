@@ -437,82 +437,6 @@ Do not use markdown.
 # =====================================================
 # OFFER KNOWLEDGE PROMPT
 # =====================================================
-# OFFER_KNOWLEDGE_PROMPT = """
-# Analyze the offer information and create a deep understanding of this offer.
-
-# Your goal is to build a structured knowledge base that explains:
-# what this offer is, why it exists, what value it provides, and what makes it different.
-
-# Analyze the offer from the perspective of a senior product strategist.
-
-# Understand:
-
-# - What this offer actually is
-# - What category or market it belongs to
-# - What customer problem, need, or situation it addresses
-# - What solution it provides
-# - What transformation or outcome it creates
-# - Who it is potentially designed for
-# - Main components and elements included in the offer
-# - Key features
-# - Functional benefits
-# - Emotional benefits
-# - Value proposition
-# - Differentiation factors
-# - Strengths of the offer
-# - Possible weaknesses or limitations
-# - Important observations about the offer
-
-# Rules:
-
-# - Focus on understanding the offer itself.
-# - Do not create detailed customer personas yet.
-# - Do not create marketing campaigns or sales copy yet.
-# - Do not generate advertising messages yet.
-# - Separate facts from assumptions.
-# - If information is incomplete, make reasonable assumptions and clearly mark them.
-# - Add additional fields if they provide meaningful value for understanding the offer.
-# - Avoid generic statements. Stay specific to this offer.
-
-
-# Important:
-#     - Do not create detailed personas.
-#     - Do not create advertising messages.
-#     - Do not create marketing campaigns.
-#     - Focus only on understanding the offer.
-#     - If something is uncertain, mark it as assumption.
-
-# Return ONLY valid JSON.
-
-# Use this structure as a foundation, but extend it when necessary:
-
-# {
-#     "offer_summary": "",
-#     "category": "",
-#     "problem_solved": [],
-#     "solution": [],
-#     "transformation": [],
-
-#     "offer_components": [],
-
-#     "features": [],
-#     "functional_benefits": [],
-#     "emotional_benefits": [],
-
-#     "value_proposition": "",
-
-#     "differentiators": [],
-
-#     "strengths": [],
-#     "limitations": [],
-
-#     "assumptions": [],
-
-#     "additional_insights": []
-# }
-# """
-
-
 OFFER_KNOWLEDGE_PROMPT = """
 Analyze the offer information and create a deep understanding of this offer.
 
@@ -717,11 +641,6 @@ TASK:
 
     json_data = json.loads(response)
 
-
-
-    # ----------------------------
-    # SAVE TO DATABASE
-    # ----------------------------
     # ----------------------------
     # SAVE TO DATABASE
     # ----------------------------
