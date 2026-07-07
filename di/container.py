@@ -11,6 +11,10 @@ from infrastructure.parsers.txt_parser import TxtParser
 from core.settings import Settings
 from infrastructure.database.db import SessionLocal
 from application.assemblers.offer_assembler import OfferAssembler
+from infrastructure.repositories.offers_knowledge_repository import OfferKnowledgeRepository
+from infrastructure.repositories.offer_insights_repository import OfferInsightsRepository
+from application.assemblers.offer_knowledge_assembler import OfferKnowledgeAssembler
+
 class Container(containers.DeclarativeContainer):
     db = providers.Factory(
         SessionLocal
@@ -52,11 +56,30 @@ class Container(containers.DeclarativeContainer):
         db=db
     )
 
+    offer_knowledge_repository = providers.Singleton(
+        OfferKnowledgeRepository,
+        logger=logger,
+        db=db
+    )
+
+    offer_insights_repository = providers.Singleton(
+        OfferInsightsRepository,
+        logger=logger,
+        db=db
+    )
+
     offer_assembler = providers.Singleton(
         OfferAssembler,
         logger=logger,
         offers_repository=offers_repository,
         offer_items_repository=offer_items_repository
+    )
+
+    offer_knowledge_assembler = providers.Singleton(
+        OfferKnowledgeAssembler,
+        logger=logger,
+        offer_knowledge_repository=offer_knowledge_repository,
+        offer_insights_repository=offer_insights_repository
     )
 
 
