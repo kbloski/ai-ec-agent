@@ -17,6 +17,7 @@ SessionLocal = sessionmaker(
     autocommit=False,
     autoflush=False,
     future=True,
+    expire_on_commit=False
 )
 
 def get_db():

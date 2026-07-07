@@ -31,6 +31,8 @@ class OfferKnowledge(Base, JSONSerializable):
 
     value_proposition=Column(Text, nullable=True)
 
+    #TODO - prompt 
+    #TODO - object used to prompt 
 
     # Timestamps
     created_at = Column(
