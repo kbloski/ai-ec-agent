@@ -13,6 +13,10 @@ class OfferKnowledgeRepository:
     def get_by_id(self, id: int) -> Optional[OfferKnowledge]:
         return self.db.query(OfferKnowledge).filter(OfferKnowledge.id == id).first()
 
+    # 🔍 GET BY ID
+    def get_by_offer_id(self, offer_id: int) -> Optional[OfferKnowledge]:
+        return self.db.query(OfferKnowledge).filter(OfferKnowledge.offer_id == offer_id).all()
+
     # def search(self, page: int = 1, page_size: int = 20) -> PaginatedResult[Offer]:
     #         page = max(1, page)
     #         page_size = max(1, page_size)
