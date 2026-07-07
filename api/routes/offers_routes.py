@@ -19,7 +19,7 @@ def register_offers_routes(router: APIRouter):
         return get_offer_handler(id=id)
     
     # /offers/id/knowledge - POST in future 
-    @router.get("/offers/{id}/knowledge:generate")
+    @router.get("/offers/{id}/knowledges/generate")
     def offer_knowledge_generate(id: int):
         return offer_knowledge_generate_handler(offer_id=id)
 

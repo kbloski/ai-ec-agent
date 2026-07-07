@@ -4,6 +4,15 @@ from di.container import Container
 from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
 from domain.enums.ollama.ollama_message_role import OllamaMessageRole
 
+from domain.models.offers.offer_knowledge import OfferKnowledge
+from domain.models.offers.offer_insight import OfferInsight
+
+from domain.enums.offers.offer_knowledge_status import OfferKnowledgeStatus
+from domain.enums.offers.offer_insight_type import OfferInsightType
+from domain.enums.offers.offer_insight_status import OfferInsightStatus
+
+from infrastructure.database.db import SessionLocal
+
 
 # =====================================================
 # BASE ROLE
@@ -13,295 +22,195 @@ BASE_SYSTEM_PROMPT = """
 You are a senior product strategist AI specialized in product analysis,
 market research, customer psychology, and marketing strategy.
 
-Your role is to deeply understand products and transform raw product
-information into structured business insights.
+Your role is to deeply understand offers and transform raw offer
+information into structured business knowledge.
 
 Think like:
 - a product manager,
 - a market researcher,
-- a growth strategist,
-- a customer psychology expert.
+- a growth strategist.
 
-Your principles:
-- Understand before analyzing
-- Be specific to the product
-- Avoid generic marketing statements
-- Separate facts from assumptions
-- Make reasonable assumptions when data is incomplete
-- Focus on business value and customer behavior
-
-Always provide structured, precise, and actionable analysis.
+Rules:
+- Understand before analyzing.
+- Be specific to the offer.
+- Avoid generic statements.
+- Separate facts from assumptions.
+- Make reasonable assumptions when data is incomplete.
+- Focus on business value.
 
 Return ONLY valid JSON.
 Do not use markdown.
-Do not add explanations outside JSON.
 """
 
 
 # =====================================================
-# STEP 1
+# OFFER KNOWLEDGE PROMPT
 # =====================================================
+# OFFER_KNOWLEDGE_PROMPT = """
+# Analyze the offer information and create a deep understanding of this offer.
 
-PRODUCT_UNDERSTANDING_PROMPT = """
-Analyze the product information.
+# Your goal is to build a structured knowledge base that explains:
+# what this offer is, why it exists, what value it provides, and what makes it different.
 
-Build a deep understanding of the product.
+# Analyze the offer from the perspective of a senior product strategist.
 
-Analyze:
+# Understand:
 
-- What the product is
-- What problem it solves
-- Who it is designed for
-- Main features
-- Main benefits
+# - What this offer actually is
+# - What category or market it belongs to
+# - What customer problem, need, or situation it addresses
+# - What solution it provides
+# - What transformation or outcome it creates
+# - Who it is potentially designed for
+# - Main components and elements included in the offer
+# - Key features
+# - Functional benefits
+# - Emotional benefits
+# - Value proposition
+# - Differentiation factors
+# - Strengths of the offer
+# - Possible weaknesses or limitations
+# - Important observations about the offer
+
+# Rules:
+
+# - Focus on understanding the offer itself.
+# - Do not create detailed customer personas yet.
+# - Do not create marketing campaigns or sales copy yet.
+# - Do not generate advertising messages yet.
+# - Separate facts from assumptions.
+# - If information is incomplete, make reasonable assumptions and clearly mark them.
+# - Add additional fields if they provide meaningful value for understanding the offer.
+# - Avoid generic statements. Stay specific to this offer.
+
+
+# Important:
+#     - Do not create detailed personas.
+#     - Do not create advertising messages.
+#     - Do not create marketing campaigns.
+#     - Focus only on understanding the offer.
+#     - If something is uncertain, mark it as assumption.
+
+# Return ONLY valid JSON.
+
+# Use this structure as a foundation, but extend it when necessary:
+
+# {
+#     "offer_summary": "",
+#     "category": "",
+#     "problem_solved": [],
+#     "solution": [],
+#     "transformation": [],
+
+#     "offer_components": [],
+
+#     "features": [],
+#     "functional_benefits": [],
+#     "emotional_benefits": [],
+
+#     "value_proposition": "",
+
+#     "differentiators": [],
+
+#     "strengths": [],
+#     "limitations": [],
+
+#     "assumptions": [],
+
+#     "additional_insights": []
+# }
+# """
+
+
+OFFER_KNOWLEDGE_PROMPT = """
+Analyze the offer information and create a deep understanding of this offer.
+
+Your goal is to build a structured knowledge base that explains:
+what this offer is, why it exists, what value it provides, and what makes it different.
+
+Analyze the offer from the perspective of a senior product strategist.
+
+Understand:
+
+- What this offer actually is
+- What category or market it belongs to
+- What customer problem, need, or situation it addresses
+- What solution it provides
+- What transformation or outcome it creates
+- Who it is potentially designed for
+- Main components and elements included in the offer
+- Key features
+- Functional benefits
+- Emotional benefits
 - Value proposition
-- Product differentiation
+- Differentiation factors
+- Strengths of the offer
+- Possible weaknesses or limitations
+- Important observations about the offer
 
-Focus only on understanding the product.
-Do not generate customer insights yet.
+Rules:
 
-Return:
+- Focus on understanding the offer itself.
+- Do not create detailed customer personas yet.
+- Do not create marketing campaigns or sales copy yet.
+- Do not generate advertising messages yet.
+- Separate facts from assumptions.
+- If information is incomplete, make reasonable assumptions and clearly mark them.
+- Add additional fields if they provide meaningful value for understanding the offer.
+- Avoid generic statements. Stay specific to this offer.
+
+Additional insight extraction rules:
+
+- Extract the maximum possible number of meaningful insights about the offer.
+- Do not limit the number of insights in any section.
+- Lists do not need to contain the same number of elements.
+- Some sections may contain many insights, while others may contain only a few or none if no meaningful information exists.
+- Prioritize discovering valuable information over maintaining balanced output.
+- Do not artificially create items just to fill sections.
+- Include every relevant insight that can be logically derived from the offer information.
+
+Important:
+    - Do not create detailed personas.
+    - Do not create advertising messages.
+    - Do not create marketing campaigns.
+    - Focus only on understanding the offer.
+    - If something is uncertain, mark it as assumption.
+
+Return ONLY valid JSON.
+
+Use this structure as a foundation, but extend it when necessary:
 
 {
-    "product_summary": "",
-    "problem_solved": "",
-    "solution": "",
+    "offer_summary": "",
+    "category": "",
+    "problem_solved": [],
+    "solution": [],
+    "transformation": [],
+
+    "offer_components": [],
+
     "features": [],
-    "benefits": [],
+    "functional_benefits": [],
+    "emotional_benefits": [],
+
     "value_proposition": "",
-    "differentiators": []
+
+    "differentiators": [],
+
+    "strengths": [],
+    "limitations": [],
+
+    "assumptions": [],
+
+    "additional_insights": []
 }
 """
 
 
-# =====================================================
-# STEP 2
-# =====================================================
-
-MARKET_ANALYSIS_PROMPT = """
-Analyze the market context.
-
-Use product understanding.
-
-Analyze:
-
-- Market category
-- Customer segments
-- Competitive positioning
-- Market opportunities
-- Market risks
-- Alternative solutions customers currently use
-
-Return:
-
-{
-    "market_category": "",
-    "customer_segments": [],
-    "competitive_positioning": "",
-    "alternatives": [],
-    "market_opportunities": [],
-    "market_risks": []
-}
-"""
 
 
-# =====================================================
-# STEP 3
-# =====================================================
-
-CUSTOMER_ANALYSIS_PROMPT = """
-Analyze customer psychology.
-
-Use product understanding and market analysis.
-
-Identify:
-
-- Customer motivations
-- Buying triggers
-- Emotional drivers
-- Customer fears
-- Decision factors
-- Reasons preventing purchase
-
-Return:
-
-{
-    "customer_motivations": [],
-    "buying_triggers": [],
-    "emotional_drivers": [],
-    "customer_fears": [],
-    "decision_factors": []
-}
-"""
 
 
-# =====================================================
-# STEP 4
-# =====================================================
-
-ICP_GENERATION_PROMPT = """
-Generate Ideal Customer Profiles.
-
-Create realistic buyer profiles.
-
-Analyze:
-
-- Who they are
-- Their situation
-- Their needs
-- Their problems
-- Why they buy
-- Purchase triggers
-
-Avoid generic audiences.
-
-Return:
-
-{
-    "customer_profiles": [
-        {
-            "name": "",
-            "description": "",
-            "situation": "",
-            "needs": [],
-            "problems": [],
-            "purchase_trigger": "",
-            "buying_motivation": ""
-        }
-    ]
-}
-"""
-
-
-# =====================================================
-# STEP 5
-# =====================================================
-
-JTBD_ANALYSIS_PROMPT = """
-Analyze Jobs To Be Done.
-
-Understand why customers hire this product.
-
-Identify:
-
-- Functional jobs
-- Emotional jobs
-- Social jobs
-- Desired outcomes
-
-Return:
-
-{
-    "jobs_to_be_done": [
-        {
-            "job": "",
-            "situation": "",
-            "motivation": "",
-            "desired_outcome": ""
-        }
-    ]
-}
-"""
-
-
-# =====================================================
-# STEP 6
-# =====================================================
-
-MARKETING_ANGLES_PROMPT = """
-Create marketing angles.
-
-Use:
-
-- Product understanding
-- Customer psychology
-- JTBD
-
-Generate:
-
-- Selling angles
-- Emotional hooks
-- Customer-focused messages
-
-Return:
-
-{
-    "marketing_angles": [
-        {
-            "angle": "",
-            "customer_problem": "",
-            "message": "",
-            "reason_it_works": ""
-        }
-    ]
-}
-"""
-
-
-# =====================================================
-# STEP 7
-# =====================================================
-
-INSIGHT_GENERATION_PROMPT = """
-Generate final product insights.
-
-Use:
-
-- Product understanding
-- Market analysis
-- Customer psychology
-- Customer profiles
-- JTBD
-- Marketing angles
-
-Generate:
-
-1. Target audience
-2. Pain points
-3. Desires
-4. Objections
-5. Buying triggers
-
-
-Return:
-
-{
-    "target_audience": [
-        {
-            "value": "",
-            "score": 0.0
-        }
-    ],
-
-    "pain_points": [
-        {
-            "value": "",
-            "score": 0.0
-        }
-    ],
-
-    "desires": [
-        {
-            "value": "",
-            "score": 0.0
-        }
-    ],
-
-    "objections": [
-        {
-            "value": "",
-            "score": 0.0
-        }
-    ],
-
-    "buying_triggers": [
-        {
-            "value": "",
-            "score": 0.0
-        }
-    ]
-}
-"""
 
 
 # =====================================================
@@ -323,17 +232,33 @@ def call_llm(ollama_service, prompt):
 
     response = ollama_service.chat_llm(chat)
 
-    try:
-        return json.loads(response.content)
+    return response.content
 
-    except Exception:
-        raise ValueError(
-            f"Invalid JSON from LLM:\n{response.content}"
-        )
 
 
 # =====================================================
-# MAIN PIPELINE
+# INSIGHT TYPE MAPPING
+# =====================================================
+
+INSIGHT_MAPPING = {
+    "problem_solved": OfferInsightType.PROBLEM_SOLVED,
+    "solution":OfferInsightType.SOLUTION,
+    "transformation":OfferInsightType.TRANSFORMATION,
+    "offer_components":OfferInsightType.OFFER_COMPONENT,
+    "features":OfferInsightType.FEATURE,
+    "functional_benefits":OfferInsightType.FUNCTIONAL_BENEFIT,
+    "emotional_benefits":OfferInsightType.EMOTIONAL_BENEFIT,
+    "differentiators":OfferInsightType.DIFFERENTIATOR,
+    "strengths":OfferInsightType.STRENGTH,
+    "limitations":OfferInsightType.LIMITATION,
+    "assumptions":OfferInsightType.ASSUMPTION,
+    "additional_insights":OfferInsightType.ADDITIONAL_INSIGHT,
+}
+
+
+
+# =====================================================
+# MAIN HANDLER
 # =====================================================
 
 def offer_knowledge_generate_handler(offer_id: int):
@@ -346,10 +271,9 @@ def offer_knowledge_generate_handler(offer_id: int):
 
 
     # ----------------------------
-    # LOAD DATA
+    # LOAD OFFER
     # ----------------------------
-
-    offer = offers_repository.get_by_id(offer_id)
+    offer = offers_repository.get_by_id( offer_id)
 
     if not offer:
         raise ValueError(
@@ -357,9 +281,7 @@ def offer_knowledge_generate_handler(offer_id: int):
         )
 
 
-    offer_items = offer_items_repository.get_by_offer_id(
-        offer_id
-    )
+    offer_items = offer_items_repository.get_by_offer_id(offer_id)
 
 
     offer_json = (
@@ -369,191 +291,92 @@ def offer_knowledge_generate_handler(offer_id: int):
             "id": offer.id,
             "name": offer.name,
             "details": offer.details,
-            "selling_price": float(offer.selling_price)
-                if offer.selling_price else None,
+            "selling_price": float(
+                offer.selling_price
+            )
+            if offer.selling_price else None,
         }
     )
 
-
-    offer_json["offer_items"] = [
-        item.to_dict()
-        if hasattr(item, "to_dict")
-        else {
-            "name": item.name,
-            "details": item.details,
-        }
-        for item in offer_items
-    ]
+    offer_json["offer_items"] = [ item.to_dict() for item in offer_items ]
 
 
     # ----------------------------
-    # 1 PRODUCT UNDERSTANDING
+    # GENERATE KNOWLEDGE
     # ----------------------------
 
-    product_understanding = call_llm(
+    response = call_llm(
         ollama_service,
-        f"""
-PRODUCT DATA:
 
-{json.dumps(offer_json, ensure_ascii=False)}
+        f"""
+OFFER DATA:
+
+{json.dumps(
+    offer_json,
+    ensure_ascii=False
+)}
 
 TASK:
 
-{PRODUCT_UNDERSTANDING_PROMPT}
+{OFFER_KNOWLEDGE_PROMPT}
+
 """
     )
 
 
-    # ----------------------------
-    # 2 MARKET ANALYSIS
-    # ----------------------------
+    json_data = json.loads(response)
 
-    market_analysis = call_llm(
-        ollama_service,
-        f"""
-PRODUCT:
-
-{json.dumps(product_understanding, ensure_ascii=False)}
-
-TASK:
-
-{MARKET_ANALYSIS_PROMPT}
-"""
-    )
 
 
     # ----------------------------
-    # 3 CUSTOMER PSYCHOLOGY
+    # SAVE TO DATABASE
     # ----------------------------
+    with SessionLocal() as session:
+        with session.begin():
+            offer_knowledge = OfferKnowledge(
+                offer_id=offer_id,
+                version=1,
+                status=OfferKnowledgeStatus.COMPLETED,
+                offer_summary=json_data.get( "offer_summary",  "" ),
+                category=json_data.get("category", ""),
+                value_proposition=json_data.get( "value_proposition", "" ),
+            )
 
-    customer_analysis = call_llm(
-        ollama_service,
-        f"""
-PRODUCT:
+            session.add(  offer_knowledge )
+            session.flush()
 
-{json.dumps(product_understanding, ensure_ascii=False)}
+            # ----------------------------
+            # SAVE INSIGHTS
+            # ----------------------------
 
-MARKET:
+            insight_items = []
+            for field, insight_type in INSIGHT_MAPPING.items():
 
-{json.dumps(market_analysis, ensure_ascii=False)}
+                items = json_data.get(field, [])
 
-TASK:
-
-{CUSTOMER_ANALYSIS_PROMPT}
-"""
-    )
-
-
-    # ----------------------------
-    # 4 ICP
-    # ----------------------------
-
-    customer_profiles = call_llm(
-        ollama_service,
-        f"""
-PRODUCT:
-
-{json.dumps(product_understanding, ensure_ascii=False)}
-
-CUSTOMER:
-
-{json.dumps(customer_analysis, ensure_ascii=False)}
-
-TASK:
-
-{ICP_GENERATION_PROMPT}
-"""
-    )
+                if not isinstance(items, list):
+                    items = [items]
 
 
-    # ----------------------------
-    # 5 JTBD
-    # ----------------------------
+                for item in items:
+                    value = item
+     
 
-    jtbd = call_llm(
-        ollama_service,
-        f"""
-CUSTOMER PROFILES:
+                    if not value:
+                        continue
 
-{json.dumps(customer_profiles, ensure_ascii=False)}
+                    insight = OfferInsight(
+                        offer_id=offer_id,
+                        knowledge_id=offer_knowledge.id,
+                        type=insight_type,
+                        value=str(value),
+                        status=OfferInsightStatus.APPROVED,
+                    )
 
-CUSTOMER ANALYSIS:
-
-{json.dumps(customer_analysis, ensure_ascii=False)}
-
-TASK:
-
-{JTBD_ANALYSIS_PROMPT}
-"""
-    )
+                    insight_items.append(insight)
 
 
-    # ----------------------------
-    # 6 MARKETING ANGLES
-    # ----------------------------
-
-    marketing_angles = call_llm(
-        ollama_service,
-        f"""
-PRODUCT:
-
-{json.dumps(product_understanding, ensure_ascii=False)}
-
-JTBD:
-
-{json.dumps(jtbd, ensure_ascii=False)}
-
-TASK:
-
-{MARKETING_ANGLES_PROMPT}
-"""
-    )
+            session.add_all(insight_items)
 
 
-    # ----------------------------
-    # 7 FINAL INSIGHTS
-    # ----------------------------
-
-    insights = call_llm(
-        ollama_service,
-        f"""
-PRODUCT:
-
-{json.dumps(product_understanding, ensure_ascii=False)}
-
-MARKET:
-
-{json.dumps(market_analysis, ensure_ascii=False)}
-
-CUSTOMER:
-
-{json.dumps(customer_analysis, ensure_ascii=False)}
-
-ICP:
-
-{json.dumps(customer_profiles, ensure_ascii=False)}
-
-JTBD:
-
-{json.dumps(jtbd, ensure_ascii=False)}
-
-MARKETING:
-
-{json.dumps(marketing_angles, ensure_ascii=False)}
-
-TASK:
-
-{INSIGHT_GENERATION_PROMPT}
-"""
-    )
-
-
-    return {
-        "product_understanding": product_understanding,
-        "market_analysis": market_analysis,
-        "customer_analysis": customer_analysis,
-        "customer_profiles": customer_profiles,
-        "jtbd": jtbd,
-        "marketing_angles": marketing_angles,
-        "insights": insights,
-    }
+    return json_data

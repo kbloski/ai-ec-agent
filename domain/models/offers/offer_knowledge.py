@@ -26,13 +26,11 @@ class OfferKnowledge(Base, JSONSerializable):
     status = Column(String(20), nullable=False, default="pending")
 
     # AI-generated knowledge
-    product_understanding = Column(Text, nullable=True)
-    market_analysis = Column(Text, nullable=True)
-    # target_audience = Column(JSON, nullable=True)
-    # pain_points = Column(JSON, nullable=True)
-    # desires = Column(JSON, nullable=True)
-    # objections = Column(JSON, nullable=True)
-    unique_value = Column(Text, nullable=True)
+    offer_summary = Column(Text, nullable=True)
+    category = Column(Text, nullable=True)
+
+    value_proposition=Column(Text, nullable=True)
+
 
     # Timestamps
     created_at = Column(

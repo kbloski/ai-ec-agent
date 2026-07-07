@@ -1,8 +1,23 @@
 from enum import Enum
 
 class OfferInsightType(str, Enum):
-    TARGET_AUDIENCE = "target_audience"
-    PAIN_POINT = "pain_point"
-    DESIRE = "desire"
-    OBJECTION = "objection"
-    
+    PROBLEM_SOLVED = "problem_solved"
+    SOLUTION = "solution"
+    TRANSFORMATION = "transformation"
+
+    OFFER_COMPONENT = "offer_component"
+
+    FEATURE = "feature"
+    FUNCTIONAL_BENEFIT = "functional_benefit"
+    EMOTIONAL_BENEFIT = "emotional_benefit"
+
+    VALUE_PROPOSITION = "value_proposition"
+
+    DIFFERENTIATOR = "differentiator"
+
+    STRENGTH = "strength"
+    LIMITATION = "limitation"
+
+    ASSUMPTION = "assumption"
+
+    ADDITIONAL_INSIGHT = "additional_insight"

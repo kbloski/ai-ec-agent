@@ -20,18 +20,25 @@ class OfferInsight(Base, JSONSerializable):
         index=True,
     )
 
-    # Type of insight
-    # target_audience | pain_point | desire | objection
+    knowledge_id = Column(
+        Integer,
+        ForeignKey(TableName.OFFER_KNOWLEDGE + ".id"),
+        nullable=True,
+        index=True,
+    )
+
     type = Column(String(50), nullable=False, index=True)
+
+    status = Column(String(20), nullable=False, index=True)
+
+    # optional scoring (AI confidence / business importance)
+    # score = Column(Float, nullable=True)
 
     # Actual insight value
     value = Column(String, nullable=False)
 
-    # draft | approved | rejected | archived
-    status = Column(String(20), nullable=False, index=True)
-
-    # optional scoring (AI confidence / business importance)
-    score = Column(Float, nullable=True)
+    #uzasadnienie 
+    # evidence = Column(String, nullable=True)
 
     # timestamps
     created_at = Column(
