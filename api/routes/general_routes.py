@@ -7,7 +7,7 @@ from application.handlers.offers.offer_knowledge_generate import offer_knowledge
 from application.handlers.offers.get_offer_knowledge_handler import get_offer_knowledge_handler
 from application.handlers.offers.get_offer_knowledges_handler import get_offer_knowledges_handler
 
-def register_offers_routes(router: APIRouter):
+def register_general_routes(router: APIRouter):
     @router.get("/offers")
     def offers(page: int = 1):
         return get_offers( page=page )
