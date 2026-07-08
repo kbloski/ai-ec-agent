@@ -292,7 +292,7 @@ TASK:
                         knowledge_id=offer_knowledge.id,
                         type=insight_type,
                         value=str(item),
-                        status=ContentStatus.APPROVED.value,
+                        content_status=ContentStatus.APPROVED.value,
                     )
 
                     insight_items.append(insight)
