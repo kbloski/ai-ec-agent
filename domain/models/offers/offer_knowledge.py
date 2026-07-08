@@ -23,7 +23,7 @@ class OfferKnowledge(Base, JSONSerializable):
     version = Column(Integer, nullable=False, default=1)
 
     # pending | processing | completed | failed
-    status = Column(String(20), nullable=False, default="pending")
+    content_status = Column(String(20), nullable=False)
 
     # AI-generated knowledge
     offer_summary = Column(Text, nullable=True)

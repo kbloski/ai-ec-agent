@@ -11,7 +11,7 @@ class OfferKnowledgeDto:
         id: int,
         offer_id: int,
         version: int,
-        status: str,
+        content_status: str,
         offer_summary: Optional[str] = None,
         category: Optional[str] = None,
         value_proposition: Optional[str] = None,
@@ -19,7 +19,7 @@ class OfferKnowledgeDto:
         self.id = id
         self.offer_id = offer_id
         self.version = version
-        self.status = status
+        self.content_status = content_status
         self.offer_summary = offer_summary
         self.category = category
         self.value_proposition = value_proposition
