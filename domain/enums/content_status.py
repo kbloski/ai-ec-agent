@@ -1,6 +1,6 @@
 from enum import Enum
 
-class OfferInsightStatus(str, Enum):
+class ContentStatus(str, Enum):
     APPROVED = "approved"
     SUGGESTED = "suggested"
     REJECTED = "rejected"

@@ -12,7 +12,7 @@ from domain.models.offers.offer_insight import OfferInsight
 
 from domain.enums.offers.offer_knowledge_status import OfferKnowledgeStatus
 from domain.enums.offers.offer_insight_type import OfferInsightType
-from domain.enums.offers.offer_insight_status import OfferInsightStatus
+from domain.enums.content_status import ContentStatus
 
 from infrastructure.database.db import SessionLocal
 
@@ -373,7 +373,7 @@ TASK:
                         knowledge_id=offer_knowledge.id,
                         type=insight_type,
                         value=str(value),
-                        status=OfferInsightStatus.APPROVED.value,
+                        status=ContentStatus.APPROVED.value,
                     )
 
                     insight_items.append(insight)
@@ -400,7 +400,7 @@ from domain.models.offers.offer_insight import OfferInsight
 
 from domain.enums.offers.offer_knowledge_status import OfferKnowledgeStatus
 from domain.enums.offers.offer_insight_type import OfferInsightType
-from domain.enums.offers.offer_insight_status import OfferInsightStatus
+from domain.enums.content_status import ContentStatus
 
 from infrastructure.database.db import SessionLocal
 
@@ -678,7 +678,7 @@ TASK:
                         knowledge_id=offer_knowledge.id,
                         type=insight_type,
                         value=str(item),
-                        status=OfferInsightStatus.APPROVED.value,
+                        status=ContentStatus.APPROVED.value,
                     )
 
                     insight_items.append(insight)
