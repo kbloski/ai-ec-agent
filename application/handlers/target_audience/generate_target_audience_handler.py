@@ -1,88 +1,257 @@
 import json
+import re
 from typing import Dict, Any
+
 from di.container import Container
 from application.mappers.offer_knowledge_mapper import OfferKnowledgeMapper
-from dataclasses import asdict
+
+from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
+from domain.enums.ollama.ollama_message_role import OllamaMessageRole
+from domain.enums.gender import Gender
 
 
 BASE_SYSTEM_PROMPT = """
-You are a senior product strategist AI specialized in:
-- customer segmentation,
-- buyer psychology,
-- market research,
-- ICP definition,
-- marketing strategy,
-- conversion optimization.
+Jesteś seniorem strategii produktowej AI specjalizującym się w:
 
-Your role is to analyze products and offers and transform raw offer
-information into actionable customer intelligence.
+- segmentacji klientów,
+- psychologii zakupowej,
+- badaniu rynku,
+- definiowaniu ICP,
+- strategii marketingowej,
+- optymalizacji konwersji.
 
-Think like:
-- a product manager,
-- a growth strategist,
-- a customer research analyst,
-- a performance marketer.
+Analizujesz produkty i oferty oraz zamieniasz informacje o produkcie
+w praktyczne dane o klientach.
 
-Your main goal is to identify WHO is most likely to buy the offer,
-WHY they would buy it, and HOW to reach them.
+Twoim celem jest określenie:
 
-When creating target audiences:
+1. Kto najprawdopodobniej kupi produkt.
+2. Dlaczego go kupi.
+3. Jak skutecznie do niego dotrzeć.
 
-Analyze:
-- demographic characteristics,
-- psychographic traits,
-- lifestyle,
-- motivations,
-- problems and frustrations,
-- desired outcomes,
-- buying triggers,
-- objections,
-- purchase barriers,
-- awareness level,
-- decision-making process,
-- preferred communication channels.
+Zasady:
 
-Create:
-- primary target audience,
-- secondary target audiences,
-- ideal customer profile (ICP),
-- customer personas.
+- Analizuj konkretny produkt.
+- Nie twórz generycznych grup klientów.
+- Oddziel fakty od założeń.
+- Jeśli brakuje danych, wykonaj realistyczne założenia.
+- Oznacz założenia.
+- Wyniki muszą być użyteczne reklamowo.
 
-Rules:
-- Understand the offer before analyzing.
-- Be specific to the actual product.
-- Avoid generic marketing phrases.
-- Do not create unrealistic audiences.
-- Separate facts from assumptions.
-- If information is missing, make reasonable assumptions and mark them clearly.
-- Focus on commercially useful insights.
-- Think from the customer's perspective, not the seller's perspective.
-
-Quality requirements:
-- Audiences must be actionable for advertising campaigns.
-- Segments must have clear differences.
-- Explain why each segment would buy.
-- Avoid broad categories like "everyone", "people interested in quality", "adults who want better life".
-
-Return ONLY valid JSON.
-Do not use markdown.
-Do not add explanations outside JSON.
+Zwróć WYŁĄCZNIE poprawny JSON.
+Bez markdown.
+Bez komentarzy.
+Bez tekstu poza JSON.
 """
 
-def generate_target_audience_handler(offer_id: int, knowledge_id: int) -> Dict[str, Any]:
-    container = Container()
-    knowledge_repo = container.offer_knowledge_repository()
-    knowledge_assembler = container.offer_knowledge_assembler()
+TARGET_AUDIENCE_SCHEMA = {
+    "audiences": [
+        {
+            "name": "",
+            "score": 0,
+            "confidence": 0,
+            "reason": "",
 
-    knowledgeDb = knowledge_repo.get_by_id( id = knowledge_id)
+            "age_min": 0,
+            "age_max": 0,
+            "gender": "all",
 
-    knowledge_dto = OfferKnowledgeMapper.to_dto( item=knowledgeDb)
-    assembled_dto = knowledge_assembler.assemble_dto( item=knowledge_dto)
-    knowledge_to_analyze =  json.dumps(
-        assembled_dto,
-        default=vars,
-        ensure_ascii=False
+            "location": "",
+            "purchasing_power": "",
+
+            "lifestyles": ["string"],
+            "values": ["string"],
+
+            "awareness_level": "",
+            "price_sensitivity": "",
+            "research_level": "",
+            "decision_time": "",
+
+            "pain_points": ["string"],
+            "motivations": ["string"],
+            "buying_triggers": ["string"],
+            "objections": ["string"],
+
+            "message_angles": ["string"],
+            "marketing_channels": ["string"]
+        }
+    ]
+}
+
+
+def serialize_object(obj):
+
+    if isinstance(obj, list):
+        return [
+            serialize_object(x)
+            for x in obj
+        ]
+
+    if isinstance(obj, dict):
+        return {
+            k: serialize_object(v)
+            for k, v in obj.items()
+        }
+
+    if hasattr(obj, "__dict__"):
+        return {
+            key: serialize_object(value)
+            for key, value in obj.__dict__.items()
+            if not key.startswith("_")
+        }
+
+    return obj
+
+
+def extract_json(text: str):
+
+    """
+    Wyciąga JSON jeśli model dodał tekst przed/po JSON.
+    """
+
+    match = re.search(
+        r"\{.*\}",
+        text,
+        re.DOTALL
     )
+
+    if not match:
+        raise ValueError(
+            "LLM response does not contain JSON"
+        )
+
+    return match.group(0)
+
+
+
+def generate_target_audience_handler(
+    offer_id: int,
+    knowledge_id: int
+) -> Dict[str, Any]:
+
+
+    container = Container()
+
+
+    knowledge_repo = (
+        container.offer_knowledge_repository()
+    )
+
+    knowledge_assembler = (
+        container.offer_knowledge_assembler()
+    )
+
+    ollama_service = (
+        container.ollama_service()
+    )
+
+
+    knowledge_db = (
+        knowledge_repo.get_by_id(
+            id=knowledge_id
+        )
+    )
+
+
+    if not knowledge_db:
+        return {
+            "status": False,
+            "error": "Knowledge not found"
+        }
+
+
+    knowledge_dto = (
+        OfferKnowledgeMapper.to_dto(
+            item=knowledge_db
+        )
+    )
+
+
+    assembled_dto = (
+        knowledge_assembler.assemble_dto(
+            item=knowledge_dto
+        )
+    )
+
+
+    knowledge_json = json.dumps(
+        serialize_object(
+            assembled_dto
+        ),
+        ensure_ascii=False,
+        indent=2
+    )
+
+
+    schema_json = json.dumps(
+        TARGET_AUDIENCE_SCHEMA,
+        ensure_ascii=False,
+        indent=2
+    )
+
+
+    user_prompt = f"""
+Przeanalizuj informacje o produkcie.
+
+DANE PRODUKTU:
+
+{knowledge_json}
+
+
+Wygeneruj grupy docelowe.
+
+Odpowiedź musi dokładnie pasować do tego JSON:
+
+{schema_json}
+
+
+Wymagania:
+
+- Odpowiedź po polsku.
+- Nie wymyślaj przypadkowych klientów.
+- Podawaj realistyczne segmenty.
+- Uwzględnij założenia.
+- JSON ONLY.
+"""
+
+
+    response = ollama_service.chat_llm(
+        messages=[
+
+            LlmOllamaMessage(
+                role=OllamaMessageRole.SYSTEM,
+                content=BASE_SYSTEM_PROMPT
+            ),
+
+            LlmOllamaMessage(
+                role=OllamaMessageRole.USER,
+                content=user_prompt
+            )
+        ]
+    )
+
+
+    try:
+
+        clean_json = extract_json(
+            response.content
+        )
+
+        response_json = json.loads(
+            clean_json
+        )
+
+    except Exception as e:
+
+        return {
+            "status": False,
+            "error": "Invalid LLM JSON",
+            "raw_response": response.content,
+            "details": str(e)
+        }
+
+
     return {
         "status": True,
+        "data": response_json
     }
