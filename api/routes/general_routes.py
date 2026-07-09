@@ -8,6 +8,9 @@ from application.handlers.offers.get_offer_knowledge_handler import get_offer_kn
 from application.handlers.offers.get_offer_knowledges_handler import get_offer_knowledges_handler
 from application.handlers.analysis.generate_knowledge_analysis_handler import generate_knowledge_analysis_guides_handler
 from application.handlers.analysis.generate_knowledge_analysis_guides_handler import generate_knowledge_analysis_handler
+from application.handlers.target_audience.generate_target_audience_handler import generate_target_audience_handler
+from application.handlers.target_audience.get_target_audience_handler import get_target_audience_handler
+from application.handlers.target_audience.get_target_audience_preview_handler import get_target_audience_preview_handler
 
 def register_general_routes(router: APIRouter):
     @router.get("/offers")
@@ -39,11 +42,25 @@ def register_general_routes(router: APIRouter):
         return get_offer_knowledge_handler(offer_id=offer_id, knowledge_id=knowledge_id)
 
     #  POST in future 
-    @router.get("/offers/{offer_id}/knowledges/{knowledge_id}/analysis/generate")
-    def generate_knowledge_analysis(offer_id: int, knowledge_id : int):
-        return generate_knowledge_analysis_handler(offer_id=offer_id, knowledge_id=knowledge_id)
+    # @router.get("/offers/{offer_id}/knowledges/{knowledge_id}/analysis/generate")
+    # def generate_knowledge_analysis(offer_id: int, knowledge_id : int):
+    #     return generate_knowledge_analysis_handler(offer_id=offer_id, knowledge_id=knowledge_id)
     
-    @router.get("/offers/{offer_id}/knowledges/{knowledge_id}/analysis-guides/generate")
-    def generate_knowledge_analysis_guides(offer_id: int, knowledge_id : int):
-        return generate_knowledge_analysis_guides_handler(offer_id=offer_id, knowledge_id=knowledge_id)
+    # @router.get("/offers/{offer_id}/knowledges/{knowledge_id}/analysis-guides/generate")
+    # def generate_knowledge_analysis_guides(offer_id: int, knowledge_id : int):
+    #     return generate_knowledge_analysis_guides_handler(offer_id=offer_id, knowledge_id=knowledge_id)
 
+    #  POST in future 
+    @router.get("/offers/{offer_id}/knowledges/{knowledge_id}/target-audiences/generate")
+    def generate_target_audience(offer_id: int, knowledge_id: int):
+        return generate_target_audience_handler(offer_id=offer_id, knowledge_id=knowledge_id)
+
+    # #  GET in future 
+    # @router.get("/offers/{offer_id}/knowledges/{knowledge_id}/target-audiences")
+    # def get_target_audience(offer_id: int, knowledge_id: int):
+    #     return get_target_audience_handler(offer_id=offer_id, knowledge_id=knowledge_id)
+
+    # #  GET in future 
+    # @router.get("/offers/{offer_id}/knowledges/{knowledge_id}/target-audiences/{target_audience_id}")
+    # def get_target_audience_preview(offer_id: int, knowledge_id: int, target_audience_id: int):
+    #     return get_target_audience_preview_handler(offer_id=offer_id, knowledge_id=knowledge_id, target_audience_id=target_audience_id)
