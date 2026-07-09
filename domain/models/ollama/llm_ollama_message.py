@@ -1,4 +1,4 @@
-from ...enums.ollama.ollama_message_role import OllamaMessageRole
+from ...enums.ollama_message_role import OllamaMessageRole
 
 
 class LlmOllamaMessage:

@@ -2,7 +2,7 @@ import json
 
 from di.container import Container
 from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
-from domain.enums.ollama.ollama_message_role import OllamaMessageRole
+from domain.enums.ollama_message_role import OllamaMessageRole
 
 
 # =====================================================

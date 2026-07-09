@@ -6,3 +6,4 @@ class TableName(str, Enum):
     OFFER_ITEMS = "offer_items"
     OFFER_KNOWLEDGE = "offer_knowledge"
     OFFER_INSIGHTS = "offer_insights"
+    TARGET_AUDIENCES = "target_audiences"

@@ -8,12 +8,12 @@ from application.mappers.offer_insight_mapper import OfferInsightsMapper
 
 from di.container import Container
 from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
-from domain.enums.ollama.ollama_message_role import OllamaMessageRole
+from domain.enums.ollama_message_role import OllamaMessageRole
 
 from domain.models.offers.offer_knowledge import OfferKnowledge
 from domain.models.offers.offer_insight import OfferInsight
 
-from domain.enums.offers.offer_insight_type import OfferInsightType
+from domain.offer_insight_type import OfferInsightType
 from domain.enums.content_status import ContentStatus
 
 from infrastructure.database.db import SessionLocal

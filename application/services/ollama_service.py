@@ -3,7 +3,7 @@ from infrastructure.logging.logger import Logger
 from core.settings import Settings
 
 from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
-from domain.enums.ollama.ollama_message_role import OllamaMessageRole
+from domain.enums.ollama_message_role import OllamaMessageRole
 
 class OllamaService:
     def __init__(self, logger: Logger, settings: Settings):

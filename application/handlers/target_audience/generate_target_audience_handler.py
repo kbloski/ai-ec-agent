@@ -6,8 +6,13 @@ from di.container import Container
 from application.mappers.offer_knowledge_mapper import OfferKnowledgeMapper
 
 from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
-from domain.enums.ollama.ollama_message_role import OllamaMessageRole
-from domain.enums.gender import Gender
+from domain.enums.ollama_message_role import OllamaMessageRole
+
+from domain.enums.audience_gender import AudienceGender
+from domain.enums.decision_time import DecisionTime
+from domain.enums.awareness_level import AwarenessLevel
+from domain.enums.intensity_level import IntensityLevel
+from domain.enums.purchasing_power import PurchasingPower
 
 
 BASE_SYSTEM_PROMPT = """
@@ -44,6 +49,59 @@ Bez komentarzy.
 Bez tekstu poza JSON.
 """
 
+
+def enum_values(enum):
+    return [
+        item.value
+        for item in enum
+    ]
+
+
+ENUM_PROMPT = f"""
+Dozwolone wartości enum:
+
+gender:
+AudienceGenderEnum:
+{enum_values(AudienceGender)}
+
+purchasing_power:
+PurchasingPowerEnum:
+{enum_values(PurchasingPower)}
+
+awareness_level:
+AwarenessLevelEnum:
+{enum_values(AwarenessLevel)}
+
+price_sensitivity:
+IntensityLevelEnum:
+{enum_values(IntensityLevel)}
+
+research_level:
+IntensityLevelEnum:
+{enum_values(IntensityLevel)}
+
+decision_time:
+DecisionTimeEnum:
+{enum_values(DecisionTime)}
+
+
+Zasady enum:
+
+- Pola enum muszą być pojedynczym stringiem.
+- Nie zwracaj tablic.
+- Nie twórz nowych wartości.
+- Używaj wyłącznie wartości dostępnych w odpowiednim enumie.
+
+Przykład poprawny:
+
+"gender": "all"
+
+Przykład błędny:
+
+"gender": ["male", "female"]
+"""
+
+
 TARGET_AUDIENCE_SCHEMA = {
     "audiences": [
         {
@@ -54,26 +112,26 @@ TARGET_AUDIENCE_SCHEMA = {
 
             "age_min": 0,
             "age_max": 0,
-            "gender": "all",
 
+            "gender": "",
             "location": "",
             "purchasing_power": "",
 
-            "lifestyles": ["string"],
-            "values": ["string"],
+            "lifestyles": [""],
+            "values": [""],
 
             "awareness_level": "",
             "price_sensitivity": "",
             "research_level": "",
             "decision_time": "",
 
-            "pain_points": ["string"],
-            "motivations": ["string"],
-            "buying_triggers": ["string"],
-            "objections": ["string"],
+            "pain_points": [""],
+            "motivations": [""],
+            "buying_triggers": [""],
+            "objections": [""],
 
-            "message_angles": ["string"],
-            "marketing_channels": ["string"]
+            "message_angles": [""],
+            "marketing_channels": [""]
         }
     ]
 }
@@ -104,10 +162,6 @@ def serialize_object(obj):
 
 
 def extract_json(text: str):
-
-    """
-    Wyciąga JSON jeśli model dodał tekst przed/po JSON.
-    """
 
     match = re.search(
         r"\{.*\}",
@@ -200,9 +254,15 @@ DANE PRODUKTU:
 
 Wygeneruj grupy docelowe.
 
-Odpowiedź musi dokładnie pasować do tego JSON:
+
+Format odpowiedzi:
 
 {schema_json}
+
+
+ENUM RULES:
+
+{ENUM_PROMPT}
 
 
 Wymagania:

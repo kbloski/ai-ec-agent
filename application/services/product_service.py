@@ -4,7 +4,7 @@ from infrastructure.services.path_service import PathService
 from .ollama_service import OllamaService
 import json
 from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
-from domain.enums.ollama.ollama_message_role import OllamaMessageRole
+from domain.enums.ollama_message_role import OllamaMessageRole
 
 
 class ProductService:

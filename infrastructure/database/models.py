@@ -5,3 +5,4 @@ from domain.models.offers.offer_knowledge import OfferKnowledge
 from domain.models.offers.offer_insight import OfferInsight
 # możesz dodawać kolejne:
 # from domain.models.user.user import User
+from domain.models.audience.target_audience import TargetAudience
