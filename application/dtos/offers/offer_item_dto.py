@@ -1,4 +1,6 @@
-class OfferItemDto:
+from common.mixins.json_serializable  import JSONSerializable
+
+class OfferItemDto(JSONSerializable):
     def __init__(
         self,
         id: int,
@@ -12,3 +14,6 @@ class OfferItemDto:
         self.name = name
         self.quantity = quantity
         self.details = details
+
+    def to_dict(self, exclude=None):
+        return super().to_dict(exclude)

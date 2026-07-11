@@ -40,30 +40,20 @@ class OffersRepository:
                 total_items=total_items,
             )
 
-    # # ✏️ UPDATE
-    # def update(self, offer_id: int, name: str = None, price: float = None) -> Optional[offer]:
-    #     offer = self.get_by_id(offer_id)
-    #     if not offer:
-    #         return None
+    def update(self, item: Offer) -> Offer:
+        existing_offer = self.db.query(Offer).filter(Offer.id == item.id).first()
 
-    #     if name is not None:
-    #         offer.name = name
-    #     if price is not None:
-    #         offer.price = price
+        if not existing_offer:
+            raise ValueError(f"Offer with id {item.id} not found")
 
-    #     self.db.commit()
-    #     self.db.refresh(offer)
-    #     return offer
+        for key, value in item.__dict__.items():
+            if key != "_sa_instance_state":
+                setattr(existing_offer, key, value)
 
-    # # ❌ DELETE
-    # def delete(self, offer_id: int) -> bool:
-    #     offer = self.get_by_id(offer_id)
-    #     if not offer:
-    #         return False
+        self.db.commit()
+        self.db.refresh(existing_offer)
 
-    #     self.db.delete(offer)
-    #     self.db.commit()
-    #     return True
+        return existing_offer
 
     def delete_all(self) -> int:
         deleted = self.db.query(Offer).delete()

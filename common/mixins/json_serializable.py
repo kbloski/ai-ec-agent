@@ -44,8 +44,3 @@ class JSONSerializable:
 
         return data
 
-    def to_json(self):
-        return json.dumps(
-            self.to_dict(),
-            ensure_ascii=False
-        )

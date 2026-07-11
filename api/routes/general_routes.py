@@ -11,6 +11,7 @@ from application.handlers.analysis.generate_knowledge_analysis_guides_handler im
 from application.handlers.target_audience.generate_target_audience_handler import generate_target_audience_handler
 from application.handlers.target_audience.get_target_audience_handler import get_target_audience_handler
 from application.handlers.target_audience.get_target_audience_preview_handler import get_target_audience_preview_handler
+from application.handlers.offers.suggest_offer_data_handler import suggets_offer_data_handler
 
 def register_general_routes(router: APIRouter):
     @router.get("/offers")
@@ -24,7 +25,12 @@ def register_general_routes(router: APIRouter):
     @router.get("/offers/{id}")
     def get_offer_details(id: int):
         return get_offer_handler(id=id)
+
     
+    @router.get("/offers/{id}/suggestions")
+    def suggest_offer_data(id: int):
+        return suggets_offer_data_handler(offer_id=id)
+
     # POST in future 
     @router.get("/offers/{id}/knowledges/generate")
     def offer_knowledge_generate(id: int):
