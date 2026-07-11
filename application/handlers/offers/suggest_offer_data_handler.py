@@ -150,7 +150,8 @@ def suggets_offer_data_handler(offer_id : int):
     ]
 
     response_target_audience = ollama_service.chat_llm(messages=messages)
-    for p in response_target_audience:
+    new_target_audience = json.loads(response_target_audience.content)
+    for p in new_target_audience:
         new_insights =OfferInsight(
             offer_id = offer_id,
             type = OfferInsightType.TARGET_AUDIENCE,
@@ -167,6 +168,6 @@ def suggets_offer_data_handler(offer_id : int):
     # --------------------------
     updated_offer_db = offer_repository.get_by_id(id=offer_id)
     updated_offer_dto = OfferMapper.to_dto(item=updated_offer_db)
-    updated_offer_assembled = offer_assembler.assemble_dto(item=offer_dto)
+    updated_offer_assembled = offer_assembler.assemble_dto(item=updated_offer_dto)
 
     return updated_offer_assembled
