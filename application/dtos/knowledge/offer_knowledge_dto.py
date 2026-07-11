@@ -1,10 +1,10 @@
 from typing import Optional, List
-from .offer_insight_dto import OfferInsightDto
+from .knowledge_insight_dto import KnowledgeInsightDto
 
 
 class OfferKnowledgeDto:
 
-    offer_insights: List[OfferInsightDto] = []
+    offer_insights: List[KnowledgeInsightDto] = []
 
     def __init__(
         self,

@@ -1,21 +1,41 @@
 from sqlalchemy import func
 from sqlalchemy.orm import Session
+from sqlalchemy import or_
 from typing import List, Optional
-from domain.models.knowledge.offer_knowledge import OfferKnowledge
+from domain.models.knowledge.knowledge_insight import KnowledgeInsight
 from infrastructure.logging.logger import Logger
 from common.results.paginated_result import PaginatedResult
 
-class OfferKnowledgeRepository:
+class KnowledgeInsightsRepository:
     def __init__(self, logger : Logger, db: Session):
         self.db = db
 
     # 🔍 GET BY ID
-    def get_by_id(self, id: int) -> Optional[OfferKnowledge]:
-        return self.db.query(OfferKnowledge).filter(OfferKnowledge.id == id).first()
+    def find_by_offer_id_or_knowledge_id(
+        self,
+        offer_id: Optional[int] = None,
+        knowledge_id: Optional[int] = None
+    ) -> list[KnowledgeInsight]:
 
-    # 🔍 GET BY ID
-    def get_by_offer_id(self, offer_id: int) -> Optional[OfferKnowledge]:
-        return self.db.query(OfferKnowledge).filter(OfferKnowledge.offer_id == offer_id).all()
+        filters = []
+
+        if offer_id is not None:
+            filters.append(
+                KnowledgeInsight.offer_id == offer_id
+            )
+
+        if knowledge_id is not None:
+            filters.append(
+                KnowledgeInsight.knowledge_id == knowledge_id
+            )
+
+        if not filters:
+            return []
+
+        return self.db.query(KnowledgeInsight).filter(
+            or_(*filters)
+        ).all()
+    
 
     # def search(self, page: int = 1, page_size: int = 20) -> PaginatedResult[Offer]:
     #         page = max(1, page)

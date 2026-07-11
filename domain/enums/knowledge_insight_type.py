@@ -1,6 +1,6 @@
 from enum import Enum
 
-class OfferInsightType(str, Enum):
+class KnowledgeInsightType(str, Enum):
     PROBLEM_SOLVED = "problem_solved"
     SOLUTION = "solution"
     TRANSFORMATION = "transformation"

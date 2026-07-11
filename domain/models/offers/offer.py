@@ -21,8 +21,8 @@ class Offer(Base, JSONSerializable):
     details = Column(String, nullable=True)
 
     # (user-provided fact)
-    target_audience = Column(JSON, nullable=True)  # list[str]
-    pain_points = Column(JSON, nullable=True)      # list[str]
+    # target_audience = Column(JSON, nullable=True)  # list[str]
+    # pain_points = Column(JSON, nullable=True)      # list[str]
 
     # timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now())

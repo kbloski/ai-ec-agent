@@ -12,8 +12,9 @@ from core.settings import Settings
 from infrastructure.database.db import SessionLocal
 from application.assemblers.offer_assembler import OfferAssembler
 from infrastructure.repositories.offers_knowledge_repository import OfferKnowledgeRepository
-from infrastructure.repositories.offer_insights_repository import OfferInsightsRepository
+from infrastructure.repositories.knowledge_insights_repository import KnowledgeInsightsRepository
 from application.assemblers.offer_knowledge_assembler import OfferKnowledgeAssembler
+from infrastructure.repositories.offer_insights_repository import OfferInsightsRepository
 
 class Container(containers.DeclarativeContainer):
     db = providers.Factory(
@@ -62,6 +63,12 @@ class Container(containers.DeclarativeContainer):
         db=db
     )
 
+    knowledge_insights_repository = providers.Singleton(
+        KnowledgeInsightsRepository,
+        logger=logger,
+        db=db
+    )
+
     offer_insights_repository = providers.Singleton(
         OfferInsightsRepository,
         logger=logger,
@@ -72,14 +79,15 @@ class Container(containers.DeclarativeContainer):
         OfferAssembler,
         logger=logger,
         offers_repository=offers_repository,
-        offer_items_repository=offer_items_repository
+        offer_items_repository=offer_items_repository,
+        offer_insights_repository=offer_insights_repository
     )
 
     offer_knowledge_assembler = providers.Singleton(
         OfferKnowledgeAssembler,
         logger=logger,
         offer_knowledge_repository=offer_knowledge_repository,
-        offer_insights_repository=offer_insights_repository
+        knowledge_insights_repository=knowledge_insights_repository
     )
 
 

@@ -4,6 +4,10 @@ from application.mappers.offer_mapper import OfferMapper
 from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
 from domain.enums.ollama_message_role import OllamaMessageRole
 from infrastructure.ai.prompts.constraints.uniqueness_prompt import build_uniqueness_constraint_prompt  
+from domain.enums.offer_insight_type import OfferInsightType
+from domain.models.offers.offer_insight import OfferInsight
+from domain.enums.content_status import ContentStatus
+
 
 def get_system_prompt(offer_data: str):
     SYSTEM_PROMPT = f"""
@@ -82,12 +86,17 @@ Wygeneruj kilka dodatkowych segmentów klientów.
 def suggets_offer_data_handler(offer_id : int):
     container = Container()
     offer_repository = container.offers_repository()
+    offer_insights_repository = container.offer_insights_repository()
     offer_assembler = container.offer_assembler()
     ollama_service  = container.ollama_service()
 
     offer_db = offer_repository.get_by_id(id=offer_id)
     offer_dto = OfferMapper.to_dto(item=offer_db)
     offer_assembled = offer_assembler.assemble_dto(item=offer_dto)
+    offer_pain_points = [p.to_dict() for p in offer_assembled.offer_insights if p.type == OfferInsightType.PAIN_POINTS]
+    offer_target_audience = [p.to_dict() for p in offer_assembled.offer_insights if p.type == OfferInsightType.TARGET_AUDIENCE]
+
+    generated_offer_insights = []
 
     # ---------------------------------------
     # PAIN POINTS
@@ -100,7 +109,7 @@ def suggets_offer_data_handler(offer_id : int):
         ),
         LlmOllamaMessage(
             role=OllamaMessageRole.USER,
-            content=build_uniqueness_constraint_prompt( json.dumps(offer_assembled.pain_points))
+            content=build_uniqueness_constraint_prompt( json.dumps(offer_pain_points))
         ),
         LlmOllamaMessage(
             role=OllamaMessageRole.USER,
@@ -110,14 +119,17 @@ def suggets_offer_data_handler(offer_id : int):
 
     response_pain_points = ollama_service.chat_llm(messages=messages)
     new_pain_points_arr = json.loads(response_pain_points.content)
-    updated_pain_points = offer_assembled.pain_points + new_pain_points_arr
-    offer_db.pain_points = updated_pain_points
-    offer_assembled.pain_points = updated_pain_points
+    for p in new_pain_points_arr:
+        generated_offer_insights.append(OfferInsight(
+            offer_id = offer_id,
+            type = OfferInsightType.PAIN_POINTS,
+            content_status = ContentStatus.SUGGESTED,
+            value=p
+        ))
 
     # ---------------------------------------
     # Target audience
     # ---------------------------------------
-
     messages = [
         LlmOllamaMessage(
             role = OllamaMessageRole.SYSTEM,
@@ -125,7 +137,7 @@ def suggets_offer_data_handler(offer_id : int):
         ),
         LlmOllamaMessage(
             role=OllamaMessageRole.USER,
-            content=build_uniqueness_constraint_prompt( json.dumps(offer_assembled.target_audience))
+            content=build_uniqueness_constraint_prompt( json.dumps(offer_target_audience))
         ),
         LlmOllamaMessage(
             role=OllamaMessageRole.USER,
@@ -134,11 +146,21 @@ def suggets_offer_data_handler(offer_id : int):
     ]
 
     response_target_audience = ollama_service.chat_llm(messages=messages)
-    new_targets_audience = json.loads(response_target_audience.content)
-    updated_target_audience = offer_assembled.target_audience + new_targets_audience
-    offer_db.target_audience = updated_target_audience
-    offer_assembled.target_audience = updated_target_audience
+    for p in response_target_audience:
+        generated_offer_insights.append(OfferInsight(
+            offer_id = offer_id,
+            type = OfferInsightType.TARGET_AUDIENCE,
+            content_status = ContentStatus.SUGGESTED,
+            value=p
+        ))
 
-    offer_repository.update( item = offer_db)
+    offer_insights_repository.create_many(generated_offer_insights)
 
-    return offer_assembled
+    # --------------------------
+    #  Return full offer data
+    # --------------------------
+    updated_offer_db = offer_repository.get_by_id(id=offer_id)
+    updated_offer_dto = OfferMapper.to_dto(item=offer_db)
+    updated_offer_assembled = offer_assembler.assemble_dto(item=offer_dto)
+
+    return updated_offer_assembled

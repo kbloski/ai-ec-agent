@@ -4,16 +4,17 @@
 import json
 
 from application.mappers.offer_knowledge_mapper import OfferKnowledgeMapper
-from application.mappers.offer_insight_mapper import OfferInsightsMapper
+from application.mappers.knowledge_insight_mapper import KnowledgeInsightMapper
+from application.mappers.offer_mapper import OfferMapper
 
 from di.container import Container
 from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
 from domain.enums.ollama_message_role import OllamaMessageRole
 
-from domain.models.offers.offer_knowledge import OfferKnowledge
-from domain.models.offers.offer_insight import OfferInsight
+from domain.models.knowledge.offer_knowledge import OfferKnowledge
+from domain.models.knowledge.knowledge_insight import KnowledgeInsight
 
-from domain.offer_insight_type import OfferInsightType
+from domain.enums.knowledge_insight_type import KnowledgeInsightType
 from domain.enums.content_status import ContentStatus
 
 from infrastructure.database.db import SessionLocal
@@ -170,18 +171,18 @@ def call_llm(ollama_service, prompt):
 # =====================================================
 
 INSIGHT_MAPPING = {
-    "problem_solved": OfferInsightType.PROBLEM_SOLVED,
-    "solution":OfferInsightType.SOLUTION,
-    "transformation":OfferInsightType.TRANSFORMATION,
-    "offer_components":OfferInsightType.OFFER_COMPONENT,
-    "features":OfferInsightType.FEATURE,
-    "functional_benefits":OfferInsightType.FUNCTIONAL_BENEFIT,
-    "emotional_benefits":OfferInsightType.EMOTIONAL_BENEFIT,
-    "differentiators":OfferInsightType.DIFFERENTIATOR,
-    "strengths":OfferInsightType.STRENGTH,
-    "limitations":OfferInsightType.LIMITATION,
-    "assumptions":OfferInsightType.ASSUMPTION,
-    "additional_insights":OfferInsightType.ADDITIONAL_INSIGHT,
+    "problem_solved": KnowledgeInsightType.PROBLEM_SOLVED,
+    "solution":KnowledgeInsightType.SOLUTION,
+    "transformation":KnowledgeInsightType.TRANSFORMATION,
+    "offer_components":KnowledgeInsightType.OFFER_COMPONENT,
+    "features":KnowledgeInsightType.FEATURE,
+    "functional_benefits":KnowledgeInsightType.FUNCTIONAL_BENEFIT,
+    "emotional_benefits":KnowledgeInsightType.EMOTIONAL_BENEFIT,
+    "differentiators":KnowledgeInsightType.DIFFERENTIATOR,
+    "strengths":KnowledgeInsightType.STRENGTH,
+    "limitations":KnowledgeInsightType.LIMITATION,
+    "assumptions":KnowledgeInsightType.ASSUMPTION,
+    "additional_insights":KnowledgeInsightType.ADDITIONAL_INSIGHT,
 }
 
 
@@ -194,6 +195,7 @@ def offer_knowledge_generate_handler(offer_id: int):
 
     container = Container()
 
+    offer_assembler = container.offer_assembler()
     offers_repository = container.offers_repository()
     offer_items_repository = container.offer_items_repository()
     ollama_service = container.ollama_service()
@@ -202,33 +204,12 @@ def offer_knowledge_generate_handler(offer_id: int):
     # ----------------------------
     # LOAD OFFER
     # ----------------------------
-    offer = offers_repository.get_by_id( offer_id)
+    offer = offers_repository.get_by_id( offer_id )
+    offer_dto = OfferMapper.to_dto( item=offer)
+    offer_assembled = offer_assembler.assemble_dto(item=offer_dto)
 
-    if not offer:
-        raise ValueError(
-            f"Offer {offer_id} not found"
-        )
-
-
-    offer_items = offer_items_repository.get_by_offer_id(offer_id)
-
-
-    offer_json = (
-        offer.to_dict()
-        if hasattr(offer, "to_dict")
-        else {
-            "id": offer.id,
-            "name": offer.name,
-            "details": offer.details,
-            "selling_price": float(
-                offer.selling_price
-            )
-            if offer.selling_price else None,
-        }
-    )
-
-    offer_json["offer_items"] = [ item.to_dict() for item in offer_items ]
-
+    offer_json = offer_assembled.to_dict()
+    offer_json_str = json.dumps(offer_json)
 
     # ----------------------------
     # GENERATE KNOWLEDGE
@@ -240,10 +221,7 @@ def offer_knowledge_generate_handler(offer_id: int):
         f"""
 OFFER DATA:
 
-{json.dumps(
-    offer_json,
-    ensure_ascii=False
-)}
+{offer_json_str}
 
 TASK:
 
@@ -287,7 +265,7 @@ TASK:
                     if not item:
                         continue
 
-                    insight = OfferInsight(
+                    insight = KnowledgeInsight(
                         offer_id=offer_id,
                         knowledge_id=offer_knowledge.id,
                         type=insight_type,
@@ -317,7 +295,7 @@ TASK:
     )
 
     result.offer_insights = [
-        OfferInsightsMapper.to_dto(item)
+        KnowledgeInsightMapper.to_dto(item)
         for item in saved_insights
     ]
 

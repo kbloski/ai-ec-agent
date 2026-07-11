@@ -182,30 +182,13 @@ def generate_target_audience_handler(
     offer_id: int,
     knowledge_id: int
 ) -> Dict[str, Any]:
-
-
     container = Container()
 
+    knowledge_repo = container.offer_knowledge_repository()
+    knowledge_assembler = container.offer_knowledge_assembler()
+    ollama_service = container.ollama_service()
 
-    knowledge_repo = (
-        container.offer_knowledge_repository()
-    )
-
-    knowledge_assembler = (
-        container.offer_knowledge_assembler()
-    )
-
-    ollama_service = (
-        container.ollama_service()
-    )
-
-
-    knowledge_db = (
-        knowledge_repo.get_by_id(
-            id=knowledge_id
-        )
-    )
-
+    knowledge_db =  knowledge_repo.get_by_id( id=knowledge_id )
 
     if not knowledge_db:
         return {

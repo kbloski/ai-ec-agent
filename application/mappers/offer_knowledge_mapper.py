@@ -1,5 +1,5 @@
-from domain.models.offers.offer_knowledge import OfferKnowledge
-from application.dtos.offers.offer_knowledge_dto import OfferKnowledgeDto
+from domain.models.knowledge.offer_knowledge import OfferKnowledge
+from application.dtos.knowledge.offer_knowledge_dto import OfferKnowledgeDto
 
 class OfferKnowledgeMapper:
 
