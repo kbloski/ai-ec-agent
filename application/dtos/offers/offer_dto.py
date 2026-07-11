@@ -23,6 +23,7 @@ class OfferDto(JSONSerializable):
         self.details = details
 
     def to_dict(self, exclude=None):
-        self.offer_insights = [i.to_dict() for i in self.offer_insights]
-        self.offer_items = [i.to_dict() for i in self.offer_items]
-        return super().to_dict(exclude)
+        obj_dict = super().to_dict(exclude)
+        obj_dict["offer_items"] = [i.to_dict() for i in self.offer_items]
+        obj_dict["self.offer_insights"] = [i.to_dict() for i in self.offer_insights]
+        return obj_dict

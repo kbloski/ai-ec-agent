@@ -16,5 +16,5 @@ class OfferInsightDto(JSONSerializable):
         self.content_status = content_status
         self.value = value
 
-    def to_dict(self, exclude=None):
-        return super().to_dict(exclude)
+    # def to_dict(self, exclude=None):
+        # return super().to_dict(exclude)

@@ -93,6 +93,7 @@ def suggets_offer_data_handler(offer_id : int):
     offer_db = offer_repository.get_by_id(id=offer_id)
     offer_dto = OfferMapper.to_dto(item=offer_db)
     offer_assembled = offer_assembler.assemble_dto(item=offer_dto)
+    
     offer_pain_points = [p.to_dict() for p in offer_assembled.offer_insights if p.type == OfferInsightType.PAIN_POINTS]
     offer_target_audience = [p.to_dict() for p in offer_assembled.offer_insights if p.type == OfferInsightType.TARGET_AUDIENCE]
 
@@ -120,12 +121,15 @@ def suggets_offer_data_handler(offer_id : int):
     response_pain_points = ollama_service.chat_llm(messages=messages)
     new_pain_points_arr = json.loads(response_pain_points.content)
     for p in new_pain_points_arr:
-        generated_offer_insights.append(OfferInsight(
+        new_insights = OfferInsight(
             offer_id = offer_id,
             type = OfferInsightType.PAIN_POINTS,
             content_status = ContentStatus.SUGGESTED,
             value=p
-        ))
+        )
+        generated_offer_insights.append(new_insights)
+        offer_assembled.offer_insights.append(new_insights)
+
 
     # ---------------------------------------
     # Target audience
@@ -147,12 +151,14 @@ def suggets_offer_data_handler(offer_id : int):
 
     response_target_audience = ollama_service.chat_llm(messages=messages)
     for p in response_target_audience:
-        generated_offer_insights.append(OfferInsight(
+        new_insights =OfferInsight(
             offer_id = offer_id,
             type = OfferInsightType.TARGET_AUDIENCE,
             content_status = ContentStatus.SUGGESTED,
             value=p
-        ))
+        )
+        generated_offer_insights.append(new_insights)
+        offer_assembled.offer_insights.append(new_insights)
 
     offer_insights_repository.create_many(generated_offer_insights)
 
@@ -160,7 +166,7 @@ def suggets_offer_data_handler(offer_id : int):
     #  Return full offer data
     # --------------------------
     updated_offer_db = offer_repository.get_by_id(id=offer_id)
-    updated_offer_dto = OfferMapper.to_dto(item=offer_db)
+    updated_offer_dto = OfferMapper.to_dto(item=updated_offer_db)
     updated_offer_assembled = offer_assembler.assemble_dto(item=offer_dto)
 
     return updated_offer_assembled
