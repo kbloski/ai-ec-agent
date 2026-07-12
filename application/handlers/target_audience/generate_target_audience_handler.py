@@ -192,7 +192,7 @@ ENUM RULES:
 
 
 Requirements:
-
+- Return a minimum of 3 target audience segments.
 - Do not invent random customers.
 - Provide realistic segments.
 - Include assumptions.
