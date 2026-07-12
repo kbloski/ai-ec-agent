@@ -1,20 +1,13 @@
 from typing import Dict, Any
+from di.container import Container
+from application.mappers.target_audience_mapper import TargetAudienceMapper
 
-def get_target_audience_preview_handler(offer_id: int, knowledge_id: int, target_audience_id: int) -> Dict[str, Any]:
-    """
-    Retrieve a preview of a specific target audience for a knowledge in an offer.
-    
-    Args:
-        offer_id: The ID of the offer.
-        knowledge_id: The ID of the knowledge.
-        target_audience_id: The ID of the target audience.
-    
-    Returns:
-        A dictionary containing the preview details of the target audience.
-    """
-    # In a real implementation, this function would fetch a preview of the target audience
-    # from a database or service. For demonstration purposes, we're returning a mock response.
-    
-    return {
-        "status": True
-    }
+def get_target_audience_preview_handler( target_audience_id: int) -> Dict[str, Any]:
+    container = Container()
+    repo = container.target_audiences_repository()
+    assember = container.target_audience_assembler()
+
+    target_audience_db =repo.find_by_id(target_audience_id)
+    dto = TargetAudienceMapper.to_dto( target_audience_db )
+    assembled_dto = assember.assemble_dto(dto)
+    return assembled_dto

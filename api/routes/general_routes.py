@@ -31,6 +31,9 @@ def register_general_routes(router: APIRouter):
     def suggest_offer_data(id: int):
         return suggets_offer_data_handler(offer_id=id)
 
+
+
+
     # POST in future 
     @router.get("/offers/{id}/knowledges/generate")
     def offer_knowledge_generate(id: int):
@@ -43,7 +46,7 @@ def register_general_routes(router: APIRouter):
 
 
     #  POST in future 
-    @router.get("/offers/{offer_id}/knowledges/{knowledge_id}")
+    @router.get("/knowledges/{knowledge_id}")
     def get_offer_knowledge(offer_id: int, knowledge_id : int):
         return get_offer_knowledge_handler(offer_id=offer_id, knowledge_id=knowledge_id)
 
@@ -52,16 +55,16 @@ def register_general_routes(router: APIRouter):
 
 
     #  POST in future 
-    @router.get("/offers/{offer_id}/knowledges/{knowledge_id}/target-audiences/generate")
-    def generate_target_audience(offer_id: int, knowledge_id: int):
-        return generate_target_audience_handler(offer_id=offer_id, knowledge_id=knowledge_id)
+    @router.get("/knowledges/{knowledge_id}/target-audiences/generate")
+    def generate_target_audience(knowledge_id: int):
+        return generate_target_audience_handler( knowledge_id=knowledge_id)
 
     # #  GET in future 
-    @router.get("/offers/{offer_id}/knowledges/{knowledge_id}/target-audiences")
-    def get_target_audience(offer_id: int, knowledge_id: int):
-        return get_target_audience_handler(offer_id=offer_id, knowledge_id=knowledge_id)
+    @router.get("/knowledges/{knowledge_id}/target-audiences")
+    def get_target_audience( knowledge_id: int):
+        return get_target_audience_handler( knowledge_id=knowledge_id)
 
     # #  GET in future 
-    # @router.get("/offers/{offer_id}/knowledges/{knowledge_id}/target-audiences/{target_audience_id}")
-    # def get_target_audience_preview(offer_id: int, knowledge_id: int, target_audience_id: int):
-    #     return get_target_audience_preview_handler(offer_id=offer_id, knowledge_id=knowledge_id, target_audience_id=target_audience_id)
+    @router.get("/target-audiences/{target_audience_id}")
+    def get_target_audience_preview( target_audience_id: int):
+        return get_target_audience_preview_handler( target_audience_id=target_audience_id)

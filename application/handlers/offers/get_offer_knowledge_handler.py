@@ -7,7 +7,6 @@ from application.mappers.offer_knowledge_mapper import OfferKnowledgeMapper
 # =====================================================
 
 def get_offer_knowledge_handler(
-    offer_id: int,
     knowledge_id: int
 ):
     container = Container()

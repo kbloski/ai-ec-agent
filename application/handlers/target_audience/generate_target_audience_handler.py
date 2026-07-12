@@ -143,7 +143,6 @@ TARGET_AUDIENCE_SCHEMA = {
 
 
 def generate_target_audience_handler(
-    offer_id: int,
     knowledge_id: int
 ) -> Dict[str, Any]:
     container = Container()

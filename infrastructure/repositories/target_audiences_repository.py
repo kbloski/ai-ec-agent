@@ -28,6 +28,18 @@ class TargetAudiencesRepository:
         return items
 
     # 🔍 GET BY ID
+    def find_by_id(
+        self,
+        id: int ,
+    ) -> TargetAudience:
+
+        return self.db.query(TargetAudience).filter(
+            TargetAudience.id == id
+        ).first()
+
+
+
+    # 🔍 GET BY ID
     def find_for_knowledge(
         self,
         knowledge_id: int = None,
