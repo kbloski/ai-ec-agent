@@ -24,9 +24,6 @@ Currently analyzed product:
 {offer_data}"""
 
 
-
-
-
 PAIN_POINTS_PROMPT = """
 Przeanalizuj produkt i zidentyfikuj realistyczne problemy klientów, które ten produkt rozwiązuje.
 
@@ -49,7 +46,7 @@ Zasady:
 
 Istniejące punkty bólu traktuj jako kontekst. Rozwijaj je i uzupełniaj, ale nie kopiuj ich bezmyślnie.
 
-Zwróć wyłącznie poprawną tablicę JSON zawierającą stringi.
+Zwróć wyłącznie poprawną JSON zawierający listę stringów.
 
 Wygeneruj kilka realistycznych punktów bólu klientów.
 """
@@ -76,7 +73,7 @@ Zasady:
 - Skup się na praktycznych grupach klientów przydatnych w komunikacji marketingowej.
 - Nie powtarzaj istniejących grup odbiorców.
 
-Zwróć wyłącznie poprawną tablicę JSON zawierającą stringi.
+Zwróć wyłącznie poprawny JSON zawierający listę stringów.
 
 Wygeneruj kilka dodatkowych segmentów klientów.
 """
@@ -102,7 +99,6 @@ def suggets_offer_data_handler(offer_id : int):
     # ---------------------------------------
     # PAIN POINTS
     # ---------------------------------------
-
     messages = [
         LlmOllamaMessage(
             role = OllamaMessageRole.SYSTEM,
@@ -123,8 +119,8 @@ def suggets_offer_data_handler(offer_id : int):
     for p in new_pain_points_arr:
         new_insights = OfferInsight(
             offer_id = offer_id,
-            type = OfferInsightType.PAIN_POINTS,
-            content_status = ContentStatus.SUGGESTED,
+            type = OfferInsightType.PAIN_POINTS.value,
+            content_status = ContentStatus.SUGGESTED.value,
             value=p
         )
         generated_offer_insights.append(new_insights)
@@ -154,14 +150,15 @@ def suggets_offer_data_handler(offer_id : int):
     for p in new_target_audience:
         new_insights =OfferInsight(
             offer_id = offer_id,
-            type = OfferInsightType.TARGET_AUDIENCE,
-            content_status = ContentStatus.SUGGESTED,
+            type = OfferInsightType.TARGET_AUDIENCE.value,
+            content_status = ContentStatus.SUGGESTED.value,
             value=p
         )
         generated_offer_insights.append(new_insights)
         offer_assembled.offer_insights.append(new_insights)
 
-    offer_insights_repository.create_many(generated_offer_insights)
+    # return generated_offer_insights
+    offer_insights_repository.create_many(items=generated_offer_insights)
 
     # --------------------------
     #  Return full offer data

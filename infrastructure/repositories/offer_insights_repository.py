@@ -8,23 +8,24 @@ from common.results.paginated_result import PaginatedResult
 
 class OfferInsightsRepository:
     def __init__(self, logger : Logger, db: Session):
+        self.logger=logger
         self.db = db
 
     def create_many(
         self,
-        insights: list[OfferInsight]
+        items: list[OfferInsight]
     ) -> list[OfferInsight]:
 
-        if not insights:
+        if not items:
             return []
 
-        self.db.add_all(insights)
+        self.db.add_all(items)
         self.db.commit()
 
-        for insight in insights:
+        for insight in items:
             self.db.refresh(insight)
 
-        return insights
+        return items
 
     # 🔍 GET BY ID
     def find_by_offer(
