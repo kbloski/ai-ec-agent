@@ -1,10 +1,12 @@
 from typing import Optional, List
 from .knowledge_insight_dto import KnowledgeInsightDto
+from ..audience.target_audience_dto import TargetAudienceDto
 from common.mixins.json_serializable import JSONSerializable
 
 class OfferKnowledgeDto(JSONSerializable):
 
     offer_insights: List[KnowledgeInsightDto] = []
+    target_audiences: List[TargetAudienceDto] = []
 
     def __init__(
         self,
@@ -35,7 +37,8 @@ class OfferKnowledgeDto(JSONSerializable):
             "offer_summary": self.offer_summary,
             "category": self.category,
             "value_proposition": self.value_proposition,
-            "offer_insights": [i.to_dict() for i in self.offer_insights]
+            "offer_insights": [i.to_dict() for i in self.offer_insights],
+            "target_audiences" : [t.to_dict() for t in self.target_audiences]
         }
 
         return {k: v for k, v in data.items() if k not in exclude}

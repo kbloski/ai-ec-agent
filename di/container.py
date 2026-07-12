@@ -102,13 +102,15 @@ class Container(containers.DeclarativeContainer):
         OfferKnowledgeAssembler,
         logger=logger,
         offer_knowledge_repository=offer_knowledge_repository,
-        knowledge_insights_repository=knowledge_insights_repository
+        knowledge_insights_repository=knowledge_insights_repository,
+        target_audiences_repository=target_audiences_repository
     )
 
     target_audience_assembler =  providers.Singleton(
         TargetAudienceAssembler,
         logger=logger,
     )
+
 
     # --------------------------
     # Serwisy
