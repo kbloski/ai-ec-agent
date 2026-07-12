@@ -1,4 +1,3 @@
-from typing import List
 from common.mixins.json_serializable import JSONSerializable
 
 class OfferInsightDto(JSONSerializable):
@@ -16,5 +15,15 @@ class OfferInsightDto(JSONSerializable):
         self.content_status = content_status
         self.value = value
 
-    # def to_dict(self, exclude=None):
-        # return super().to_dict(exclude)
+    def to_dict(self, exclude=None):
+        exclude = set(exclude or [])
+
+        data = {
+            "id": self.id,
+            "offer_id": self.offer_id,
+            "type": self.type,
+            "content_status": self.content_status,
+            "value": self.value,
+        }
+
+        return {k: v for k, v in data.items() if k not in exclude}

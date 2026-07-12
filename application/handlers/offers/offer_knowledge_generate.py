@@ -210,6 +210,7 @@ def offer_knowledge_generate_handler(offer_id: int):
 
     offer_json = offer_assembled.to_dict()
     offer_json_str = json.dumps(offer_json)
+    
 
     # ----------------------------
     # GENERATE KNOWLEDGE
