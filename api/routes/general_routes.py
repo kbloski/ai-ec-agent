@@ -6,12 +6,11 @@ from application.handlers.offers.get_offer import get_offer_handler
 from application.handlers.offers.offer_knowledge_generate import offer_knowledge_generate_handler
 from application.handlers.offers.get_offer_knowledge_handler import get_offer_knowledge_handler
 from application.handlers.offers.get_offer_knowledges_handler import get_offer_knowledges_handler
-from application.handlers.analysis.generate_knowledge_analysis_handler import generate_knowledge_analysis_guides_handler
-from application.handlers.analysis.generate_knowledge_analysis_guides_handler import generate_knowledge_analysis_handler
 from application.handlers.target_audience.generate_target_audience_handler import generate_target_audience_handler
 from application.handlers.target_audience.get_target_audience_handler import get_target_audience_handler
 from application.handlers.target_audience.get_target_audience_preview_handler import get_target_audience_preview_handler
 from application.handlers.offers.suggest_offer_data_handler import suggets_offer_data_handler
+from application.handlers.analysis.generate_knowledge_analysis_handler import generate_knowledge_analysis_handler
 
 def register_general_routes(router: APIRouter):
     @router.get("/offers")
@@ -47,8 +46,8 @@ def register_general_routes(router: APIRouter):
 
     #  POST in future 
     @router.get("/knowledges/{knowledge_id}")
-    def get_offer_knowledge(offer_id: int, knowledge_id : int):
-        return get_offer_knowledge_handler(offer_id=offer_id, knowledge_id=knowledge_id)
+    def get_offer_knowledge( knowledge_id : int):
+        return get_offer_knowledge_handler( knowledge_id=knowledge_id)
 
 
 
@@ -68,3 +67,10 @@ def register_general_routes(router: APIRouter):
     @router.get("/target-audiences/{target_audience_id}")
     def get_target_audience_preview( target_audience_id: int):
         return get_target_audience_preview_handler( target_audience_id=target_audience_id)
+
+
+
+     #  POST in future 
+    @router.get("/knowledges/{knowledge_id}/analysis/generate")
+    def knowledge_analysis_generate(knowledge_id: int):
+        return generate_knowledge_analysis_handler( knowledge_id=knowledge_id)
