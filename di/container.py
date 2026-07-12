@@ -15,6 +15,7 @@ from infrastructure.repositories.offers_knowledge_repository import OfferKnowled
 from infrastructure.repositories.knowledge_insights_repository import KnowledgeInsightsRepository
 from application.assemblers.offer_knowledge_assembler import OfferKnowledgeAssembler
 from infrastructure.repositories.offer_insights_repository import OfferInsightsRepository
+from infrastructure.repositories.target_audiences_repository import TargetAudiencesRepository
 
 class Container(containers.DeclarativeContainer):
     db = providers.Factory(
@@ -71,6 +72,12 @@ class Container(containers.DeclarativeContainer):
 
     offer_insights_repository = providers.Singleton(
         OfferInsightsRepository,
+        logger=logger,
+        db=db
+    )
+
+    target_audiences_repository = providers.Singleton(
+        TargetAudiencesRepository,
         logger=logger,
         db=db
     )

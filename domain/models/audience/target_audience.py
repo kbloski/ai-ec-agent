@@ -20,6 +20,9 @@ class TargetAudience(Base, JSONSerializable):
         index=True,
     )
 
+    # Status
+    content_status = Column(String(20), nullable=False, index=True)
+
     # Basic information
     name = Column(String(255), nullable=False)
     reason = Column(String, nullable=True)
@@ -54,9 +57,6 @@ class TargetAudience(Base, JSONSerializable):
     # Marketing
     message_angles = Column(JSON, nullable=True)
     marketing_channels = Column(JSON, nullable=True)
-
-    # Status
-    content_status = Column(String(20), nullable=False, index=True)
 
     # Timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now())

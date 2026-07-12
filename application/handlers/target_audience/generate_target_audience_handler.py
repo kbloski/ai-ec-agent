@@ -4,15 +4,20 @@ from typing import Dict, Any
 
 from di.container import Container
 from application.mappers.offer_knowledge_mapper import OfferKnowledgeMapper
+from application.mappers.target_audience_mapper import TargetAudienceMapper
 
 from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
-from domain.enums.ollama_message_role import OllamaMessageRole
+from domain.models.audience.target_audience import TargetAudience
 
+from domain.enums.ollama_message_role import OllamaMessageRole
 from domain.enums.audience_gender import AudienceGender
 from domain.enums.decision_time import DecisionTime
 from domain.enums.awareness_level import AwarenessLevel
 from domain.enums.intensity_level import IntensityLevel
 from domain.enums.purchasing_power import PurchasingPower
+from domain.enums.content_status import ContentStatus
+
+from infrastructure.ai.prompts.constraints.uniqueness_prompt import build_uniqueness_constraint_prompt
 
 BASE_SYSTEM_PROMPT = """
 You are a senior AI product strategy specialist specializing in:
@@ -143,11 +148,14 @@ def generate_target_audience_handler(
 ) -> Dict[str, Any]:
     container = Container()
 
+    target_audience_repo = container.target_audiences_repository()
     knowledge_repo = container.offer_knowledge_repository()
     knowledge_assembler = container.offer_knowledge_assembler()
     ollama_service = container.ollama_service()
 
     knowledge_db =  knowledge_repo.get_by_id( id=knowledge_id )
+    target_audiences_db = target_audience_repo.find_for_knowledge(knowledge_id=knowledge_id)
+    target_audiences_db_dtos = [TargetAudienceMapper.to_dto(item=t) for t in target_audiences_db]
 
     if not knowledge_db:
         return {
@@ -199,7 +207,12 @@ Requirements:
                 role=OllamaMessageRole.SYSTEM,
                 content=BASE_SYSTEM_PROMPT
             ),
-
+            LlmOllamaMessage(
+                role=OllamaMessageRole.USER,
+                content=build_uniqueness_constraint_prompt(
+                    existing_data= json.dumps( [t.to_dict() for t in target_audiences_db_dtos])
+                )
+            ),
             LlmOllamaMessage(
                 role=OllamaMessageRole.USER,
                 content=user_prompt
@@ -209,6 +222,38 @@ Requirements:
 
 
     response_json = json.loads(response.content )
-    audiences_dict = response_json["audiences"]
+    audiences_arr = response_json["audiences"]
 
-    return audiences_dict
+    new_target_audiences = []
+    for t in audiences_arr:
+        new_target_audiences.append(
+            TargetAudience(
+                knowledge_id=knowledge_id,
+                content_status=ContentStatus.SUGGESTED.value,
+                name=t["name"],
+                reason=t["reason"],
+                score=t['score'],
+                confidence=t['confidence'],
+                age_min=t["age_min"],
+                age_max=t["age_max"],
+                gender=t["gender"],
+                location=t["location"],
+                purchasing_power=t["purchasing_power"],
+                lifestyles=t["lifestyles"],
+                values=t["values"],
+                awareness_level=t["awareness_level"],
+                price_sensitivity=t["price_sensitivity"],
+                research_level=t["research_level"],
+                decision_time=t["decision_time"],
+                pain_points=t["pain_points"],
+                motivations=t["motivations"],
+                buying_triggers=t["buying_triggers"],
+                objections=t["objections"],
+                message_angles=t["message_angles"],
+                marketing_channels=t["marketing_channels"]
+            )
+        )
+
+    target_audience_repo.create_many(items=new_target_audiences)
+
+    return new_target_audiences
