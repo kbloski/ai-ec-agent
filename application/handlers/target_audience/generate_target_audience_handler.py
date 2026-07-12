@@ -14,39 +14,38 @@ from domain.enums.awareness_level import AwarenessLevel
 from domain.enums.intensity_level import IntensityLevel
 from domain.enums.purchasing_power import PurchasingPower
 
-
 BASE_SYSTEM_PROMPT = """
-Jesteś seniorem strategii produktowej AI specjalizującym się w:
+You are a senior AI product strategy specialist specializing in:
 
-- segmentacji klientów,
-- psychologii zakupowej,
-- badaniu rynku,
-- definiowaniu ICP,
-- strategii marketingowej,
-- optymalizacji konwersji.
+- customer segmentation,
+- buying psychology,
+- market research,
+- ICP (Ideal Customer Profile) definition,
+- marketing strategy,
+- conversion optimization.
 
-Analizujesz produkty i oferty oraz zamieniasz informacje o produkcie
-w praktyczne dane o klientach.
+You analyze products and offers and transform product information
+into practical customer insights.
 
-Twoim celem jest określenie:
+Your goal is to determine:
 
-1. Kto najprawdopodobniej kupi produkt.
-2. Dlaczego go kupi.
-3. Jak skutecznie do niego dotrzeć.
+1. Who is most likely to buy the product.
+2. Why they will buy it.
+3. How to effectively reach them.
 
-Zasady:
+Rules:
 
-- Analizuj konkretny produkt.
-- Nie twórz generycznych grup klientów.
-- Oddziel fakty od założeń.
-- Jeśli brakuje danych, wykonaj realistyczne założenia.
-- Oznacz założenia.
-- Wyniki muszą być użyteczne reklamowo.
+- Analyze the specific product.
+- Do not create generic customer groups.
+- Separate facts from assumptions.
+- If data is missing, make realistic assumptions.
+- Label assumptions.
+- Results must be useful for advertising and marketing.
 
-Zwróć WYŁĄCZNIE poprawny JSON.
-Bez markdown.
-Bez komentarzy.
-Bez tekstu poza JSON.
+Return ONLY valid JSON.
+No markdown.
+No comments.
+No text outside JSON.
 """
 
 
@@ -58,7 +57,7 @@ def enum_values(enum):
 
 
 ENUM_PROMPT = f"""
-Dozwolone wartości enum:
+Allowed enum values:
 
 gender:
 AudienceGenderEnum:
@@ -85,18 +84,18 @@ DecisionTimeEnum:
 {enum_values(DecisionTime)}
 
 
-Zasady enum:
+Enum rules:
 
-- Pola enum muszą być pojedynczym stringiem.
-- Nie zwracaj tablic.
-- Nie twórz nowych wartości.
-- Używaj wyłącznie wartości dostępnych w odpowiednim enumie.
+- Enum fields must contain a single string value.
+- Do not return arrays.
+- Do not create new values.
+- Use only values available in the corresponding enum.
 
-Przykład poprawny:
+Correct example:
 
 "gender": "all"
 
-Przykład błędny:
+Incorrect example:
 
 "gender": ["male", "female"]
 """
@@ -137,46 +136,6 @@ TARGET_AUDIENCE_SCHEMA = {
 }
 
 
-def serialize_object(obj):
-
-    if isinstance(obj, list):
-        return [
-            serialize_object(x)
-            for x in obj
-        ]
-
-    if isinstance(obj, dict):
-        return {
-            k: serialize_object(v)
-            for k, v in obj.items()
-        }
-
-    if hasattr(obj, "__dict__"):
-        return {
-            key: serialize_object(value)
-            for key, value in obj.__dict__.items()
-            if not key.startswith("_")
-        }
-
-    return obj
-
-
-def extract_json(text: str):
-
-    match = re.search(
-        r"\{.*\}",
-        text,
-        re.DOTALL
-    )
-
-    if not match:
-        raise ValueError(
-            "LLM response does not contain JSON"
-        )
-
-    return match.group(0)
-
-
 
 def generate_target_audience_handler(
     offer_id: int,
@@ -197,48 +156,24 @@ def generate_target_audience_handler(
         }
 
 
-    knowledge_dto = (
-        OfferKnowledgeMapper.to_dto(
-            item=knowledge_db
-        )
-    )
+    knowledge_dto = OfferKnowledgeMapper.to_dto( item=knowledge_db )
+    assembled_dto =  knowledge_assembler.assemble_dto( item=knowledge_dto )
+    knowledge_json = assembled_dto.to_dict()
 
-
-    assembled_dto = (
-        knowledge_assembler.assemble_dto(
-            item=knowledge_dto
-        )
-    )
-
-
-    knowledge_json = json.dumps(
-        serialize_object(
-            assembled_dto
-        ),
-        ensure_ascii=False,
-        indent=2
-    )
-
-
-    schema_json = json.dumps(
-        TARGET_AUDIENCE_SCHEMA,
-        ensure_ascii=False,
-        indent=2
-    )
-
+    schema_json = json.dumps( TARGET_AUDIENCE_SCHEMA, ensure_ascii=False, indent=2)
 
     user_prompt = f"""
-Przeanalizuj informacje o produkcie.
+Analyze the product information.
 
-DANE PRODUKTU:
+PRODUCT DATA:
 
 {knowledge_json}
 
 
-Wygeneruj grupy docelowe.
+Generate target audience segments.
 
 
-Format odpowiedzi:
+Response format:
 
 {schema_json}
 
@@ -248,12 +183,11 @@ ENUM RULES:
 {ENUM_PROMPT}
 
 
-Wymagania:
+Requirements:
 
-- Odpowiedź po polsku.
-- Nie wymyślaj przypadkowych klientów.
-- Podawaj realistyczne segmenty.
-- Uwzględnij założenia.
+- Do not invent random customers.
+- Provide realistic segments.
+- Include assumptions.
 - JSON ONLY.
 """
 
@@ -274,27 +208,7 @@ Wymagania:
     )
 
 
-    try:
+    response_json = json.loads(response.content )
+    audiences_dict = response_json["audiences"]
 
-        clean_json = extract_json(
-            response.content
-        )
-
-        response_json = json.loads(
-            clean_json
-        )
-
-    except Exception as e:
-
-        return {
-            "status": False,
-            "error": "Invalid LLM JSON",
-            "raw_response": response.content,
-            "details": str(e)
-        }
-
-
-    return {
-        "status": True,
-        "data": response_json
-    }
+    return audiences_dict

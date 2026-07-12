@@ -25,57 +25,56 @@ Currently analyzed product:
 
 
 PAIN_POINTS_PROMPT = """
-Przeanalizuj produkt i zidentyfikuj realistyczne problemy klientów, które ten produkt rozwiązuje.
+Analyze the product and identify realistic customer pain points that this product solves.
 
-Najpierw zrozum produkt:
-- jakie zadanie pomaga wykonać,
-- jakie niedogodności usuwa,
-- jakie trudności zmniejsza,
-- jakie istniejące metody lub narzędzia może usprawnić.
+First, understand the product:
+- what task it helps customers accomplish,
+- what inconveniences it removes,
+- what difficulties it reduces,
+- what existing methods or tools it can improve.
 
-Wygeneruj punkty bólu na podstawie realnych sytuacji, w których klient potrzebowałby tego produktu.
+Generate pain points based on real-life situations where a customer would need this product.
 
-Zasady:
-- Trzymaj się rzeczywistego przeznaczenia i możliwości produktu.
-- Nie wymyślaj całkowicie nowych rynków ani niezwiązanych zastosowań.
-- Nie zakładaj profesjonalnego zastosowania, jeśli produkt wyraźnie go nie wspiera.
-- Nie twórz problemów, które nie mają bezpośredniego związku z produktem.
-- Nie opisuj cech produktu, jego zalet ani korzyści marketingowych.
-- Opisuj sytuację klienta przed zakupem produktu.
-- Skup się na frustracji, trudnościach, stracie czasu, wysiłku, niedogodnościach lub ograniczeniach.
+Rules:
+- Stay within the product's actual purpose and capabilities.
+- Do not invent completely new markets or unrelated use cases.
+- Do not assume professional use if the product does not clearly support it.
+- Do not create problems that are not directly related to the product.
+- Do not describe product features, advantages, or marketing benefits.
+- Describe the customer's situation before purchasing the product.
+- Focus on frustration, difficulties, wasted time, effort, inconveniences, or limitations.
 
-Istniejące punkty bólu traktuj jako kontekst. Rozwijaj je i uzupełniaj, ale nie kopiuj ich bezmyślnie.
+Treat existing pain points as context. Expand and complement them, but do not copy them blindly.
 
-Zwróć wyłącznie poprawną JSON zawierający listę stringów.
+Return only valid JSON containing a list of strings.
 
-Wygeneruj kilka realistycznych punktów bólu klientów.
+Generate several realistic customer pain points.
 """
 
 
-
 TARGET_AUDIENCE_PROMPT = """
-Przeanalizuj produkt i rozszerz istniejącą grupę docelową o dodatkowe realistyczne grupy klientów.
+Analyze the product and expand the existing target audience with additional realistic customer segments.
 
-Znajdź osoby, które naturalnie mogłyby kupić ten produkt, ponieważ mają podobną potrzebę lub problem.
+Find people who could naturally buy this product because they have a similar need or problem.
 
-Oprzyj analizę na:
-- obecnej grupie docelowej,
-- przeznaczeniu produktu,
-- sytuacjach użycia produktu,
-- problemach klientów.
+Base the analysis on:
+- the current target audience,
+- the product's purpose,
+- product usage situations,
+- customer problems.
 
-Zasady:
-- Trzymaj się obecnego pozycjonowania produktu.
-- Nie szukaj całkowicie nowych rynków.
-- Nie twórz mało prawdopodobnych grup zawodowych, jeśli produkt nie pasuje do ich potrzeb.
-- Nie używaj szerokich grup typu "wszyscy", "ludzie", "klienci".
-- Każda grupa odbiorców musi mieć konkretny powód, aby kupić ten produkt.
-- Skup się na praktycznych grupach klientów przydatnych w komunikacji marketingowej.
-- Nie powtarzaj istniejących grup odbiorców.
+Rules:
+- Stay within the product's current positioning.
+- Do not search for completely new markets.
+- Do not create unlikely professional groups if the product does not fit their needs.
+- Do not use broad groups such as "everyone", "people", or "customers".
+- Each audience group must have a specific reason to buy this product.
+- Focus on practical customer segments useful for marketing communication.
+- Do not repeat existing audience groups.
 
-Zwróć wyłącznie poprawny JSON zawierający listę stringów.
+Return only valid JSON containing a list of strings.
 
-Wygeneruj kilka dodatkowych segmentów klientów.
+Generate several additional customer segments.
 """
 
 

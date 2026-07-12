@@ -1,8 +1,8 @@
 from typing import Optional, List
 from .knowledge_insight_dto import KnowledgeInsightDto
+from common.mixins.json_serializable import JSONSerializable
 
-
-class OfferKnowledgeDto:
+class OfferKnowledgeDto(JSONSerializable):
 
     offer_insights: List[KnowledgeInsightDto] = []
 
@@ -23,3 +23,19 @@ class OfferKnowledgeDto:
         self.offer_summary = offer_summary
         self.category = category
         self.value_proposition = value_proposition
+
+    def to_dict(self, exclude=None):
+        exclude = set(exclude or [])
+
+        data = {
+            "id": self.id,
+            "offer_id": self.offer_id,
+            "version": self.version,
+            "content_status": self.content_status,
+            "offer_summary": self.offer_summary,
+            "category": self.category,
+            "value_proposition": self.value_proposition,
+            "offer_insights": [i.to_dict() for i in self.offer_insights]
+        }
+
+        return {k: v for k, v in data.items() if k not in exclude}
