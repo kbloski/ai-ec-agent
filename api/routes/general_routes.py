@@ -47,14 +47,9 @@ def register_general_routes(router: APIRouter):
     def get_offer_knowledge(offer_id: int, knowledge_id : int):
         return get_offer_knowledge_handler(offer_id=offer_id, knowledge_id=knowledge_id)
 
-    #  POST in future 
-    # @router.get("/offers/{offer_id}/knowledges/{knowledge_id}/analysis/generate")
-    # def generate_knowledge_analysis(offer_id: int, knowledge_id : int):
-    #     return generate_knowledge_analysis_handler(offer_id=offer_id, knowledge_id=knowledge_id)
-    
-    # @router.get("/offers/{offer_id}/knowledges/{knowledge_id}/analysis-guides/generate")
-    # def generate_knowledge_analysis_guides(offer_id: int, knowledge_id : int):
-    #     return generate_knowledge_analysis_guides_handler(offer_id=offer_id, knowledge_id=knowledge_id)
+
+
+
 
     #  POST in future 
     @router.get("/offers/{offer_id}/knowledges/{knowledge_id}/target-audiences/generate")
@@ -62,9 +57,9 @@ def register_general_routes(router: APIRouter):
         return generate_target_audience_handler(offer_id=offer_id, knowledge_id=knowledge_id)
 
     # #  GET in future 
-    # @router.get("/offers/{offer_id}/knowledges/{knowledge_id}/target-audiences")
-    # def get_target_audience(offer_id: int, knowledge_id: int):
-    #     return get_target_audience_handler(offer_id=offer_id, knowledge_id=knowledge_id)
+    @router.get("/offers/{offer_id}/knowledges/{knowledge_id}/target-audiences")
+    def get_target_audience(offer_id: int, knowledge_id: int):
+        return get_target_audience_handler(offer_id=offer_id, knowledge_id=knowledge_id)
 
     # #  GET in future 
     # @router.get("/offers/{offer_id}/knowledges/{knowledge_id}/target-audiences/{target_audience_id}")

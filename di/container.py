@@ -16,6 +16,7 @@ from infrastructure.repositories.knowledge_insights_repository import KnowledgeI
 from application.assemblers.offer_knowledge_assembler import OfferKnowledgeAssembler
 from infrastructure.repositories.offer_insights_repository import OfferInsightsRepository
 from infrastructure.repositories.target_audiences_repository import TargetAudiencesRepository
+from application.assemblers.target_audience_assembler import TargetAudienceAssembler
 
 class Container(containers.DeclarativeContainer):
     db = providers.Factory(
@@ -31,6 +32,10 @@ class Container(containers.DeclarativeContainer):
         Settings
     )
 
+    # --------------------------
+    # Parsery
+    # --------------------------
+
     docx_parser = providers.Singleton(
         DocxParser,
         logger=logger
@@ -41,10 +46,9 @@ class Container(containers.DeclarativeContainer):
         logger=logger
     )
 
-    path_service =  providers.Singleton(
-        PathService,
-        logger=logger,
-    )
+    # --------------------------
+    # Repozytoria
+    # --------------------------
 
     offers_repository =  providers.Singleton(
         OffersRepository,
@@ -82,6 +86,10 @@ class Container(containers.DeclarativeContainer):
         db=db
     )
 
+    # --------------------------
+    # Assemblry
+    # --------------------------
+
     offer_assembler = providers.Singleton(
         OfferAssembler,
         logger=logger,
@@ -97,6 +105,19 @@ class Container(containers.DeclarativeContainer):
         knowledge_insights_repository=knowledge_insights_repository
     )
 
+    target_audience_assembler =  providers.Singleton(
+        TargetAudienceAssembler,
+        logger=logger,
+    )
+
+    # --------------------------
+    # Serwisy
+    # --------------------------
+    
+    path_service =  providers.Singleton(
+        PathService,
+        logger=logger,
+    )
 
     ollama_service =  providers.Singleton(
         OllamaService,

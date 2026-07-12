@@ -1,20 +1,12 @@
 from typing import Dict, Any
+from di.container import Container
+from application.mappers.target_audience_mapper import TargetAudienceMapper
 
 def get_target_audience_handler(offer_id: int, knowledge_id: int) -> Dict[str, Any]:
-    """
-    Retrieve the target audience for a specific knowledge in an offer.
+    container = Container()
+
+    target_audiences_repository = container.target_audiences_repository()
     
-    Args:
-        offer_id: The ID of the offer.
-        knowledge_id: The ID of the knowledge.
-    
-    Returns:
-        A dictionary containing the target audience details.
-    """
-    # In a real implementation, this function would query a database or service
-    # to retrieve the target audience information for the given offer and knowledge.
-    # For demonstration purposes, we're returning a mock response.
-    
-    return {
-        "status": True
-    }
+    items_db = target_audiences_repository.find_for_knowledge(knowledge_id)
+
+    return [TargetAudienceMapper.to_dto(t) for t in items_db]
