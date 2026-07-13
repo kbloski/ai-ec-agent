@@ -8,3 +8,5 @@ class TableName(str, Enum):
     KNOWLEDGE_INSIGHTS = "knowledge_insights"
     OFFER_INSIGHTS = "offer_insights"
     TARGET_AUDIENCES = "target_audiences"
+    ANALYSIS = "analysis"
+    KNOWLEDGE_ANALYSIS = "knowledge_analysis"

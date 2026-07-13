@@ -9,3 +9,7 @@ from domain.models.knowledge.knowledge_insight import KnowledgeInsight
 
 # Target Audience
 from domain.models.audience.target_audience import TargetAudience
+
+# Analysis 
+from domain.models.analysis.analysis import Analysis
+from domain.models.analysis.knowledge_analysis import KnowledgeAnalysis

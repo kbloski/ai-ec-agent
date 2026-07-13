@@ -7,42 +7,18 @@ from domain.enums.table_name import TableName
 
 
 class KnowledgeAnalysis(Base, JSONSerializable):
-    __tablename__ = TableName.KNOWLEDGE_ANALYSES
-
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    __tablename__ = TableName.KNOWLEDGE_ANALYSIS
 
     knowledge_id = Column(
         Integer,
-        ForeignKey(TableName.KNOWLEDGES + ".id", ondelete="CASCADE"),
-        nullable=False
+        ForeignKey(TableName.OFFER_KNOWLEDGE + ".id", ondelete="CASCADE"),
+        nullable=False,
+        primary_key=True
     )
 
-    # Prompt / instrukcja według której AI wykonało analizę
-    # instruction = Column(Text, nullable=False)
-
-    # Wynik wygenerowany przez AI
-    # result = Column(Text, nullable=False)
-
-    # Opcjonalne metadane analizy
-    # metadata = Column(JSON, nullable=True)
-
-    # np. model AI, wersja promptu, czas wykonania
-    # model = Column(String, nullable=True)
-
-    # recommendation = Column(
-    #     Enum(AnalysisRecommendation),
-    #     nullable=False
-    # )
-
-    assessment_status = Column(Text, nullable=False)
-
-    recommendation_score = Column(Integer, nullable=False)
-
-    summary = Column(Text, nullable=False)
-
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(
-        DateTime(timezone=True),
-        server_default=func.now(),
-        onupdate=func.now()
+    analysis_id = Column(
+        Integer,
+        ForeignKey(TableName.ANALYSIS + ".id", ondelete="CASCADE"),
+        nullable=False,
+        primary_key=True
     )
