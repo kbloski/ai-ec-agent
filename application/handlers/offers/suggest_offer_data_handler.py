@@ -48,6 +48,9 @@ Treat existing pain points as context. Expand and complement them, but do not co
 
 Return only valid JSON containing a list of strings.
 
+Correct output example:
+[ "string", "string" ]
+
 Generate several realistic customer pain points.
 """
 
@@ -73,6 +76,9 @@ Rules:
 - Do not repeat existing audience groups.
 
 Return only valid JSON containing a list of strings.
+
+Correct output example:
+[ "string", "string" ]
 
 Generate several additional customer segments.
 """
@@ -101,7 +107,7 @@ def suggets_offer_data_handler(offer_id : int):
     messages = [
         LlmOllamaMessage(
             role = OllamaMessageRole.SYSTEM,
-            content = get_system_prompt(offer_assembled.to_dict())
+            content = get_system_prompt(json.dumps(offer_assembled.to_dict()))
         ),
         LlmOllamaMessage(
             role=OllamaMessageRole.USER,
@@ -132,7 +138,7 @@ def suggets_offer_data_handler(offer_id : int):
     messages = [
         LlmOllamaMessage(
             role = OllamaMessageRole.SYSTEM,
-            content = get_system_prompt(offer_assembled.to_dict())
+            content = get_system_prompt(json.dumps(offer_assembled.to_dict()))
         ),
         LlmOllamaMessage(
             role=OllamaMessageRole.USER,
