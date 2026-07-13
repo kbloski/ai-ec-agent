@@ -125,7 +125,6 @@ Rules:
 3. If information is missing, clearly state that fact.
 4. Evaluate the product objectively.
 5. Point out both advantages and risks.
-6. Result values must be in polish
 """
 
 
