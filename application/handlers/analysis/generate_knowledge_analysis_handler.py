@@ -1,35 +1,3 @@
-import json
-from typing import Dict, Any, List
-
-from di.container import Container
-
-from application.mappers.offer_knowledge_mapper import OfferKnowledgeMapper
-
-from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
-from domain.enums.ollama_message_role import OllamaMessageRole
-
-
-
-BASE_SYSTEM_PROMPT = """
-Jesteś ekspertem ds. analizy produktów e-commerce.
-
-Twoim zadaniem jest analizowanie produktów pod kątem ich potencjału sprzedażowego.
-
-Myśl jak przedsiębiorca inwestujący własne pieniądze w produkt.
-
-Zasady:
-
-1. Odpowiadaj konkretnie i rzeczowo.
-2. Nie wymyślaj informacji, których nie ma w danych.
-3. Jeżeli brakuje informacji, zaznacz ten fakt.
-4. Oceniaj produkt obiektywnie.
-5. Wskazuj zarówno zalety jak i ryzyka.
-6. Odpowiedzi muszą być przygotowane w formacie JSON.
-7. Nie dodawaj żadnego tekstu poza JSON.
-"""
-
-
-
 # PRODUCT_ANALYSIS_QUESTIONS = [
 
 #     "Jaki konkretny problem rozwiązuje produkt?",
@@ -89,6 +57,7 @@ Zasady:
 #     "Oblicz minimalną cenę sprzedaży według wzoru: cena zakupu + 15 zł dostawy + 20 zł reklamy + 15 zł marży.",
 
 #     "Czy klient będzie skłonny zapłacić minimalną cenę sprzedaży?",
+
 #     "Zaproponuj realistyczną cenę sprzedaży.",
 
 #     "Czy produkt ma potencjał osiągnięcia dobrej rentowności?",
@@ -130,80 +99,69 @@ Zasady:
 #     "Czy rekomendujesz sprzedaż produktu? TAK/WARUNKOWO/NIE. Dlaczego?"
 # ]
 
+
+
+
+import json
+from typing import Dict, Any, List
+
+from di.container import Container
+
+from application.mappers.offer_knowledge_mapper import OfferKnowledgeMapper
+
+from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
+from domain.enums.ollama_message_role import OllamaMessageRole
+
+
+BASE_SYSTEM_PROMPT = """
+You are an expert in e-commerce product analysis.
+
+Your task is to analyze products in terms of their sales potential.
+Think like an entrepreneur investing their own money into a product.
+
+Rules:
+1. Provide specific and factual answers.
+2. Do not invent information that is not present in the data.
+3. If information is missing, clearly state that fact.
+4. Evaluate the product objectively.
+5. Point out both advantages and risks.
+6. Result values must be in polish
+"""
+
+
 PRODUCT_ANALYSIS_QUESTIONS = [
-
     "Jaki konkretny problem rozwiązuje produkt? Opisz problem klienta, jego skalę, częstotliwość występowania oraz poziom uciążliwości w skali 1-10.",
-
     "Jak istotny jest problem dla klienta? Oceń, czy jest to drobna niedogodność, realna frustracja czy pilna potrzeba wymagająca rozwiązania.",
-
     "Jakie emocje wywołuje ten problem u klienta i jakie są główne motywacje zakupu produktu?",
-
     "Czy klient aktywnie szuka rozwiązania tego problemu? Oceń poziom intencji zakupowej i prawdopodobieństwo zakupu.",
-
     "Czy produkt jest typu must have czy nice to have? Uzasadnij ocenę.",
-
     "Czy produkt ma potencjał do zakupu impulsywnego? Oceń, jakie czynniki mogą powodować szybki zakup.",
-
-
     "Jak wygląda konkurencja dla tego produktu? Wymień istniejące produkty konkurencyjne, alternatywne rozwiązania oraz głównych konkurentów.",
-
     "Czym produkt różni się od konkurencji? Oceń, czy posiada wyraźną przewagę konkurencyjną i jaka ona jest.",
-
-
     "Jak często klient może spotykać się z problemem rozwiązywanym przez produkt? Oceń, czy częstotliwość problemu sprzyja wysokiej sprzedaży.",
-
-
-    "Czy produkt posiada efekt WOW? Oceń, czy wyróżnia się na rynku i czy łatwo stworzyć atrakcyjne materiały reklamowe pokazujące jego wartość.",
-
-
-    "Kim jest idealny klient tego produktu? Opisz grupę docelową, jej wielkość, potrzeby, motywacje oraz zachowania zakupowe.",
-
-
-    "Czy produkt dobrze prezentuje się wizualnie? Oceń potencjał sprzedaży poprzez zdjęcia i krótkie materiały video na TikTok, Facebook i Instagram.",
-
-
-    "Jaka powinna być cena sprzedaży produktu? Uwzględnij atrakcyjność dla klienta, konkurencję oraz wylicz minimalną cenę według wzoru: cena zakupu + 15 zł dostawy + 20 zł reklamy + 15 zł marży.",
-
-    "Czy produkt ma potencjał osiągnięcia dobrej rentowności? Oceń relację między ceną zakupu, ceną sprzedaży, kosztami reklamy i możliwą marżą.",
-
-
-    "Czy produkt sprawia wrażenie wysokiej jakości? Oceń postrzeganą wartość produktu oraz ryzyko negatywnych opinii.",
-
-    "Jakie jest ryzyko reklamacji, zwrotów i niezadowolenia klientów? Wskaż główne powody potencjalnych problemów.",
-
-
-    "Czy produkt jest łatwy w logistyce? Oceń łatwość magazynowania, pakowania, wysyłki oraz ryzyko uszkodzeń podczas transportu.",
-
-
-    "Czy produkt można sprzedawać przez cały rok? Oceń sezonowość, okresy zwiększonego i zmniejszonego popytu.",
-
-
-    "Czy klient może kupić produkt ponownie? Oceń potencjał powtarzalnych zakupów oraz możliwość sprzedaży dodatków, akcesoriów lub kolejnych produktów.",
-
-
-    "Czy produkt wymaga elektroniki, specjalnej obsługi, certyfikatów lub zezwoleń? Wskaż potencjalne bariery sprzedaży.",
-
-
-    "Oceń ogólny potencjał produktu w skali 1-10. Uwzględnij problem klienta, konkurencję, marketing, marżę, logistykę i ryzyko.",
-
-    "Jakie są największe zalety produktu z punktu widzenia sprzedaży?",
-
+    "Czy produkt posiada efekt WOW? Oceń, czy wyróżnia się na rynku i czy łatwo stworzyć atrakcyjne materiały reklamowe.",
+    "Kim jest idealny klient tego produktu? Opisz grupę docelową, potrzeby, motywacje oraz zachowania zakupowe.",
+    "Czy produkt dobrze prezentuje się wizualnie? Oceń potencjał sprzedaży poprzez zdjęcia i materiały video.",
+    "Jaka powinna być cena sprzedaży produktu? Uwzględnij koszt zakupu + 15 zł dostawy + 20 zł reklamy + 15 zł marży.",
+    "Czy produkt ma potencjał osiągnięcia dobrej rentowności?",
+    "Czy produkt sprawia wrażenie wysokiej jakości?",
+    "Jakie jest ryzyko reklamacji, zwrotów i niezadowolenia klientów?",
+    "Czy produkt jest łatwy w logistyce?",
+    "Czy produkt można sprzedawać cały rok? Oceń sezonowość.",
+    "Czy klient może kupić produkt ponownie? Oceń potencjał dodatków i akcesoriów.",
+    "Czy produkt wymaga elektroniki, specjalnej obsługi, certyfikatów lub zezwoleń?",
+    "Oceń ogólny potencjał produktu w skali 1-10.",
+    "Jakie są największe zalety produktu?",
     "Jakie są największe ryzyka sprzedaży tego produktu?",
-
-    "Co należy poprawić lub sprawdzić przed rozpoczęciem sprzedaży produktu?",
-
-    "Czy rekomendujesz sprzedaż produktu? Odpowiedz: TAK / WARUNKOWO / NIE i uzasadnij decyzję."
+    "Co należy poprawić przed rozpoczęciem sprzedaży?",
+    "Czy rekomendujesz sprzedaż produktu? TAK/WARUNKOWO/NIE i dlaczego?"
 ]
-
 
 
 def chunk_list(
     items: List[str],
     size: int
 ) -> List[List[str]]:
-    """
-    Dzieli listę pytań na mniejsze paczki.
-    """
 
     return [
         items[i:i + size]
@@ -211,13 +169,12 @@ def chunk_list(
     ]
 
 
-
 def build_product_context_prompt(
     product_data: Dict[str, Any]
 ) -> str:
 
     return f"""
-Dane produktu:
+PRODUCT DATA:
 
 {json.dumps(
     product_data,
@@ -225,22 +182,17 @@ Dane produktu:
     indent=2
 )}
 
-Przeanalizuj produkt na podstawie tych informacji.
-Nie zakładaj informacji, których nie ma w danych.
+Analyze the product based on the data provided above.
+Do not draw conclusions based on information that is not present in the data.
 """
 
 
-
 def build_questions_prompt(
-    questions: List[str],
-    batch_number: int,
-    total_batches: int
+    questions: List[str]
 ) -> str:
 
     return f"""
-To jest część analizy {batch_number}/{total_batches}.
-
-Odpowiedz na poniższe pytania dotyczące produktu:
+ANALYSIS QUESTIONS:
 
 {json.dumps(
     questions,
@@ -249,26 +201,25 @@ Odpowiedz na poniższe pytania dotyczące produktu:
 )}
 
 
-Zwróć wynik dokładnie w takim formacie:
+Answer each question based only on the provided product data.
+
+Return ONLY valid JSON:
 
 [
     {{
-        "pytanie": "dokładny tekst pytania",
-        "odpowiedz": "szczegółowa odpowiedź"
+        "question": "exact question text",
+        "answer": "detailed answer"
     }}
 ]
 
 
-Ważne zasady:
-
-- Każde pytanie musi posiadać odpowiedź.
-- Nie pomijaj pytań.
-- Nie zmieniaj nazwy pola "pytanie".
-- Nie zmieniaj nazwy pola "odpowiedz".
-- Nie zwracaj żadnego tekstu poza JSON.
-- Nie używaj markdown.
+Rules:
+- Answer every question.
+- Do not skip questions.
+- Do not add markdown.
+- Do not add any text outside JSON.
+- If information is missing, state that clearly.
 """
-
 
 
 def generate_knowledge_analysis_handler(
@@ -276,56 +227,43 @@ def generate_knowledge_analysis_handler(
 ) -> Dict[str, Any]:
 
     container = Container()
-
+    logger = container.logger()
     knowledge_repo = container.offer_knowledge_repository()
     knowledge_assembler = container.offer_knowledge_assembler()
     ollama_service = container.ollama_service()
 
 
-
-    #
-    # Pobranie produktu
-    #
+    logger.info(f"Generating knowledge analysis for knowledge_id={knowledge_id}")
 
     knowledge_db = knowledge_repo.get_by_id(
         id=knowledge_id
     )
 
-
     knowledge_dto = OfferKnowledgeMapper.to_dto(
         item=knowledge_db
     )
-
 
     assembled_dto = knowledge_assembler.assemble_dto(
         item=knowledge_dto
     )
 
-
     knowledge_json = assembled_dto.to_dict()
 
 
-
-    #
-    # Podział pytań
-    #
-
     question_batches = chunk_list(
-        PRODUCT_ANALYSIS_QUESTIONS,
-        5
+        items=PRODUCT_ANALYSIS_QUESTIONS,
+        size=10
     )
 
+    logger.info(f"Split {len(PRODUCT_ANALYSIS_QUESTIONS)} questions into {len(question_batches)} batches")
 
 
     final_analysis = []
 
 
+    for batch_index, batch in enumerate(question_batches, start=1):
 
-    #
-    # Analiza batchami po 5 pytań
-    #
-
-    for index, batch in enumerate(question_batches):
+        logger.info(f"Processing batch {batch_index}/{len(question_batches)} ({len(batch)} questions)")
 
         messages = [
 
@@ -334,7 +272,6 @@ def generate_knowledge_analysis_handler(
                 content=BASE_SYSTEM_PROMPT
             ),
 
-
             LlmOllamaMessage(
                 role=OllamaMessageRole.USER,
                 content=build_product_context_prompt(
@@ -342,24 +279,19 @@ def generate_knowledge_analysis_handler(
                 )
             ),
 
-
             LlmOllamaMessage(
                 role=OllamaMessageRole.USER,
                 content=build_questions_prompt(
-                    questions=batch,
-                    batch_number=index + 1,
-                    total_batches=len(question_batches)
+                    questions=batch
                 )
             )
 
         ]
 
 
-
         response = ollama_service.chat_llm(
             messages=messages
         )
-
 
 
         try:
@@ -368,46 +300,34 @@ def generate_knowledge_analysis_handler(
                 response.content
             )
 
-
         except json.JSONDecodeError:
 
             raise Exception(
                 f"""
-Niepoprawny JSON od modelu.
+Invalid JSON response from model:
 
-Batch:
-{index + 1}
-
-Response:
 {response.content}
 """
             )
 
 
-
         if not isinstance(batch_result, list):
 
             raise Exception(
-                f"""
-Model nie zwrócił listy.
-
-Batch:
-{index + 1}
-"""
+                "Model response is not a list."
             )
 
 
+        logger.info(f"Batch {batch_index}/{len(question_batches)} returned {len(batch_result)} answers")
 
         final_analysis.extend(
             batch_result
         )
 
 
+    logger.info(f"Knowledge analysis completed for knowledge_id={knowledge_id}, total_answers={len(final_analysis)}")
 
     return {
-
         "product_id": knowledge_id,
-
         "analysis": final_analysis
-
     }
