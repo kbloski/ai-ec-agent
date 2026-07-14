@@ -8,8 +8,8 @@ class ChecklistItemMapper:
         return ChecklistItemDto(
             id = item.id,
             checklist_id= item.checklist_id,
-            question=item.question,
-            answer=item.answer,
-            notes=item.notes
+            title=item.title,
+            description=item.description,
+            note=item.note
         )
 
