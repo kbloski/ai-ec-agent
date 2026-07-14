@@ -12,6 +12,7 @@ from application.handlers.target_audience.get_target_audience_preview_handler im
 from application.handlers.offers.suggest_offer_data_handler import suggets_offer_data_handler
 from application.handlers.analysis.generate_knowledge_analysis_handler import generate_knowledge_analysis_handler
 from application.handlers.analysis.create_analysis_for_knowledge_handler import create_analysis_for_knowledge_handler
+from application.handlers.analysis.get_analysis_by_id_hanlder import get_analysis_by_id_handler
 from application.handlers.analysis.get_analysis_for_knowledge_hanlder import get_analysis_for_knowledge_handler
 
 def register_general_routes(router: APIRouter):
@@ -76,8 +77,11 @@ def register_general_routes(router: APIRouter):
     # -----------------------------
     # Analysis
     # -----------------------------
+    # POST in future 
+    @router.get("/analysis/{analyse_id}")
+    def get_anlysis_by_id(analyse_id: int):
+        return get_analysis_by_id_handler( analyse_id=analyse_id)
 
-    #  POST in future 
     @router.get("/knowledges/{knowledge_id}/analysis/create")
     def create_analysis_for_knowledge(knowledge_id: int):
         return create_analysis_for_knowledge_handler(knowledge_id=knowledge_id)
@@ -85,7 +89,6 @@ def register_general_routes(router: APIRouter):
     @router.get("/knowledges/{knowledge_id}/analysis")
     def get_analysis_for_knowledge(knowledge_id: int):
         return get_analysis_for_knowledge_handler(knowledge_id=knowledge_id)
-
 
     # POST in future 
     @router.get("/knowledges/{knowledge_id}/analysis/{analysis_id}/answers/generate")
