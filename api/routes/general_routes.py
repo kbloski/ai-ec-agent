@@ -15,6 +15,11 @@ from application.handlers.analysis.create_analysis_for_knowledge_handler import 
 from application.handlers.analysis.get_analysis_by_id_hanlder import get_analysis_by_id_handler
 from application.handlers.analysis.get_analysis_for_knowledge_hanlder import get_analysis_for_knowledge_handler
 from application.handlers.analysis.analyse_checklist_generate_handler import analyse_checklist_generate_handler
+from application.handlers.checklist.create_checklist_for_analysis_handler import create_checklist_for_analysis_handler
+from application.handlers.checklist.get_analysis_checklists_handler import get_analyse_checklists_handler
+
+
+
 
 def register_general_routes(router: APIRouter):
     @router.get("/offers")
@@ -96,7 +101,15 @@ def register_general_routes(router: APIRouter):
     def knowledge_analysis_answers_generate(knowledge_id: int, analyse_id: int):
         return knowledge_analysis_answers_generate_handler( knowledge_id=knowledge_id, analyse_id=analyse_id)
 
-        # POST in future 
-    @router.get("/knowledges/{knowledge_id}/analysis/{analyse_id}/checklist/generate")
-    def analyse_checklist_generate(knowledge_id: int, analyse_id: int):
-        return analyse_checklist_generate_handler( knowledge_id=knowledge_id, analyse_id=analyse_id)
+    @router.get("/knowledges/{knowledge_id}/analysis/{analysis_id}/checklists/create")
+    def create_analyse_checklist(knowledge_id: int, analysis_id: int):
+        return create_checklist_for_analysis_handler( analysis_id=analysis_id)  
+
+    # POST in future 
+    @router.get("/knowledges/{knowledge_id}/analysis/{analyse_id}/checklists/{checklist_id}/generate")
+    def analyse_checklist_generate(knowledge_id: int, analyse_id: int, checklist_id: int):
+        return analyse_checklist_generate_handler( knowledge_id=knowledge_id, analyse_id=analyse_id, checklist_id=checklist_id)
+
+    @router.get("/analysis/{analysis_id}/checklists")
+    def get_checklist_for_analysis( analysis_id: int):
+        return get_analyse_checklists_handler( analyse_id=analysis_id)  

@@ -12,14 +12,14 @@ class AnalysisChecklist(Base, JSONSerializable):
 
     analysis_id = Column(
         Integer,
-        ForeignKey(f"{TableName.ANALYSIS}.id"),
+        ForeignKey(f"{TableName.ANALYSIS.value}.id"),
         nullable=False,
         primary_key=True
     )
 
     checklist_id = Column(
         Integer,
-        ForeignKey(f"{TableName.CHECKLIST}.id"),
+        ForeignKey(f"{TableName.CHECKLIST.value}.id"),
         nullable=False,
         primary_key=True
     )
