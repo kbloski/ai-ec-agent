@@ -12,4 +12,6 @@ from domain.models.audience.target_audience import TargetAudience
 
 # Analysis 
 from domain.models.analysis.analysis import Analysis
+from domain.models.analysis.analysis_questions import AnalysisQuestion
+
 from domain.models.analysis.knowledge_analysis import KnowledgeAnalysis

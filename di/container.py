@@ -20,6 +20,7 @@ from application.assemblers.target_audience_assembler import TargetAudienceAssem
 from infrastructure.repositories.analysis_repository import AnalysisRepository
 from infrastructure.repositories.knowledge_analysis_repository import KnowledgeAnalysisRepository
 from application.assemblers.analysis_assembler import AnalysisAssembler
+from infrastructure.repositories.analysis_questions_repository import AnalysisQuestionsRepository
 
 
 class Container(containers.DeclarativeContainer):
@@ -92,6 +93,12 @@ class Container(containers.DeclarativeContainer):
 
     analysis_repository = providers.Singleton(
         AnalysisRepository,
+        logger=logger,
+        db=db
+    )
+
+    analysis_questions_repository = providers.Singleton(
+        AnalysisQuestionsRepository,
         logger=logger,
         db=db
     )

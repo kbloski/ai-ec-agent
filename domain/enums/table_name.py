@@ -10,3 +10,4 @@ class TableName(str, Enum):
     TARGET_AUDIENCES = "target_audiences"
     ANALYSIS = "analysis"
     KNOWLEDGE_ANALYSIS = "knowledge_analysis"
+    ANALYSIS_QUESTIONS= "analysis_questions"
