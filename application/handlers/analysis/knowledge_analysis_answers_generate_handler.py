@@ -92,6 +92,7 @@ Rules:
 - Do not add markdown.
 - Do not add any text outside JSON.
 - If information is missing, state that clearly.
+- JSON values must be written in English.
 """
 
 
@@ -168,7 +169,7 @@ def knowledge_analysis_answers_generate_handler(
         score=a["score"],
         confidence=a["confidence"]
     ) for a in final_analysis_questions_dicts]
-    
+
     analysis_questions_db = analysis_questions_repository.create_many(items=analysis_questions)
     analysis_questions_dtos = [ AnalysisQuestionMapper.to_dto(aq) for aq in analysis_questions_db]
 
