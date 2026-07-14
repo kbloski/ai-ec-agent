@@ -21,7 +21,9 @@ from infrastructure.repositories.analysis_repository import AnalysisRepository
 from infrastructure.repositories.knowledge_analysis_repository import KnowledgeAnalysisRepository
 from application.assemblers.analysis_assembler import AnalysisAssembler
 from infrastructure.repositories.analysis_questions_repository import AnalysisQuestionsRepository
-
+from infrastructure.repositories.checklist_repository import ChecklistRepository
+from infrastructure.repositories.checklist_items_repository import ChecklistItemsRepository
+from infrastructure.repositories.analysis_checklist_repository import AnalysisChecklistRepository
 
 class Container(containers.DeclarativeContainer):
     db = providers.Factory(
@@ -91,6 +93,18 @@ class Container(containers.DeclarativeContainer):
         db=db
     )
 
+    checklist_repository = providers.Singleton(
+        ChecklistRepository,
+        logger=logger,
+        db=db
+    )
+
+    checklist_items_repository = providers.Singleton(
+        ChecklistItemsRepository,
+        logger=logger,
+        db=db
+    )
+
     analysis_repository = providers.Singleton(
         AnalysisRepository,
         logger=logger,
@@ -105,6 +119,12 @@ class Container(containers.DeclarativeContainer):
 
     knowledge_analysis_repository = providers.Singleton(
         KnowledgeAnalysisRepository,
+        logger=logger,
+        db=db
+    )
+
+    analysis_checklist_repository = providers.Singleton(
+        AnalysisChecklistRepository,
         logger=logger,
         db=db
     )
