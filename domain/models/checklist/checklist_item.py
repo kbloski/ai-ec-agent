@@ -8,7 +8,7 @@ from domain.enums.table_name import TableName
 
 
 class ChecklistItem(Base, JSONSerializable):
-    __tablename__ = TableName.CHECKLIST_ITEM
+    __tablename__ = TableName.CHECKLIST_ITEM.value
 
     id = Column(Integer, primary_key=True, autoincrement=True)
 
@@ -18,9 +18,9 @@ class ChecklistItem(Base, JSONSerializable):
         nullable=False
     )
 
-    question = Column(Text, nullable=False)
-    answer= Column(Text, nullable=True)
-    notes = Column(Text, nullable=True)
+    title = Column(Text, nullable=False)
+    description= Column(Text, nullable=True)
+    note = Column(Text, nullable=True)
 
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(

@@ -8,7 +8,7 @@ from domain.enums.table_name import TableName
 
 
 class AnalysisChecklist(Base, JSONSerializable):
-    __tablename__ = TableName.ANALYSIS_CHECKLIST
+    __tablename__ = TableName.ANALYSIS_CHECKLIST.value
 
     analysis_id = Column(
         Integer,

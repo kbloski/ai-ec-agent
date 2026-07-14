@@ -7,7 +7,7 @@ from domain.enums.table_name import TableName
 
 
 class TargetAudience(Base, JSONSerializable):
-    __tablename__ = TableName.TARGET_AUDIENCES
+    __tablename__ = TableName.TARGET_AUDIENCES.value
 
     # Primary key
     id = Column(Integer, primary_key=True, autoincrement=True)

@@ -7,7 +7,7 @@ from domain.enums.table_name import TableName
 
 
 class KnowledgeAnalysis(Base, JSONSerializable):
-    __tablename__ = TableName.KNOWLEDGE_ANALYSIS
+    __tablename__ = TableName.KNOWLEDGE_ANALYSIS.value
 
     knowledge_id = Column(
         Integer,

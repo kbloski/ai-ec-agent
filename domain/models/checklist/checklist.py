@@ -7,7 +7,7 @@ from domain.enums.table_name import TableName
 
 
 class Checklist(Base, JSONSerializable):
-    __tablename__ = TableName.CHECKLIST
+    __tablename__ = TableName.CHECKLIST.value
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(255), nullable=False)

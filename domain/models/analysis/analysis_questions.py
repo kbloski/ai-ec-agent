@@ -7,7 +7,7 @@ from domain.enums.table_name import TableName
 
 
 class AnalysisQuestion(Base, JSONSerializable):
-    __tablename__ = TableName.ANALYSIS_QUESTIONS
+    __tablename__ = TableName.ANALYSIS_QUESTIONS.value
 
     id = Column(
         Integer,

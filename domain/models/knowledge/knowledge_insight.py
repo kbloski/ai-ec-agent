@@ -7,7 +7,7 @@ from domain.enums.table_name import TableName
 
 
 class KnowledgeInsight(Base, JSONSerializable):
-    __tablename__ = TableName.KNOWLEDGE_INSIGHTS
+    __tablename__ = TableName.KNOWLEDGE_INSIGHTS.value
 
     # Primary key
     id = Column(Integer, primary_key=True, autoincrement=True)
