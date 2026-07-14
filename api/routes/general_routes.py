@@ -10,7 +10,7 @@ from application.handlers.target_audience.generate_target_audience_handler impor
 from application.handlers.target_audience.get_target_audience_handler import get_target_audience_handler
 from application.handlers.target_audience.get_target_audience_preview_handler import get_target_audience_preview_handler
 from application.handlers.offers.suggest_offer_data_handler import suggets_offer_data_handler
-from application.handlers.analysis.generate_knowledge_analysis_handler import generate_knowledge_analysis_handler
+from application.handlers.analysis.knowledge_analysis_answers_generate_handler import knowledge_analysis_answers_generate_handler
 from application.handlers.analysis.create_analysis_for_knowledge_handler import create_analysis_for_knowledge_handler
 from application.handlers.analysis.get_analysis_by_id_hanlder import get_analysis_by_id_handler
 from application.handlers.analysis.get_analysis_for_knowledge_hanlder import get_analysis_for_knowledge_handler
@@ -91,6 +91,6 @@ def register_general_routes(router: APIRouter):
         return get_analysis_for_knowledge_handler(knowledge_id=knowledge_id)
 
     # POST in future 
-    @router.get("/knowledges/{knowledge_id}/analysis/{analysis_id}/answers/generate")
-    def knowledge_analysis_generate(knowledge_id: int):
-        return generate_knowledge_analysis_handler( knowledge_id=knowledge_id)
+    @router.get("/knowledges/{knowledge_id}/analysis/{analyse_id}/answers/generate")
+    def knowledge_analysis_answers_generate(knowledge_id: int, analyse_id: int):
+        return knowledge_analysis_answers_generate_handler( knowledge_id=knowledge_id, analyse_id=analyse_id)
