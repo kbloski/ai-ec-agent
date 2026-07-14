@@ -31,6 +31,25 @@ You work using these research methods:
 - customer review analysis,
 - social media research.
 
+Important requirements:
+
+For every task that requires searching, keyword research, ads research, marketplace research, or social media research:
+
+- provide a minimum of 10-15 concrete search phrases,
+- provide realistic keywords based on the analyzed product,
+- provide hashtags when applicable,
+- provide copy-paste ready search queries,
+- do not use placeholders.
+
+Do not write:
+- "keyword1"
+- "keyword2"
+- "product name"
+
+Generate real search examples based on the product information.
+
+Every task must be possible to complete without additional knowledge.
+
 Do not create generic advice.
 
 Do not write:
@@ -56,6 +75,7 @@ Each element must have exactly this structure:
 ]
 
 Do not add any text outside the JSON.
+
 Values must be in polish.
 """
 
@@ -71,53 +91,200 @@ Product data:
 
 Generate a list of tasks that the user should perform to validate the potential of this product.
 
+
+Important:
+
+Every task involving search must contain:
+- minimum 10-15 search phrases,
+- specific keywords,
+- relevant variations,
+- ready-to-use queries,
+- instructions how to use them.
+
+The user should be able to copy and paste your generated phrases directly into research tools.
+
+
 Include:
 
+
 1. Google Trends:
+
+Create tasks related to:
+
 - analyzing the main product keywords,
-- analyzing the customer's problem,
+- analyzing customer problems,
 - analyzing alternative product names,
 - analyzing seasonality,
 - analyzing related searches.
 
+For every Google Trends task provide:
+
+- minimum 10-15 search phrases,
+- product keywords,
+- problem-based keywords,
+- alternative names,
+- related terms,
+- instructions where to search,
+- instructions what to check,
+- instructions how to interpret results.
+
+
 2. Meta Ads Library:
+
+Create tasks related to:
+
 - searching for product advertisements,
 - searching for competitor advertisements,
 - searching based on customer problems,
 - analyzing successful running ads.
 
+For every Meta Ads Library task provide:
+
+- minimum 15 search queries,
+- product name variations,
+- customer problem phrases,
+- desired outcome phrases,
+- emotional buying triggers.
+
+Explain:
+
+- how to filter results,
+- what ads to analyze,
+- what elements to collect:
+  - hook,
+  - creative,
+  - offer,
+  - comments,
+  - engagement,
+  - advertising duration.
+
+
 3. TikTok Creative Center:
+
+Create tasks related to:
+
 - analyzing product popularity,
 - analyzing hashtags,
 - analyzing viral videos,
 - analyzing user comments.
 
+For every TikTok task provide:
+
+- minimum 15 hashtags,
+- minimum 10 search phrases,
+- content angles to investigate.
+
+Explain:
+
+- where to search,
+- what metrics to analyze,
+- what comments indicate buying intent.
+
+
 4. Marketplace research:
+
+Create separate tasks for:
+
 - Amazon,
 - AliExpress,
 - Temu,
 - eBay.
 
+For every marketplace provide:
+
+- minimum 10 search phrases,
+- product variations,
+- alternative names,
+- related categories.
+
+Analyze:
+
+- number of reviews,
+- product rating,
+- sales indicators,
+- customer complaints,
+- repeated problems,
+- customer expectations.
+
+
 5. Customer review analysis:
+
+Create tasks related to:
+
 - finding negative reviews,
 - finding purchase motivations,
-- finding customer problems,
+- finding common problems,
 - finding product improvement opportunities.
 
+Explain:
+
+- where to search,
+- what phrases to look for,
+- what information to extract,
+- how to use findings to improve the offer.
+
+
 6. Social media research:
+
+Create tasks for:
+
 - TikTok,
 - Instagram,
 - YouTube,
 - Pinterest.
 
+For every platform provide:
+
+- minimum 10 search phrases,
+- minimum 15 hashtags when applicable,
+- content examples to analyze.
+
+Explain:
+
+- what videos to review,
+- what comments matter,
+- what signals indicate real interest.
+
+
 7. Final product audit:
-- collecting all research results,
-- evaluating criteria,
-- deciding whether the product moves forward.
+
+Add a final summary task.
+
+It should explain:
+
+- how to collect all research results,
+- how to compare findings,
+- what criteria evaluate product potential,
+- how to decide whether the product moves to the next stage.
+
 
 Every task must be a practical execution instruction.
 
-Do not create generic tasks.
+Bad example:
+
+"Check competitors"
+
+
+Good example:
+
+"Analyze competitor ads in Meta Ads Library:
+
+1. Open Meta Ads Library.
+2. Search using:
+- portable blender
+- mini smoothie maker
+- travel blender
+- USB blender
+- fitness blender bottle
+
+3. Save active advertisements.
+4. Analyze:
+- hooks,
+- offers,
+- creatives,
+- comments,
+- how long ads have been running."
+
 
 Return ONLY a JSON array following the format defined in the SYSTEM PROMPT.
 """
@@ -238,36 +405,30 @@ def analyse_checklist_generate_handler(
             ChecklistItem(
                 title=item["title"],
                 description=item["description"],
-                note=item["note"]
+                note=item.get("note", "")
             )
         )
 
 
     logger.info(
-        f"Saving checklist items to database. Count={len(checklist_items)}"
+        f"Saving checklist items. Count={len(checklist_items)}"
     )
 
     checklist_items_db = checklist_items_repository.create_many(
         items=checklist_items
     )
 
+
     logger.info(
         f"Checklist items saved. Count={len(checklist_items_db)}"
     )
 
-
-    # ---------
-    # DTO Mapping
-    # ---------
-
-    logger.info("Mapping checklist items to DTOs")
 
     items_dtos = [
         ChecklistItemMapper.to_dto(ch)
         for ch in checklist_items_db
     ]
 
-
-    logger.info("Checklist generation finished successfully")
+    logger.info("Checklist generation finished")
 
     return items_dtos
