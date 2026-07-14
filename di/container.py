@@ -17,6 +17,8 @@ from application.assemblers.offer_knowledge_assembler import OfferKnowledgeAssem
 from infrastructure.repositories.offer_insights_repository import OfferInsightsRepository
 from infrastructure.repositories.target_audiences_repository import TargetAudiencesRepository
 from application.assemblers.target_audience_assembler import TargetAudienceAssembler
+from infrastructure.repositories.analysis_repository import AnalysisRepository
+from infrastructure.repositories.knowledge_analysis_repository import KnowledgeAnalysisRepository
 
 class Container(containers.DeclarativeContainer):
     db = providers.Factory(
@@ -85,6 +87,19 @@ class Container(containers.DeclarativeContainer):
         logger=logger,
         db=db
     )
+
+    analysis_repository = providers.Singleton(
+        AnalysisRepository,
+        logger=logger,
+        db=db
+    )
+
+    knowledge_analysis_repository = providers.Singleton(
+        KnowledgeAnalysisRepository,
+        logger=logger,
+        db=db
+    )
+
 
     # --------------------------
     # Assemblry
