@@ -13,13 +13,13 @@ class AnalysisChecklistRepository:
         self.logger = logger
 
     # ➕ UPSERT
-    def upsert(self, analysis_checklist: AnalysisChecklist) -> AnalysisChecklist:
+    def upsert(self, item: AnalysisChecklist) -> AnalysisChecklist:
         existing = (
             self.db.query(AnalysisChecklist)
             .filter(
                 and_(
-                    AnalysisChecklist.analysis_id == analysis_checklist.analysis_id,
-                    AnalysisChecklist.checklist_id == analysis_checklist.checklist_id,
+                    AnalysisChecklist.analysis_id == item.analysis_id,
+                    AnalysisChecklist.checklist_id == item.checklist_id,
                 )
             )
             .first()
@@ -28,10 +28,10 @@ class AnalysisChecklistRepository:
         if existing:
             return existing
 
-        self.db.add(analysis_checklist)
+        self.db.add(item)
         self.db.commit()
-        self.db.refresh(analysis_checklist)
-        return analysis_checklist
+        self.db.refresh(item)
+        return item
 
     # 🔍 GET BY ANALYSIS ID
     def find_by_analysis_id(self, analysis_id: int) -> List[AnalysisChecklist]:
