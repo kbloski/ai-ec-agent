@@ -24,6 +24,7 @@ from infrastructure.repositories.analysis_questions_repository import AnalysisQu
 from infrastructure.repositories.checklist_repository import ChecklistRepository
 from infrastructure.repositories.checklist_items_repository import ChecklistItemsRepository
 from infrastructure.repositories.analysis_checklist_repository import AnalysisChecklistRepository
+from application.assemblers.checklist_assembler import ChecklistAssembler
 
 class Container(containers.DeclarativeContainer):
     db = providers.Factory(
@@ -161,6 +162,11 @@ class Container(containers.DeclarativeContainer):
         analysis_questions_repository=analysis_questions_repository
     )
 
+    checklist_assembler = providers.Singleton(
+        ChecklistAssembler,
+        logger=logger,
+        checklist_items_repository=checklist_items_repository
+    )
     # --------------------------
     # Serwisy
     # --------------------------

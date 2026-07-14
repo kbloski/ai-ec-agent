@@ -18,7 +18,8 @@ class ChecklistDto(JSONSerializable):
 
         data = {
             "id": self.id,
-            "name" : self.name
+            "name" : self.name,
+            "checklist_items" : self.checklist_items
         }
 
         return {k: v for k, v in data.items() if k not in exclude}

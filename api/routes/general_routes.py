@@ -17,7 +17,7 @@ from application.handlers.analysis.get_analysis_for_knowledge_hanlder import get
 from application.handlers.analysis.analyse_checklist_generate_handler import analyse_checklist_generate_handler
 from application.handlers.checklist.create_checklist_for_analysis_handler import create_checklist_for_analysis_handler
 from application.handlers.checklist.get_analysis_checklists_handler import get_analyse_checklists_handler
-
+from application.handlers.checklist.get_checklist_by_id_handler import get_checklist_by_id_handler
 
 
 
@@ -79,7 +79,6 @@ def register_general_routes(router: APIRouter):
 
 
 
-
     # -----------------------------
     # Analysis
     # -----------------------------
@@ -100,6 +99,15 @@ def register_general_routes(router: APIRouter):
     @router.get("/knowledges/{knowledge_id}/analysis/{analyse_id}/answers/generate")
     def knowledge_analysis_answers_generate(knowledge_id: int, analyse_id: int):
         return knowledge_analysis_answers_generate_handler( knowledge_id=knowledge_id, analyse_id=analyse_id)
+
+
+
+    # -----------------------------
+    # Checklist 
+    # -----------------------------
+    @router.get("/checklists/{checklist_id}")
+    def get_checklist_for_analysis( checklist_id: int):
+        return get_checklist_by_id_handler( checklist_id=checklist_id)  
 
     @router.get("/knowledges/{knowledge_id}/analysis/{analysis_id}/checklists/create")
     def create_analyse_checklist(knowledge_id: int, analysis_id: int):
