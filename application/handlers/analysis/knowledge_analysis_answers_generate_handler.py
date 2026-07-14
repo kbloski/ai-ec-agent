@@ -8,6 +8,7 @@ from di.container import Container
 from application.mappers.offer_knowledge_mapper import OfferKnowledgeMapper
 from application.mappers.analysis_question_mapper import AnalysisQuestionMapper
 
+from domain.models.analysis.analysis_questions import AnalysisQuestion
 from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
 from domain.enums.ollama_message_role import OllamaMessageRole
 from domain.analysis.knowledge_analysis_questions import KNOWLEDGE_ANALYSIS_QUESTIONS
@@ -123,7 +124,7 @@ def knowledge_analysis_answers_generate_handler(
     logger.info(f"Split {len(KNOWLEDGE_ANALYSIS_QUESTIONS)} questions into {len(question_batches)} batches")
 
 
-    new_analysis_questions = []
+    final_analysis_questions_dicts = []
     for batch_index, batch in enumerate(question_batches, start=1):
 
         logger.info(f"Processing batch {batch_index}/{len(question_batches)} ({len(batch)} questions)")
@@ -154,13 +155,21 @@ def knowledge_analysis_answers_generate_handler(
 
 
         logger.info(f"Batch {batch_index}/{len(question_batches)} returned {len(batch_result)} answers")
-        new_analysis_questions.extend( batch_result  )
+        final_analysis_questions_dicts.extend( batch_result  )
 
-    logger.info(f"Knowledge analysis completed for knowledge_id={knowledge_id}, total_answers={len(new_analysis_questions)}")
+    logger.info(f"Knowledge analysis completed for knowledge_id={knowledge_id}, total_answers={len(final_analysis_questions_dicts)}")
     
     
     # Analysis_questions insert to db
-    analysis_questions_db = analysis_questions_repository.create_many(items=new_analysis_questions)
-    analysis_questions_dtos = [ AnalysisQuestionMapper.to_dto(aq) for aq in analysis_questions_db]
+    analysis_questions = [ AnalysisQuestion(
+        analysis_id=analyse_db.id,
+        question=a["question"],
+        answer=a["answer"],
+        score=a["score"],
+        confidence=a["confidence"]
+    ) for a in final_analysis_questions_dicts]
     
+    analysis_questions_db = analysis_questions_repository.create_many(items=analysis_questions)
+    analysis_questions_dtos = [ AnalysisQuestionMapper.to_dto(aq) for aq in analysis_questions_db]
+
     return analysis_questions_dtos
