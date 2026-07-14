@@ -71,136 +71,53 @@ Product data:
 
 Generate a list of tasks that the user should perform to validate the potential of this product.
 
-
 Include:
 
-
 1. Google Trends:
-
-Create tasks related to:
 - analyzing the main product keywords,
 - analyzing the customer's problem,
 - analyzing alternative product names,
 - analyzing seasonality,
 - analyzing related searches.
 
-For each task:
-- generate specific phrases to search,
-- explain where to go,
-- explain what to check,
-- explain how to interpret the results.
-
-
 2. Meta Ads Library:
-
-Create tasks related to:
 - searching for product advertisements,
 - searching for competitor advertisements,
 - searching based on customer problems,
 - analyzing successful running ads.
 
-Each task must include:
-- specific search phrases,
-- filtering instructions,
-- advertising elements to analyze,
-- signals that indicate product potential.
-
-
 3. TikTok Creative Center:
-
-Create tasks related to:
 - analyzing product popularity,
 - analyzing hashtags,
 - analyzing viral videos,
 - analyzing user comments.
 
-Include:
-- specific search phrases,
-- hashtags,
-- research instructions,
-- evaluation criteria.
-
-
 4. Marketplace research:
-
-Create separate tasks for:
-
 - Amazon,
 - AliExpress,
 - Temu,
 - eBay.
 
-For each platform define:
-- what keywords to search,
-- what products to compare,
-- what data to collect:
-  - number of reviews,
-  - product rating,
-  - popularity indicators,
-  - recurring customer problems,
-  - customer needs.
-
-
 5. Customer review analysis:
-
-Create tasks related to:
 - finding negative reviews,
 - finding purchase motivations,
-- finding the most common problems,
+- finding customer problems,
 - finding product improvement opportunities.
 
-Include:
-- where to search,
-- what information to extract,
-- how to use the findings in the product offer.
-
-
 6. Social media research:
-
-Create tasks for:
-
 - TikTok,
 - Instagram,
 - YouTube,
 - Pinterest.
 
-For each:
-- provide search phrases,
-- provide hashtags,
-- describe what to analyze,
-- describe what signals indicate customer interest.
-
-
 7. Final product audit:
-
-Add a final summary task.
-
-It should include:
-- how to collect all research results,
-- what criteria to evaluate,
-- how to decide whether the product should move to the next stage.
-
+- collecting all research results,
+- evaluating criteria,
+- deciding whether the product moves forward.
 
 Every task must be a practical execution instruction.
 
 Do not create generic tasks.
-
-Bad example:
-
-"Check competitors"
-
-
-Good example:
-
-"Analyze competitor ads in Meta Ads Library:
-1. Open Meta Ads Library.
-2. Search for phrases: [phrase1], [phrase2], [phrase3].
-3. Save active advertisements.
-4. Analyze the hook, offer, comments, and how long the advertisement has been running."
-
-
-Every task must be possible to complete by someone without additional expertise.
-
 
 Return ONLY a JSON array following the format defined in the SYSTEM PROMPT.
 """
@@ -217,17 +134,30 @@ def analyse_checklist_generate_handler(
     ollama_service = container.ollama_service()
     knowledge_repo = container.offer_knowledge_repository()
     knowledge_assembler = container.analysis_assembler()
-    checklist_items_repository=container.checklist_items_repository()
+    checklist_items_repository = container.checklist_items_repository()
+
+    logger.info(
+        f"Checklist generation started. "
+        f"knowledge_id={knowledge_id}, analyse_id={analyse_id}, checklist_id={checklist_id}"
+    )
 
     # ---------
     # Get product data
     # ---------
 
-    knowledge_db = knowledge_repo.get_by_id(id=knowledge_id)
+    logger.info("Fetching product knowledge data")
+
+    knowledge_db = knowledge_repo.get_by_id(
+        id=knowledge_id
+    )
+
+    logger.info("Mapping knowledge entity to DTO")
 
     knowledge_dto = OfferKnowledgeMapper.to_dto(
         item=knowledge_db
     )
+
+    logger.info("Assembling product knowledge")
 
     assembled_knowledge = knowledge_assembler.assemble_dto(
         item=knowledge_dto
@@ -239,17 +169,31 @@ def analyse_checklist_generate_handler(
         indent=2
     )
 
+    logger.info(
+        f"Product data prepared. Size={len(json_offer_data)} chars"
+    )
+
+
     # ---------
     # Prepare prompt
     # ---------
+
+    logger.info("Preparing user prompt")
 
     user_prompt = prepare_user_prompt(
         json_offer_data=json_offer_data
     )
 
+    logger.info(
+        f"User prompt prepared. Size={len(user_prompt)} chars"
+    )
+
+
     # ---------
     # Call LLM
     # ---------
+
+    logger.info("Sending request to LLM")
 
     response = ollama_service.chat_llm(
         messages=[
@@ -264,22 +208,66 @@ def analyse_checklist_generate_handler(
         ]
     )
 
-    
+    logger.info("LLM response received")
+
+
     # ---------
     # Checklist Items Create
     # ---------
+
+    logger.info("Parsing LLM response")
+
+    response_object = json.loads(
+        response.content
+    )
+
+    logger.info(
+        f"Generated checklist items count={len(response_object)}"
+    )
+
+
     checklist_items = []
-    response_object = json.loads(response.content)
 
-    for item in response_object:
-        checklist_items.append(ChecklistItem(
-            title=item["title"],
-            description=item["description"],
-            note=item["note"]
-        ))
+    for index, item in enumerate(response_object):
 
-    checklist_items_db = checklist_items_repository.create_many(items=checklist_items)
+        logger.info(
+            f"Creating checklist item {index + 1}: {item['title']}"
+        )
 
-    items_dtos = [ChecklistItemMapper.to_dto(ch) for ch in checklist_items_db]
+        checklist_items.append(
+            ChecklistItem(
+                title=item["title"],
+                description=item["description"],
+                note=item["note"]
+            )
+        )
+
+
+    logger.info(
+        f"Saving checklist items to database. Count={len(checklist_items)}"
+    )
+
+    checklist_items_db = checklist_items_repository.create_many(
+        items=checklist_items
+    )
+
+    logger.info(
+        f"Checklist items saved. Count={len(checklist_items_db)}"
+    )
+
+
+    # ---------
+    # DTO Mapping
+    # ---------
+
+    logger.info("Mapping checklist items to DTOs")
+
+    items_dtos = [
+        ChecklistItemMapper.to_dto(ch)
+        for ch in checklist_items_db
+    ]
+
+
+    logger.info("Checklist generation finished successfully")
 
     return items_dtos
