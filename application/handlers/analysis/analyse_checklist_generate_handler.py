@@ -77,6 +77,25 @@ Each element must have exactly this structure:
 Do not add any text outside the JSON.
 
 Values must be in polish.
+
+
+
+The research must be prepared specifically for the Polish market.
+
+The generated content can use Polish or English keywords depending on how customers actually search in Poland.
+
+Do not translate keywords artificially.
+If an English keyword is commonly used in Poland (for example product names, trends, TikTok phrases, brand-related searches), keep the English version.
+
+Adapt all research to:
+- Polish customers,
+- Polish e-commerce market,
+- Polish competitors,
+- Polish shopping behavior,
+- Polish marketplaces,
+- Polish social media trends.
+
+Search phrases should reflect real queries used by people in Poland, not only direct translations from English.
 """
 
 
@@ -403,6 +422,7 @@ def analyse_checklist_generate_handler(
 
         checklist_items.append(
             ChecklistItem(
+                checklist_id=checklist_id,
                 title=item["title"],
                 description=item["description"],
                 note=item.get("note", "")
