@@ -138,6 +138,7 @@ class Container(containers.DeclarativeContainer):
     analysis_assembler = providers.Singleton(
         AnalysisAssembler,
         logger=logger,
+        analysis_questions_repository=analysis_questions_repository
     )
 
     # --------------------------
