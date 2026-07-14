@@ -3,7 +3,7 @@ from domain.models.analysis.analysis import Analysis
 from domain.models.analysis.knowledge_analysis import KnowledgeAnalysis
 from application.mappers.analysis_mapper import AnalysisMapper
 
-def knowledge_analysis_create_handler(knowledge_id: int):
+def create_analysis_for_knowledge_handler(knowledge_id: int):
     container = Container()
     analysis_repository = container.analysis_repository()
     knowledge_analysis_repotistory = container.knowledge_analysis_repository()

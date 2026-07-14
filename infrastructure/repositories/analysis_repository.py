@@ -20,3 +20,10 @@ class AnalysisRepository:
     def get_by_id(self, id: int) -> Optional[Analysis]:
         return self.db.query(Analysis).filter(Analysis.id == id).first()
 
+    # 🔍 GET BY IDS
+    def get_by_ids(self, ids: List[int]) -> List[Analysis]:
+        return (
+            self.db.query(Analysis)
+            .filter(Analysis.id.in_(ids))
+            .all()
+        )
