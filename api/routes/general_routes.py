@@ -71,6 +71,11 @@ def register_general_routes(router: APIRouter):
 
 
 
+
+    # -----------------------------
+    # Analysis
+    # -----------------------------
+
     #  POST in future 
     @router.get("/knowledges/{knowledge_id}/analysis/create")
     def knowledge_analysis_create(knowledge_id: int):

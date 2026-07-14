@@ -19,6 +19,8 @@ from infrastructure.repositories.target_audiences_repository import TargetAudien
 from application.assemblers.target_audience_assembler import TargetAudienceAssembler
 from infrastructure.repositories.analysis_repository import AnalysisRepository
 from infrastructure.repositories.knowledge_analysis_repository import KnowledgeAnalysisRepository
+from application.assemblers.analysis_assembler import AnalysisAssembler
+
 
 class Container(containers.DeclarativeContainer):
     db = providers.Factory(
@@ -126,6 +128,10 @@ class Container(containers.DeclarativeContainer):
         logger=logger,
     )
 
+    analysis_assembler = providers.Singleton(
+        AnalysisAssembler,
+        logger=logger,
+    )
 
     # --------------------------
     # Serwisy
