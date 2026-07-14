@@ -8,15 +8,15 @@ class ChecklistItemDto(JSONSerializable):
         self,
         id: int,
         checklist_id: int,
-        question: str,
-        answer: Optional[str],
-        notes: Optional[str]
+        title: str,
+        description: Optional[str],
+        note: Optional[str]
     ):
         self.id = id
         self.checklist_id = checklist_id
-        self.question = question
-        self.answer = answer
-        self.notes = notes
+        self.title = title
+        self.description = description
+        self.note = note
 
     def to_dict(self, exclude=None):
         exclude = set(exclude or [])
@@ -24,9 +24,9 @@ class ChecklistItemDto(JSONSerializable):
         data = {
             "id": self.id,
             "checklist_id": self.checklist_id,
-            "question": self.question,
-            "answer": self.answer,
-            "notes": self.notes,
+            "title": self.title,
+            "description": self.description,
+            "note": self.note,
         }
 
         return {k: v for k, v in data.items() if k not in exclude}
