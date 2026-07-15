@@ -6,7 +6,7 @@ from domain.enums.table_name import TableName
 
 
 class OfferItem(Base, JSONSerializable):
-    __tablename__ = TableName.OFFER_ITEMS
+    __tablename__ = TableName.OFFER_ITEMS.value
 
     id = Column(Integer, primary_key=True, autoincrement=True)
 

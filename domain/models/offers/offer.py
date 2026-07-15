@@ -5,7 +5,7 @@ from common.mixins.json_serializable import JSONSerializable
 from domain.enums.table_name import TableName
 
 class Offer(Base, JSONSerializable):
-    __tablename__ = TableName.OFFERS
+    __tablename__ = TableName.OFFERS.value
 
     # primary key auto-increment
     id = Column(Integer, primary_key=True, autoincrement=True)

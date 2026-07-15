@@ -9,3 +9,14 @@ from domain.models.knowledge.knowledge_insight import KnowledgeInsight
 
 # Target Audience
 from domain.models.audience.target_audience import TargetAudience
+
+# Checklist 
+from domain.models.checklist.checklist import Checklist
+from domain.models.checklist.checklist_item import ChecklistItem
+
+# Analysis 
+from domain.models.analysis.analysis import Analysis
+from domain.models.analysis.analysis_questions import AnalysisQuestion
+
+from domain.models.analysis.knowledge_analysis import KnowledgeAnalysis
+from domain.models.analysis.analysis_checklist import AnalysisChecklist

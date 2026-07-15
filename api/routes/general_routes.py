@@ -10,7 +10,16 @@ from application.handlers.target_audience.generate_target_audience_handler impor
 from application.handlers.target_audience.get_target_audience_handler import get_target_audience_handler
 from application.handlers.target_audience.get_target_audience_preview_handler import get_target_audience_preview_handler
 from application.handlers.offers.suggest_offer_data_handler import suggets_offer_data_handler
-from application.handlers.analysis.generate_knowledge_analysis_handler import generate_knowledge_analysis_handler
+from application.handlers.analysis.knowledge_analysis_answers_generate_handler import knowledge_analysis_answers_generate_handler
+from application.handlers.analysis.create_analysis_for_knowledge_handler import create_analysis_for_knowledge_handler
+from application.handlers.analysis.get_analysis_by_id_hanlder import get_analysis_by_id_handler
+from application.handlers.analysis.get_analysis_for_knowledge_hanlder import get_analysis_for_knowledge_handler
+from application.handlers.analysis.analyse_checklist_generate_handler import analyse_checklist_generate_handler
+from application.handlers.checklist.create_checklist_for_analysis_handler import create_checklist_for_analysis_handler
+from application.handlers.checklist.get_analysis_checklists_handler import get_analyse_checklists_handler
+from application.handlers.checklist.get_checklist_by_id_handler import get_checklist_by_id_handler
+
+
 
 def register_general_routes(router: APIRouter):
     @router.get("/offers")
@@ -70,7 +79,45 @@ def register_general_routes(router: APIRouter):
 
 
 
-     #  POST in future 
-    @router.get("/knowledges/{knowledge_id}/analysis/generate")
-    def knowledge_analysis_generate(knowledge_id: int):
-        return generate_knowledge_analysis_handler( knowledge_id=knowledge_id)
+    # -----------------------------
+    # Analysis
+    # -----------------------------
+    # POST in future 
+    @router.get("/analysis/{analyse_id}")
+    def get_anlysis_by_id(analyse_id: int):
+        return get_analysis_by_id_handler( analyse_id=analyse_id)
+
+    @router.get("/knowledges/{knowledge_id}/analysis/create")
+    def create_analysis_for_knowledge(knowledge_id: int):
+        return create_analysis_for_knowledge_handler(knowledge_id=knowledge_id)
+
+    @router.get("/knowledges/{knowledge_id}/analysis")
+    def get_analysis_for_knowledge(knowledge_id: int):
+        return get_analysis_for_knowledge_handler(knowledge_id=knowledge_id)
+
+    # POST in future 
+    @router.get("/knowledges/{knowledge_id}/analysis/{analyse_id}/answers/generate")
+    def knowledge_analysis_answers_generate(knowledge_id: int, analyse_id: int):
+        return knowledge_analysis_answers_generate_handler( knowledge_id=knowledge_id, analyse_id=analyse_id)
+
+
+
+    # -----------------------------
+    # Checklist 
+    # -----------------------------
+    @router.get("/checklists/{checklist_id}")
+    def get_checklist_for_analysis( checklist_id: int):
+        return get_checklist_by_id_handler( checklist_id=checklist_id)  
+
+    @router.get("/knowledges/{knowledge_id}/analysis/{analysis_id}/checklists/create")
+    def create_analyse_checklist(knowledge_id: int, analysis_id: int):
+        return create_checklist_for_analysis_handler( analysis_id=analysis_id)  
+
+    # POST in future 
+    @router.get("/knowledges/{knowledge_id}/analysis/{analyse_id}/checklists/{checklist_id}/generate")
+    def analyse_checklist_generate(knowledge_id: int, analyse_id: int, checklist_id: int):
+        return analyse_checklist_generate_handler( knowledge_id=knowledge_id, analyse_id=analyse_id, checklist_id=checklist_id)
+
+    @router.get("/analysis/{analysis_id}/checklists")
+    def get_checklist_for_analysis( analysis_id: int):
+        return get_analyse_checklists_handler( analyse_id=analysis_id)  
