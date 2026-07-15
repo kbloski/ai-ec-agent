@@ -515,7 +515,7 @@ def generate_landing_page_for_knowledge_v2_handler(
 
     return {
 
-        "product": assembled_knowledge_dto.to_dict(),
+        # "product": assembled_knowledge_dto.to_dict(),
 
         "landing_page_strategy":
             landing_strategy,
