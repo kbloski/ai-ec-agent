@@ -18,10 +18,17 @@ from application.handlers.analysis.analyse_checklist_generate_handler import ana
 from application.handlers.checklist.create_checklist_for_analysis_handler import create_checklist_for_analysis_handler
 from application.handlers.checklist.get_analysis_checklists_handler import get_analyse_checklists_handler
 from application.handlers.checklist.get_checklist_by_id_handler import get_checklist_by_id_handler
-
+from application.handlers.landing_page.generate.generate_landing_page_for_knowledge_handler import generate_landing_page_for_knowledge_handler
+from application.handlers.landing_page.generate.generate_landing_page_for_knowledge_handler_v2 import generate_landing_page_for_knowledge_v2_handler
 
 
 def register_general_routes(router: APIRouter):
+
+    
+    # -----------------------------
+    # Offers
+    # -----------------------------
+
     @router.get("/offers")
     def offers(page: int = 1):
         return get_offers( page=page )
@@ -41,6 +48,9 @@ def register_general_routes(router: APIRouter):
 
 
 
+    # -----------------------------
+    # Knowledges
+    # -----------------------------
 
     # POST in future 
     @router.get("/offers/{id}/knowledges/generate")
@@ -60,7 +70,9 @@ def register_general_routes(router: APIRouter):
 
 
 
-
+    # -----------------------------
+    # Target audience
+    # -----------------------------
 
     #  POST in future 
     @router.get("/knowledges/{knowledge_id}/target-audiences/generate")
@@ -121,3 +133,15 @@ def register_general_routes(router: APIRouter):
     @router.get("/analysis/{analysis_id}/checklists")
     def get_checklist_for_analysis( analysis_id: int):
         return get_analyse_checklists_handler( analyse_id=analysis_id)  
+
+
+
+    # -----------------------------
+    # Landing page 
+    # -----------------------------
+    @router.get("/knowledges/{knowledge_id}/landing-page/generate")
+    def knowledge_landing_page_generate( knowledge_id : int, version=str):
+        if not version:
+            return generate_landing_page_for_knowledge_handler( knowledge_id=knowledge_id)
+        if version=="2":
+            return generate_landing_page_for_knowledge_v2_handler( knowledge_id=knowledge_id)

@@ -19,9 +19,8 @@ Body:
 Stopka 
 
 
-
-
-
-
 DODATKOWO: 
-- auto generowanie komentarzy
+- auto generowanie komentarzy do importu dla wordpress 
+
+
+Dodatkowo generowanie pomysłów na reklamę 
