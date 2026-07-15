@@ -1,0 +1,22 @@
+Sekcje 
+
+
+Pasek nad menu głównym
+
+Menu główne
+
+Body:
+    - przedstawienie produktu
+        - krótki opis produktu
+        - zdjęcia produktu 
+        - cta 
+    - baner z problemami jakie rozwiązuje
+    - najważniejsze cechy oferty
+    - materiały UGC
+    - czym się różnimy od konkurencji
+    - komentarzy wraz z formularzem przesłania komentarza
+    - FAQ
+    - baner produktowy
+
+
+Stopka 
