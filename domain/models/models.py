@@ -43,3 +43,6 @@ from domain.models.advertisement.scene import Scene
 from domain.models.advertisement.advertisement_scene import AdvertisementScene
 from domain.models.advertisement.advertisement_visualization import AdvertisementVisualization
 from domain.models.advertisement.advertisement_objection import AdvertisementObjection
+
+# Experiments
+from domain.models.experiment.experiment import Experiment

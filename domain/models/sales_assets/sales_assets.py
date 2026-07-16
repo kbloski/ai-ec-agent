@@ -50,7 +50,7 @@ class SalesAsset(Base, JSONSerializable):
     content_status = Column(
         String,
         nullable=False,
-        default="draft"
+        default=""
     )
 
 

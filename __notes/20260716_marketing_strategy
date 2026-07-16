@@ -1,0 +1,242 @@
+{
+  "id": 1,
+  "knowledge_id": 1,
+  "version": 1,
+  "status": "approved",
+
+  "pozycjonowanie": {
+
+    "kategoria": "Lekkie akumulatorowe narzędzia ogrodowe",
+
+    "pozycja_na_rynku": 
+      "Prosta i lekka pilarka akumulatorowa dla właścicieli domów, którzy chcą samodzielnie wykonywać prace ogrodowe bez używania ciężkiego sprzętu.",
+
+    "wyróżnik": 
+      "Połączenie mobilności, kompatybilności z bateriami Makita oraz ergonomicznej konstrukcji umożliwiającej łatwe cięcie.",
+
+    "cel_percepcji_klienta":
+      "Klient ma postrzegać produkt jako łatwiejszą, bezpieczniejszą i wygodniejszą alternatywę dla ciężkich pił oraz ręcznych narzędzi."
+  },
+
+
+  "główna_strategia": {
+
+    "big_idea":
+      "Nie potrzebujesz siły profesjonalisty, żeby samodzielnie zadbać o swój ogród.",
+
+    "główna_obietnica":
+      "Przycinaj gałęzie i utrzymuj swoją posesję przy mniejszym wysiłku.",
+
+    "unikalny_mechanizm":
+      "Kompaktowa pilarka akumulatorowa, która daje moc cięcia tradycyjnego narzędzia przy znacznie większej wygodzie użytkowania.",
+
+    "główny_kąt_sprzedaży":
+      "Niezależność i wygoda",
+
+    "pozostałe_kąty_sprzedaży": [
+      "Mniej wysiłku fizycznego",
+      "Oszczędność czasu",
+      "Łatwość użytkowania",
+      "Wykorzystanie posiadanych baterii Makita"
+    ]
+  },
+
+
+  "strategia_klienta": {
+
+    "główna_grupa": {
+
+      "nazwa":
+        "Emerytowani właściciele domów z problemami z mobilnością",
+
+      "dlaczego_ta_grupa":
+        "Ta grupa najbardziej odczuwa problem ciężkich narzędzi i chce zachować samodzielność.",
+
+
+      "problemy": [
+        "Ciężkie narzędzia powodują zmęczenie i ból",
+        "Trudność w samodzielnym wykonywaniu prac ogrodowych",
+        "Obawa przed utratą niezależności"
+      ],
+
+
+      "pragnienia": [
+        "Samodzielne dbanie o ogród",
+        "Poczucie sprawności",
+        "Mniejszy wysiłek fizyczny"
+      ]
+    },
+
+
+    "drugorzędne_grupy": [
+
+      {
+        "nazwa": "Miłośnicy DIY",
+        "powód":
+          "Szukają kompaktowych i wygodnych narzędzi do domowych projektów"
+      },
+
+      {
+        "nazwa": "Właściciele dużych posesji",
+        "powód":
+          "Potrzebują niezawodnego narzędzia do regularnej pielęgnacji"
+      }
+
+    ]
+  },
+
+
+  "strategia_komunikacji": {
+
+    "ton": [
+      "Prosty",
+      "Pomocny",
+      "Budujący pewność siebie",
+      "Praktyczny"
+    ],
+
+
+    "czego_unikać": [
+      "Skupiania się tylko na parametrach technicznych",
+      "Udawania profesjonalnej piły przemysłowej",
+      "Obietnic bez pokrycia"
+    ],
+
+
+    "język_klienta": [
+      "Zrób to sam",
+      "Bez ciężkiego sprzętu",
+      "Łatwo w Twoim ogrodzie",
+      "Mniej wysiłku, więcej kontroli"
+    ]
+  },
+
+
+  "strategia_psychologiczna": {
+
+    "główny_trigger":
+      "Niezależność",
+
+
+    "dodatkowe_triggery": [
+      "Ulga",
+      "Kontrola",
+      "Komfort",
+      "Duma z zadbanego ogrodu"
+    ],
+
+
+    "główne_obiekcje": [
+
+      {
+        "obiekcja":
+          "Czy taka mała pilarka będzie wystarczająco mocna?",
+
+        "strategia_odpowiedzi":
+          "Pokazać realne demonstracje cięcia gałęzi."
+      },
+
+
+      {
+        "obiekcja":
+          "Czy bateria wystarczy?",
+
+        "strategia_odpowiedzi":
+          "Pokazać opcje baterii i typowe zastosowania."
+      }
+
+    ]
+  },
+
+
+  "strategia_kreatywna": {
+
+    "najlepsze_formaty": [
+      "Problem → rozwiązanie",
+      "Przed → po",
+      "Demo produktu",
+      "Opinie klientów"
+    ],
+
+
+    "proponowane_hooki": [
+
+      "Twój ogród nie powinien zależeć od Twojej siły.",
+
+      "Przestań walczyć z ciężkimi narzędziami.",
+
+      "Mała pilarka, którą każdy może obsłużyć."
+    ],
+
+
+    "kierunek_wizualny": [
+
+      "Starsza osoba samodzielnie pracująca w ogrodzie",
+
+      "Przed:
+       ciężkie narzędzia i zmęczenie",
+
+      "Po:
+       szybka i łatwa pielęgnacja ogrodu"
+    ]
+  },
+
+
+  "strategia_konwersji": {
+
+    "główne_argumenty": [
+      "Łatwość użytkowania",
+      "Komfort",
+      "Mobilność",
+      "Kompatybilność z bateriami"
+    ],
+
+
+    "potrzebny_dowód": [
+      "Demonstracja działania",
+      "Opinie klientów",
+      "Porównanie z tradycyjnymi narzędziami"
+    ],
+
+
+    "strategia_cta":
+      "Zobacz, jak łatwa może być pielęgnacja Twojego ogrodu."
+  },
+
+
+  "priorytety_eksperymentów": [
+
+    {
+      "typ":
+        "ANGLE",
+
+      "hipoteza":
+        "Komunikacja niezależności będzie skuteczniejsza niż komunikacja parametrów technicznych.",
+
+      "priorytet": 10
+    },
+
+
+    {
+      "typ":
+        "HOOK",
+
+      "hipoteza":
+        "Pokazanie fizycznego problemu zwiększy zatrzymanie uwagi.",
+
+      "priorytet": 9
+    },
+
+
+    {
+      "typ":
+        "AUDIENCE",
+
+      "hipoteza":
+        "Starsze osoby posiadające dom będą miały większą intencję zakupu niż ogólna grupa DIY.",
+
+      "priorytet": 8
+    }
+
+  ]
+}

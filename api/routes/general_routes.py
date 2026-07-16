@@ -24,6 +24,10 @@ from application.handlers.advertisement.get_advertisement_handler import get_adv
 from application.handlers.sales_assets.generate_sales_asset_handler import generate_sales_asset_handler
 from application.handlers.sales_assets.get_sales_assets_handler import get_sales_assets_handler
 from application.handlers.sales_assets.get_sales_asset_handler import get_sales_asset_handler
+from application.handlers.experiments.knowledge_experiments_generate_handler import knowledge_experiments_generate_handler
+from application.handlers.experiments.get_knowledge_experiments_handler import get_knowledge_experiments_handler
+from application.handlers.experiments.get_knowledge_experiment_handler import get_knowledge_experiment_handler
+
 
 def register_general_routes(router: APIRouter):
 
@@ -169,3 +173,19 @@ def register_general_routes(router: APIRouter):
     @router.get("/advertisements/{id}")
     def get_advertisement( id: int ):
         return get_advertisement_handler( id=id )
+
+
+    # -----------------------------
+    # Knowledges experiments
+    # -----------------------------
+    @router.get("/knowledges/{knowledge_id}/experiments/generate")
+    def knowledge_experiments_generate( knowledge_id: int, count: int = 10 ):
+        return knowledge_experiments_generate_handler( knowledge_id=knowledge_id, count=count )
+
+    @router.get("/knowledges/{knowledge_id}/experiments")
+    def get_knowledge_experiments( knowledge_id: int ):
+        return get_knowledge_experiments_handler( knowledge_id=knowledge_id )
+
+    @router.get("/experiments/{id}")
+    def get_knowledge_experiment( id: int ):
+        return get_knowledge_experiment_handler( id=id )
