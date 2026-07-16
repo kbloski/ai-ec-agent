@@ -10,64 +10,82 @@
         v                  v                  v                  v
  CUSTOMER VOICE     SALES POTENTIAL    MARKET ANALYSIS    TARGET AUDIENCES
  (comments,         ANALYSIS           (konkurencja,      (segmenty,
- reviews, Q&A)           |              trendy,           persony)
-                         |              szanse)
-                         |
-                         v
+ reviews, Q&A)      (szanse, ryzyka,   trendy,            persony,
+                    potencjał)         możliwości)        potrzeby)
+                           |                  |                  |
+                           -+------------------+------------------+
+                           |
+                           v
+                 CUSTOMER & MARKET INSIGHTS
+                 (kto kupuje i dlaczego)
+                           |
+                           v
                   BRAND STRATEGY
-                  (kim jesteśmy)
-                         |
-                         v
+                  (jak marka pozycjonuje się
+                   dla konkretnego klienta)
+                           |
+                           v
               MARKETING STRATEGY
-              (jak sprzedajemy)
-                         |
-              +----------+----------+
-              |                     |
-              v                     v
-        OFFER STRATEGY       MESSAGE STRATEGY
-        (cena, bonusy,       (kąty, obietnice,
-        gwarancja)           komunikacja)
-              |
-              |
-              v
-           EXPERIMENTS
-        (hipotezy marketingowe)
-              |
-              |
-              v
-        SALES ASSETS
-              |
-      +-------+-------+-------+-------+
-      |       |       |       |
-      v       v       v       v
-    ADS   LANDING  EMAILS   UGC
-              |
-              |
-              v
-        TODO / ACTION PLAN
-        (zadania do wykonania)
+              (jak zdobywamy tego klienta)
+                           |
+        +------------------+------------------+
+        |                                     |
+        v                                     v
+ OFFER STRATEGY                       MESSAGE STRATEGY
+ (co oferujemy                       (jak komunikujemy
+ temu klientowi)                     wartość)
+        |                                     |
+        +------------------+------------------+
+                           |
+                           v
+                    EXPERIMENTS
+              (testujemy konkretne
+               hipotezy dla konkretnej grupy)
+                           |
+                           v
+                    SALES ASSETS
+                           |
+        +------------------+------------------+
+        |                  |                  |
+        v                  v                  v
+       ADS           LANDING PAGES        EMAILS
+        |
+        v
+       UGC
 
 
+
+                           |
+                           v
+
+                    TODO / ACTION PLAN
+              (zadania wynikające z całego procesu)
+
+
+
+================================================
 
 # IN FUTURE
 
-              |
-              v
+================================================
 
-        CAMPAIGN RESULTS
-              |
-              v
 
-        PERFORMANCE ANALYSIS
-              |
-              v
-
-        LEARNING ENGINE
-              |
-              v
-
-        STRATEGY OPTIMIZATION
-              |
-              v
-
-        UPDATED KNOWLEDGE BASE
+                    CAMPAIGN RESULTS
+                           |
+                           v
+              PERFORMANCE ANALYSIS
+                           |
+                           v
+                  LEARNING ENGINE
+                           |
+                           v
+             STRATEGY OPTIMIZATION
+                           |
+                           v
+             UPDATED KNOWLEDGE BASE
+                           |
+                           v
+                UPDATED AUDIENCES
+                           |
+                           v
+                  NEW EXPERIMENTS
