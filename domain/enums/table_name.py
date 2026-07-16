@@ -18,3 +18,8 @@ class TableName(str, Enum):
     SALES_ASSETS = "sales_assets"
     SALES_ASSET_SECTIONS = "sales_asset_sections"
     SALES_ASSET_SECTION_VISUALIZATIONS = "sales_asset_section_visualizations"
+    ADVERTISEMENTS = "advertisements"
+    SCENES = "scenes"
+    ADVERTISEMENT_SCENES = "advertisement_scenes"
+    ADVERTISEMENT_VISUALIZATIONS = "advertisement_visualizations"
+    ADVERTISEMENT_OBJECTIONS = "advertisement_objections"

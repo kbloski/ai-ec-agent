@@ -31,6 +31,13 @@ from infrastructure.repositories.sales_asset_section_visualizations_repository i
 from infrastructure.repositories.visualizations_repository import VisualizationsRepository
 from application.assemblers.sales_asset_assembler import SalesAssetAssembler
 from application.services.sales_asset_service import SalesAssetService
+from infrastructure.repositories.advertisements_repository import AdvertisementsRepository
+from infrastructure.repositories.scenes_repository import ScenesRepository
+from infrastructure.repositories.advertisement_scenes_repository import AdvertisementScenesRepository
+from infrastructure.repositories.advertisement_visualizations_repository import AdvertisementVisualizationsRepository
+from infrastructure.repositories.advertisement_objections_repository import AdvertisementObjectionsRepository
+from application.assemblers.advertisement_assembler import AdvertisementAssembler
+from application.services.advertisement_service import AdvertisementService
 
 class Container(containers.DeclarativeContainer):
     db = providers.Factory(
@@ -160,6 +167,36 @@ class Container(containers.DeclarativeContainer):
         db=db
     )
 
+    advertisements_repository = providers.Singleton(
+        AdvertisementsRepository,
+        logger=logger,
+        db=db
+    )
+
+    scenes_repository = providers.Singleton(
+        ScenesRepository,
+        logger=logger,
+        db=db
+    )
+
+    advertisement_scenes_repository = providers.Singleton(
+        AdvertisementScenesRepository,
+        logger=logger,
+        db=db
+    )
+
+    advertisement_visualizations_repository = providers.Singleton(
+        AdvertisementVisualizationsRepository,
+        logger=logger,
+        db=db
+    )
+
+    advertisement_objections_repository = providers.Singleton(
+        AdvertisementObjectionsRepository,
+        logger=logger,
+        db=db
+    )
+
 
     # --------------------------
     # Assemblery
@@ -205,6 +242,15 @@ class Container(containers.DeclarativeContainer):
         sales_asset_section_visualizations_repository=sales_asset_section_visualizations_repository,
         visualizations_repository=visualizations_repository
     )
+
+    advertisement_assembler = providers.Singleton(
+        AdvertisementAssembler,
+        logger=logger,
+        advertisement_scenes_repository=advertisement_scenes_repository,
+        scenes_repository=scenes_repository,
+        advertisement_visualizations_repository=advertisement_visualizations_repository,
+        advertisement_objections_repository=advertisement_objections_repository
+    )
     # --------------------------
     # Serwisy
     # --------------------------
@@ -245,5 +291,12 @@ class Container(containers.DeclarativeContainer):
         sales_assets_repository=sales_assets_repository,
         sales_asset_assembler=sales_asset_assembler
     )
-    
+
+    advertisement_service = providers.Singleton(
+        AdvertisementService,
+        logger=logger,
+        advertisements_repository=advertisements_repository,
+        advertisement_assembler=advertisement_assembler
+    )
+
 

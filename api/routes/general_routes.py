@@ -19,6 +19,8 @@ from application.handlers.checklist.create_checklist_for_analysis_handler import
 from application.handlers.checklist.get_analysis_checklists_handler import get_analyse_checklists_handler
 from application.handlers.checklist.get_checklist_by_id_handler import get_checklist_by_id_handler
 from application.handlers.advertisement.knowledge_advertisement_generate_handler import knowledge_advertisement_generate_handler
+from application.handlers.advertisement.get_advertisements_handler import get_advertisements_handler
+from application.handlers.advertisement.get_advertisement_handler import get_advertisement_handler
 from application.handlers.sales_assets.generate_sales_asset_handler import generate_sales_asset_handler
 from application.handlers.sales_assets.get_sales_assets_handler import get_sales_assets_handler
 from application.handlers.sales_assets.get_sales_asset_handler import get_sales_asset_handler
@@ -157,5 +159,13 @@ def register_general_routes(router: APIRouter):
     # Knowledges advertisement
     # -----------------------------
     @router.get("/knowledges/{knowledge_id}/advertisements/generate")
-    def knowledge_advertisement_generate( knowledge_id : int, count=3 ):
+    def knowledge_advertisement_generate( knowledge_id : int, count: int = 3 ):
         return knowledge_advertisement_generate_handler( knowledge_id=knowledge_id, count=count )
+
+    @router.get("/knowledges/{knowledge_id}/advertisements")
+    def get_knowledge_advertisements( knowledge_id: int ):
+        return get_advertisements_handler( knowledge_id=knowledge_id )
+
+    @router.get("/advertisements/{id}")
+    def get_advertisement( id: int ):
+        return get_advertisement_handler( id=id )

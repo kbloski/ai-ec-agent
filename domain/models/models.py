@@ -36,3 +36,10 @@ from domain.models.visualizations.vusualization import Visualization
 from domain.models.sales_assets.sales_assets import SalesAsset
 from domain.models.sales_assets.sales_asset_sections import SalesAssetSection
 from domain.models.sales_assets.sales_asset_section_visualization import SalesAssetSectionVisualization
+
+# Advertisement
+from domain.models.advertisement.advertisement import Advertisement
+from domain.models.advertisement.scene import Scene
+from domain.models.advertisement.advertisement_scene import AdvertisementScene
+from domain.models.advertisement.advertisement_visualization import AdvertisementVisualization
+from domain.models.advertisement.advertisement_objection import AdvertisementObjection
