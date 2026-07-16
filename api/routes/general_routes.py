@@ -21,6 +21,7 @@ from application.handlers.checklist.get_checklist_by_id_handler import get_check
 from application.handlers.advertisement.knowledge_advertisement_generate_handler import knowledge_advertisement_generate_handler
 from application.handlers.sales_assets.generate_sales_asset_handler import generate_sales_asset_handler
 from application.handlers.sales_assets.get_sales_assets_handler import get_sales_assets_handler
+from application.handlers.sales_assets.get_sales_asset_handler import get_sales_asset_handler
 
 def register_general_routes(router: APIRouter):
 
@@ -146,6 +147,10 @@ def register_general_routes(router: APIRouter):
     @router.get("/knowledges/{knowledge_id}/sales-assets")
     def get_knowledge_sales_assets(knowledge_id: int):
         return get_sales_assets_handler(knowledge_id=knowledge_id)
+
+    @router.get("/sales-assets/{id}")
+    def get_sales_asset(id: int):
+        return get_sales_asset_handler(id=id)
 
 
     # -----------------------------

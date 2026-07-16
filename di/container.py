@@ -30,6 +30,7 @@ from infrastructure.repositories.sales_asset_sections_repository import SalesAss
 from infrastructure.repositories.sales_asset_section_visualizations_repository import SalesAssetSectionVisualizationsRepository
 from infrastructure.repositories.visualizations_repository import VisualizationsRepository
 from application.assemblers.sales_asset_assembler import SalesAssetAssembler
+from application.services.sales_asset_service import SalesAssetService
 
 class Container(containers.DeclarativeContainer):
     db = providers.Factory(
@@ -236,6 +237,13 @@ class Container(containers.DeclarativeContainer):
         offers_repository=offers_repository,
         ollama_service=ollama_service,
         path_service=path_service
+    )
+
+    sales_asset_service = providers.Singleton(
+        SalesAssetService,
+        logger=logger,
+        sales_assets_repository=sales_assets_repository,
+        sales_asset_assembler=sales_asset_assembler
     )
     
 
