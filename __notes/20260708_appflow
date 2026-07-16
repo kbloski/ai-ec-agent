@@ -1,33 +1,32 @@
                          OFFER
                            |
-                           |
                            v
                     KNOWLEDGE BASE
                            |
-          (AI analizuje produkt i rynek)
+          (AI analizuje produkt, rynek i klienta)
                            |
-        +------------------+------------------+
-        |                  |                  |
-        v                  v                  v
- CUSTOMER VOICE     MARKETING STRATEGY   TARGET AUDIENCES
- (comments,         (jak sprzedajemy)    (komu sprzedajemy)
- reviews, Q&A)             |
-                            |
-                            v
-                       EXPERIMENTS
-                            |
-                    (co konkretnie testujemy)
-                            |
-                            v
-                       SALES ASSETS
-                            |
-        +-------------------+-------------------+
-        |                   |                   |
-        v                   v                   v
- ADVERTISEMENTS      LANDING PAGES        EMAILS
-        |
-        v
- UGC SCRIPTS / CREATIVES
+        +------------------+------------------+------------------+
+        |                  |                  |                  |
+        v                  v                  v                  v
+ CUSTOMER VOICE     SALES POTENTIAL    MARKETING STRATEGY   TARGET AUDIENCES
+ (comments,         ANALYSIS           (jak sprzedajemy)    (komu sprzedajemy)
+ reviews, Q&A)           |                    |
+                         |                    |
+                         v                    v
+                   MARKET INSIGHTS       EXPERIMENTS
+                   RISKS                 (co testujemy)
+                   OPPORTUNITIES              |
+                   SCORES                     |
+                                              v
+                                         SALES ASSETS
+                                              |
+                   +--------------------------+----------------+
+                   |                          |                |
+                   v                          v                v
+            ADVERTISEMENTS             LANDING PAGES       EMAILS
+                   |
+                   v
+            UGC SCRIPTS / CREATIVES
 
 
 
