@@ -20,7 +20,7 @@ from application.handlers.checklist.get_analysis_checklists_handler import get_a
 from application.handlers.checklist.get_checklist_by_id_handler import get_checklist_by_id_handler
 from application.handlers.landing_page.generate.generate_landing_page_for_knowledge_handler import generate_landing_page_for_knowledge_handler
 from application.handlers.landing_page.generate.generate_landing_page_for_knowledge_handler_v2 import generate_landing_page_for_knowledge_v2_handler
-
+from application.handlers.advertisement.knowledge_advertisement_generate_handler import knowledge_advertisement_generate_handler
 
 def register_general_routes(router: APIRouter):
 
@@ -145,3 +145,11 @@ def register_general_routes(router: APIRouter):
             return generate_landing_page_for_knowledge_handler( knowledge_id=knowledge_id)
         if version=="2":
             return generate_landing_page_for_knowledge_v2_handler( knowledge_id=knowledge_id)
+
+
+    # -----------------------------
+    # Knowledges advertisement
+    # -----------------------------
+    @router.get("/knowledges/{knowledge_id}/advertisements/generate")
+    def knowledge_advertisement_generate( knowledge_id : int ):
+        return knowledge_advertisement_generate_handler( knowledge_id=knowledge_id )

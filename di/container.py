@@ -188,7 +188,9 @@ class Container(containers.DeclarativeContainer):
         docx_parser=docx_parser,
         txt_parser=txt_parser,
         path_service=path_service,
-        ollama_service=ollama_service
+        ollama_service=ollama_service,
+        offer_knowledge_repository=offer_knowledge_repository,
+        offer_knowledge_assembler=offer_knowledge_assembler
     )
 
     product_service = providers.Singleton(
