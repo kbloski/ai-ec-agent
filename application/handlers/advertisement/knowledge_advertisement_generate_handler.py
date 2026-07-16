@@ -64,151 +64,136 @@ DANE PRODUKTU:
 Zwróć odpowiedź wyłącznie jako poprawny JSON w poniższej strukturze:
 
 
-{{
-    "product_analysis": {{
-        "main_problem": "",
-        "customer_desire": "",
-        "main_emotion": "",
-        "main_objection": "",
-        "transformation": ""
-    }},
+[
+
+    {{
+
+        "name": "",
+        "strategy": {{
+            "framework": "",
+            "angle": "",
+            "psychology_trigger": "",
+            "awareness_stage": "",
+            "hypothesis": ""
+
+        }},
 
 
-    "advertisements": [
-
-        {{
-
-            "name": "",
-
-
-            "strategy": {{
-
-                "framework": "",
-                "angle": "",
-                "psychology_trigger": "",
-                "awareness_stage": "",
-                "hypothesis": ""
-
-            }},
+        "creative": {{
+            "platform": "",
+            "format": "",
+            "duration_seconds": "",
+            "aspect_ratio": "",
 
 
-            "creative": {{
+            "hook": {{
 
-                "platform": "",
-                "format": "",
-                "duration_seconds": "",
-                "aspect_ratio": "",
-
-
-                "hook": {{
-
-                    "text": "",
-                    "type": "",
-                    "visual": "",
-                    "duration": "0-3s"
-
-                }},
-
-
-                "problem": "",
-
-
-                "solution": "",
-
-
-                "proof": {{
-
-                    "type": "",
-                    "content": ""
-
-                }},
-
-
-                "script": {{
-
-                    "scene_1": "",
-                    "scene_2": "",
-                    "scene_3": "",
-                    "scene_4": "",
-                    "scene_5": ""
-
-                }},
-
-
-                "voiceover": "",
-
-
-                "visual_direction": [
-
-                    ""
-
-                ],
-
-
-                "text_overlays": [
-
-                    ""
-
-                ],
-
-
-                "cta": {{
-
-                    "text": "",
-                    "type": "",
-                    "urgency": ""
-
-                }}
+                "text": "",
+                "type": "",
+                "visual": "",
+                "duration": "0-3s"
 
             }},
 
 
-            "target_audience": {{
+            "problem": "",
 
-                "name": "",
-                "pain_points": [],
-                "motivations": [],
-                "buying_triggers": []
+
+            "solution": "",
+
+
+            "proof": {{
+
+                "type": "",
+                "content": ""
 
             }},
 
 
-            "objections_handled": [
+            "script": {{
 
-                {{
+                "scene_1": "",
+                "scene_2": "",
+                "scene_3": "",
+                "scene_4": "",
+                "scene_5": ""
 
-                    "objection": "",
-                    "answer": ""
+            }},
 
-                }}
+
+            "voiceover": "",
+
+
+            "visual_direction": [
+
+                ""
 
             ],
 
 
-            "testing": {{
+            "text_overlays": [
 
-                "variant": "",
-                "what_is_tested": "",
-                "expected_result": ""
+                ""
 
-            }},
+            ],
 
 
-            "score": {{
+            "cta": {{
 
-                "hook": 0,
-                "emotion": 0,
-                "clarity": 0,
-                "purchase_intent": 0,
-                "overall": 0
+                "text": "",
+                "type": "",
+                "urgency": ""
 
             }}
 
+        }},
+
+
+        "target_audience": {{
+
+            "name": "",
+            "pain_points": [],
+            "motivations": [],
+            "buying_triggers": []
+
+        }},
+
+
+        "objections_handled": [
+
+            {{
+
+                "objection": "",
+                "answer": ""
+
+            }}
+
+        ],
+
+
+        "testing": {{
+
+            "variant": "",
+            "what_is_tested": "",
+            "expected_result": ""
+
+        }},
+
+
+        "score": {{
+
+            "hook": 0,
+            "emotion": 0,
+            "clarity": 0,
+            "purchase_intent": 0,
+            "overall": 0
+
         }}
 
-    ]
+    }}
 
-}}
+]
+
 
 
 
@@ -372,9 +357,9 @@ def knowledge_advertisement_generate_handler(
 
     except json.JSONDecodeError:
 
-        generated_ads = {
+        return {
             "error": "Invalid JSON from LLM",
             "raw_response": response.content
         }
 
-    return generated_ads
+    return generated_ads.get("advertisements", [])
