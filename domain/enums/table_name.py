@@ -14,3 +14,7 @@ class TableName(str, Enum):
     CHECKLIST = "checklist"
     CHECKLIST_ITEM = "checklist_item"
     ANALYSIS_CHECKLIST = "analysis_checklist"
+    VISUALIZATIONS = "visualizations"
+    SALES_ASSETS = "sales_assets"
+    SALES_ASSET_SECTIONS = "sales_asset_sections"
+    SALES_ASSET_SECTION_VISUALIZATIONS = "sales_asset_section_visualizations"

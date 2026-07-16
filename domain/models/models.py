@@ -1,4 +1,12 @@
-# infrastructure/database/models.py
+# --------------------
+# Other models  
+# --------------------
+from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
+
+# --------------------
+# Database models 
+# --------------------
+
 from domain.models.offers.offer import Offer
 from domain.models.offers.offer_item import OfferItem
 from domain.models.offers.offer_insight import OfferInsight
@@ -20,3 +28,11 @@ from domain.models.analysis.analysis_questions import AnalysisQuestion
 
 from domain.models.analysis.knowledge_analysis import KnowledgeAnalysis
 from domain.models.analysis.analysis_checklist import AnalysisChecklist
+
+# Visualizations 
+from domain.models.visualizations.vusualization import Visualization
+
+# Sales Assets
+from domain.models.sales_assets.sales_assets import SalesAsset
+from domain.models.sales_assets.sales_asset_sections import SalesAssetSection
+from domain.models.sales_assets.sales_asset_section_visualization import SalesAssetSectionVisualization

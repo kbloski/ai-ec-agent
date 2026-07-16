@@ -61,7 +61,8 @@ DANE PRODUKTU:
 {product_json}
 
 
-Zwróć JSON w strukturze:
+Zwróć odpowiedź wyłącznie jako poprawny JSON w poniższej strukturze:
+
 
 {{
     "product_analysis": {{
@@ -72,44 +73,244 @@ Zwróć JSON w strukturze:
         "transformation": ""
     }},
 
+
     "advertisements": [
+
         {{
+
             "name": "",
-            "angle": "",
-            "format": "",
-            "target_audience": "",
 
-            "hook": "",
 
-            "script": {{
-                "scene_1": "",
-                "scene_2": "",
-                "scene_3": "",
-                "scene_4": "",
-                "scene_5": ""
+            "strategy": {{
+
+                "framework": "",
+                "angle": "",
+                "psychology_trigger": "",
+                "awareness_stage": "",
+                "hypothesis": ""
+
             }},
 
-            "visual_direction": [
-                ""
+
+            "creative": {{
+
+                "platform": "",
+                "format": "",
+                "duration_seconds": "",
+                "aspect_ratio": "",
+
+
+                "hook": {{
+
+                    "text": "",
+                    "type": "",
+                    "visual": "",
+                    "duration": "0-3s"
+
+                }},
+
+
+                "problem": "",
+
+
+                "solution": "",
+
+
+                "proof": {{
+
+                    "type": "",
+                    "content": ""
+
+                }},
+
+
+                "script": {{
+
+                    "scene_1": "",
+                    "scene_2": "",
+                    "scene_3": "",
+                    "scene_4": "",
+                    "scene_5": ""
+
+                }},
+
+
+                "voiceover": "",
+
+
+                "visual_direction": [
+
+                    ""
+
+                ],
+
+
+                "text_overlays": [
+
+                    ""
+
+                ],
+
+
+                "cta": {{
+
+                    "text": "",
+                    "type": "",
+                    "urgency": ""
+
+                }}
+
+            }},
+
+
+            "target_audience": {{
+
+                "name": "",
+                "pain_points": [],
+                "motivations": [],
+                "buying_triggers": []
+
+            }},
+
+
+            "objections_handled": [
+
+                {{
+
+                    "objection": "",
+                    "answer": ""
+
+                }}
+
             ],
 
-            "text_overlays": [
-                ""
-            ],
 
-            "cta": ""
+            "testing": {{
+
+                "variant": "",
+                "what_is_tested": "",
+                "expected_result": ""
+
+            }},
+
+
+            "score": {{
+
+                "hook": 0,
+                "emotion": 0,
+                "clarity": 0,
+                "purchase_intent": 0,
+                "overall": 0
+
+            }}
+
         }}
+
     ]
+
 }}
 
 
-Ważne:
-- Tablica advertisements musi zawierać dokładnie {count} elementów.
-- Każda reklama musi mieć inny kąt psychologiczny.
-- Nie kopiuj tych samych hooków.
-- Nie kopiuj tych samych scenariuszy.
-"""
 
+ZASADY GENEROWANIA:
+
+
+1. Wygeneruj dokładnie {count} elementów w tablicy advertisements.
+
+
+2. Każda reklama musi mieć:
+- inny framework reklamowy,
+- inny kąt psychologiczny,
+- inny hook,
+- inną hipotezę marketingową.
+
+
+3. Wykorzystuj różne strategie:
+
+- Before / After
+- Problem → Solution
+- Product Demo
+- Testimonial
+- Feature → Benefit
+- US vs THEM
+- Bold Claim
+- Offer / Sale
+- Native
+- Statistics
+- News Article
+- Negative Hook
+- What's Inside
+- Google Search
+- Airdrop
+
+
+4. Każda reklama musi odpowiadać na:
+
+- Jaki problem klient ma?
+- Dlaczego chce go rozwiązać?
+- Dlaczego ten produkt jest rozwiązaniem?
+- Dlaczego powinien kupić teraz?
+
+
+5. Hook:
+
+Pierwsze 3 sekundy są najważniejsze.
+
+Hook musi:
+- zatrzymać scrollowanie,
+- dotyczyć klienta,
+- wywoływać emocję,
+- być prosty i zrozumiały.
+
+
+6. Copywriting:
+
+Używaj:
+- prostego języka,
+- krótkich zdań,
+- konkretnych korzyści,
+- języka klienta.
+
+
+Nie używaj:
+- technicznego żargonu,
+- pustych obietnic,
+- ogólnych sloganów.
+
+
+7. Proof:
+
+Jeżeli produkt posiada dane, opinie lub liczby wykorzystaj je.
+
+Nie wymyślaj fałszywych statystyk.
+
+
+8. CTA:
+
+CTA musi jasno mówić klientowi co zrobić dalej.
+
+Przykłady:
+- Sprawdź ofertę
+- Zamów teraz
+- Zobacz jak działa
+- Poznaj szczegóły
+
+
+9. Oceniaj każdą reklamę:
+
+Skala 1-10.
+
+Oceń:
+- siłę hooka,
+- emocje,
+- prostotę przekazu,
+- prawdopodobieństwo zakupu.
+
+
+10. Nie generuj podobnych reklam.
+
+Każda reklama ma być osobnym eksperymentem marketingowym.
+"""
 
 def knowledge_advertisement_generate_handler(
     knowledge_id: int,
@@ -176,9 +377,4 @@ def knowledge_advertisement_generate_handler(
             "raw_response": response.content
         }
 
-
-    return {
-        "knowledge_id": knowledge_id,
-        "count": count,
-        "generated": generated_ads
-    }
+    return generated_ads

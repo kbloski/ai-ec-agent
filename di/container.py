@@ -25,6 +25,11 @@ from infrastructure.repositories.checklist_repository import ChecklistRepository
 from infrastructure.repositories.checklist_items_repository import ChecklistItemsRepository
 from infrastructure.repositories.analysis_checklist_repository import AnalysisChecklistRepository
 from application.assemblers.checklist_assembler import ChecklistAssembler
+from infrastructure.repositories.sales_assets_repository import SalesAssetsRepository
+from infrastructure.repositories.sales_asset_sections_repository import SalesAssetSectionsRepository
+from infrastructure.repositories.sales_asset_section_visualizations_repository import SalesAssetSectionVisualizationsRepository
+from infrastructure.repositories.visualizations_repository import VisualizationsRepository
+from application.assemblers.sales_asset_assembler import SalesAssetAssembler
 
 class Container(containers.DeclarativeContainer):
     db = providers.Factory(
@@ -130,6 +135,30 @@ class Container(containers.DeclarativeContainer):
         db=db
     )
 
+    sales_assets_repository = providers.Singleton(
+        SalesAssetsRepository,
+        logger=logger,
+        db=db
+    )
+
+    sales_asset_sections_repository = providers.Singleton(
+        SalesAssetSectionsRepository,
+        logger=logger,
+        db=db
+    )
+
+    sales_asset_section_visualizations_repository = providers.Singleton(
+        SalesAssetSectionVisualizationsRepository,
+        logger=logger,
+        db=db
+    )
+
+    visualizations_repository = providers.Singleton(
+        VisualizationsRepository,
+        logger=logger,
+        db=db
+    )
+
 
     # --------------------------
     # Assemblery
@@ -166,6 +195,14 @@ class Container(containers.DeclarativeContainer):
         ChecklistAssembler,
         logger=logger,
         checklist_items_repository=checklist_items_repository
+    )
+
+    sales_asset_assembler = providers.Singleton(
+        SalesAssetAssembler,
+        logger=logger,
+        sales_asset_sections_repository=sales_asset_sections_repository,
+        sales_asset_section_visualizations_repository=sales_asset_section_visualizations_repository,
+        visualizations_repository=visualizations_repository
     )
     # --------------------------
     # Serwisy

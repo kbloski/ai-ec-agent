@@ -18,9 +18,9 @@ from application.handlers.analysis.analyse_checklist_generate_handler import ana
 from application.handlers.checklist.create_checklist_for_analysis_handler import create_checklist_for_analysis_handler
 from application.handlers.checklist.get_analysis_checklists_handler import get_analyse_checklists_handler
 from application.handlers.checklist.get_checklist_by_id_handler import get_checklist_by_id_handler
-from application.handlers.landing_page.generate.generate_landing_page_for_knowledge_handler import generate_landing_page_for_knowledge_handler
-from application.handlers.landing_page.generate.generate_landing_page_for_knowledge_handler_v2 import generate_landing_page_for_knowledge_v2_handler
 from application.handlers.advertisement.knowledge_advertisement_generate_handler import knowledge_advertisement_generate_handler
+from application.handlers.sales_assets.generate_sales_asset_handler import generate_sales_asset_handler
+from application.handlers.sales_assets.get_sales_assets_handler import get_sales_assets_handler
 
 def register_general_routes(router: APIRouter):
 
@@ -137,19 +137,20 @@ def register_general_routes(router: APIRouter):
 
 
     # -----------------------------
-    # Landing page 
+    # Sales assets
     # -----------------------------
-    @router.get("/knowledges/{knowledge_id}/landing-page/generate")
-    def knowledge_landing_page_generate( knowledge_id : int, version=str):
-        if not version:
-            return generate_landing_page_for_knowledge_handler( knowledge_id=knowledge_id)
-        if version=="2":
-            return generate_landing_page_for_knowledge_v2_handler( knowledge_id=knowledge_id)
+    @router.get("/knowledges/{knowledge_id}/sales-assets/generate")
+    def knowledge_sales_asset_generate(knowledge_id: int, type: str = "landing_page"):
+        return generate_sales_asset_handler(knowledge_id=knowledge_id, type=type)
+
+    @router.get("/knowledges/{knowledge_id}/sales-assets")
+    def get_knowledge_sales_assets(knowledge_id: int):
+        return get_sales_assets_handler(knowledge_id=knowledge_id)
 
 
     # -----------------------------
     # Knowledges advertisement
     # -----------------------------
     @router.get("/knowledges/{knowledge_id}/advertisements/generate")
-    def knowledge_advertisement_generate( knowledge_id : int, count=5 ):
+    def knowledge_advertisement_generate( knowledge_id : int, count=3 ):
         return knowledge_advertisement_generate_handler( knowledge_id=knowledge_id, count=count )

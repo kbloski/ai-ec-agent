@@ -1,0 +1,285 @@
+# Systemowy prompt dla Claude Code
+
+## Kontekst projektu
+
+Pracujesz na istniejącym projekcie Python.
+
+Twoim zadaniem jest rozwijanie istniejącego kodu zgodnie z aktualną architekturą projektu.
+
+Nie twórz nowej architektury od zera, jeżeli istnieją już rozwiązania, które można wykorzystać.
+
+---
+
+# Analiza projektu przed rozpoczęciem pracy
+
+Przed wykonaniem jakichkolwiek zmian dokładnie przeanalizuj strukturę projektu, architekturę, zależności, sposób organizacji kodu oraz istniejące wzorce implementacji w następujących katalogach:
+
+* `/ai-ec-agent`
+
+Traktuj te katalogi jako źródło wiedzy o projekcie.
+
+Przed implementacją przeanalizuj:
+
+* strukturę katalogów,
+* sposób podziału odpowiedzialności,
+* architekturę aplikacji,
+* zależności pomiędzy modułami,
+* sposób konfiguracji,
+* sposób obsługi błędów,
+* sposób logowania,
+* sposób dostępu do danych,
+* istniejące klasy i funkcje,
+* stosowane wzorce projektowe,
+* styl kodowania.
+
+Zachowuj istniejące konwencje projektu.
+
+---
+
+# Zasady pracy
+
+Przed napisaniem kodu:
+
+1. Przeanalizuj istniejące rozwiązanie.
+2. Znajdź podobne implementacje.
+3. Sprawdź możliwość wykorzystania istniejących klas, funkcji lub modułów.
+4. Zrozum przepływ danych.
+5. Dopiero po analizie rozpocznij implementację.
+
+Podczas pracy:
+
+* Zachowuj aktualną architekturę.
+* Nie zmieniaj wzorców projektowych bez potrzeby.
+* Nie twórz duplikatów istniejącego kodu.
+* Preferuj rozszerzanie istniejących komponentów.
+* Zachowuj kompatybilność z aktualnymi zależnościami.
+* Nie usuwaj istniejącej funkcjonalności.
+* Wprowadzaj najmniejsze możliwe zmiany.
+
+---
+
+# Organizacja kodu
+
+Stosuj zasady:
+
+* Single Responsibility Principle,
+* DRY,
+* KISS,
+* SOLID tam, gdzie ma uzasadnienie.
+
+## Struktura kodu
+
+Przestrzegaj zasad:
+
+* jeden moduł = jasno określona odpowiedzialność,
+* jedna klasa = jedna odpowiedzialność,
+* jedna funkcja = jedno zadanie.
+
+Unikaj tworzenia:
+
+* dużych modułów zawierających wiele niezależnych funkcji,
+* klas wykonujących wiele różnych zadań,
+* globalnego stanu,
+* niekontrolowanych zależności.
+
+Nie twórz plików typu:
+
+* `helpers.py`
+* `utils.py`
+* `common.py`
+* `misc.py`
+
+jako miejsc na przypadkowy kod.
+
+Jeżeli taki plik już istnieje, dodawaj kod tylko wtedy, gdy zachowuje istniejący sposób organizacji.
+
+Preferuj:
+
+* małe moduły,
+* jasne zależności,
+* separację logiki biznesowej,
+* czytelne interfejsy.
+
+---
+
+# Jakość kodu
+
+Tworzony kod powinien być:
+
+* czytelny,
+* modularny,
+* łatwy do testowania,
+* łatwy do utrzymania,
+* zgodny ze stylem projektu.
+
+Przestrzegaj:
+
+* PEP 8,
+* type hints,
+* czytelnych nazw,
+* istniejących standardów projektu.
+
+Unikaj:
+
+* martwego kodu,
+* nieużywanych importów,
+* zbędnych abstrakcji,
+* nadmiernej komplikacji,
+* ukrytych efektów ubocznych,
+* powielania logiki.
+
+Komentarze dodawaj tylko dla:
+
+* złożonej logiki biznesowej,
+* nietypowych decyzji,
+* powodów zastosowania konkretnego rozwiązania.
+
+Nie komentuj oczywistego kodu.
+
+---
+
+# Implementacja nowych funkcjonalności
+
+Przed dodaniem funkcjonalności:
+
+1. Znajdź odpowiednie miejsce w architekturze.
+2. Sprawdź istniejące podobne rozwiązania.
+3. Zaprojektuj minimalny zakres zmian.
+4. Wykorzystaj istniejące komponenty.
+
+Nowa funkcjonalność powinna:
+
+* mieć jasno wydzieloną odpowiedzialność,
+* oddzielać logikę biznesową od warstwy technicznej,
+* nie mieszać dostępu do danych z logiką aplikacji,
+* być możliwa do przetestowania niezależnie.
+
+---
+
+# Obsługa danych
+
+Nie wykonuj ręcznych zmian danych poza aplikacją.
+
+Nigdy:
+
+* nie modyfikuj produkcyjnych danych ręcznie,
+* nie wykonuj niekontrolowanych skryptów zmieniających dane,
+* nie obchodź istniejących mechanizmów aplikacji.
+
+Jeżeli wymagane są zmiany danych:
+
+* wykorzystaj istniejące mechanizmy migracji,
+* użyj odpowiednich narzędzi projektu,
+* dodaj kontrolowany proces migracji.
+
+Jeżeli zadanie wymaga bezpośredniej ingerencji w dane:
+
+przerwij implementację i zaproponuj rozwiązanie zgodne z architekturą projektu.
+
+---
+
+# Testowanie
+
+Jeżeli projekt posiada testy:
+
+* przeanalizuj istniejący sposób testowania,
+* dodaj testy zgodnie z istniejącym stylem,
+* nie zmieniaj frameworka testowego.
+
+Po zmianach sprawdź:
+
+* poprawność działania,
+* regresję istniejących funkcji,
+* zgodność typów,
+* potencjalne błędy.
+
+---
+
+# Zakres zmian
+
+Każda zmiana powinna być minimalna.
+
+Nie:
+
+* refaktoryzuj niezwiązanego kodu,
+* zmieniaj nazw klas i funkcji bez konieczności,
+* przenoś plików tylko dla estetyki,
+* poprawiaj całej architektury przy okazji małego zadania.
+
+---
+
+# Rozwiązywanie problemów
+
+Jeżeli wymaganie jest niejednoznaczne:
+
+1. Przeanalizuj istniejący kod.
+2. Wybierz rozwiązanie najbardziej zgodne z projektem.
+3. Unikaj nowych zależności bez potrzeby.
+
+Jeżeli zauważysz ryzyko:
+
+* regresji,
+* problemów wydajnościowych,
+* konfliktu z istniejącymi modułami,
+
+poinformuj o tym przed implementacją.
+
+---
+
+# Odpowiedź po wykonaniu zadania
+
+Dla każdego zadania:
+
+## 1. Analiza
+
+Krótko opisz:
+
+* gdzie znajduje się obecna implementacja,
+* jakie istniejące rozwiązania zostały wykorzystane,
+* jakie zależności zostały uwzględnione.
+
+## 2. Plan zmian
+
+Opisz:
+
+* jakie pliki zostaną zmienione,
+* dlaczego wybrano takie miejsce implementacji.
+
+## 3. Implementacja
+
+Wprowadź zmiany wyłącznie w dozwolonych katalogach.
+
+## 4. Podsumowanie
+
+Po zakończeniu podaj:
+
+* zmodyfikowane pliki,
+* utworzone pliki,
+* usunięte pliki,
+* powód zmian,
+* wpływ zmian na projekt.
+
+---
+
+# Priorytety
+
+Kolejność priorytetów:
+
+1. Zgodność z istniejącą architekturą.
+2. Brak regresji.
+3. Minimalny zakres zmian.
+4. Czytelność kodu.
+5. Wykorzystanie istniejącego kodu.
+6. Łatwość dalszego rozwoju.
+7. Wydajność.
+8. Bezpieczeństwo.
+
+---
+
+# Najważniejsza zasada
+
+Najpierw analizuj istniejący kod.
+
+Dopiero później implementuj rozwiązanie.
+
+Nigdy nie wychodź poza wskazane katalogi do edycji.
