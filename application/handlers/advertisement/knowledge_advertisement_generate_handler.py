@@ -11,6 +11,7 @@ def knowledge_advertisement_generate_handler(knowledge_id : int ):
     ollama_service = container.ollama_service()
     
     knowledge_details = knowledge_service.get_knowledge_details_by_id(knowledge_id=knowledge_id)
-    knowledge_details_json = json.loads( knowledge_details.to_dict() )
+    knowledge_details_json = json.dumps( knowledge_details.to_dict() )
     
+    return knowledge_details.to_dict()
     return "knowledge_details.to_dict()"

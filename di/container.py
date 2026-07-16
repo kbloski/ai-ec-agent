@@ -132,7 +132,7 @@ class Container(containers.DeclarativeContainer):
 
 
     # --------------------------
-    # Assemblry
+    # Assemblery
     # --------------------------
 
     offer_assembler = providers.Singleton(
