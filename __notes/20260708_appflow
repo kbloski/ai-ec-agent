@@ -1,23 +1,250 @@
-OFFER
- |
- | (dane wejściowe)
- v
-KNOWLEDGE BASE
- |
- | (AI analizuje i wzbogaca wiedzę)
- v
-MARKETING STRATEGY
- |
- | (co testujemy i jak sprzedajemy)
- v
-EXPERIMENTS
- |
- | (konkretne hipotezy)
- v
+                         OFFER
+                           |
+                           |
+                           v
+                    KNOWLEDGE BASE
+                           |
+          (AI analizuje produkt i rynek)
+                           |
+        +------------------+------------------+
+        |                  |                  |
+        v                  v                  v
+ CUSTOMER VOICE     MARKETING STRATEGY   TARGET AUDIENCES
+ (comments,         (jak sprzedajemy)    (komu sprzedajemy)
+ reviews, Q&A)             |
+                            |
+                            v
+                       EXPERIMENTS
+                            |
+                    (co konkretnie testujemy)
+                            |
+                            v
+                       SALES ASSETS
+                            |
+        +-------------------+-------------------+
+        |                   |                   |
+        v                   v                   v
+ ADVERTISEMENTS      LANDING PAGES        EMAILS
+        |
+        v
+ UGC SCRIPTS / CREATIVES
+
+
+
+
+
+
+
+ 1. OFFER
+
+Surowe dane.
+
+Przykład:
+
+nazwa produktu
+opis
+zdjęcia
+cena
+warianty
+parametry
+dostawca
+
+To jest wejście.
+
+2. KNOWLEDGE BASE
+
+Tutaj robisz "mózg produktu".
+
+Czyli:
+
+Produkt
+czym jest
+jak działa
+jakie ma cechy
+Problemy
+jakie problemy rozwiązuje
+Korzyści
+funkcjonalne
+emocjonalne
+Transformacje
+
+"przed → po"
+
+Obiekcje
+
+"dlaczego ktoś może nie kupić"
+
+Sugestie AI
+
+np:
+
+możliwe grupy odbiorców
+możliwe kąty komunikacji
+potencjalne przewagi
+ryzyka
+
+Czyli Knowledge odpowiada:
+
+"Co wiemy?"
+
+3. CUSTOMER VOICE
+
+Tutaj generujesz:
+
+komentarze
+opinie
+pytania
+obiekcje
+reakcje klientów
+
+Przykład:
+
+{
+"type":"QUESTION",
+"text":"Czy bateria jest w zestawie?"
+}
+
+albo:
+
+{
+"type":"OBJECTION",
+"text":"Wygląda dobrze, ale czy to nie jest za słabe?"
+}
+
+To potem zasila:
+
+landing page
+reklamy
+FAQ
+copy
+4. TARGET AUDIENCES
+
+Tutaj trzymasz segmenty.
+
+Np:
+
+{
+"name":"Senior homeowners",
+
+"pain_points":[
+"brak siły",
+"ciężkie narzędzia"
+],
+
+"motivations":[
+"niezależność",
+"samodzielność"
+]
+}
+
+To jest:
+
+"Komu sprzedajemy?"
+
+5. MARKETING STRATEGY
+
+Tutaj AI podejmuje decyzję.
+
+Czyli:
+
+Nie:
+
+"produkt ma baterię 18V"
+
+tylko:
+
+"sprzedajemy go jako narzędzie dla osób, które chcą zachować niezależność"
+
+Tutaj:
+
+positioning
+big idea
+główny przekaz
+obietnica
+ton komunikacji
+główne angle
+priorytetowe grupy
+
+Odpowiada:
+
+"Jak chcemy wygrać rynek?"
+
+6. EXPERIMENTS
+
+To jest bardzo ważna warstwa.
+
+Bo marketing nie wie z góry co działa.
+
+Przykład:
+
+Experiment 1:
+
+Hipoteza:
+Seniorzy kupią szybciej, jeśli pokażemy niezależność.
+
+Test:
+Angle: Independence
+
+Miernik:
+CTR + Purchase Rate
+
+Experiment 2:
+
+Hipoteza:
+Problem ciężkich narzędzi zatrzyma uwagę.
+
+Test:
+Hook pain-based
+
+Miernik:
+3 second view rate
+7. SALES ASSETS
+
+Dopiero tutaj generujesz rzeczy do użycia.
+
+Experiment:
+
+Independence angle
+
+tworzy:
+
+Advertisement
+"Nie proś nikogo o pomoc przy ogrodzie..."
+Landing page
+"Pilarka dla osób, które chcą działać samodzielnie"
+Email
+"3 powody, dla których ciężkie narzędzia odchodzą do przeszłości"
+Jedna rzecz, którą bym jeszcze dodał
+
+Pomiędzy Sales Assets a wynikami zrobiłbym kiedyś:
+
 SALES ASSETS
- |
- +---- Advertisements
- +---- Landing Pages
- +---- Emails
- +---- UGC Scripts
- +---- Creatives
+      |
+      v
+CAMPAIGN RESULTS
+      |
+      v
+LEARNING ENGINE
+      |
+      v
+MARKETING STRATEGY UPDATE
+
+Czyli:
+
+Reklama wygrała?
+
+System zapisuje:
+
+Angle:
+Independence
+
+Audience:
+Senior homeowners
+
+Hook:
+"Nie proś nikogo o pomoc"
+
+Result:
+CPA -35%
+
+I następnym razem strategia będzie mądrzejsza.
