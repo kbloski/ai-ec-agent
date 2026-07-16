@@ -151,5 +151,5 @@ def register_general_routes(router: APIRouter):
     # Knowledges advertisement
     # -----------------------------
     @router.get("/knowledges/{knowledge_id}/advertisements/generate")
-    def knowledge_advertisement_generate( knowledge_id : int ):
-        return knowledge_advertisement_generate_handler( knowledge_id=knowledge_id )
+    def knowledge_advertisement_generate( knowledge_id : int, count=5 ):
+        return knowledge_advertisement_generate_handler( knowledge_id=knowledge_id, count=count )
