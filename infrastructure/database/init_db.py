@@ -1,5 +1,5 @@
 from .db import Base, engine
-from ...domain.models import models  # ważne: rejestracja modeli
+from domain.models import models 
 
 def init_db():
     Base.metadata.create_all(bind=engine)
