@@ -1,47 +1,23 @@
-Reguly, ktore ai ma przestrzegac - to tez fajny element (dla kazdego typu
-generowania) - to dla dalszego rozwoju
-
-1.
-product Knowledge (zrozumienie produktu)
-
-2. 
-sugestie ai co do rozwiazania problemow, grup odbiorcow, obiekcji etc... 
-(dodatkowe generowania bazujace na produkcie)
-
-// Select / suggested / Rejected product knowledge data
-
-3. Segmentacja na docelowe grupy odbiorcow 
-{
- "name" : 
- "wiek"
- "plec"
- "score" : 
- "reason" :
- "pain_points": [],
- "motivations": [],
- "objections": [],
- "buying_triggers": []
-}
-
-// Select / Suggested / Rejected dla grup odbiorcow
-
-4. Analiza produktu wzgledem potencjalu sprzedazowego
-przez ai 
-"Kto ma największą potrzebę tego produktu?"
-Czy rozwiazuje uciazliwe, trudne, frustrujace problemy a nie tylko blache
-Ktore to beda problemy przewodnie 
-Tutaj pasowaloby rowniez gdzies zapisac ktore problemy beda przewodnie
-(ocena czy warto w to dalej brnac)
-
-
-4.1 Przygotowanie do analizy glebokiej w 
-facebook biblioteka reklam 
-google trends 
-titkok ads 
-etc.
-
-
-
-Tworzenie witryny
-Wybor typow reklam ze wzgledu na typ
-Tworzenie scenariuszy do materialow reklamowych
+OFFER
+ |
+ | (dane wejściowe)
+ v
+KNOWLEDGE BASE
+ |
+ | (AI analizuje i wzbogaca wiedzę)
+ v
+MARKETING STRATEGY
+ |
+ | (co testujemy i jak sprzedajemy)
+ v
+EXPERIMENTS
+ |
+ | (konkretne hipotezy)
+ v
+SALES ASSETS
+ |
+ +---- Advertisements
+ +---- Landing Pages
+ +---- Emails
+ +---- UGC Scripts
+ +---- Creatives
