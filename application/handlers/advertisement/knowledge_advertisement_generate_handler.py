@@ -197,9 +197,10 @@ Zwróć dokładnie strukturę:
                 "content":""
 
             }},
-            "script":[
+            "scenes":[
                 {{
                     "order":1,
+                    "type" : "",
                     "description":"",
                     "duration_seconds":3
                 }}
@@ -311,16 +312,8 @@ def knowledge_advertisement_generate_handler(
     advertisement_objections_repository = container.advertisement_objections_repository()
     advertisement_service = container.advertisement_service()
 
-
-    knowledge_details = (
-        knowledge_service
-        .get_knowledge_details_by_id(
-            knowledge_id=knowledge_id
-        )
-    )
-
-
-
+    knowledge_details =  knowledge_service .get_knowledge_details_by_id(knowledge_id=knowledge_id)
+    
     product_json = json.dumps(
         knowledge_details.to_dict(),
         ensure_ascii=False,
@@ -328,10 +321,7 @@ def knowledge_advertisement_generate_handler(
         default=str
     )
 
-    user_prompt = USER_PROMPT_TEMPLATE.format(
-        count=count,
-        product_json=product_json
-    )
+    user_prompt = USER_PROMPT_TEMPLATE.format(count=count,product_json=product_json)
 
     response = (
         ollama_service.chat_llm(
@@ -354,296 +344,66 @@ def knowledge_advertisement_generate_handler(
     results = []
 
     for ad in ads:
-        strategy = (
-            ad.get(
-                "strategy",
-                {}
-            )
-            or {}
-        )
-
-
-        creative = (
-            ad.get(
-                "creative",
-                {}
-            )
-            or {}
-        )
-
-
-        hook = (
-            creative.get(
-                "hook",
-                {}
-            )
-            or {}
-        )
-
-
-        proof = (
-            creative.get(
-                "proof",
-                {}
-            )
-            or {}
-        )
-
-
-        cta = (
-            creative.get(
-                "cta",
-                {}
-            )
-            or {}
-        )
-
-
-        target = (
-            ad.get(
-                "target_audience",
-                {}
-            )
-            or {}
-        )
-
-
-        score = (
-            ad.get(
-                "score",
-                {}
-            )
-            or {}
-        )
-
-
+        strategy = ad.get("strategy", {})       
+        creative =  ad.get("creative", {})
+        hook = creative.get("hook",{})
+        proof =  creative.get("proof", {})
+        cta =  creative.get( "cta",{} )
+        target = ad.get( "target_audience",{} )
+        score = ad.get( "score",  {} )
 
         advertisement = (
             advertisements_repository.create(
-
                 Advertisement(
-
                     knowledge_id=knowledge_id,
-
-
-                    name=ad.get(
-                        "name",
-                        ""
-                    ),
-
-
-
+                    name=ad.get(  "name", ""),
                     strategy_framework=
-                    strategy.get(
-                        "framework"
-                    ),
-
-
-                    strategy_angle=
-                    strategy.get(
-                        "angle"
-                    ),
-
-
+                    strategy.get( "framework" ),
+                    strategy_angle= strategy.get( "angle"),
                     strategy_psychology_trigger=
-                    strategy.get(
-                        "psychology_trigger"
-                    ),
-
-
+                    strategy.get( "psychology_trigger"),
                     strategy_awareness_stage=
-                    strategy.get(
-                        "awareness_stage"
-                    ),
-
-
+                    strategy.get( "awareness_stage" ),
                     strategy_hypothesis=
-                    strategy.get(
-                        "hypothesis"
-                    ),
+                    strategy.get( "hypothesis" ),
 
+                    platform= creative.get( "platform"),
+                    format= creative.get( "format" ),
+                    duration_seconds=creative.get( "duration_seconds" ),
+                    aspect_ratio= creative.get( "aspect_ratio" ),
 
+                    hook_text=  hook.get( "text" ),
+                    hook_type=hook.get( "type" ),
+                    hook_visual=  hook.get("visual" ),
+                    hook_duration= hook.get( "duration" ),
 
+                    problem= creative.get("problem"),
 
-                    platform=
-                    creative.get(
-                        "platform"
-                    ),
+                    solution=creative.get("solution"),
 
-
-                    format=
-                    creative.get(
-                        "format"
-                    ),
-
-
-
-                    duration_seconds=
-                    
-                        creative.get(
-                            "duration_seconds"
-                        
-                    ),
-
-
-
-                    aspect_ratio=
-                    creative.get(
-                        "aspect_ratio"
-                    ),
-
-
-
-
-                    hook_text=
-                    hook.get(
-                        "text"
-                    ),
-
-
-                    hook_type=
-                    hook.get(
-                        "type"
-                    ),
-
-
-                    hook_visual=
-                    hook.get(
-                        "visual"
-                    ),
-
-
-                    hook_duration=
-                    
-                        hook.get(
-                            "duration"
-                        
-                    ),
-
-
-
-
-
-                    problem=
-                    creative.get(
-                        "problem"
-                    ),
-
-
-                    solution=
-                    creative.get(
-                        "solution"
-                    ),
-
-
-
-
-                    proof_type=
-                    proof.get(
-                        "type"
-                    ),
-
-
+                    proof_type= proof.get( "type"),
                     proof_content=
-                    proof.get(
-                        "content"
-                    ),
+                    proof.get("content" ),
 
+                    voiceover= creative.get("voiceover"),
 
+                    audience_description=target.get("name"),
 
+                    cta_text=cta.get("text" ),
 
-                    voiceover=
-                    creative.get(
-                        "voiceover"
-                    ),
+                    cta_type=cta.get("type"),
 
+                    cta_urgency=cta.get("urgency"),
 
+                    visual_direction= creative.get( "visual_direction", [] ),
 
+                    text_overlays= creative.get( "text_overlays", [] ),
 
-                    audience_description=
-                    target.get(
-                        "name"
-                    ),
-
-
-
-
-                    cta_text=
-                    cta.get(
-                        "text"
-                    ),
-
-
-                    cta_type=
-                    cta.get(
-                        "type"
-                    ),
-
-
-                    cta_urgency=
-                    cta.get(
-                        "urgency"
-                    ),
-
-
-
-
-                    visual_direction=
-                    creative.get(
-                        "visual_direction",
-                        []
-                    ),
-
-
-
-                    text_overlays=
-                    creative.get(
-                        "text_overlays",
-                        []
-                    ),
-
-
-
-
-                    score_hook=
-                    
-                        score.get(
-                            "hook"
-                        
-                    ),
-
-
-                    score_emotion=
-                    
-                        score.get(
-                            "emotion"
-                        
-                    ),
-
-
-                    score_clarity=
-                    
-                        score.get(
-                            "clarity"
-                        
-                    ),
-
-
-                    score_purchase_intent=
-                    
-                        score.get(
-                            "purchase_intent"
-                        
-                    ),
-
-
-                    score_overall=
-                    
-                        score.get(
-                            "overall"
-                        
-                    )
-
+                    score_hook= score.get( "hook"),
+                    score_emotion= score.get( "emotion" ),
+                    score_clarity= score.get( "clarity" ),
+                    score_purchase_intent= score.get( "purchase_intent"),
+                    score_overall= score.get( "overall" )
                 )
 
             )
@@ -654,145 +414,51 @@ def knowledge_advertisement_generate_handler(
         #
         # SCENES
         #
-
-
         scenes = []
-
-
-        for scene in creative.get(
-            "script",
-            []
-        ):
-
+        for scene in creative.get( "scenes",  [] ):
             scenes.append(
-
                 Scene(
-
-                    type="scene",
-
-                    description=
-                    scene.get(
-                        "description",
-                        ""
-                    ),
-
-                    duration_seconds=
-                    
-                        scene.get(
-                            "duration_seconds"
-                        
-                    )
-
+                    type=scene.get("type", ""),
+                    description= scene.get( "description", "" ),
+                    duration_seconds=scene.get( "duration_seconds" )
                 )
-
             )
-
-
 
         saved_scenes = []
-
         if scenes:
-
-            saved_scenes = (
-                scenes_repository
-                .create_many(
-                    scenes
-                )
-            )
-
-
-
+            saved_scenes = scenes_repository.create_many( scenes  )
+            
             advertisement_scenes_repository.create_many(
-
                 [
-
                     AdvertisementScene(
-
-                        advertisement_id=
-                        advertisement.id,
-
-
-                        scene_id=
-                        scene.id,
-
-
-                        order_number=
-                        index + 1
-
+                        advertisement_id=advertisement.id,
+                        scene_id=scene.id,
+                        order_number= index + 1
                     )
 
-
-                    for index, scene
-                    in enumerate(
-                        saved_scenes
-                    )
-
+                    for index, scene in enumerate( saved_scenes )
                 ]
-
             )
-
 
 
         #
         # OBJECTIONS
         #
-
-
         objections = []
-
-
-        for objection in ad.get(
-            "objections_handled",
-            []
-        ):
-
-
+        for objection in ad.get( "objections_handled", [] ):
             objections.append(
-
                 AdvertisementObjection(
-
-                    advertisement_id=
-                    advertisement.id,
-
-
-                    objection=
-                    objection.get(
-                        "objection",
-                        ""
-                    ),
-
-
-                    answer=
-                    objection.get(
-                        "answer"
-                    )
-
+                    advertisement_id=advertisement.id,
+                    objection= objection.get( "objection", "" ),
+                    answer=objection.get( "answer" )
                 )
-
             )
-
-
 
         if objections:
-
-            (
-                advertisement_objections_repository
-                .create_many(
-                    objections
-                )
-            )
-
-
+            advertisement_objections_repository.create_many( objections )
 
         results.append(
-
-            advertisement_service
-            .get_advertisement_details_by_id(
-                id=advertisement.id
-            )
-
+            advertisement_service .get_advertisement_details_by_id( id=advertisement.id )
         )
-
-
 
     return results
