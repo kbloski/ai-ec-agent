@@ -103,8 +103,7 @@ def knowledge_analysis_answers_generate_handler(
 
     container = Container()
     logger = container.logger()
-    knowledge_repo = container.offer_knowledge_repository()
-    knowledge_assembler = container.offer_knowledge_assembler()
+    knowledge_service = container.knowledge_service()
     ollama_service = container.ollama_service()
     knowledge_analysis_repository = container.knowledge_analysis_repository()
     analysis_repository = container.analysis_repository()
@@ -115,9 +114,7 @@ def knowledge_analysis_answers_generate_handler(
     analyse_db = analysis_repository.get_by_id(id=knowledge_analysis_db.analysis_id)
 
     logger.info(f"Generating knowledge analysis for knowledge_id={knowledge_id}")
-    knowledge_db = knowledge_repo.get_by_id(id=knowledge_id)
-    knowledge_dto = OfferKnowledgeMapper.to_dto(item=knowledge_db)
-    assembled_dto = knowledge_assembler.assemble_dto(item=knowledge_dto)
+    assembled_dto = knowledge_service.get_knowledge_details_by_id(knowledge_id=knowledge_id)
     knowledge_json = assembled_dto.to_dict()
 
     question_batches = chunk_list(items=KNOWLEDGE_ANALYSIS_QUESTIONS,size=10)

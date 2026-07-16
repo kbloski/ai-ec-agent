@@ -148,24 +148,12 @@ def generate_target_audience_handler(
     container = Container()
 
     target_audience_repo = container.target_audiences_repository()
-    knowledge_repo = container.offer_knowledge_repository()
-    knowledge_assembler = container.offer_knowledge_assembler()
     ollama_service = container.ollama_service()
+    knowledge_service = container.knowledge_service()
 
-    knowledge_db =  knowledge_repo.get_by_id( id=knowledge_id )
     target_audiences_db = target_audience_repo.find_for_knowledge(knowledge_id=knowledge_id)
     target_audiences_db_dtos = [TargetAudienceMapper.to_dto(item=t) for t in target_audiences_db]
-
-    if not knowledge_db:
-        return {
-            "status": False,
-            "error": "Knowledge not found"
-        }
-
-
-    knowledge_dto = OfferKnowledgeMapper.to_dto( item=knowledge_db )
-    assembled_dto =  knowledge_assembler.assemble_dto( item=knowledge_dto )
-    knowledge_json = assembled_dto.to_dict()
+    knowledge_json = knowledge_service.get_knowledge_details_by_id(knowledge_id=knowledge_id).to_dict()
 
     schema_json = json.dumps( TARGET_AUDIENCE_SCHEMA, ensure_ascii=False, indent=2)
 

@@ -218,37 +218,12 @@ def generate_landing_page_for_knowledge_handler(knowledge_id: int):
     container = Container()
 
     logger = container.logger()
-
-    offer_knowledge_repository = (
-        container.offer_knowledge_repository()
-    )
-
-    offer_knowledge_assembler = (
-        container.offer_knowledge_assembler()
-    )
+    knowledge_service = container.knowledge_service()
 
     ollama_service = container.ollama_service()
 
 
-    knowledge_db = (
-        offer_knowledge_repository.get_by_id(
-            knowledge_id
-        )
-    )
-
-
-    knowledge_dto = (
-        OfferKnowledgeMapper.to_dto(
-            item=knowledge_db
-        )
-    )
-
-
-    assembled_knowledge_dto = (
-        offer_knowledge_assembler.assemble_dto(
-            item=knowledge_dto
-        )
-    )
+    assembled_knowledge_dto =  knowledge_service.get_knowledge_details_by_id(knowledge_id=knowledge_id)
 
 
     knowledge_json = json.dumps(

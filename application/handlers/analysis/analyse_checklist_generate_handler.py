@@ -318,8 +318,7 @@ def analyse_checklist_generate_handler(
 
     logger = container.logger()
     ollama_service = container.ollama_service()
-    knowledge_repo = container.offer_knowledge_repository()
-    knowledge_assembler = container.analysis_assembler()
+    knowledge_service = container.knowledge_service()
     checklist_items_repository = container.checklist_items_repository()
 
     logger.info(
@@ -333,21 +332,12 @@ def analyse_checklist_generate_handler(
 
     logger.info("Fetching product knowledge data")
 
-    knowledge_db = knowledge_repo.get_by_id(
-        id=knowledge_id
-    )
 
-    logger.info("Mapping knowledge entity to DTO")
-
-    knowledge_dto = OfferKnowledgeMapper.to_dto(
-        item=knowledge_db
-    )
 
     logger.info("Assembling product knowledge")
 
-    assembled_knowledge = knowledge_assembler.assemble_dto(
-        item=knowledge_dto
-    )
+    assembled_knowledge = knowledge_service.get_knowledge_details_by_id(knowledge_id=knowledge_id)
+
 
     json_offer_data = json.dumps(
         assembled_knowledge.to_dict(),

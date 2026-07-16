@@ -69,7 +69,7 @@ class KnowledgeService:
             # "documents": parsed_documents
         }
         
-    def get_assembled_knowledge_by_id(self, knowledge_id : int ) -> OfferKnowledgeDto : 
+    def get_knowledge_details_by_id(self, knowledge_id : int ) -> OfferKnowledgeDto : 
         knowledge_db = self.offer_knowledge_repository.get_by_id( id=knowledge_id)
         knowledge_dto = OfferKnowledgeMapper.to_dto(item=knowledge_db)
         assembled_knowledge = self.offer_knowledge_assembler.assemble_dto(item=knowledge_dto)
