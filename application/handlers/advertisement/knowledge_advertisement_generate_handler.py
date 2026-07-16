@@ -2,29 +2,11 @@ import json
 import re
 
 from di.container import Container
-
-from domain.models.ollama.llm_ollama_message import (
-    LlmOllamaMessage
+from domain.models.models import (
+    LlmOllamaMessage, Advertisement, Scene, AdvertisementScene, AdvertisementObjection
 )
-
-from domain.enums.ollama_message_role import (
+from domain.enums.enums import (
     OllamaMessageRole
-)
-
-from domain.models.advertisement.advertisement import (
-    Advertisement
-)
-
-from domain.models.advertisement.scene import (
-    Scene
-)
-
-from domain.models.advertisement.advertisement_scene import (
-    AdvertisementScene
-)
-
-from domain.models.advertisement.advertisement_objection import (
-    AdvertisementObjection
 )
 
 
@@ -37,8 +19,8 @@ sprzedażowych dla platform takich jak:
 
 - Meta Ads
 - TikTok Ads
-- YouTube Ads
-- Google Ads
+- Facebook Ads
+- Instagram Ads
 
 
 Twoim zadaniem jest wygenerowanie gotowych kreacji reklamowych,
@@ -182,21 +164,13 @@ DANE PRODUKTU:
 
 {product_json}
 
-
-
 Zwróć dokładnie strukturę:
-
 
 {{
 "advertisements":[
-
     {{
-
         "name":"",
-
-
         "strategy":{{
-
             "framework":"",
             "angle":"",
             "psychology_trigger":"",
@@ -204,495 +178,112 @@ Zwróć dokładnie strukturę:
             "hypothesis":""
 
         }},
-
-
-
         "creative":{{
-
-
             "platform":"",
-
             "format":"",
-
             "duration_seconds":15,
-
             "aspect_ratio":"9:16",
-
-
-
             "hook":{{
-
                 "text":"",
                 "type":"",
                 "visual":"",
                 "duration":3
 
             }},
-
-
-
             "problem":"",
-
             "solution":"",
-
-
-
             "proof":{{
-
                 "type":"",
                 "content":""
 
             }},
-
-
-
             "script":[
-
                 {{
-
                     "order":1,
-
                     "description":"",
-
                     "duration_seconds":3
-
                 }}
-
             ],
-
-
-
             "voiceover":"",
-
-
-
             "visual_direction":[
-
                 ""
-
             ],
-
-
-
             "text_overlays":[
-
                 ""
-
             ],
-
-
-
             "cta":{{
-
                 "text":"",
-
                 "type":"",
-
                 "urgency":""
-
             }}
-
         }},
-
-
-
-
         "target_audience":{{
-
             "name":"",
-
             "pain_points":[
-
                 ""
-
             ],
-
             "motivations":[
-
                 ""
-
             ],
-
             "buying_triggers":[
-
                 ""
-
             ]
-
         }},
-
-
-
-
         "objections_handled":[
-
             {{
-
                 "objection":"",
-
                 "answer":""
-
             }}
-
         ],
-
-
-
-
-        "testing":{{
-
-            "variant":"",
-
-            "what_is_tested":"",
-
-            "expected_result":""
-
-        }},
-
-
-
-
         "score":{{
-
             "hook":0,
-
             "emotion":0,
-
             "clarity":0,
-
             "purchase_intent":0,
-
             "overall":0
-
         }}
-
     }}
-
 ]
-
 }}
-
 
 
 DODATKOWE ZASADY:
 
+1.Wygeneruj dokładnie {count} elementów.
 
-1.
-
-Wygeneruj dokładnie {count} elementów.
-
-
-2.
-
-Każda reklama musi mieć:
-
+2.Każda reklama musi mieć:
 - inny framework,
 - inny hook,
 - inną grupę odbiorców,
 - inny problem,
 - inną hipotezę testową.
 
-
-
-3.
-
-SCRIPT:
-
+3. SCRIPT:
 Script jest tablicą scen filmu.
-
 Każda scena posiada:
-
 - order,
 - description,
 - duration_seconds.
 
-
-
-4.
-
-PROOF:
-
+4.PROOF:
 Nigdy nie wymyślaj dowodów.
-
 Jeżeli brak danych:
-
 "type":"",
 "content":""
 
-
-
-5.
-
-CTA:
-
+5.CTA:
 CTA musi mówić użytkownikowi co zrobić.
 
 Przykłady:
-
 - Zamów teraz
 - Sprawdź ofertę
 - Zobacz jak działa
 - Poznaj szczegóły
 
-
-
-6.
-
-SCORE:
-
+6.SCORE:
 Skala 1-10.
-
 Każda wartość musi być integer.
-
-
-
 """
-
-
-
-
-
-def parse_llm_json(
-    content: str
-) -> dict:
-
-    """
-    Czyści i parsuje JSON zwrócony przez LLM.
-    """
-
-    if not content:
-
-        raise ValueError(
-            "Empty LLM response"
-        )
-
-
-    text = content.strip()
-
-
-
-    #
-    # Usuwanie markdown
-    #
-
-    if text.startswith(
-        "```"
-    ):
-
-        text = re.sub(
-            r"```(?:json)?",
-            "",
-            text
-        )
-
-        text = text.replace(
-            "```",
-            ""
-        ).strip()
-
-
-
-    #
-    # Szukanie pierwszego JSON
-    #
-
-    json_start = (
-        text.find("{")
-    )
-
-
-    json_end = (
-        text.rfind("}")
-    )
-
-
-
-    if (
-        json_start == -1
-        or json_end == -1
-    ):
-
-        raise ValueError(
-            "No JSON object found"
-        )
-
-
-
-    text = text[
-        json_start:
-        json_end + 1
-    ]
-
-
-
-    try:
-
-        return json.loads(
-            text
-        )
-
-
-    except json.JSONDecodeError as e:
-
-
-        raise ValueError(
-            f"Invalid JSON from LLM: {e}"
-        )
-
-
-
-
-
-def safe_int(
-    value,
-    default=None
-):
-
-    """
-    Zamienia wartości liczbowe
-    zwracane przez LLM na int.
-    """
-
-
-    if value is None:
-
-        return default
-
-
-
-    if isinstance(
-        value,
-        int
-    ):
-
-        return value
-
-
-
-    if isinstance(
-        value,
-        float
-    ):
-
-        return int(
-            value
-        )
-
-
-
-    if isinstance(
-        value,
-        str
-    ):
-
-
-        numbers = re.findall(
-            r"\d+",
-            value
-        )
-
-
-        if numbers:
-
-            return int(
-                numbers[0]
-            )
-
-
-    return default
-
-
-
-
-
-def validate_advertisement_structure(
-    advertisement: dict
-):
-
-    """
-    Minimalna walidacja odpowiedzi LLM.
-    """
-
-    required_fields = [
-
-        "name",
-
-        "strategy",
-
-        "creative",
-
-        "target_audience",
-
-        "score"
-
-    ]
-
-
-
-    missing = [
-
-        field
-
-        for field in required_fields
-
-        if field not in advertisement
-
-    ]
-
-
-
-    if missing:
-
-        raise ValueError(
-            f"Missing fields from LLM response: {missing}"
-        )
-
-
-
-    creative = (
-        advertisement
-        .get(
-            "creative",
-            {}
-        )
-    )
-
-
-
-    creative_required = [
-
-        "hook",
-
-        "problem",
-
-        "solution",
-
-        "cta"
-
-    ]
-
-
-
-    missing_creative = [
-
-        field
-
-        for field in creative_required
-
-        if field not in creative
-
-    ]
-
-
-
-    if missing_creative:
-
-        raise ValueError(
-            "Missing creative fields: "
-            f"{missing_creative}"
-        )
-
-
 
 
 def knowledge_advertisement_generate_handler(
@@ -709,35 +300,16 @@ def knowledge_advertisement_generate_handler(
     container = Container()
 
 
-    knowledge_service = (
-        container.knowledge_service()
-    )
+    knowledge_service = container.knowledge_service()
+    
 
-    ollama_service = (
-        container.ollama_service()
-    )
+    ollama_service = container.ollama_service()
 
-
-    advertisements_repository = (
-        container.advertisements_repository()
-    )
-
-    scenes_repository = (
-        container.scenes_repository()
-    )
-
-    advertisement_scenes_repository = (
-        container.advertisement_scenes_repository()
-    )
-
-    advertisement_objections_repository = (
-        container.advertisement_objections_repository()
-    )
-
-    advertisement_service = (
-        container.advertisement_service()
-    )
-
+    advertisements_repository = container.advertisements_repository()
+    scenes_repository = container.scenes_repository()
+    advertisement_scenes_repository = container.advertisement_scenes_repository()
+    advertisement_objections_repository = container.advertisement_objections_repository()
+    advertisement_service = container.advertisement_service()
 
 
     knowledge_details = (
@@ -756,14 +328,10 @@ def knowledge_advertisement_generate_handler(
         default=str
     )
 
-
-
     user_prompt = USER_PROMPT_TEMPLATE.format(
         count=count,
         product_json=product_json
     )
-
-
 
     response = (
         ollama_service.chat_llm(
@@ -773,78 +341,19 @@ def knowledge_advertisement_generate_handler(
                     role=OllamaMessageRole.SYSTEM,
                     content=SYSTEM_PROMPT
                 ),
-
-
                 LlmOllamaMessage(
                     role=OllamaMessageRole.USER,
                     content=user_prompt
                 )
-
             ]
         )
     )
 
-
-
-    raw_response = (
-        response.content.strip()
-    )
-
-
-
-    generated_ads = (
-        parse_llm_json(
-            raw_response
-        )
-    )
-
-
-
-    if not isinstance(
-        generated_ads,
-        dict
-    ):
-
-        return {
-            "error":
-                "LLM response must be object",
-            "raw_response":
-                raw_response
-        }
-
-
-
-    ads = generated_ads.get(
-        "advertisements",
-        []
-    )
-
-
-
-    if not ads:
-
-        return {
-            "error":
-                "No advertisements generated",
-            "raw_response":
-                raw_response
-        }
-
-
-
+    generated_ads = json.loads(response.content.strip())
+    ads = generated_ads.get("advertisements",[])
     results = []
 
-
-
     for ad in ads:
-
-
-        validate_advertisement_structure(
-            ad
-        )
-
-
-
         strategy = (
             ad.get(
                 "strategy",
@@ -970,10 +479,10 @@ def knowledge_advertisement_generate_handler(
 
 
                     duration_seconds=
-                    safe_int(
+                    
                         creative.get(
                             "duration_seconds"
-                        )
+                        
                     ),
 
 
@@ -1005,10 +514,10 @@ def knowledge_advertisement_generate_handler(
 
 
                     hook_duration=
-                    safe_int(
+                    
                         hook.get(
                             "duration"
-                        )
+                        
                     ),
 
 
@@ -1097,42 +606,42 @@ def knowledge_advertisement_generate_handler(
 
 
                     score_hook=
-                    safe_int(
+                    
                         score.get(
                             "hook"
-                        )
+                        
                     ),
 
 
                     score_emotion=
-                    safe_int(
+                    
                         score.get(
                             "emotion"
-                        )
+                        
                     ),
 
 
                     score_clarity=
-                    safe_int(
+                    
                         score.get(
                             "clarity"
-                        )
+                        
                     ),
 
 
                     score_purchase_intent=
-                    safe_int(
+                    
                         score.get(
                             "purchase_intent"
-                        )
+                        
                     ),
 
 
                     score_overall=
-                    safe_int(
+                    
                         score.get(
                             "overall"
-                        )
+                        
                     )
 
                 )
@@ -1168,10 +677,10 @@ def knowledge_advertisement_generate_handler(
                     ),
 
                     duration_seconds=
-                    safe_int(
+                    
                         scene.get(
                             "duration_seconds"
-                        )
+                        
                     )
 
                 )
