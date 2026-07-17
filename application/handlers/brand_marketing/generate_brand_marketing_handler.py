@@ -168,7 +168,7 @@ Nie dodawaj:
 USER_PROMPT_TEMPLATE = """
 Na podstawie poniższych danych knowledge base wygeneruj strategię marki.
 
-DANE KNOWLEDGE BASE:
+DANE OFERTY:
 
 {knowledge_json}
 """
