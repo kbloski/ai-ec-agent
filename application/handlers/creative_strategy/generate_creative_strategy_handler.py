@@ -1,293 +1,229 @@
 import json
 
 from di.container import Container
+
 from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
 from domain.enums.ollama_message_role import OllamaMessageRole
+
 from domain.models.creative_strategy.creative_strategy import CreativeStrategy
 
+
+
 SYSTEM_PROMPT = """
-Jesteś ekspertem od Creative Strategy,
-Performance Creative,
-Direct Response Advertising
-oraz Creative Production.
+Jesteś ekspertem od Performance Creative,
+Direct Response Advertising,
+Video Advertising oraz Creative Production.
+
 
 Twoim zadaniem jest stworzenie CREATIVE STRATEGY
-na podstawie pełnego kontekstu marketingowego.
+na podstawie pełnego kontekstu marketingowego i Ad Strategy.
 
 
-Creative Strategy jest dokumentem pomiędzy:
-
-AD STRATEGY
-
-a
-
-AD SCRIPT.
+CREATIVE STRATEGY jest dokumentem produkcyjnym reklamy.
 
 
-Nie tworzysz jeszcze reklamy.
-
-Nie piszesz scenariusza.
-
-Projektujesz blueprint kreatywny,
-który później zostanie zamieniony w:
-
-- video script,
-- UGC script,
-- static ad concept,
-- visual production plan.
+Tworzysz kompletny blueprint reklamy:
 
 
+- wygląd reklamy,
+- sposób nagrania,
+- strukturę,
+- sceny,
+- tekst,
+- assety produkcyjne.
 
-ODPOWIEDZ NA PYTANIE:
 
-"Jak stworzyć reklamę,
-która ma największą szansę przekonać
-konkretną grupę odbiorców?"
-
+================================
+PARAMETRY REKLAMY
+================================
 
 
-ŹRÓDŁA:
+Parametry reklamy przekazane w USER PROMPT są obowiązkowe.
 
+
+Musisz zachować:
+
+- platformę,
+- format,
+- aspect ratio,
+- długość reklamy.
+
+
+Jeżeli długość reklamy wynosi X sekund:
+
+
+1. execution.duration musi wynosić X sekund.
+
+2. Wszystkie sceny w script muszą razem mieć dokładnie X sekund.
+
+3. Każda scena musi mieć realny czas trwania.
+
+4. Nie dodawaj dodatkowych sekund poza określony czas.
+
+5. Dopasuj liczbę scen do długości reklamy.
+
+
+Przykład:
+
+
+Dla reklamy 30 sekund:
+
+
+script:
+
+scene 1:
+5 sekund
+
+scene 2:
+10 sekund
+
+scene 3:
+10 sekund
+
+scene 4:
+5 sekund
+
+
+SUMA = 30 sekund
+
+
+
+================================
+ŹRÓDŁA
+================================
 
 
 KNOWLEDGE BASE
 
 - produkt
-- customer voice
+- klient
 - problemy
 - potrzeby
 - obiekcje
-- konkurencja
-
-
-
-BRAND STRATEGY
-
-- positioning
-- personality
-- tone
-- values
-
-
-
-MARKETING STRATEGY
-
-- segmenty
-- kanały
-- customer journey
-
-
-
-OFFER STRATEGY
-
-- value proposition
-- offer mechanism
-- risk reversal
-
 
 
 MESSAGE STRATEGY
 
-- core message
-- message angles
-- objections
-- proof
-
+- komunikaty
+- argumenty
+- proof points
 
 
 AD STRATEGY
 
-- audience angles
-- message angles
-- creative concepts
-- recommended formats
-
-
-
-GENERUJ:
-
-
-
-1. CREATIVE IDENTITY
-
-
-- name
-- based_on_ad_concept
+- audience
+- angle
 - objective
-- creative_type
-- recommended_format
+- creative concepts
+
+
+
+================================
+GENERUJ
+================================
+
+
+1. CREATIVE EXECUTION
+
+
+Pola:
+
 - platform
+- format
 - duration
 - aspect_ratio
-
-
-
-Przykłady:
-
-creative_type:
-
-ugc_story
-ugc_review
-product_demo
-comparison
-founder_story
-problem_solution
-before_after
-educational
-
-
-platform:
-
-meta_ads
-tiktok_ads
-youtube_ads
-google_display
-
-
-
-2. TARGET
-
-
-Określ:
-
-- audience
-- awareness_stage
-- desired_action
-
-
-
-3. HOOK STRATEGY
-
-
-Nie generuj hooka.
-
-Określ:
-
-- hook_type
-- hook_goal
-- hook_direction
-
-
-
-4. STORY FRAMEWORK
-
-
-Struktura narracji:
-
-Hook
-
-Problem
-
-Agitation
-
-Discovery
-
-Solution
-
-Proof
-
-Offer
-
-CTA
-
-
-
-5. CREATIVE DIRECTION
-
-
-Określ:
-
-- visual_style
-- editing_style
+- creative_type
+- production_style
 - camera_style
-- pace
-- lighting
-- environment
+- editing_style
+- voice_style
 
 
 
-6. SPEAKER
+2. SCRIPT STRUCTURE
+
+
+Nie generuj ogólnej historii.
+
+
+Generuj konkretne sceny reklamowe.
+
+
+Każda scena:
+
+
+- order
+- duration_seconds
+- purpose
+- visual
+- dialogue
+- voiceover
+- on_screen_text
+- emotion
+
+
+
+3. ASSET REQUIREMENTS
 
 
 Określ:
 
-- speaker_type
-
-(customer,
-creator,
-founder,
-expert,
-voiceover)
-
-
-- persona
-- age_range
-- credibility_reason
+- video shots
+- images
+- product shots
+- testimonials
+- screenshots
+- animations
 
 
 
-7. EMOTION FLOW
+4. PRODUCTION NOTES
 
 
-Lista emocji użytkownika podczas oglądania.
+Pola:
 
-
-
-8. VISUAL DIRECTION
-
-
-Elementy wizualne wymagane do produkcji.
-
-
-Nie opisuj scen.
+- shooting_notes
+- editing_notes
+- important_details
 
 
 
-9. PROOF STRATEGY
+5. CTA
 
 
-Jakie dowody powinny zostać pokazane.
-
-
-
-10. CTA STRATEGY
-
-
-Nie generuj CTA.
-
-Określ:
+Pola:
 
 - goal
-- direction
 - action_type
+- placement
 
 
 
-11. PRODUCTION NOTES
+================================
+NIE GENERUJ
+================================
 
 
-Dodaj:
-
-- required_assets
-- production_complexity
-- recommended_shooting_style
-
-
-
-NIE GENERUJ:
-
-- scenariusza
-- dialogów
-- voiceover
-- finalnego copy
-- headline
-- caption
-- obrazów
+- grafik
+- video
 - promptów AI
+- gotowych assetów
 
 
 
-Zwróć JSON:
+================================
+FORMAT ODPOWIEDZI
+================================
+
+
+Zwróć tylko JSON.
+
+Bez markdown.
+Bez komentarzy.
+
+
+
+Format:
 
 
 {
@@ -297,99 +233,67 @@ Zwróć JSON:
 
 "name":"",
 
-"based_on_ad_concept":"",
 
-"objective":"",
-
-"creative_type":"",
-
-"recommended_format":"",
+"execution":{
 
 "platform":"",
-
-"duration":"",
-
+"format":"",
+"duration_seconds":30,
 "aspect_ratio":"",
-
-
-"target":{
-
-"audience":"",
-"awareness_stage":"",
-"desired_action":""
-
-},
-
-
-"hook_strategy":{
-
-"hook_type":"",
-"hook_goal":"",
-"hook_direction":""
-
-},
-
-
-"story_framework":[
-""
-],
-
-
-"creative_direction":{
-
-"visual_style":"",
-"editing_style":"",
+"creative_type":"",
+"production_style":"",
 "camera_style":"",
-"pace":"",
-"lighting":"",
-"environment":""
+"editing_style":"",
+"voice_style":""
 
 },
 
 
-"speaker":{
+"script":[
 
-"speaker_type":"",
-"persona":"",
-"age_range":"",
-"credibility_reason":""
+{
 
-},
+"order":1,
+"duration_seconds":5,
+"purpose":"",
+"visual":"",
+"dialogue":"",
+"voiceover":"",
+"on_screen_text":"",
+"emotion":""
 
+}
 
-"emotion_flow":[
-""
 ],
 
 
-"visual_direction":[
-""
+"asset_requirements":[
+
+{
+
+"type":"",
+"description":"",
+"purpose":""
+
+}
+
 ],
-
-
-"proof_strategy":[
-""
-],
-
-
-"cta_strategy":{
-
-"goal":"",
-"direction":"",
-"action_type":""
-
-},
 
 
 "production_notes":{
 
-"required_assets":[
-""
-],
+"shooting_notes":"",
+"editing_notes":"",
+"important_details":""
 
-"production_complexity":"",
+},
 
-"recommended_shooting_style":""
+
+"cta":{
+
+"goal":"",
+"action_type":"",
+"placement":""
 
 }
 
@@ -400,16 +304,37 @@ Zwróć JSON:
 
 }
 
-
-
-Bez markdown.
-Bez komentarzy.
-Tylko JSON.
 """
 
 
+
 USER_PROMPT_TEMPLATE = """
-Wygeneruj Creative Strategy na podstawie:
+
+================================
+PARAMETRY REKLAMY
+================================
+
+
+Platform:
+
+{platform}
+
+
+Format:
+
+{format}
+
+
+Maksymalna długość reklamy:
+
+{video_duration_seconds} sekund
+
+
+
+================================
+GENERUJ CREATIVE STRATEGY
+================================
+
 
 
 KNOWLEDGE BASE:
@@ -417,9 +342,11 @@ KNOWLEDGE BASE:
 {knowledge_json}
 
 
+
 BRAND STRATEGY:
 
 {brand_strategy_json}
+
 
 
 MARKETING STRATEGY:
@@ -427,14 +354,17 @@ MARKETING STRATEGY:
 {marketing_strategy_json}
 
 
+
 OFFER STRATEGY:
 
 {offer_strategy_json}
 
 
+
 MESSAGE STRATEGY:
 
 {message_strategy_json}
+
 
 
 AD STRATEGY:
@@ -445,232 +375,423 @@ AD STRATEGY:
 
 
 
-
 def generate_creative_strategy_handler(
+
     knowledge_id: int,
+
     brand_marketing_id: int,
+
     marketing_strategy_id: int,
+
     offer_strategy_id: int,
+
     message_strategy_id: int,
-    ad_strategy_id: int
+
+    ad_strategy_id: int,
+
+
+    video_duration_seconds: int = 17,
+
+    platform: str = "Meta Ads",
+
+    format: str = "Vertical Video 9:16"
+
 ):
+
 
     container = Container()
 
-    knowledge_service = container.knowledge_service()
+
+
+    knowledge_service = (
+        container.knowledge_service()
+    )
+
 
     brand_marketing_service = (
         container.brand_marketing_service()
     )
 
+
     marketing_strategy_service = (
         container.marketing_strategy_service()
     )
+
 
     offer_strategy_service = (
         container.offer_strategy_service()
     )
 
+
     message_strategy_service = (
         container.message_strategy_service()
     )
+
 
     ad_strategy_service = (
         container.ad_strategy_service()
     )
 
-    creative_strategy_repository = container.creative_strategy_repository()
-    creative_strategy_service = container.creative_strategy_service()
+
+
+    creative_strategy_repository = (
+        container.creative_strategy_repository()
+    )
+
+
+    creative_strategy_service = (
+        container.creative_strategy_service()
+    )
+
 
     ollama_service = (
         container.ollama_service()
     )
-
-
+    
     knowledge = (
-        knowledge_service.get_knowledge_details_by_id(
+        knowledge_service
+        .get_knowledge_details_by_id(
             knowledge_id=knowledge_id
         )
     )
 
 
     brand_strategy = (
-        brand_marketing_service.get_brand_marketing_by_id(
+        brand_marketing_service
+        .get_brand_marketing_by_id(
             id=brand_marketing_id
         )
     )
 
 
     marketing_strategy = (
-        marketing_strategy_service.get_marketing_strategy_by_id(
+        marketing_strategy_service
+        .get_marketing_strategy_by_id(
             id=marketing_strategy_id
         )
     )
 
 
     offer_strategy = (
-        offer_strategy_service.get_offer_strategy_by_id(
+        offer_strategy_service
+        .get_offer_strategy_by_id(
             id=offer_strategy_id
         )
     )
 
 
     message_strategy = (
-        message_strategy_service.get_message_strategy_by_id(
+        message_strategy_service
+        .get_message_strategy_by_id(
             id=message_strategy_id
         )
     )
 
 
     ad_strategy = (
-        ad_strategy_service.get_ad_strategy_by_id(
+        ad_strategy_service
+        .get_ad_strategy_by_id(
             id=ad_strategy_id
         )
     )
 
 
-    knowledge_json = json.dumps(
-        knowledge.to_dict(),
-        ensure_ascii=False,
-        indent=2,
-        default=str
-    )
 
+    def serialize(obj):
 
-    brand_strategy_json = json.dumps(
-        brand_strategy.to_dict(),
-        ensure_ascii=False,
-        indent=2,
-        default=str
-    )
+        return json.dumps(
 
+            obj.to_dict(),
 
-    marketing_strategy_json = json.dumps(
-        marketing_strategy.to_dict(),
-        ensure_ascii=False,
-        indent=2,
-        default=str
-    )
+            ensure_ascii=False,
 
+            indent=2,
 
-    offer_strategy_json = json.dumps(
-        offer_strategy.to_dict(),
-        ensure_ascii=False,
-        indent=2,
-        default=str
-    )
+            default=str
 
+        )
 
-    message_strategy_json = json.dumps(
-        message_strategy.to_dict(),
-        ensure_ascii=False,
-        indent=2,
-        default=str
-    )
-
-
-    ad_strategy_json = json.dumps(
-        ad_strategy.to_dict(),
-        ensure_ascii=False,
-        indent=2,
-        default=str
-    )
 
 
     user_prompt = USER_PROMPT_TEMPLATE.format(
 
-        knowledge_json=knowledge_json,
+        platform=platform,
 
-        brand_strategy_json=brand_strategy_json,
+        format=format,
 
-        marketing_strategy_json=marketing_strategy_json,
+        video_duration_seconds=video_duration_seconds,
 
-        offer_strategy_json=offer_strategy_json,
 
-        message_strategy_json=message_strategy_json,
+        knowledge_json=serialize(
+            knowledge
+        ),
 
-        ad_strategy_json=ad_strategy_json
+
+        brand_strategy_json=serialize(
+            brand_strategy
+        ),
+
+
+        marketing_strategy_json=serialize(
+            marketing_strategy
+        ),
+
+
+        offer_strategy_json=serialize(
+            offer_strategy
+        ),
+
+
+        message_strategy_json=serialize(
+            message_strategy
+        ),
+
+
+        ad_strategy_json=serialize(
+            ad_strategy
+        )
 
     )
+
 
 
     response = ollama_service.chat_llm(
 
         messages=[
 
-            LlmOllamaMessage(
-                role=OllamaMessageRole.SYSTEM,
-                content=SYSTEM_PROMPT
-            ),
 
             LlmOllamaMessage(
+
+                role=OllamaMessageRole.SYSTEM,
+
+                content=SYSTEM_PROMPT
+
+            ),
+
+
+            LlmOllamaMessage(
+
                 role=OllamaMessageRole.USER,
+
                 content=user_prompt
+
             )
+
 
         ]
 
     )
 
 
+
     try:
+
 
         content = response.content.strip()
 
+
+
         if content.startswith("```"):
 
+
             content = (
+
                 content
-                .replace("```json", "")
-                .replace("```", "")
+
+                .replace(
+                    "```json",
+                    ""
+                )
+
+                .replace(
+                    "```",
+                    ""
+                )
+
                 .strip()
+
             )
 
-        result = json.loads(content)
+
+
+        result = json.loads(
+            content
+        )
+
+
 
     except json.JSONDecodeError:
 
-        result = {
+
+        return {
+
             "raw_response": response.content
+
         }
 
-    creative_strategies = result.get("creative_strategies", [])
+
+
 
     created_ids = []
 
-    for item in creative_strategies:
 
-        entity = CreativeStrategy(
-            knowledge_id=knowledge_id,
-            brand_marketing_id=brand_marketing_id,
-            marketing_strategy_id=marketing_strategy_id,
-            offer_strategy_id=offer_strategy_id,
-            message_strategy_id=message_strategy_id,
-            ad_strategy_id=ad_strategy_id,
-            name=item.get("name"),
-            based_on_ad_concept=item.get("based_on_ad_concept"),
-            objective=item.get("objective"),
-            creative_type=item.get("creative_type"),
-            recommended_format=item.get("recommended_format"),
-            platform=item.get("platform"),
-            duration=item.get("duration"),
-            aspect_ratio=item.get("aspect_ratio"),
-            target=item.get("target"),
-            hook_strategy=item.get("hook_strategy"),
-            story_framework=item.get("story_framework", []),
-            creative_direction=item.get("creative_direction"),
-            speaker=item.get("speaker"),
-            emotion_flow=item.get("emotion_flow", []),
-            visual_direction=item.get("visual_direction", []),
-            proof_strategy=item.get("proof_strategy", []),
-            cta_strategy=item.get("cta_strategy"),
-            production_notes=item.get("production_notes"),
+
+    strategies = result.get(
+
+        "creative_strategies",
+
+        []
+
+    )
+
+
+
+
+    for item in strategies:
+
+
+
+        execution = item.get(
+            "execution",
+            {}
         )
 
-        created = creative_strategy_repository.create(entity)
-        created_ids.append(created.id)
+
+        script = item.get(
+            "script",
+            []
+        )
+
+
+
+        # dodatkowa kontrola długości reklamy
+
+        total_duration = sum(
+
+            scene.get(
+                "duration_seconds",
+                0
+            )
+
+            for scene in script
+
+        )
+
+
+
+        if total_duration != video_duration_seconds:
+
+
+            raise ValueError(
+
+                f"Generated script duration "
+                f"{total_duration}s does not match "
+                f"required {video_duration_seconds}s"
+
+            )
+
+
+
+
+        entity = CreativeStrategy(
+
+
+
+            knowledge_id=knowledge_id,
+
+
+            brand_marketing_id=brand_marketing_id,
+
+
+            marketing_strategy_id=marketing_strategy_id,
+
+
+            offer_strategy_id=offer_strategy_id,
+
+
+            message_strategy_id=message_strategy_id,
+
+
+            ad_strategy_id=ad_strategy_id,
+
+
+
+            name=item.get(
+                "name"
+            ),
+
+
+
+            execution=execution,
+
+
+
+            script=script,
+
+
+
+            asset_requirements=item.get(
+
+                "asset_requirements",
+
+                []
+
+            ),
+
+
+
+            production_notes=item.get(
+
+                "production_notes"
+
+            ),
+
+
+
+            cta=item.get(
+
+                "cta"
+
+            )
+
+        )
+
+
+
+
+        created = (
+
+            creative_strategy_repository
+
+            .create(
+
+                entity
+
+            )
+
+        )
+
+
+
+        created_ids.append(
+
+            created.id
+
+        )
+
+
+
 
     return [
-        creative_strategy_service.get_creative_strategy_by_id(id=id)
+
+        creative_strategy_service
+
+        .get_creative_strategy_by_id(
+
+            id=id
+
+        )
+
         for id in created_ids
+
     ]
