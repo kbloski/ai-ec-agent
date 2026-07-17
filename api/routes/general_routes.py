@@ -36,6 +36,7 @@ from application.handlers.marketing_strategy.get_brand_marketing_marketing_strat
 from application.handlers.offer_strategy.generate_offer_strategy_handler import generate_offer_strategy_handler
 from application.handlers.offer_strategy.get_offer_strategy_handler import get_offer_strategy_handler
 from application.handlers.offer_strategy.get_marketing_strategy_offer_strategies_handler import get_marketing_strategy_offer_strategies_handler
+from application.handlers.message_strategy.generate_message_strategy_handler import generate_message_strategy_handler
 
 
 def register_general_routes(router: APIRouter):
@@ -202,6 +203,19 @@ def register_general_routes(router: APIRouter):
     @router.get("/offer-strategy/{id}")
     def get_offer_strategy( id: int ):
         return get_offer_strategy_handler( id=id )
+
+
+    # -----------------------------
+    # Message strategy
+    # -----------------------------
+    @router.get("/knowledges/{knowledge_id}/brand-marketing/{brand_marketing_id}/marketing-strategy/{marketing_strategy_id}/offer-strategy/{offer_strategy_id}/message-strategy/generate")
+    def knowledge_message_strategy_generate( knowledge_id: int, brand_marketing_id: int, marketing_strategy_id: int, offer_strategy_id: int ):
+        return generate_message_strategy_handler(
+            knowledge_id=knowledge_id,
+            brand_marketing_id=brand_marketing_id,
+            marketing_strategy_id=marketing_strategy_id,
+            offer_strategy_id=offer_strategy_id
+        )
 
 
     # -----------------------------
