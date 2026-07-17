@@ -35,6 +35,7 @@ from application.handlers.page_strategy.generate_page_strategy_json_handler impo
 from application.handlers.ad_strategy.generate_ad_strategy_handler import generate_ad_strategy_handler
 from application.handlers.ad_strategy.get_ad_strategy_handler import get_ad_strategy_handler
 from application.handlers.ad_strategy.get_message_strategy_ad_strategies_handler import get_message_strategy_ad_strategies_handler
+from application.handlers.creative_strategy.generate_creative_strategy_handler import generate_creative_strategy_handler
 
 
 def register_general_routes(router: APIRouter):
@@ -244,6 +245,21 @@ def register_general_routes(router: APIRouter):
     @router.get("/ad-strategy/{id}")
     def get_ad_strategy( id: int ):
         return get_ad_strategy_handler( id=id )
+
+
+    # -----------------------------
+    # Creative strategy
+    # -----------------------------
+    @router.get("/knowledges/{knowledge_id}/brand-marketing/{brand_marketing_id}/marketing-strategy/{marketing_strategy_id}/offer-strategy/{offer_strategy_id}/message-strategy/{message_strategy_id}/ad-strategy/{ad_strategy_id}/creative-strategy/generate")
+    def knowledge_creative_strategy_generate( knowledge_id: int, brand_marketing_id: int, marketing_strategy_id: int, offer_strategy_id: int, message_strategy_id: int, ad_strategy_id: int ):
+        return generate_creative_strategy_handler(
+            knowledge_id=knowledge_id,
+            brand_marketing_id=brand_marketing_id,
+            marketing_strategy_id=marketing_strategy_id,
+            offer_strategy_id=offer_strategy_id,
+            message_strategy_id=message_strategy_id,
+            ad_strategy_id=ad_strategy_id
+        )
 
 
     # -----------------------------
