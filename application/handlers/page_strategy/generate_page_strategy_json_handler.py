@@ -9,13 +9,28 @@ SYSTEM_PROMPT = """
 Jesteś ekspertem od Conversion Rate Optimization,
 Landing Page Strategy oraz Marketing Asset Architecture.
 
-Twoim zadaniem jest stworzenie struktury landing page
+Twoim zadaniem jest stworzenie Page Strategy
 na podstawie pełnego kontekstu marketingowego.
+
+
+Landing page jest systemem komunikacji,
+który prowadzi klienta przez proces decyzji zakupowej.
+
+Każda sekcja strony musi mieć konkretną funkcję:
+- przyciągnąć uwagę,
+- zwiększyć świadomość problemu,
+- pokazać rozwiązanie,
+- zbudować wartość,
+- usunąć obiekcje,
+- doprowadzić do konwersji.
+
 
 
 ŹRÓDŁA DANYCH:
 
+
 1. KNOWLEDGE BASE:
+
 - produkt,
 - customer voice,
 - problemy klientów,
@@ -26,22 +41,30 @@ na podstawie pełnego kontekstu marketingowego.
 - konkurencja.
 
 
+
 2. BRAND STRATEGY:
+
 - positioning,
 - wartości marki,
 - osobowość marki,
 - voice,
-- tone.
+- tone,
+- sposób komunikacji.
+
 
 
 3. MARKETING STRATEGY:
+
 - segmenty klientów,
-- kanały,
+- kanały pozyskania,
 - customer journey,
+- etap świadomości klienta,
 - sposób dotarcia.
 
 
+
 4. OFFER STRATEGY:
+
 - value proposition,
 - mechanizm wartości,
 - benefity,
@@ -50,91 +73,241 @@ na podstawie pełnego kontekstu marketingowego.
 - wyróżniki.
 
 
+
 5. MESSAGE STRATEGY:
+
 - core message,
-- message angles,
+- primary message angle,
+- secondary angles,
 - customer pains,
 - customer desires,
 - benefit messages,
 - objection handling,
 - proof points,
-- emotional triggers.
+- emotional triggers,
+- rational arguments.
 
 
 
-TWOJE ZADANIE:
+CEL:
 
-Wygeneruj strukturę landing page, która będzie podstawą dla:
+Wygeneruj strukturę landing page używaną przez:
 
-- frontend generatora,
-- copy generatora,
-- visual generation engine,
+- frontend generator,
+- copy generator,
+- visual asset generator,
 - marketing asset engine.
 
 
 
-GENERUJ:
+LOGIKA STRONY:
 
-1. PAGE STRATEGY
-
-- cel strony,
-- główny komunikat,
-- grupa docelowa,
-- customer journey stage,
-- conversion goal.
+Sekcje powinny prowadzić klienta przez:
 
 
+1. ATTENTION
 
-2. PAGE SECTIONS
-
-Każda sekcja musi zawierać:
-
-- order,
-- section_type,
-- purpose,
-- headline,
-- subheadline,
-- content,
-- CTA,
-- objections addressed,
-- message angle,
-- emotional trigger,
-- rational argument,
-- visual requirements.
+Cel:
+- przyciągnąć uwagę,
+- przekazać główną wartość.
 
 
+2. PROBLEM AWARENESS
 
-Dostępne typy sekcji:
-
-hero,
-problem,
-solution,
-how_it_works,
-benefits,
-features,
-comparison,
-social_proof,
-testimonials,
-case_studies,
-objection_handling,
-faq,
-offer,
-pricing,
-risk_reversal,
-final_cta
+Cel:
+- nazwać problem,
+- pokazać konsekwencje.
 
 
+3. SOLUTION AWARENESS
 
-3. VISUALIZATION PLAN
+Cel:
+- przedstawić rozwiązanie,
+- wyjaśnić mechanizm działania.
+
+
+4. VALUE DEMONSTRATION
+
+Cel:
+- pokazać benefity,
+- rezultaty,
+- przewagi.
+
+
+5. TRUST BUILDING
+
+Cel:
+- zwiększyć wiarygodność.
+
+
+6. OBJECTION REMOVAL
+
+Cel:
+- usunąć bariery zakupu.
+
+
+7. CONVERSION
+
+Cel:
+- doprowadzić do działania.
+
+
+
+FORMAT JSON:
+
+
+{
+    "page_strategy": {
+        "goal": "",
+        "conversion_action": "",
+        "target_audience": "",
+        "customer_journey_stage": "",
+        "main_message": ""
+    },
+
+    "sections": [
+        {
+            "order": 1,
+
+            "section_type": "",
+
+            "purpose": "",
+
+            "customer_journey_stage": "",
+
+
+            "strategy": {
+                "customer_problem": "",
+                "customer_desire": "",
+                "message_angle": "",
+                "emotional_trigger": "",
+                "rational_argument": ""
+            },
+
+
+            "copy_direction": {
+                "headline_direction": "",
+                "subheadline_direction": "",
+                "body_direction": ""
+            },
+
+
+            "cta": {
+                "text_direction": "",
+                "purpose": "",
+                "action_type": ""
+            },
+
+
+            "objection_handling": [
+            ],
+
+
+            "proof_requirements": [
+            ],
+
+
+            "visual_requirements": [
+                {
+                    "visual_type": "",
+                    "purpose": "",
+                    "description": "",
+                    "generation_direction": ""
+                }
+            ]
+        }
+    ]
+}
+
+
+
+WAŻNE:
+
+Każda sekcja musi być jednym obiektem JSON.
+
+NIE RÓB:
+
+{
+ "sections": [
+    {
+       "strategy": {}
+    },
+    {
+       "copy_direction": {}
+    }
+ ]
+}
+
+
+POPRAWNIE:
+
+{
+ "sections": [
+    {
+       "strategy": {},
+       "copy_direction": {},
+       "visual_requirements": []
+    }
+ ]
+}
+
+
+
+COPY DIRECTION:
+
+Nie generuj finalnego copy.
+
+Nie twórz:
+- gotowych headline'ów,
+- sloganów,
+- reklamowych claimów.
+
+
+Zamiast tego opisuj kierunek komunikacji.
+
+
+ŹLE:
+
+"Cut with Ease, Live with Power"
+
+
+DOBRZE:
+
+"Communicate reduced physical effort and increased independence"
+
+
+
+VISUAL REQUIREMENTS:
 
 Nie generuj obrazów.
 
 Określ tylko:
 
-- jakie wizualizacje są potrzebne,
-- gdzie powinny wystąpić,
-- jaki mają cel,
+- jaki typ wizualizacji jest potrzebny,
+- jaki jest jej cel,
+- co powinna przedstawiać,
 - jaki powinien być kierunek generowania.
+
+
+
+Dostępne section_type:
+
+- hero
+- problem
+- solution
+- how_it_works
+- benefits
+- features
+- comparison
+- social_proof
+- testimonials
+- case_studies
+- objection_handling
+- faq
+- offer
+- pricing
+- risk_reversal
+- final_cta
 
 
 
@@ -142,9 +315,11 @@ NIE GENERUJ:
 
 - HTML,
 - CSS,
-- komponentów frontendowych,
+- React components,
 - finalnego designu,
-- gotowych obrazów.
+- gotowych obrazów,
+- finalnego copy,
+- reklam.
 
 
 
@@ -157,7 +332,7 @@ Tylko JSON.
 
 
 USER_PROMPT_TEMPLATE = """
-Wygeneruj strukturę landing page na podstawie:
+Wygeneruj Page Strategy na podstawie:
 
 
 KNOWLEDGE BASE:
@@ -207,38 +382,29 @@ def generate_page_strategy_json_handler(
     ollama_service = container.ollama_service()
 
 
-    knowledge = (
-        knowledge_service.get_knowledge_details_by_id(
-            knowledge_id=knowledge_id
-        )
+
+    knowledge = knowledge_service.get_knowledge_details_by_id(
+        knowledge_id=knowledge_id
     )
 
 
-    message_strategy = (
-        message_strategy_service.get_message_strategy_by_id(
-            id=message_strategy_id
-        )
+    message_strategy = message_strategy_service.get_message_strategy_by_id(
+        id=message_strategy_id
     )
 
 
-    brand_strategy = (
-        brand_marketing_service.get_brand_marketing_by_id(
-            id=brand_marketing_id
-        )
+    brand_strategy = brand_marketing_service.get_brand_marketing_by_id(
+        id=brand_marketing_id
     )
 
 
-    marketing_strategy = (
-        marketing_strategy_service.get_marketing_strategy_by_id(
-            id=marketing_strategy_id
-        )
+    marketing_strategy = marketing_strategy_service.get_marketing_strategy_by_id(
+        id=marketing_strategy_id
     )
 
 
-    offer_strategy = (
-        offer_strategy_service.get_offer_strategy_by_id(
-            id=offer_strategy_id
-        )
+    offer_strategy = offer_strategy_service.get_offer_strategy_by_id(
+        id=offer_strategy_id
     )
 
 
@@ -308,18 +474,59 @@ def generate_page_strategy_json_handler(
     )
 
 
-    result = json.loads(
-        response.content.strip()
-    )
+
+    try:
+
+        content = response.content.strip()
 
 
-    # lineage metadata
+        # remove markdown json block
+        if content.startswith("```"):
+
+            content = content.replace(
+                "```json",
+                ""
+            )
+
+            content = content.replace(
+                "```",
+                ""
+            )
+
+            content = content.strip()
+
+
+
+        result = json.loads(content)
+
+
+
+        # handle double encoded JSON
+        if isinstance(result, str):
+            result = json.loads(result)
+
+
+
+    except Exception:
+
+        result = {
+            "raw_response": response.content
+        }
+
+
+
     # result["metadata"] = {
+
     #     "knowledge_id": knowledge_id,
+
     #     "message_strategy_id": message_strategy_id,
+
     #     "brand_marketing_id": brand_marketing_id,
+
     #     "marketing_strategy_id": marketing_strategy_id,
+
     #     "offer_strategy_id": offer_strategy_id
+
     # }
 
 
