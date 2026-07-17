@@ -37,6 +37,8 @@ from application.handlers.ad_strategy.get_ad_strategy_handler import get_ad_stra
 from application.handlers.ad_strategy.get_message_strategy_ad_strategies_handler import get_message_strategy_ad_strategies_handler
 from application.handlers.creative_strategy.generate_creative_strategy_handler import generate_creative_strategy_handler
 from application.handlers.ad_execution.generate_ad_execution_handler import generate_ad_execution_handler
+from application.handlers.ad_execution.get_ad_execution_handler import get_ad_execution_handler
+from application.handlers.ad_execution.get_creative_strategy_ad_executions_handler import get_creative_strategy_ad_executions_handler
 from application.handlers.creative_strategy.get_creative_strategy_handler import get_creative_strategy_handler
 from application.handlers.creative_strategy.get_ad_strategy_creative_strategies_handler import get_ad_strategy_creative_strategies_handler
 
@@ -276,11 +278,25 @@ def register_general_routes(router: APIRouter):
     # -----------------------------
     # Ad execution
     # -----------------------------
-    @router.get("/creative-strategy/{creative_strategy_id}/ad-execution/generate")
-    def creative_strategy_ad_execution_generate( creative_strategy_id: int ):
+    @router.get("/knowledges/{knowledge_id}/brand-marketing/{brand_marketing_id}/marketing-strategy/{marketing_strategy_id}/offer-strategy/{offer_strategy_id}/message-strategy/{message_strategy_id}/ad-strategy/{ad_strategy_id}/creative-strategy/{creative_strategy_id}/ad-execution/generate")
+    def creative_strategy_ad_execution_generate( knowledge_id: int, brand_marketing_id: int, marketing_strategy_id: int, offer_strategy_id: int, message_strategy_id: int, ad_strategy_id: int, creative_strategy_id: int ):
         return generate_ad_execution_handler(
+            knowledge_id=knowledge_id,
+            brand_marketing_id=brand_marketing_id,
+            marketing_strategy_id=marketing_strategy_id,
+            offer_strategy_id=offer_strategy_id,
+            message_strategy_id=message_strategy_id,
+            ad_strategy_id=ad_strategy_id,
             creative_strategy_id=creative_strategy_id
         )
+
+    @router.get("/creative-strategy/{creative_strategy_id}/ad-execution")
+    def get_creative_strategy_ad_executions( creative_strategy_id: int ):
+        return get_creative_strategy_ad_executions_handler( creative_strategy_id=creative_strategy_id )
+
+    @router.get("/ad-execution/{id}")
+    def get_ad_execution( id: int ):
+        return get_ad_execution_handler( id=id )
 
 
     # -----------------------------

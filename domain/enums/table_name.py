@@ -20,3 +20,4 @@ class TableName(str, Enum):
     MESSAGE_STRATEGY = "message_strategy"
     AD_STRATEGY = "ad_strategy"
     CREATIVE_STRATEGY = "creative_strategy"
+    AD_EXECUTION = "ad_execution"

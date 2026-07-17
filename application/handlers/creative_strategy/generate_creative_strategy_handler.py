@@ -1,323 +1,149 @@
 import json
 
 from di.container import Container
-
 from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
 from domain.enums.ollama_message_role import OllamaMessageRole
-
 from domain.models.creative_strategy.creative_strategy import CreativeStrategy
-
 
 
 SYSTEM_PROMPT = """
 Jesteś ekspertem od Performance Creative,
-Creative Strategy oraz Direct Response Advertising.
+Direct Response Advertising oraz Brand Storytelling.
 
 
 Twoim zadaniem jest stworzenie CREATIVE STRATEGY
-na podstawie Ad Strategy oraz pełnego kontekstu marketingowego.
+na podstawie pełnego kontekstu marketingowego oraz Ad Strategy.
 
 
-Creative Strategy odpowiada na pytanie:
+ŹRÓDŁA:
 
-"Jaką reklamę powinniśmy stworzyć,
-dla kogo,
-jakim kątem,
-jaką historią
-i dlaczego powinna działać?"
-
-
-Creative Strategy NIE jest scenariuszem reklamy.
+- Knowledge Base
+- Brand Strategy
+- Marketing Strategy
+- Offer Strategy
+- Message Strategy
+- Ad Strategy
 
 
-NIE GENERUJ:
 
-- scen reklamowych,
-- timingów,
-- voiceover,
-- dialogów,
-- tekstów na ekranie,
-- assetów produkcyjnych,
-- instrukcji montażowych.
+CREATIVE STRATEGY NIE TWORZY:
+
+- finalnego copy,
+- scenariusza video,
+- gotowych reklam.
+
+
+Jej zadaniem jest rozwinięcie wybranego konceptu z Ad Strategy
+w spójny kierunek kreatywny.
+
 
 
 GENERUJ:
 
 
-1. BASIC INFORMATION
+1. OBJECTIVE
 
-- name
-- objective
-- creative_type
-- recommended_format
+Cel kreacji.
 
 
+2. CREATIVE TYPE
 
-2. TARGET
-
-
-Określ:
-
-- audience
-- awareness_stage
-- desired_action
+Np. video, static, carousel, ugc.
 
 
+3. RECOMMENDED FORMAT
 
-3. CREATIVE BIG IDEA
-
-
-Wyjaśnij główną ideę reklamy.
+Rekomendowany format reklamy.
 
 
-Odpowiedz:
+4. TARGET
 
-"Jaki koncept emocjonalny będzie napędzał reklamę?"
-
-
-
-4. MESSAGE ANGLE
+Segment odbiorcy, dla którego tworzona jest kreacja.
 
 
-Powiąż reklamę z Ad Strategy.
+5. CREATIVE BIG IDEA
 
+Główna idea kreatywna.
+
+
+6. MESSAGE ANGLE
+
+Kąt komunikacji, na którym bazuje kreacja.
+
+
+7. HOOK STRATEGY
 
 Określ:
 
-- główny angle,
-- dlaczego działa,
-- jaki problem rozwiązuje.
+- type
+- goal
+- direction
 
 
+8. STORY FRAMEWORK
 
-5. HOOK STRATEGY
+Struktura narracyjna reklamy (np. problem -> agitacja -> rozwiązanie).
 
 
-Nie twórz konkretnego hooka.
+9. CREATIVE DIRECTION
 
+Wskazówki wizualne i stylistyczne.
 
-Określ strategię:
 
+10. SPEAKER STRATEGY
 
-- hook_type
-- hook_goal
-- hook_direction
+Kto mówi, w jakiej roli, z jakim tonem.
 
 
+11. EMOTION FLOW
 
-6. STORY FRAMEWORK
+Sekwencja emocji w trakcie reklamy.
 
 
-Określ strukturę narracji.
+12. PROOF STRATEGY
 
+Jakie dowody społeczne / dane / testimoniale są potrzebne.
 
-Przykład:
 
+13. EXECUTION GUIDELINES
 
-Problem
+Wskazówki dla zespołu produkcyjnego.
 
-Agitation
 
-Discovery
 
-Transformation
+NIE GENERUJ:
 
-Proof
+- gotowego scenariusza,
+- dialogów,
+- grafik,
+- promptów AI.
 
-Offer
 
 
-
-7. CREATIVE DIRECTION
-
-
-Określ:
-
-
-- visual_style
-- camera_style
-- editing_style
-- tone
-
-
-
-8. SPEAKER STRATEGY
-
-
-Określ:
-
-
-- speaker_type
-
-(customer,
-founder,
-expert,
-creator,
-voiceover)
-
-
-- persona
-- credibility_reason
-
-
-
-9. EMOTION FLOW
-
-
-Kolejność emocji:
-
-
-Curiosity
-
-Problem awareness
-
-Hope
-
-Trust
-
-Confidence
-
-
-
-10. PROOF STRATEGY
-
-
-Jakie dowody powinny być wykorzystane:
-
-
-- testimonial
-- demo
-- comparison
-- numbers
-- reviews
-
-
-
-11. EXECUTION GUIDELINES
-
-
-Określ:
-
-
-- recommended_duration_seconds
-- platforms
-- formats
-
-
-
-Zwróć wyłącznie JSON.
+Zwróć wyłącznie JSON:
 
 
 {
 "creative_strategies":[
 
 {
-
 "name":"",
-
 "objective":"",
-
 "creative_type":"",
-
 "recommended_format":"",
-
-
-"target":{
-
-"audience":"",
-
-"awareness_stage":"",
-
-"desired_action":""
-
-},
-
-
+"target":{},
 "creative_big_idea":"",
-
-
 "message_angle":"",
-
-
-"hook_strategy":{
-
-"hook_type":"",
-
-"hook_goal":"",
-
-"hook_direction":""
-
-},
-
-
-"story_framework":[
-
-""
-
-],
-
-
-"creative_direction":{
-
-"visual_style":"",
-
-"camera_style":"",
-
-"editing_style":"",
-
-"tone":""
-
-},
-
-
-"speaker_strategy":{
-
-"speaker_type":"",
-
-"persona":"",
-
-"credibility_reason":""
-
-},
-
-
-"emotion_flow":[
-
-""
-
-],
-
-
-"proof_strategy":[
-
-""
-
-],
-
-
-"execution_guidelines":{
-
-"recommended_duration_seconds":30,
-
-"platforms":[
-
-""
-
-],
-
-"formats":[
-
-""
-
-]
-
-}
-
-
+"hook_strategy":{},
+"story_framework":[],
+"creative_direction":{},
+"speaker_strategy":{},
+"emotion_flow":[],
+"proof_strategy":[],
+"execution_guidelines":{}
 }
 
 ]
-
 }
 
 
@@ -327,8 +153,9 @@ Tylko JSON.
 """
 
 
-
 USER_PROMPT_TEMPLATE = """
+Wygeneruj Creative Strategy na podstawie:
+
 
 KNOWLEDGE BASE:
 
@@ -367,118 +194,84 @@ AD STRATEGY:
 """
 
 
-
-
 def generate_creative_strategy_handler(
-
-    knowledge_id:int,
-
-    brand_marketing_id:int,
-
-    marketing_strategy_id:int,
-
-    offer_strategy_id:int,
-
-    message_strategy_id:int,
-
-    ad_strategy_id:int
-
+    knowledge_id: int,
+    brand_marketing_id: int,
+    marketing_strategy_id: int,
+    offer_strategy_id: int,
+    message_strategy_id: int,
+    ad_strategy_id: int
 ):
-
 
     container = Container()
 
 
-
-    knowledge_service = (
-        container.knowledge_service()
-    )
-
+    knowledge_service = container.knowledge_service()
 
     brand_marketing_service = (
         container.brand_marketing_service()
     )
 
-
     marketing_strategy_service = (
         container.marketing_strategy_service()
     )
-
 
     offer_strategy_service = (
         container.offer_strategy_service()
     )
 
-
     message_strategy_service = (
         container.message_strategy_service()
     )
-
 
     ad_strategy_service = (
         container.ad_strategy_service()
     )
 
+    creative_strategy_repository = container.creative_strategy_repository()
+    creative_strategy_service = container.creative_strategy_service()
 
-    creative_strategy_repository = (
-        container.creative_strategy_repository()
-    )
-
-
-    creative_strategy_service = (
-        container.creative_strategy_service()
-    )
-
-
-    ollama_service = (
-        container.ollama_service()
-    )
+    ollama_service = container.ollama_service()
 
 
 
     knowledge = (
-        knowledge_service
-        .get_knowledge_details_by_id(
-            knowledge_id
+        knowledge_service.get_knowledge_details_by_id(
+            knowledge_id=knowledge_id
         )
     )
 
 
     brand_strategy = (
-        brand_marketing_service
-        .get_brand_marketing_by_id(
+        brand_marketing_service.get_brand_marketing_by_id(
             id=brand_marketing_id
         )
     )
 
 
     marketing_strategy = (
-        marketing_strategy_service
-        .get_marketing_strategy_by_id(
+        marketing_strategy_service.get_marketing_strategy_by_id(
             id=marketing_strategy_id
         )
     )
 
 
     offer_strategy = (
-        offer_strategy_service
-        .get_offer_strategy_by_id(
+        offer_strategy_service.get_offer_strategy_by_id(
             id=offer_strategy_id
         )
     )
 
 
     message_strategy = (
-        message_strategy_service
-        .get_message_strategy_by_id(
+        message_strategy_service.get_message_strategy_by_id(
             id=message_strategy_id
         )
     )
 
 
     ad_strategy = (
-        ad_strategy_service
-        .get_ad_strategy_by_id(
+        ad_strategy_service.get_ad_strategy_by_id(
             id=ad_strategy_id
         )
     )
@@ -486,46 +279,27 @@ def generate_creative_strategy_handler(
 
 
     def serialize(obj):
-
         return json.dumps(
-
             obj.to_dict(),
-
             ensure_ascii=False,
-
             indent=2,
-
             default=str
-
         )
-
 
 
     user_prompt = USER_PROMPT_TEMPLATE.format(
 
-        knowledge_json=serialize(
-            knowledge
-        ),
+        knowledge_json=serialize(knowledge),
 
-        brand_strategy_json=serialize(
-            brand_strategy
-        ),
+        brand_strategy_json=serialize(brand_strategy),
 
-        marketing_strategy_json=serialize(
-            marketing_strategy
-        ),
+        marketing_strategy_json=serialize(marketing_strategy),
 
-        offer_strategy_json=serialize(
-            offer_strategy
-        ),
+        offer_strategy_json=serialize(offer_strategy),
 
-        message_strategy_json=serialize(
-            message_strategy
-        ),
+        message_strategy_json=serialize(message_strategy),
 
-        ad_strategy_json=serialize(
-            ad_strategy
-        )
+        ad_strategy_json=serialize(ad_strategy)
 
     )
 
@@ -535,24 +309,16 @@ def generate_creative_strategy_handler(
 
         messages=[
 
-
             LlmOllamaMessage(
-
                 role=OllamaMessageRole.SYSTEM,
-
                 content=SYSTEM_PROMPT
-
             ),
 
 
             LlmOllamaMessage(
-
                 role=OllamaMessageRole.USER,
-
                 content=user_prompt
-
             )
-
 
         ]
 
@@ -562,182 +328,85 @@ def generate_creative_strategy_handler(
 
     try:
 
-
         content = response.content.strip()
-
 
 
         if content.startswith("```"):
 
-
             content = (
-
                 content
-
-                .replace(
-                    "```json",
-                    ""
-                )
-
-                .replace(
-                    "```",
-                    ""
-                )
-
+                .replace("```json", "")
+                .replace("```", "")
                 .strip()
-
             )
 
 
-
-        result = json.loads(
-            content
-        )
-
+        result = json.loads(content)
 
 
     except json.JSONDecodeError:
 
-
         return {
-
-            "raw_response":
-            response.content
-
+            "raw_response": response.content
         }
-
 
 
 
     created_ids = []
 
 
-
-    for item in result.get(
-        "creative_strategies",
-        []
-    ):
-
-
+    for item in result.get("creative_strategies", []):
 
         entity = CreativeStrategy(
 
-
             knowledge_id=knowledge_id,
-
 
             brand_marketing_id=brand_marketing_id,
 
-
             marketing_strategy_id=marketing_strategy_id,
-
 
             offer_strategy_id=offer_strategy_id,
 
-
             message_strategy_id=message_strategy_id,
-
 
             ad_strategy_id=ad_strategy_id,
 
+            name=item.get("name"),
 
+            objective=item.get("objective"),
 
-            name=item.get(
-                "name"
-            ),
+            creative_type=item.get("creative_type"),
 
+            recommended_format=item.get("recommended_format"),
 
-            objective=item.get(
-                "objective"
-            ),
+            target=item.get("target"),
 
+            creative_big_idea=item.get("creative_big_idea"),
 
-            creative_type=item.get(
-                "creative_type"
-            ),
+            message_angle=item.get("message_angle"),
 
+            hook_strategy=item.get("hook_strategy"),
 
-            recommended_format=item.get(
-                "recommended_format"
-            ),
+            story_framework=item.get("story_framework", []),
 
+            creative_direction=item.get("creative_direction"),
 
-            target=item.get(
-                "target"
-            ),
+            speaker_strategy=item.get("speaker_strategy"),
 
+            emotion_flow=item.get("emotion_flow", []),
 
-            creative_big_idea=item.get(
-                "creative_big_idea"
-            ),
+            proof_strategy=item.get("proof_strategy", []),
 
-
-            message_angle=item.get(
-                "message_angle"
-            ),
-
-
-            hook_strategy=item.get(
-                "hook_strategy"
-            ),
-
-
-            story_framework=item.get(
-                "story_framework",
-                []
-            ),
-
-
-            creative_direction=item.get(
-                "creative_direction"
-            ),
-
-
-            speaker_strategy=item.get(
-                "speaker_strategy"
-            ),
-
-
-            emotion_flow=item.get(
-                "emotion_flow",
-                []
-            ),
-
-
-            proof_strategy=item.get(
-                "proof_strategy",
-                []
-            ),
-
-
-            execution_guidelines=item.get(
-                "execution_guidelines"
-            )
+            execution_guidelines=item.get("execution_guidelines"),
 
         )
 
+        created = creative_strategy_repository.create(entity)
 
-
-        created = (
-            creative_strategy_repository
-            .create(entity)
-        )
-
-
-
-        created_ids.append(
-            created.id
-        )
-
+        created_ids.append(created.id)
 
 
     return [
-
-        creative_strategy_service
-        .get_creative_strategy_by_id(
-            id=id
-        )
-
+        creative_strategy_service.get_creative_strategy_by_id(id)
         for id in created_ids
-
     ]
