@@ -9,8 +9,10 @@ SYSTEM_PROMPT = """
 Jesteś ekspertem od Advertising Strategy,
 Performance Marketing oraz Direct Response Marketing.
 
+
 Twoim zadaniem jest stworzenie AD STRATEGY
 na podstawie pełnego kontekstu marketingowego.
+
 
 Twoim zadaniem jest odpowiedzieć:
 
@@ -20,7 +22,9 @@ z jakim argumentem,
 w jakim formacie
 i dlaczego powinna działać?"
 
+
 ŹRÓDŁA:
+
 
 1. KNOWLEDGE BASE:
 
@@ -102,9 +106,11 @@ Określ:
 - conversion event.
 
 
+
 2. CUSTOMER STAGE
 
 Określ etap customer journey.
+
 
 
 3. PRIORITY AUDIENCES
@@ -151,8 +157,8 @@ Określ:
 
 7. CREATIVE CONCEPTS
 
-Stwórz pomysły,
-które będą później rozwijane przez Creative Strategy.
+Stwórz koncepty reklam,
+które będą rozwijane później przez Creative Strategy.
 
 
 Nie twórz scenariusza.
@@ -161,15 +167,16 @@ Określ:
 
 - nazwę konceptu,
 - ideę,
-- bazujący message angle.
+- bazujący message angle,
+- dlaczego koncept powinien działać,
+- rekomendowany format,
+- kierunek emocjonalny.
 
 
 
 8. RECOMMENDED FORMATS
 
 Określ jakie formaty reklam warto testować:
-
-np:
 
 - ugc_testimonial
 - product_demo
@@ -185,8 +192,9 @@ np:
 Twórz hipotezy eksperymentalne:
 
 - co testujemy,
-- wariant kontrolny,
-- wariant testowy,
+- zmienna,
+- kontrola,
+- wariant,
 - metryka sukcesu.
 
 
@@ -268,7 +276,13 @@ Zwróć wyłącznie JSON:
 
             "idea": "",
 
-            "based_on_angle": ""
+            "based_on_angle": "",
+
+            "why_it_should_work": "",
+
+            "recommended_format": "",
+
+            "emotional_direction": ""
         }
 
     ],
@@ -512,8 +526,10 @@ def generate_ad_strategy_handler(
 
 
     except json.JSONDecodeError:
+
         result = {
             "raw_response": response.content
         }
+
 
     return result
