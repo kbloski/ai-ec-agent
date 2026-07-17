@@ -38,9 +38,6 @@ from infrastructure.repositories.advertisement_visualizations_repository import 
 from infrastructure.repositories.advertisement_objections_repository import AdvertisementObjectionsRepository
 from application.assemblers.advertisement_assembler import AdvertisementAssembler
 from application.services.advertisement_service import AdvertisementService
-from infrastructure.repositories.experiments_repository import ExperimentsRepository
-from application.assemblers.experiment_assembler import ExperimentAssembler
-from application.services.experiment_service import ExperimentService
 from infrastructure.repositories.brand_marketing_repository import BrandMarketingRepository
 from application.assemblers.brand_marketing_assembler import BrandMarketingAssembler
 from application.services.brand_marketing_service import BrandMarketingService
@@ -53,6 +50,10 @@ from application.services.offer_strategy_service import OfferStrategyService
 from infrastructure.repositories.message_strategy_repository import MessageStrategyRepository
 from application.assemblers.message_strategy_assembler import MessageStrategyAssembler
 from application.services.message_strategy_service import MessageStrategyService
+from infrastructure.repositories.experiment_strategy_repository import ExperimentStrategyRepository
+from infrastructure.repositories.experiments_repository import ExperimentsRepository
+from application.assemblers.experiment_strategy_assembler import ExperimentStrategyAssembler
+from application.services.experiment_strategy_service import ExperimentStrategyService
 
 class Container(containers.DeclarativeContainer):
     db = providers.Factory(
@@ -212,12 +213,6 @@ class Container(containers.DeclarativeContainer):
         db=db
     )
 
-    experiments_repository = providers.Singleton(
-        ExperimentsRepository,
-        logger=logger,
-        db=db
-    )
-
     brand_marketing_repository = providers.Singleton(
         BrandMarketingRepository,
         logger=logger,
@@ -238,6 +233,18 @@ class Container(containers.DeclarativeContainer):
 
     message_strategy_repository = providers.Singleton(
         MessageStrategyRepository,
+        logger=logger,
+        db=db
+    )
+
+    experiment_strategy_repository = providers.Singleton(
+        ExperimentStrategyRepository,
+        logger=logger,
+        db=db
+    )
+
+    experiments_repository = providers.Singleton(
+        ExperimentsRepository,
         logger=logger,
         db=db
     )
@@ -297,11 +304,6 @@ class Container(containers.DeclarativeContainer):
         advertisement_objections_repository=advertisement_objections_repository
     )
 
-    experiment_assembler = providers.Singleton(
-        ExperimentAssembler,
-        logger=logger,
-    )
-
     brand_marketing_assembler = providers.Singleton(
         BrandMarketingAssembler,
         logger=logger,
@@ -320,6 +322,12 @@ class Container(containers.DeclarativeContainer):
     message_strategy_assembler = providers.Singleton(
         MessageStrategyAssembler,
         logger=logger,
+    )
+
+    experiment_strategy_assembler = providers.Singleton(
+        ExperimentStrategyAssembler,
+        logger=logger,
+        experiments_repository=experiments_repository,
     )
     # --------------------------
     # Serwisy
@@ -369,13 +377,6 @@ class Container(containers.DeclarativeContainer):
         advertisement_assembler=advertisement_assembler
     )
 
-    experiment_service = providers.Singleton(
-        ExperimentService,
-        logger=logger,
-        experiments_repository=experiments_repository,
-        experiment_assembler=experiment_assembler
-    )
-
     brand_marketing_service = providers.Singleton(
         BrandMarketingService,
         logger=logger,
@@ -402,6 +403,13 @@ class Container(containers.DeclarativeContainer):
         logger=logger,
         message_strategy_repository=message_strategy_repository,
         message_strategy_assembler=message_strategy_assembler
+    )
+
+    experiment_strategy_service = providers.Singleton(
+        ExperimentStrategyService,
+        logger=logger,
+        experiment_strategy_repository=experiment_strategy_repository,
+        experiment_strategy_assembler=experiment_strategy_assembler
     )
 
 

@@ -3,6 +3,8 @@ import json
 from di.container import Container
 from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
 from domain.enums.ollama_message_role import OllamaMessageRole
+from domain.models.experiment_strategy.experiment_strategy import ExperimentStrategy
+from domain.models.experiments.experiment import Experiment
 
 
 SYSTEM_PROMPT = """
@@ -249,6 +251,9 @@ def generate_experiments_handler(
     marketing_strategy_service = container.marketing_strategy_service()
     offer_strategy_service = container.offer_strategy_service()
     message_strategy_service = container.message_strategy_service()
+    experiment_strategy_repository = container.experiment_strategy_repository()
+    experiments_repository = container.experiments_repository()
+    experiment_strategy_service = container.experiment_strategy_service()
 
     ollama_service = container.ollama_service()
 
@@ -315,4 +320,44 @@ def generate_experiments_handler(
     )
 
 
-    return json.loads(response.content.strip())
+    data = json.loads(response.content.strip())
+
+    strategy_entity = ExperimentStrategy(
+        knowledge_id=knowledge_id,
+        brand_marketing_id=brand_marketing_id,
+        marketing_strategy_id=marketing_strategy_id,
+        offer_strategy_id=offer_strategy_id,
+        message_strategy_id=message_strategy_id,
+        experiment_strategy=data.get("experiment_strategy"),
+        learning_objectives=data.get("learning_objectives", []),
+    )
+    created_strategy = experiment_strategy_repository.create(strategy_entity)
+
+    for experiment in data.get("experiments", []):
+        experiment_entity = Experiment(
+            experiment_strategy_id=created_strategy.id,
+            name=experiment.get("name"),
+            category=experiment.get("category"),
+            strategic_question=experiment.get("strategic_question"),
+            objective=experiment.get("objective"),
+            hypothesis=experiment.get("hypothesis"),
+            hypothesis_basis=experiment.get("hypothesis_basis", []),
+            reason=experiment.get("reason"),
+            target_audience=experiment.get("target_audience"),
+            funnel_stage=experiment.get("funnel_stage"),
+            channel=experiment.get("channel"),
+            asset_type=experiment.get("asset_type"),
+            variable_tested=experiment.get("variable_tested"),
+            control_variant=experiment.get("control_variant"),
+            test_variant=experiment.get("test_variant"),
+            success_metrics=experiment.get("success_metrics", []),
+            decision_rule=experiment.get("decision_rule"),
+            expected_learning=experiment.get("expected_learning"),
+            priority=experiment.get("priority", {}),
+            estimated_cost=experiment.get("estimated_cost"),
+            estimated_duration=experiment.get("estimated_duration"),
+            status=experiment.get("status", "planned"),
+        )
+        experiments_repository.create(experiment_entity)
+
+    return experiment_strategy_service.get_experiment_strategy_by_id(id=created_strategy.id)
