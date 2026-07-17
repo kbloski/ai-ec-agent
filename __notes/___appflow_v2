@@ -1,62 +1,97 @@
-                         OFFER
-                           |
-                           v
-                    KNOWLEDGE BASE
-                           |
+                           OFFER
+                             |
+                             v
+
+                      KNOWLEDGE BASE
+                             |
           (AI analizuje produkt, rynek i klienta)
-                           |
-        +------------------+------------------+------------------+
-        |                  |                  |                  |
-        v                  v                  v                  v
- CUSTOMER VOICE     SALES POTENTIAL    MARKET ANALYSIS    TARGET AUDIENCES
- (comments,         ANALYSIS           (konkurencja,      (segmenty,
- reviews, Q&A)      (szanse, ryzyka,   trendy,            persony,
-                    potencjał)         możliwości)        potrzeby)
-                           |                  |                  |
-                           -+------------------+------------------+
-                           |
-                           v
+                             |
+        +--------------------+--------------------+--------------------+
+        |                    |                    |                    |
+        v                    v                    v                    v
+
+ CUSTOMER VOICE       SALES POTENTIAL       MARKET ANALYSIS       TARGET AUDIENCES
+ (comments,           ANALYSIS              (konkurencja,        (segmenty,
+ reviews, Q&A)        (szanse, ryzyka,      trendy,              persony,
+                      potencjał)            możliwości)          potrzeby)
+
+        +--------------------+--------------------+--------------------+
+                             |
+                             v
+
                  CUSTOMER & MARKET INSIGHTS
-                 (kto kupuje i dlaczego)
-                           |
-                           v
-                  BRAND STRATEGY
-                  (jak marka pozycjonuje się
-                   dla konkretnego klienta)
-                           |
-                           v
-              MARKETING STRATEGY
+              (kto kupuje, dlaczego i co blokuje zakup)
+
+                             |
+                             v
+
+                      BRAND STRATEGY
+              (jak marka pozycjonuje się
+               dla konkretnego klienta)
+
+                             |
+                             v
+
+                    MARKETING STRATEGY
               (jak zdobywamy tego klienta)
-                           |
-        +------------------+------------------+
-        |                                     |
-        v                                     v
- OFFER STRATEGY                       MESSAGE STRATEGY
- (co oferujemy                       (jak komunikujemy
- temu klientowi)                     wartość)
-        |                                     |
-        +------------------+------------------+
-                           |
-                           v
-                    EXPERIMENTS
-              (testujemy konkretne
-               hipotezy dla konkretnej grupy)
-                           |
-                           v
-                    SALES ASSETS
-                           |
-        +------------------+------------------+
-        |                  |                  |
-        v                  v                  v
-       ADS           LANDING PAGES        EMAILS
+
+                             |
+                             v
+
+                     OFFER STRATEGY
+              (co dokładnie oferujemy
+               temu klientowi)
+
+              - value proposition
+              - pakietowanie produktu
+              - mechanizm wartości
+              - redukcja ryzyka
+              - bonusy
+              - pricing angle
+
+                             |
+                             v
+
+                    MESSAGE STRATEGY
+              (jak komunikujemy wartość)
+
+              - główne komunikaty
+              - pain angles
+              - benefit angles
+              - emocje
+              - obiekcje
+              - proof points
+              - hooks
+
+                             |
+                             v
+
+                      EXPERIMENTS
+              (testujemy konkretne hipotezy)
+
+              - audience hypothesis
+              - offer hypothesis
+              - message hypothesis
+              - creative hypothesis
+              - channel hypothesis
+
+                             |
+                             v
+
+                      SALES ASSETS
+
+        +--------------------+--------------------+
+        |                    |                    |
+        v                    v                    v
+
+       ADS             LANDING PAGES          EMAILS
         |
         v
        UGC
 
 
-
-                           |
-                           v
+                             |
+                             v
 
                     TODO / ACTION PLAN
               (zadania wynikające z całego procesu)
@@ -66,26 +101,35 @@
 ================================================
 
 # IN FUTURE
-
 ================================================
 
 
                     CAMPAIGN RESULTS
-                           |
-                           v
-              PERFORMANCE ANALYSIS
-                           |
-                           v
-                  LEARNING ENGINE
-                           |
-                           v
-             STRATEGY OPTIMIZATION
-                           |
-                           v
-             UPDATED KNOWLEDGE BASE
-                           |
-                           v
-                UPDATED AUDIENCES
-                           |
-                           v
+                             |
+                             v
+
+                 PERFORMANCE ANALYSIS
+                             |
+                             v
+
+                    LEARNING ENGINE
+                             |
+                             v
+
+              STRATEGY OPTIMIZATION
+                             |
+                             v
+
+              UPDATED KNOWLEDGE BASE
+                             |
+                             v
+
+                 UPDATED INSIGHTS
+                             |
+                             v
+
+                 UPDATED AUDIENCES
+                             |
+                             v
+
                   NEW EXPERIMENTS
