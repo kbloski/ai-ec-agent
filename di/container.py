@@ -50,6 +50,9 @@ from application.services.marketing_strategy_service import MarketingStrategySer
 from infrastructure.repositories.offer_strategy_repository import OfferStrategyRepository
 from application.assemblers.offer_strategy_assembler import OfferStrategyAssembler
 from application.services.offer_strategy_service import OfferStrategyService
+from infrastructure.repositories.message_strategy_repository import MessageStrategyRepository
+from application.assemblers.message_strategy_assembler import MessageStrategyAssembler
+from application.services.message_strategy_service import MessageStrategyService
 
 class Container(containers.DeclarativeContainer):
     db = providers.Factory(
@@ -233,6 +236,12 @@ class Container(containers.DeclarativeContainer):
         db=db
     )
 
+    message_strategy_repository = providers.Singleton(
+        MessageStrategyRepository,
+        logger=logger,
+        db=db
+    )
+
 
     # --------------------------
     # Assemblery
@@ -305,6 +314,11 @@ class Container(containers.DeclarativeContainer):
 
     offer_strategy_assembler = providers.Singleton(
         OfferStrategyAssembler,
+        logger=logger,
+    )
+
+    message_strategy_assembler = providers.Singleton(
+        MessageStrategyAssembler,
         logger=logger,
     )
     # --------------------------
@@ -381,6 +395,13 @@ class Container(containers.DeclarativeContainer):
         logger=logger,
         offer_strategy_repository=offer_strategy_repository,
         offer_strategy_assembler=offer_strategy_assembler
+    )
+
+    message_strategy_service = providers.Singleton(
+        MessageStrategyService,
+        logger=logger,
+        message_strategy_repository=message_strategy_repository,
+        message_strategy_assembler=message_strategy_assembler
     )
 
 

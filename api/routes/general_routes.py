@@ -25,6 +25,7 @@ from application.handlers.sales_assets.generate_sales_asset_handler import gener
 from application.handlers.sales_assets.get_sales_assets_handler import get_sales_assets_handler
 from application.handlers.sales_assets.get_sales_asset_handler import get_sales_asset_handler
 from application.handlers.experiments.knowledge_experiments_generate_handler import knowledge_experiments_generate_handler
+from application.handlers.experiments.generate_experiments_handler import generate_experiments_handler
 from application.handlers.experiments.get_knowledge_experiments_handler import get_knowledge_experiments_handler
 from application.handlers.experiments.get_knowledge_experiment_handler import get_knowledge_experiment_handler
 from application.handlers.brand_marketing.generate_brand_marketing_handler import generate_brand_marketing_handler
@@ -37,6 +38,8 @@ from application.handlers.offer_strategy.generate_offer_strategy_handler import 
 from application.handlers.offer_strategy.get_offer_strategy_handler import get_offer_strategy_handler
 from application.handlers.offer_strategy.get_marketing_strategy_offer_strategies_handler import get_marketing_strategy_offer_strategies_handler
 from application.handlers.message_strategy.generate_message_strategy_handler import generate_message_strategy_handler
+from application.handlers.message_strategy.get_message_strategy_handler import get_message_strategy_handler
+from application.handlers.message_strategy.get_offer_strategy_message_strategies_handler import get_offer_strategy_message_strategies_handler
 
 
 def register_general_routes(router: APIRouter):
@@ -215,6 +218,29 @@ def register_general_routes(router: APIRouter):
             brand_marketing_id=brand_marketing_id,
             marketing_strategy_id=marketing_strategy_id,
             offer_strategy_id=offer_strategy_id
+        )
+
+    @router.get("/offer-strategy/{offer_strategy_id}/message-strategy")
+    def get_offer_strategy_message_strategies( offer_strategy_id: int ):
+        return get_offer_strategy_message_strategies_handler( offer_strategy_id=offer_strategy_id )
+
+    @router.get("/message-strategy/{id}")
+    def get_message_strategy( id: int ):
+        return get_message_strategy_handler( id=id )
+
+
+
+    # -----------------------------
+    # Expermients
+    # -----------------------------
+    @router.get("/knowledges/{knowledge_id}/brand-marketing/{brand_marketing_id}/marketing-strategy/{marketing_strategy_id}/offer-strategy/{offer_strategy_id}/message-strategy/{message_strategy_id}/experiments/generate")
+    def knowledge_experiments_generate_v2( knowledge_id: int, brand_marketing_id: int, marketing_strategy_id: int, offer_strategy_id: int, message_strategy_id: int ):
+        return generate_experiments_handler(
+            knowledge_id=knowledge_id,
+            brand_marketing_id=brand_marketing_id,
+            marketing_strategy_id=marketing_strategy_id,
+            offer_strategy_id=offer_strategy_id,
+            message_strategy_id=message_strategy_id
         )
 
 

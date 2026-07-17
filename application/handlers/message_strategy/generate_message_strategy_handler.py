@@ -3,6 +3,7 @@ import json
 from di.container import Container
 from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
 from domain.enums.ollama_message_role import OllamaMessageRole
+from domain.models.message_strategy.message_strategy import MessageStrategy
 
 
 SYSTEM_PROMPT = """
@@ -144,6 +145,8 @@ def generate_message_strategy_handler(
     brand_marketing_service = container.brand_marketing_service()
     marketing_strategy_service = container.marketing_strategy_service()
     offer_strategy_service = container.offer_strategy_service()
+    message_strategy_repository = container.message_strategy_repository()
+    message_strategy_service = container.message_strategy_service()
 
     ollama_service = container.ollama_service()
 
@@ -216,4 +219,31 @@ def generate_message_strategy_handler(
     )
 
 
-    return json.loads(response.content.strip())
+    data = json.loads(response.content.strip())
+
+    entity = MessageStrategy(
+        knowledge_id=knowledge_id,
+        brand_marketing_id=brand_marketing_id,
+        marketing_strategy_id=marketing_strategy_id,
+        offer_strategy_id=offer_strategy_id,
+        core_message=data.get("core_message"),
+        brand_message=data.get("brand_message"),
+        primary_message_angle=data.get("primary_message_angle"),
+        secondary_message_angles=data.get("secondary_message_angles", []),
+        audience_messages=data.get("audience_messages", []),
+        customer_pain_points=data.get("customer_pain_points", []),
+        customer_desires=data.get("customer_desires", []),
+        benefit_messages=data.get("benefit_messages", []),
+        feature_to_benefit_mapping=data.get("feature_to_benefit_mapping", []),
+        objection_handling_messages=data.get("objection_handling_messages", []),
+        trust_messages=data.get("trust_messages", []),
+        proof_points=data.get("proof_points", []),
+        emotional_triggers=data.get("emotional_triggers", []),
+        rational_arguments=data.get("rational_arguments", []),
+        advertising_angles=data.get("advertising_angles", []),
+        content_angles=data.get("content_angles", []),
+        ugc_angles=data.get("ugc_angles", []),
+    )
+    created = message_strategy_repository.create(entity)
+
+    return message_strategy_service.get_message_strategy_by_id(id=created.id)
