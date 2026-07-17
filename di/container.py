@@ -48,7 +48,7 @@ from application.assemblers.ad_execution_assembler import AdExecutionAssembler
 from application.services.ad_execution_service import AdExecutionService
 
 class Container(containers.DeclarativeContainer):
-    db = providers.Factory(
+    db = providers.Singleton(
         SessionLocal
     )
 
