@@ -148,54 +148,6 @@ def register_general_routes(router: APIRouter):
 
 
     # -----------------------------
-    # Sales assets
-    # -----------------------------
-    @router.get("/knowledges/{knowledge_id}/sales-assets/generate")
-    def knowledge_sales_asset_generate(knowledge_id: int, type: str = "landing_page"):
-        return generate_sales_asset_handler(knowledge_id=knowledge_id, type=type)
-
-    @router.get("/knowledges/{knowledge_id}/sales-assets")
-    def get_knowledge_sales_assets(knowledge_id: int):
-        return get_sales_assets_handler(knowledge_id=knowledge_id)
-
-    @router.get("/sales-assets/{id}")
-    def get_sales_asset(id: int):
-        return get_sales_asset_handler(id=id)
-
-
-    # -----------------------------
-    # Knowledges advertisement
-    # -----------------------------
-    @router.get("/knowledges/{knowledge_id}/advertisements/generate")
-    def knowledge_advertisement_generate( knowledge_id : int, count: int = 3 ):
-        return knowledge_advertisement_generate_handler( knowledge_id=knowledge_id, count=count )
-
-    @router.get("/knowledges/{knowledge_id}/advertisements")
-    def get_knowledge_advertisements( knowledge_id: int ):
-        return get_advertisements_handler( knowledge_id=knowledge_id )
-
-    @router.get("/advertisements/{id}")
-    def get_advertisement( id: int ):
-        return get_advertisement_handler( id=id )
-
-
-    # -----------------------------
-    # Knowledges experiments
-    # -----------------------------
-    @router.get("/knowledges/{knowledge_id}/experiments/generate")
-    def knowledge_experiments_generate( knowledge_id: int, count: int = 10 ):
-        return knowledge_experiments_generate_handler( knowledge_id=knowledge_id, count=count )
-
-    @router.get("/knowledges/{knowledge_id}/experiments")
-    def get_knowledge_experiments( knowledge_id: int ):
-        return get_knowledge_experiments_handler( knowledge_id=knowledge_id )
-
-    @router.get("/experiments/{id}")
-    def get_knowledge_experiment( id: int ):
-        return get_knowledge_experiment_handler( id=id )
-
-
-    # -----------------------------
     # Brand marketing
     # -----------------------------
     @router.get("/knowledges/{knowledge_id}/brand-marketing/generate")
@@ -214,6 +166,60 @@ def register_general_routes(router: APIRouter):
     # -----------------------------
     # Marketing strategy
     # -----------------------------
-    @router.get("/knowledges/{knowledge_id}/insights/{insights_id}/brand-strategy/{brand_strategy_id}/marketing-strategy/generate")
-    def knowledge_marketing_strategy_generate( knowledge_id: int, insights_id: int, brand_strategy_id: int ):
-        return generate_marketing_strategy_handler( knowledge_id=knowledge_id, insights_id=insights_id, brand_strategy_id=brand_strategy_id )
+    @router.get("/knowledges/{knowledge_id}/brand-marketing/{brand_markeging_id}/marketing-strategy/generate")
+    def knowledge_marketing_strategy_generate( knowledge_id: int, brand_markeging_id: int ):
+        return generate_marketing_strategy_handler( knowledge_id=knowledge_id, brand_markeging_id=brand_markeging_id )
+    
+    
+    
+    
+    
+    
+    
+
+    # -----------------------------
+    # Sales assets
+    # -----------------------------
+    # @router.get("/knowledges/{knowledge_id}/sales-assets/generate")
+    # def knowledge_sales_asset_generate(knowledge_id: int, type: str = "landing_page"):
+    #     return generate_sales_asset_handler(knowledge_id=knowledge_id, type=type)
+
+    # @router.get("/knowledges/{knowledge_id}/sales-assets")
+    # def get_knowledge_sales_assets(knowledge_id: int):
+    #     return get_sales_assets_handler(knowledge_id=knowledge_id)
+
+    # @router.get("/sales-assets/{id}")
+    # def get_sales_asset(id: int):
+    #     return get_sales_asset_handler(id=id)
+
+
+    # -----------------------------
+    # Knowledges advertisement
+    # -----------------------------
+    # @router.get("/knowledges/{knowledge_id}/advertisements/generate")
+    # def knowledge_advertisement_generate( knowledge_id : int, count: int = 3 ):
+    #     return knowledge_advertisement_generate_handler( knowledge_id=knowledge_id, count=count )
+
+    # @router.get("/knowledges/{knowledge_id}/advertisements")
+    # def get_knowledge_advertisements( knowledge_id: int ):
+    #     return get_advertisements_handler( knowledge_id=knowledge_id )
+
+    # @router.get("/advertisements/{id}")
+    # def get_advertisement( id: int ):
+    #     return get_advertisement_handler( id=id )
+
+
+    # -----------------------------
+    # Knowledges experiments
+    # -----------------------------
+    # @router.get("/knowledges/{knowledge_id}/experiments/generate")
+    # def knowledge_experiments_generate( knowledge_id: int, count: int = 10 ):
+    #     return knowledge_experiments_generate_handler( knowledge_id=knowledge_id, count=count )
+
+    # @router.get("/knowledges/{knowledge_id}/experiments")
+    # def get_knowledge_experiments( knowledge_id: int ):
+    #     return get_knowledge_experiments_handler( knowledge_id=knowledge_id )
+
+    # @router.get("/experiments/{id}")
+    # def get_knowledge_experiment( id: int ):
+    #     return get_knowledge_experiment_handler( id=id )

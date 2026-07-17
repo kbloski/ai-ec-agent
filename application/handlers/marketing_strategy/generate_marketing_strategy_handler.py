@@ -169,28 +169,25 @@ KNOWLEDGE BASE:
 
 {knowledge_json}
 
-
-CUSTOMER & MARKET INSIGHTS:
-
-{insights_json}
-
-
 BRAND STRATEGY:
 
 {brand_strategy_json}
 """
 
+# To na razie jest w knowledge 
+# CUSTOMER & MARKET INSIGHTS:
+# {insights_json}
+
+
 
 def generate_marketing_strategy_handler(
     knowledge_id: int,
-    insights_id: int,
-    brand_strategy_id: int
+    brand_markeging_id: int
 ):
     container = Container()
 
     knowledge_service = container.knowledge_service()
-    insights_service = container.customer_insights_service()
-    brand_strategy_service = container.brand_strategy_service()
+    brand_marketing_service = container.brand_marketing_service()
     ollama_service = container.ollama_service()
 
 
@@ -198,24 +195,13 @@ def generate_marketing_strategy_handler(
         knowledge_id=knowledge_id
     )
 
-    insights = insights_service.get_by_id(
-        insights_id=insights_id
-    )
-
-    brand_strategy = brand_strategy_service.get_by_id(
-        brand_strategy_id=brand_strategy_id
+    brand_strategy = brand_marketing_service.get_brand_marketing_by_id(
+        id=brand_markeging_id
     )
 
 
     knowledge_json = json.dumps(
         knowledge.to_dict(),
-        ensure_ascii=False,
-        indent=2,
-        default=str
-    )
-
-    insights_json = json.dumps(
-        insights.to_dict(),
         ensure_ascii=False,
         indent=2,
         default=str
@@ -231,7 +217,6 @@ def generate_marketing_strategy_handler(
 
     user_prompt = USER_PROMPT_TEMPLATE.format(
         knowledge_json=knowledge_json,
-        insights_json=insights_json,
         brand_strategy_json=brand_strategy_json
     )
 
