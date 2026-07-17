@@ -51,12 +51,20 @@ class CreativeStrategy(Base, JSONSerializable):
     )
 
     name = Column(String, nullable=True)
+    objective = Column(String, nullable=True)
+    creative_type = Column(String, nullable=True)
+    recommended_format = Column(String, nullable=True)
 
-    execution = Column(JSON, nullable=True)
-    script = Column(JSON, nullable=True)
-    asset_requirements = Column(JSON, nullable=True)
-    production_notes = Column(JSON, nullable=True)
-    cta = Column(JSON, nullable=True)
+    target = Column(JSON, nullable=True)
+    creative_big_idea = Column(String, nullable=True)
+    message_angle = Column(String, nullable=True)
+    hook_strategy = Column(JSON, nullable=True)
+    story_framework = Column(JSON, nullable=True)
+    creative_direction = Column(JSON, nullable=True)
+    speaker_strategy = Column(JSON, nullable=True)
+    emotion_flow = Column(JSON, nullable=True)
+    proof_strategy = Column(JSON, nullable=True)
+    execution_guidelines = Column(JSON, nullable=True)
 
     # timestamps
     created_at = Column(

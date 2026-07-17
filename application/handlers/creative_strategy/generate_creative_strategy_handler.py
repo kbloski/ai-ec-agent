@@ -11,219 +11,201 @@ from domain.models.creative_strategy.creative_strategy import CreativeStrategy
 
 SYSTEM_PROMPT = """
 Jesteś ekspertem od Performance Creative,
-Direct Response Advertising,
-Video Advertising oraz Creative Production.
+Creative Strategy oraz Direct Response Advertising.
 
 
 Twoim zadaniem jest stworzenie CREATIVE STRATEGY
-na podstawie pełnego kontekstu marketingowego i Ad Strategy.
+na podstawie Ad Strategy oraz pełnego kontekstu marketingowego.
 
 
-CREATIVE STRATEGY jest dokumentem produkcyjnym reklamy.
+Creative Strategy odpowiada na pytanie:
+
+"Jaką reklamę powinniśmy stworzyć,
+dla kogo,
+jakim kątem,
+jaką historią
+i dlaczego powinna działać?"
 
 
-Tworzysz kompletny blueprint reklamy:
+Creative Strategy NIE jest scenariuszem reklamy.
 
 
-- wygląd reklamy,
-- sposób nagrania,
-- strukturę,
-- sceny,
-- tekst,
-- assety produkcyjne.
+NIE GENERUJ:
+
+- scen reklamowych,
+- timingów,
+- voiceover,
+- dialogów,
+- tekstów na ekranie,
+- assetów produkcyjnych,
+- instrukcji montażowych.
 
 
-================================
-PARAMETRY REKLAMY
-================================
+GENERUJ:
 
 
-Parametry reklamy przekazane w USER PROMPT są obowiązkowe.
+1. BASIC INFORMATION
+
+- name
+- objective
+- creative_type
+- recommended_format
 
 
-Musisz zachować:
 
-- platformę,
-- format,
-- aspect ratio,
-- długość reklamy.
+2. TARGET
 
 
-Jeżeli długość reklamy wynosi X sekund:
+Określ:
+
+- audience
+- awareness_stage
+- desired_action
 
 
-1. execution.duration musi wynosić X sekund.
 
-2. Wszystkie sceny w script muszą razem mieć dokładnie X sekund.
+3. CREATIVE BIG IDEA
 
-3. Każda scena musi mieć realny czas trwania.
 
-4. Nie dodawaj dodatkowych sekund poza określony czas.
+Wyjaśnij główną ideę reklamy.
 
-5. Dopasuj liczbę scen do długości reklamy.
+
+Odpowiedz:
+
+"Jaki koncept emocjonalny będzie napędzał reklamę?"
+
+
+
+4. MESSAGE ANGLE
+
+
+Powiąż reklamę z Ad Strategy.
+
+
+Określ:
+
+- główny angle,
+- dlaczego działa,
+- jaki problem rozwiązuje.
+
+
+
+5. HOOK STRATEGY
+
+
+Nie twórz konkretnego hooka.
+
+
+Określ strategię:
+
+
+- hook_type
+- hook_goal
+- hook_direction
+
+
+
+6. STORY FRAMEWORK
+
+
+Określ strukturę narracji.
 
 
 Przykład:
 
 
-Dla reklamy 30 sekund:
+Problem
 
+Agitation
 
-script:
+Discovery
 
-scene 1:
-5 sekund
+Transformation
 
-scene 2:
-10 sekund
+Proof
 
-scene 3:
-10 sekund
-
-scene 4:
-5 sekund
-
-
-SUMA = 30 sekund
+Offer
 
 
 
-================================
-ŹRÓDŁA
-================================
-
-
-KNOWLEDGE BASE
-
-- produkt
-- klient
-- problemy
-- potrzeby
-- obiekcje
-
-
-MESSAGE STRATEGY
-
-- komunikaty
-- argumenty
-- proof points
-
-
-AD STRATEGY
-
-- audience
-- angle
-- objective
-- creative concepts
-
-
-
-================================
-GENERUJ
-================================
-
-
-1. CREATIVE EXECUTION
-
-
-Pola:
-
-- platform
-- format
-- duration
-- aspect_ratio
-- creative_type
-- production_style
-- camera_style
-- editing_style
-- voice_style
-
-
-
-2. SCRIPT STRUCTURE
-
-
-Nie generuj ogólnej historii.
-
-
-Generuj konkretne sceny reklamowe.
-
-
-Każda scena:
-
-
-- order
-- duration_seconds
-- purpose
-- visual
-- dialogue
-- voiceover
-- on_screen_text
-- emotion
-
-
-
-3. ASSET REQUIREMENTS
+7. CREATIVE DIRECTION
 
 
 Określ:
 
-- video shots
-- images
-- product shots
-- testimonials
-- screenshots
-- animations
+
+- visual_style
+- camera_style
+- editing_style
+- tone
 
 
 
-4. PRODUCTION NOTES
+8. SPEAKER STRATEGY
 
 
-Pola:
-
-- shooting_notes
-- editing_notes
-- important_details
+Określ:
 
 
+- speaker_type
 
-5. CTA
-
-
-Pola:
-
-- goal
-- action_type
-- placement
+(customer,
+founder,
+expert,
+creator,
+voiceover)
 
 
-
-================================
-NIE GENERUJ
-================================
-
-
-- grafik
-- video
-- promptów AI
-- gotowych assetów
+- persona
+- credibility_reason
 
 
 
-================================
-FORMAT ODPOWIEDZI
-================================
+9. EMOTION FLOW
 
 
-Zwróć tylko JSON.
-
-Bez markdown.
-Bez komentarzy.
+Kolejność emocji:
 
 
+Curiosity
 
-Format:
+Problem awareness
+
+Hope
+
+Trust
+
+Confidence
+
+
+
+10. PROOF STRATEGY
+
+
+Jakie dowody powinny być wykorzystane:
+
+
+- testimonial
+- demo
+- comparison
+- numbers
+- reviews
+
+
+
+11. EXECUTION GUIDELINES
+
+
+Określ:
+
+
+- recommended_duration_seconds
+- platforms
+- formats
+
+
+
+Zwróć wyłącznie JSON.
 
 
 {
@@ -233,67 +215,101 @@ Format:
 
 "name":"",
 
+"objective":"",
 
-"execution":{
-
-"platform":"",
-"format":"",
-"duration_seconds":30,
-"aspect_ratio":"",
 "creative_type":"",
-"production_style":"",
+
+"recommended_format":"",
+
+
+"target":{
+
+"audience":"",
+
+"awareness_stage":"",
+
+"desired_action":""
+
+},
+
+
+"creative_big_idea":"",
+
+
+"message_angle":"",
+
+
+"hook_strategy":{
+
+"hook_type":"",
+
+"hook_goal":"",
+
+"hook_direction":""
+
+},
+
+
+"story_framework":[
+
+""
+
+],
+
+
+"creative_direction":{
+
+"visual_style":"",
+
 "camera_style":"",
+
 "editing_style":"",
-"voice_style":""
+
+"tone":""
 
 },
 
 
-"script":[
+"speaker_strategy":{
 
-{
+"speaker_type":"",
 
-"order":1,
-"duration_seconds":5,
-"purpose":"",
-"visual":"",
-"dialogue":"",
-"voiceover":"",
-"on_screen_text":"",
-"emotion":""
+"persona":"",
 
-}
-
-],
-
-
-"asset_requirements":[
-
-{
-
-"type":"",
-"description":"",
-"purpose":""
-
-}
-
-],
-
-
-"production_notes":{
-
-"shooting_notes":"",
-"editing_notes":"",
-"important_details":""
+"credibility_reason":""
 
 },
 
 
-"cta":{
+"emotion_flow":[
 
-"goal":"",
-"action_type":"",
-"placement":""
+""
+
+],
+
+
+"proof_strategy":[
+
+""
+
+],
+
+
+"execution_guidelines":{
+
+"recommended_duration_seconds":30,
+
+"platforms":[
+
+""
+
+],
+
+"formats":[
+
+""
+
+]
 
 }
 
@@ -304,38 +320,15 @@ Format:
 
 }
 
+
+Bez markdown.
+Bez komentarzy.
+Tylko JSON.
 """
 
 
 
 USER_PROMPT_TEMPLATE = """
-
-================================
-PARAMETRY REKLAMY
-================================
-
-
-Platform:
-
-{platform}
-
-
-Format:
-
-{format}
-
-
-Maksymalna długość reklamy:
-
-{video_duration_seconds} sekund
-
-
-
-================================
-GENERUJ CREATIVE STRATEGY
-================================
-
-
 
 KNOWLEDGE BASE:
 
@@ -375,26 +368,20 @@ AD STRATEGY:
 
 
 
+
 def generate_creative_strategy_handler(
 
-    knowledge_id: int,
+    knowledge_id:int,
 
-    brand_marketing_id: int,
+    brand_marketing_id:int,
 
-    marketing_strategy_id: int,
+    marketing_strategy_id:int,
 
-    offer_strategy_id: int,
+    offer_strategy_id:int,
 
-    message_strategy_id: int,
+    message_strategy_id:int,
 
-    ad_strategy_id: int,
-
-
-    video_duration_seconds: int = 17,
-
-    platform: str = "Meta Ads",
-
-    format: str = "Vertical Video 9:16"
+    ad_strategy_id:int
 
 ):
 
@@ -433,7 +420,6 @@ def generate_creative_strategy_handler(
     )
 
 
-
     creative_strategy_repository = (
         container.creative_strategy_repository()
     )
@@ -447,11 +433,13 @@ def generate_creative_strategy_handler(
     ollama_service = (
         container.ollama_service()
     )
-    
+
+
+
     knowledge = (
         knowledge_service
         .get_knowledge_details_by_id(
-            knowledge_id=knowledge_id
+            knowledge_id
         )
     )
 
@@ -515,37 +503,25 @@ def generate_creative_strategy_handler(
 
     user_prompt = USER_PROMPT_TEMPLATE.format(
 
-        platform=platform,
-
-        format=format,
-
-        video_duration_seconds=video_duration_seconds,
-
-
         knowledge_json=serialize(
             knowledge
         ),
-
 
         brand_strategy_json=serialize(
             brand_strategy
         ),
 
-
         marketing_strategy_json=serialize(
             marketing_strategy
         ),
-
 
         offer_strategy_json=serialize(
             offer_strategy
         ),
 
-
         message_strategy_json=serialize(
             message_strategy
         ),
-
 
         ad_strategy_json=serialize(
             ad_strategy
@@ -625,7 +601,8 @@ def generate_creative_strategy_handler(
 
         return {
 
-            "raw_response": response.content
+            "raw_response":
+            response.content
 
         }
 
@@ -636,65 +613,14 @@ def generate_creative_strategy_handler(
 
 
 
-    strategies = result.get(
-
+    for item in result.get(
         "creative_strategies",
-
         []
-
-    )
-
-
-
-
-    for item in strategies:
-
-
-
-        execution = item.get(
-            "execution",
-            {}
-        )
-
-
-        script = item.get(
-            "script",
-            []
-        )
-
-
-
-        # dodatkowa kontrola długości reklamy
-
-        total_duration = sum(
-
-            scene.get(
-                "duration_seconds",
-                0
-            )
-
-            for scene in script
-
-        )
-
-
-
-        if total_duration != video_duration_seconds:
-
-
-            raise ValueError(
-
-                f"Generated script duration "
-                f"{total_duration}s does not match "
-                f"required {video_duration_seconds}s"
-
-            )
-
+    ):
 
 
 
         entity = CreativeStrategy(
-
 
 
             knowledge_id=knowledge_id,
@@ -721,75 +647,95 @@ def generate_creative_strategy_handler(
             ),
 
 
-
-            execution=execution,
-
-
-
-            script=script,
+            objective=item.get(
+                "objective"
+            ),
 
 
+            creative_type=item.get(
+                "creative_type"
+            ),
 
-            asset_requirements=item.get(
 
-                "asset_requirements",
+            recommended_format=item.get(
+                "recommended_format"
+            ),
 
+
+            target=item.get(
+                "target"
+            ),
+
+
+            creative_big_idea=item.get(
+                "creative_big_idea"
+            ),
+
+
+            message_angle=item.get(
+                "message_angle"
+            ),
+
+
+            hook_strategy=item.get(
+                "hook_strategy"
+            ),
+
+
+            story_framework=item.get(
+                "story_framework",
                 []
-
             ),
 
 
-
-            production_notes=item.get(
-
-                "production_notes"
-
+            creative_direction=item.get(
+                "creative_direction"
             ),
 
 
+            speaker_strategy=item.get(
+                "speaker_strategy"
+            ),
 
-            cta=item.get(
 
-                "cta"
+            emotion_flow=item.get(
+                "emotion_flow",
+                []
+            ),
 
+
+            proof_strategy=item.get(
+                "proof_strategy",
+                []
+            ),
+
+
+            execution_guidelines=item.get(
+                "execution_guidelines"
             )
 
         )
 
 
 
-
         created = (
-
             creative_strategy_repository
-
-            .create(
-
-                entity
-
-            )
-
+            .create(entity)
         )
 
 
 
         created_ids.append(
-
             created.id
-
         )
-
 
 
 
     return [
 
         creative_strategy_service
-
         .get_creative_strategy_by_id(
-
             id=id
-
         )
 
         for id in created_ids

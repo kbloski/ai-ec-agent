@@ -36,6 +36,7 @@ from application.handlers.ad_strategy.generate_ad_strategy_handler import genera
 from application.handlers.ad_strategy.get_ad_strategy_handler import get_ad_strategy_handler
 from application.handlers.ad_strategy.get_message_strategy_ad_strategies_handler import get_message_strategy_ad_strategies_handler
 from application.handlers.creative_strategy.generate_creative_strategy_handler import generate_creative_strategy_handler
+from application.handlers.ad_execution.generate_ad_execution_handler import generate_ad_execution_handler
 from application.handlers.creative_strategy.get_creative_strategy_handler import get_creative_strategy_handler
 from application.handlers.creative_strategy.get_ad_strategy_creative_strategies_handler import get_ad_strategy_creative_strategies_handler
 
@@ -270,6 +271,16 @@ def register_general_routes(router: APIRouter):
     @router.get("/creative-strategy/{id}")
     def get_creative_strategy( id: int ):
         return get_creative_strategy_handler( id=id )
+
+
+    # -----------------------------
+    # Ad execution
+    # -----------------------------
+    @router.get("/creative-strategy/{creative_strategy_id}/ad-execution/generate")
+    def creative_strategy_ad_execution_generate( creative_strategy_id: int ):
+        return generate_ad_execution_handler(
+            creative_strategy_id=creative_strategy_id
+        )
 
 
     # -----------------------------
