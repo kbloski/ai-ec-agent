@@ -26,3 +26,4 @@ class TableName(str, Enum):
     KNOWLEDGE_EXPERIMENTS = "knowledge_experiments"
     BRAND_MARKETING = "brand_marketing"
     MARKETING_STRATEGY = "marketing_strategy"
+    OFFER_STRATEGY = "offer_strategy"

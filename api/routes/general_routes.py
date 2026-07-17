@@ -34,6 +34,8 @@ from application.handlers.marketing_strategy.generate_marketing_strategy_handler
 from application.handlers.marketing_strategy.get_marketing_strategy_handler import get_marketing_strategy_handler
 from application.handlers.marketing_strategy.get_brand_marketing_marketing_strategies_handler import get_brand_marketing_marketing_strategies_handler
 from application.handlers.offer_strategy.generate_offer_strategy_handler import generate_offer_strategy_handler
+from application.handlers.offer_strategy.get_offer_strategy_handler import get_offer_strategy_handler
+from application.handlers.offer_strategy.get_marketing_strategy_offer_strategies_handler import get_marketing_strategy_offer_strategies_handler
 
 
 def register_general_routes(router: APIRouter):
@@ -192,6 +194,14 @@ def register_general_routes(router: APIRouter):
             brand_marketing_id=brand_marketing_id,
             marketing_strategy_id=marketing_strategy_id
         )
+
+    @router.get("/marketing-strategy/{marketing_strategy_id}/offer-strategy")
+    def get_marketing_strategy_offer_strategies( marketing_strategy_id: int ):
+        return get_marketing_strategy_offer_strategies_handler( marketing_strategy_id=marketing_strategy_id )
+
+    @router.get("/offer-strategy/{id}")
+    def get_offer_strategy( id: int ):
+        return get_offer_strategy_handler( id=id )
 
 
     # -----------------------------

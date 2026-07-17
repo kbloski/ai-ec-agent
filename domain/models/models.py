@@ -52,3 +52,6 @@ from domain.models.brand_marketing.brand_marketing import BrandMarketing
 
 # Marketing strategy
 from domain.models.marketing_strategy.marketing_strategy import MarketingStrategy
+
+# Offer strategy
+from domain.models.offer_strategy.offer_strategy import OfferStrategy

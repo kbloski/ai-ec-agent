@@ -3,6 +3,7 @@ import json
 from di.container import Container
 from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
 from domain.enums.ollama_message_role import OllamaMessageRole
+from domain.models.offer_strategy.offer_strategy import OfferStrategy
 
 
 SYSTEM_PROMPT = """
@@ -137,6 +138,8 @@ def generate_offer_strategy_handler(
     brand_marketing_service = container.brand_marketing_service()
     marketing_strategy_service = container.marketing_strategy_service()
     ollama_service = container.ollama_service()
+    offer_strategy_repository = container.offer_strategy_repository()
+    offer_strategy_service = container.offer_strategy_service()
 
 
     knowledge = knowledge_service.get_knowledge_details_by_id(
@@ -199,4 +202,31 @@ def generate_offer_strategy_handler(
     )
 
 
-    return json.loads(response.content.strip())
+    data = json.loads(response.content.strip())
+
+    entity = OfferStrategy(
+        knowledge_id=knowledge_id,
+        brand_marketing_id=brand_marketing_id,
+        marketing_strategy_id=marketing_strategy_id,
+        offer_name=data.get("offer_name"),
+        offer_positioning=data.get("offer_positioning"),
+        core_value_proposition=data.get("core_value_proposition"),
+        main_customer_problem=data.get("main_customer_problem"),
+        solution_mechanism=data.get("solution_mechanism"),
+        primary_benefit=data.get("primary_benefit"),
+        secondary_benefits=data.get("secondary_benefits", []),
+        functional_benefits=data.get("functional_benefits", []),
+        emotional_benefits=data.get("emotional_benefits", []),
+        offer_structure=data.get("offer_structure", {}),
+        value_stack=data.get("value_stack", []),
+        risk_reversal=data.get("risk_reversal", []),
+        trust_elements=data.get("trust_elements", []),
+        pricing_strategy=data.get("pricing_strategy"),
+        urgency_strategy=data.get("urgency_strategy"),
+        customer_objection_handling=data.get("customer_objection_handling", []),
+        competitive_difference=data.get("competitive_difference"),
+        conversion_levers=data.get("conversion_levers", []),
+    )
+    created = offer_strategy_repository.create(entity)
+
+    return offer_strategy_service.get_offer_strategy_by_id(id=created.id)
