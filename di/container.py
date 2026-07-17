@@ -40,6 +40,9 @@ from application.services.message_strategy_service import MessageStrategyService
 from infrastructure.repositories.ad_strategy_repository import AdStrategyRepository
 from application.assemblers.ad_strategy_assembler import AdStrategyAssembler
 from application.services.ad_strategy_service import AdStrategyService
+from infrastructure.repositories.creative_strategy_repository import CreativeStrategyRepository
+from application.assemblers.creative_strategy_assembler import CreativeStrategyAssembler
+from application.services.creative_strategy_service import CreativeStrategyService
 
 class Container(containers.DeclarativeContainer):
     db = providers.Factory(
@@ -175,6 +178,12 @@ class Container(containers.DeclarativeContainer):
         db=db
     )
 
+    creative_strategy_repository = providers.Singleton(
+        CreativeStrategyRepository,
+        logger=logger,
+        db=db
+    )
+
 
     # --------------------------
     # Assemblery
@@ -235,6 +244,11 @@ class Container(containers.DeclarativeContainer):
 
     ad_strategy_assembler = providers.Singleton(
         AdStrategyAssembler,
+        logger=logger,
+    )
+
+    creative_strategy_assembler = providers.Singleton(
+        CreativeStrategyAssembler,
         logger=logger,
     )
     # --------------------------
@@ -304,4 +318,11 @@ class Container(containers.DeclarativeContainer):
         logger=logger,
         ad_strategy_repository=ad_strategy_repository,
         ad_strategy_assembler=ad_strategy_assembler
+    )
+
+    creative_strategy_service = providers.Singleton(
+        CreativeStrategyService,
+        logger=logger,
+        creative_strategy_repository=creative_strategy_repository,
+        creative_strategy_assembler=creative_strategy_assembler
     )

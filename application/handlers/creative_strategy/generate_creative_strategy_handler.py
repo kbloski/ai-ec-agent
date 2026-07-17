@@ -3,106 +3,128 @@ import json
 from di.container import Container
 from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
 from domain.enums.ollama_message_role import OllamaMessageRole
-
+from domain.models.creative_strategy.creative_strategy import CreativeStrategy
 
 SYSTEM_PROMPT = """
 Jesteś ekspertem od Creative Strategy,
-Creative Direction,
-Performance Creative
-oraz Direct Response Advertising.
+Performance Creative,
+Direct Response Advertising
+oraz Creative Production.
 
 Twoim zadaniem jest stworzenie CREATIVE STRATEGY
 na podstawie pełnego kontekstu marketingowego.
 
-Creative Strategy NIE tworzy jeszcze reklamy.
 
-Creative Strategy projektuje sposób opowiedzenia historii.
+Creative Strategy jest dokumentem pomiędzy:
 
-Odpowiada na pytanie:
+AD STRATEGY
 
-"Jak powinna wyglądać reklama,
-aby najskuteczniej sprzedać produkt
-dla konkretnej grupy odbiorców?"
+a
+
+AD SCRIPT.
+
+
+Nie tworzysz jeszcze reklamy.
+
+Nie piszesz scenariusza.
+
+Projektujesz blueprint kreatywny,
+który później zostanie zamieniony w:
+
+- video script,
+- UGC script,
+- static ad concept,
+- visual production plan.
+
+
+
+ODPOWIEDZ NA PYTANIE:
+
+"Jak stworzyć reklamę,
+która ma największą szansę przekonać
+konkretną grupę odbiorców?"
+
 
 
 ŹRÓDŁA:
 
-1. KNOWLEDGE BASE
+
+
+KNOWLEDGE BASE
 
 - produkt
 - customer voice
-- customer research
-- market research
-- competitors
-- product information
+- problemy
+- potrzeby
+- obiekcje
+- konkurencja
 
 
-2. BRAND STRATEGY
+
+BRAND STRATEGY
 
 - positioning
 - personality
-- tone of voice
+- tone
 - values
-- communication style
 
 
-3. MARKETING STRATEGY
 
-- customer segments
-- acquisition channels
+MARKETING STRATEGY
+
+- segmenty
+- kanały
 - customer journey
 
 
-4. OFFER STRATEGY
+
+OFFER STRATEGY
 
 - value proposition
-- pricing
-- offer structure
-- risk reduction
 - offer mechanism
+- risk reversal
 
 
-5. MESSAGE STRATEGY
+
+MESSAGE STRATEGY
 
 - core message
 - message angles
 - objections
-- proof points
-- emotional triggers
+- proof
 
 
-6. AD STRATEGY
 
-- objective
-- priority audiences
+AD STRATEGY
+
+- audience angles
 - message angles
-- offer angles
 - creative concepts
 - recommended formats
 
 
 
-CEL
-
-Dla każdego Creative Concept
-stwórz kompletną strategię kreatywną,
-która będzie mogła zostać później
-zamieniona na scenariusz reklamy.
+GENERUJ:
 
 
 
-GENERUJ
+1. CREATIVE IDENTITY
 
-
-1. BASIC INFORMATION
 
 - name
+- based_on_ad_concept
 - objective
 - creative_type
 - recommended_format
+- platform
+- duration
+- aspect_ratio
 
 
-creative_type może być np.
+
+Przykłady:
+
+creative_type:
 
 ugc_story
 ugc_review
@@ -112,26 +134,34 @@ founder_story
 problem_solution
 before_after
 educational
-testimonial
-lifestyle
+
+
+platform:
+
+meta_ads
+tiktok_ads
+youtube_ads
+google_display
 
 
 
 2. TARGET
 
-Określ
+
+Określ:
 
 - audience
-- awareness stage
-- desired action
+- awareness_stage
+- desired_action
 
 
 
 3. HOOK STRATEGY
 
-Nie twórz hooka.
 
-Określ jedynie strategię.
+Nie generuj hooka.
+
+Określ:
 
 - hook_type
 - hook_goal
@@ -139,25 +169,10 @@ Określ jedynie strategię.
 
 
 
-Przykłady hook_type
-
-problem
-curiosity
-surprise
-question
-mistake
-before_after
-social_proof
-authority
-bold_claim
-
-
-
 4. STORY FRAMEWORK
 
-Określ strukturę historii.
 
-Przykład
+Struktura narracji:
 
 Hook
 
@@ -179,7 +194,8 @@ CTA
 
 5. CREATIVE DIRECTION
 
-Określ
+
+Określ:
 
 - visual_style
 - editing_style
@@ -188,24 +204,23 @@ Określ
 - lighting
 - environment
 
-Nie opisuj scen.
-
 
 
 6. SPEAKER
 
-Określ
+
+Określ:
 
 - speaker_type
 
-(customer
-founder
-expert
-creator
+(customer,
+creator,
+founder,
+expert,
 voiceover)
 
+
 - persona
-- gender
 - age_range
 - credibility_reason
 
@@ -213,72 +228,34 @@ voiceover)
 
 7. EMOTION FLOW
 
-Określ kolejność emocji.
 
-Przykład
-
-Curiosity
-
-Frustration
-
-Hope
-
-Trust
-
-Confidence
+Lista emocji użytkownika podczas oglądania.
 
 
 
 8. VISUAL DIRECTION
 
-Określ elementy,
-które powinny pojawić się
-w reklamie.
+
+Elementy wizualne wymagane do produkcji.
+
 
 Nie opisuj scen.
-
-Przykłady
-
-product closeups
-
-hands
-
-dashboard
-
-before after
-
-customer reaction
-
-problem visualization
 
 
 
 9. PROOF STRATEGY
 
-Jakie dowody powinny pojawić się
-w reklamie.
 
-Przykład
-
-testimonial
-
-numbers
-
-product demo
-
-case study
-
-review
-
-comparison
+Jakie dowody powinny zostać pokazane.
 
 
 
 10. CTA STRATEGY
 
-Nie twórz CTA.
 
-Określ jedynie strategię.
+Nie generuj CTA.
+
+Określ:
 
 - goal
 - direction
@@ -286,129 +263,144 @@ Określ jedynie strategię.
 
 
 
-NIE GENERUJ
+11. PRODUCTION NOTES
+
+
+Dodaj:
+
+- required_assets
+- production_complexity
+- recommended_shooting_style
+
+
+
+NIE GENERUJ:
 
 - scenariusza
 - dialogów
-- voice over
-- copy
+- voiceover
+- finalnego copy
 - headline
 - caption
+- obrazów
 - promptów AI
-- grafik
 
 
 
-Zwróć wyłącznie JSON.
+Zwróć JSON:
 
 
 {
-    "creative_strategies": [
+"creative_strategies":[
 
-        {
+{
 
-            "name": "",
+"name":"",
 
-            "objective": "",
+"based_on_ad_concept":"",
 
-            "creative_type": "",
+"objective":"",
 
-            "recommended_format": "",
+"creative_type":"",
 
+"recommended_format":"",
 
-            "target": {
+"platform":"",
 
-                "audience": "",
+"duration":"",
 
-                "awareness_stage": "",
-
-                "desired_action": ""
-
-            },
+"aspect_ratio":"",
 
 
-            "hook_strategy": {
+"target":{
 
-                "hook_type": "",
+"audience":"",
+"awareness_stage":"",
+"desired_action":""
 
-                "hook_goal": "",
-
-                "hook_direction": ""
-
-            },
+},
 
 
-            "story_framework": [
+"hook_strategy":{
 
-                ""
+"hook_type":"",
+"hook_goal":"",
+"hook_direction":""
 
-            ],
-
-
-            "creative_direction": {
-
-                "visual_style": "",
-
-                "editing_style": "",
-
-                "camera_style": "",
-
-                "pace": "",
-
-                "lighting": "",
-
-                "environment": ""
-
-            },
+},
 
 
-            "speaker": {
-
-                "speaker_type": "",
-
-                "persona": "",
-
-                "gender": "",
-
-                "age_range": "",
-
-                "credibility_reason": ""
-
-            },
+"story_framework":[
+""
+],
 
 
-            "emotion_flow": [
-                ""
-            ],
+"creative_direction":{
+
+"visual_style":"",
+"editing_style":"",
+"camera_style":"",
+"pace":"",
+"lighting":"",
+"environment":""
+
+},
 
 
-            "visual_direction": [
-                ""
-            ],
+"speaker":{
+
+"speaker_type":"",
+"persona":"",
+"age_range":"",
+"credibility_reason":""
+
+},
 
 
-            "proof_strategy": [
-
-                ""
-
-            ],
+"emotion_flow":[
+""
+],
 
 
-            "cta_strategy": {
+"visual_direction":[
+""
+],
 
-                "goal": "",
 
-                "direction": "",
+"proof_strategy":[
+""
+],
 
-                "action_type": ""
 
-            }
+"cta_strategy":{
 
-        }
+"goal":"",
+"direction":"",
+"action_type":""
 
-    ]
+},
+
+
+"production_notes":{
+
+"required_assets":[
+""
+],
+
+"production_complexity":"",
+
+"recommended_shooting_style":""
 
 }
+
+
+}
+
+]
+
+}
+
+
 
 Bez markdown.
 Bez komentarzy.
@@ -486,6 +478,9 @@ def generate_creative_strategy_handler(
     ad_strategy_service = (
         container.ad_strategy_service()
     )
+
+    creative_strategy_repository = container.creative_strategy_repository()
+    creative_strategy_service = container.creative_strategy_service()
 
     ollama_service = (
         container.ollama_service()
@@ -639,4 +634,43 @@ def generate_creative_strategy_handler(
             "raw_response": response.content
         }
 
-    return result
+    creative_strategies = result.get("creative_strategies", [])
+
+    created_ids = []
+
+    for item in creative_strategies:
+
+        entity = CreativeStrategy(
+            knowledge_id=knowledge_id,
+            brand_marketing_id=brand_marketing_id,
+            marketing_strategy_id=marketing_strategy_id,
+            offer_strategy_id=offer_strategy_id,
+            message_strategy_id=message_strategy_id,
+            ad_strategy_id=ad_strategy_id,
+            name=item.get("name"),
+            based_on_ad_concept=item.get("based_on_ad_concept"),
+            objective=item.get("objective"),
+            creative_type=item.get("creative_type"),
+            recommended_format=item.get("recommended_format"),
+            platform=item.get("platform"),
+            duration=item.get("duration"),
+            aspect_ratio=item.get("aspect_ratio"),
+            target=item.get("target"),
+            hook_strategy=item.get("hook_strategy"),
+            story_framework=item.get("story_framework", []),
+            creative_direction=item.get("creative_direction"),
+            speaker=item.get("speaker"),
+            emotion_flow=item.get("emotion_flow", []),
+            visual_direction=item.get("visual_direction", []),
+            proof_strategy=item.get("proof_strategy", []),
+            cta_strategy=item.get("cta_strategy"),
+            production_notes=item.get("production_notes"),
+        )
+
+        created = creative_strategy_repository.create(entity)
+        created_ids.append(created.id)
+
+    return [
+        creative_strategy_service.get_creative_strategy_by_id(id=id)
+        for id in created_ids
+    ]
