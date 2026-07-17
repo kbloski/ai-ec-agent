@@ -29,21 +29,6 @@ from domain.models.analysis.analysis_questions import AnalysisQuestion
 from domain.models.analysis.knowledge_analysis import KnowledgeAnalysis
 from domain.models.analysis.analysis_checklist import AnalysisChecklist
 
-# Visualizations 
-from domain.models.visualizations.vusualization import Visualization
-
-# Sales Assets
-from domain.models.sales_assets.sales_assets import SalesAsset
-from domain.models.sales_assets.sales_asset_sections import SalesAssetSection
-from domain.models.sales_assets.sales_asset_section_visualization import SalesAssetSectionVisualization
-
-# Advertisement
-from domain.models.advertisement.advertisement import Advertisement
-from domain.models.advertisement.scene import Scene
-from domain.models.advertisement.advertisement_scene import AdvertisementScene
-from domain.models.advertisement.advertisement_visualization import AdvertisementVisualization
-from domain.models.advertisement.advertisement_objection import AdvertisementObjection
-
 # Brand marketing
 from domain.models.brand_marketing.brand_marketing import BrandMarketing
 
@@ -55,9 +40,3 @@ from domain.models.offer_strategy.offer_strategy import OfferStrategy
 
 # Message strategy
 from domain.models.message_strategy.message_strategy import MessageStrategy
-
-# Experiment strategy
-from domain.models.experiment_strategy.experiment_strategy import ExperimentStrategy
-
-# Experiments
-from domain.models.experiments.experiment import Experiment

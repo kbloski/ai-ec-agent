@@ -6,10 +6,12 @@
                                 |
                                 v
 
+
                   CUSTOMER & MARKET INSIGHTS
 
         (customer voice, market data, competitors,
          audience understanding, buying motivations)
+
 
                                 |
                                 v
@@ -49,33 +51,51 @@
                                 v
 
 
-                     SALES ASSET ENGINE
+                  MARKETING ASSET ENGINE
 
-        (produkcja materiałów)
+        (zamiana strategii w materiały)
 
         +----------------+----------------+----------------+
         |                |                |                |
         v                v                v                v
 
-       ADS       LANDING PAGES        EMAILS           UGC
+       ADS        LANDING PAGES       EMAILS           UGC
                                                      CREATIVES
+
+
+
+
 
 
                                 |
                                 v
 
 
-                    CAMPAIGN BUILDING
+                    CAMPAIGN PLANNING
 
-        (składanie kampanii)
+        (przygotowanie kampanii)
 
-        - wybór audience
-        - wybór kanału
-        - budżet
+        - audience selection
+        - channel selection
+        - budget allocation
         - placement
         - tracking
-        - KPI
-        - eksperyment setup
+        - KPIs
+
+
+                                |
+                                v
+
+
+                    EXPERIMENT DESIGN
+
+        (definiowanie hipotez)
+
+        - audience hypothesis
+        - offer hypothesis
+        - message hypothesis
+        - creative hypothesis
+        - channel hypothesis
 
 
                                 |
@@ -95,7 +115,8 @@
 
                     PERFORMANCE DATA
 
-        dane ilościowe:
+        Quantitative:
+
         - impressions
         - CTR
         - CPC
@@ -104,7 +125,9 @@
         - ROAS
         - revenue
 
-        dane jakościowe:
+
+        Qualitative:
+
         - comments
         - reviews
         - objections
@@ -115,31 +138,14 @@
                                 v
 
 
-                    EXPERIMENT ENGINE
-
-        (analiza i decyzje co testować dalej)
-
-        Testuje:
-
-        - audience hypothesis
-        - offer hypothesis
-        - message hypothesis
-        - creative hypothesis
-        - channel hypothesis
-
-
-                                |
-                                v
-
-
                     LEARNING ENGINE
 
-        AI odpowiada:
+        AI analizuje:
 
         - co działa?
         - dla kogo?
         - dlaczego?
-        - jakie wzorce powtarzają się?
+        - jakie wzorce się powtarzają?
 
 
                                 |
@@ -152,23 +158,29 @@
                                 v
 
 
-                 UPDATED INSIGHTS
+                 INSIGHTS UPDATE
 
                                 |
                                 v
 
 
-                 UPDATED STRATEGY
+                 STRATEGY UPDATE
 
-                                |
                                 |
                                 v
 
-                       NEW ITERATION
-                                |
-                                |
-                                +--------------------+
-                                                     |
-                                                     v
 
-                                             NEW ASSETS
+                 MESSAGE UPDATE
+
+                                |
+                                v
+
+
+              NEW ASSET GENERATION LOOP
+
+                                |
+                                +----------------------+
+                                                       |
+                                                       v
+
+                                      MARKETING ASSET ENGINE

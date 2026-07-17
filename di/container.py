@@ -25,19 +25,6 @@ from infrastructure.repositories.checklist_repository import ChecklistRepository
 from infrastructure.repositories.checklist_items_repository import ChecklistItemsRepository
 from infrastructure.repositories.analysis_checklist_repository import AnalysisChecklistRepository
 from application.assemblers.checklist_assembler import ChecklistAssembler
-from infrastructure.repositories.sales_assets_repository import SalesAssetsRepository
-from infrastructure.repositories.sales_asset_sections_repository import SalesAssetSectionsRepository
-from infrastructure.repositories.sales_asset_section_visualizations_repository import SalesAssetSectionVisualizationsRepository
-from infrastructure.repositories.visualizations_repository import VisualizationsRepository
-from application.assemblers.sales_asset_assembler import SalesAssetAssembler
-from application.services.sales_asset_service import SalesAssetService
-from infrastructure.repositories.advertisements_repository import AdvertisementsRepository
-from infrastructure.repositories.scenes_repository import ScenesRepository
-from infrastructure.repositories.advertisement_scenes_repository import AdvertisementScenesRepository
-from infrastructure.repositories.advertisement_visualizations_repository import AdvertisementVisualizationsRepository
-from infrastructure.repositories.advertisement_objections_repository import AdvertisementObjectionsRepository
-from application.assemblers.advertisement_assembler import AdvertisementAssembler
-from application.services.advertisement_service import AdvertisementService
 from infrastructure.repositories.brand_marketing_repository import BrandMarketingRepository
 from application.assemblers.brand_marketing_assembler import BrandMarketingAssembler
 from application.services.brand_marketing_service import BrandMarketingService
@@ -50,10 +37,6 @@ from application.services.offer_strategy_service import OfferStrategyService
 from infrastructure.repositories.message_strategy_repository import MessageStrategyRepository
 from application.assemblers.message_strategy_assembler import MessageStrategyAssembler
 from application.services.message_strategy_service import MessageStrategyService
-from infrastructure.repositories.experiment_strategy_repository import ExperimentStrategyRepository
-from infrastructure.repositories.experiments_repository import ExperimentsRepository
-from application.assemblers.experiment_strategy_assembler import ExperimentStrategyAssembler
-from application.services.experiment_strategy_service import ExperimentStrategyService
 
 class Container(containers.DeclarativeContainer):
     db = providers.Factory(
@@ -159,60 +142,6 @@ class Container(containers.DeclarativeContainer):
         db=db
     )
 
-    sales_assets_repository = providers.Singleton(
-        SalesAssetsRepository,
-        logger=logger,
-        db=db
-    )
-
-    sales_asset_sections_repository = providers.Singleton(
-        SalesAssetSectionsRepository,
-        logger=logger,
-        db=db
-    )
-
-    sales_asset_section_visualizations_repository = providers.Singleton(
-        SalesAssetSectionVisualizationsRepository,
-        logger=logger,
-        db=db
-    )
-
-    visualizations_repository = providers.Singleton(
-        VisualizationsRepository,
-        logger=logger,
-        db=db
-    )
-
-    advertisements_repository = providers.Singleton(
-        AdvertisementsRepository,
-        logger=logger,
-        db=db
-    )
-
-    scenes_repository = providers.Singleton(
-        ScenesRepository,
-        logger=logger,
-        db=db
-    )
-
-    advertisement_scenes_repository = providers.Singleton(
-        AdvertisementScenesRepository,
-        logger=logger,
-        db=db
-    )
-
-    advertisement_visualizations_repository = providers.Singleton(
-        AdvertisementVisualizationsRepository,
-        logger=logger,
-        db=db
-    )
-
-    advertisement_objections_repository = providers.Singleton(
-        AdvertisementObjectionsRepository,
-        logger=logger,
-        db=db
-    )
-
     brand_marketing_repository = providers.Singleton(
         BrandMarketingRepository,
         logger=logger,
@@ -233,18 +162,6 @@ class Container(containers.DeclarativeContainer):
 
     message_strategy_repository = providers.Singleton(
         MessageStrategyRepository,
-        logger=logger,
-        db=db
-    )
-
-    experiment_strategy_repository = providers.Singleton(
-        ExperimentStrategyRepository,
-        logger=logger,
-        db=db
-    )
-
-    experiments_repository = providers.Singleton(
-        ExperimentsRepository,
         logger=logger,
         db=db
     )
@@ -287,23 +204,6 @@ class Container(containers.DeclarativeContainer):
         checklist_items_repository=checklist_items_repository
     )
 
-    sales_asset_assembler = providers.Singleton(
-        SalesAssetAssembler,
-        logger=logger,
-        sales_asset_sections_repository=sales_asset_sections_repository,
-        sales_asset_section_visualizations_repository=sales_asset_section_visualizations_repository,
-        visualizations_repository=visualizations_repository
-    )
-
-    advertisement_assembler = providers.Singleton(
-        AdvertisementAssembler,
-        logger=logger,
-        advertisement_scenes_repository=advertisement_scenes_repository,
-        scenes_repository=scenes_repository,
-        advertisement_visualizations_repository=advertisement_visualizations_repository,
-        advertisement_objections_repository=advertisement_objections_repository
-    )
-
     brand_marketing_assembler = providers.Singleton(
         BrandMarketingAssembler,
         logger=logger,
@@ -323,16 +223,10 @@ class Container(containers.DeclarativeContainer):
         MessageStrategyAssembler,
         logger=logger,
     )
-
-    experiment_strategy_assembler = providers.Singleton(
-        ExperimentStrategyAssembler,
-        logger=logger,
-        experiments_repository=experiments_repository,
-    )
     # --------------------------
     # Serwisy
     # --------------------------
-    
+
     path_service =  providers.Singleton(
         PathService,
         logger=logger,
@@ -363,20 +257,6 @@ class Container(containers.DeclarativeContainer):
         path_service=path_service
     )
 
-    sales_asset_service = providers.Singleton(
-        SalesAssetService,
-        logger=logger,
-        sales_assets_repository=sales_assets_repository,
-        sales_asset_assembler=sales_asset_assembler
-    )
-
-    advertisement_service = providers.Singleton(
-        AdvertisementService,
-        logger=logger,
-        advertisements_repository=advertisements_repository,
-        advertisement_assembler=advertisement_assembler
-    )
-
     brand_marketing_service = providers.Singleton(
         BrandMarketingService,
         logger=logger,
@@ -404,12 +284,3 @@ class Container(containers.DeclarativeContainer):
         message_strategy_repository=message_strategy_repository,
         message_strategy_assembler=message_strategy_assembler
     )
-
-    experiment_strategy_service = providers.Singleton(
-        ExperimentStrategyService,
-        logger=logger,
-        experiment_strategy_repository=experiment_strategy_repository,
-        experiment_strategy_assembler=experiment_strategy_assembler
-    )
-
-
