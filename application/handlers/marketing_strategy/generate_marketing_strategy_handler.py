@@ -3,6 +3,7 @@ import json
 from di.container import Container
 from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
 from domain.enums.ollama_message_role import OllamaMessageRole
+from domain.models.marketing_strategy.marketing_strategy import MarketingStrategy
 
 
 SYSTEM_PROMPT = """
@@ -189,6 +190,8 @@ def generate_marketing_strategy_handler(
     knowledge_service = container.knowledge_service()
     brand_marketing_service = container.brand_marketing_service()
     ollama_service = container.ollama_service()
+    marketing_strategy_repository = container.marketing_strategy_repository()
+    marketing_strategy_service = container.marketing_strategy_service()
 
 
     knowledge = knowledge_service.get_knowledge_details_by_id(
@@ -235,4 +238,29 @@ def generate_marketing_strategy_handler(
     )
 
 
-    return json.loads(response.content.strip())
+    data = json.loads(response.content.strip())
+
+    entity = MarketingStrategy(
+        knowledge_id=knowledge_id,
+        brand_marketing_id=brand_markeging_id,
+        marketing_objective=data.get("marketing_objective"),
+        growth_strategy=data.get("growth_strategy"),
+        primary_audience=data.get("primary_audience", []),
+        secondary_audience=data.get("secondary_audience", []),
+        audience_prioritization=data.get("audience_prioritization", []),
+        customer_journey=data.get("customer_journey", {}),
+        marketing_channels=data.get("marketing_channels", []),
+        acquisition_strategy=data.get("acquisition_strategy", []),
+        trust_building_strategy=data.get("trust_building_strategy", []),
+        content_strategy=data.get("content_strategy", {}),
+        community_strategy=data.get("community_strategy", []),
+        creator_influencer_strategy=data.get("creator_influencer_strategy", []),
+        campaign_directions=data.get("campaign_directions", []),
+        conversion_strategy=data.get("conversion_strategy", []),
+        retention_strategy=data.get("retention_strategy", []),
+        marketing_experiments=data.get("marketing_experiments", []),
+        marketing_kpis=data.get("marketing_kpis", []),
+    )
+    created = marketing_strategy_repository.create(entity)
+
+    return marketing_strategy_service.get_marketing_strategy_by_id(id=created.id)

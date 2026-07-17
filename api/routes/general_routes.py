@@ -31,6 +31,8 @@ from application.handlers.brand_marketing.generate_brand_marketing_handler impor
 from application.handlers.brand_marketing.get_brand_marketing_handler import get_brand_marketing_handler
 from application.handlers.brand_marketing.get_knowledge_brand_marketings_handler import get_knowledge_brand_marketings_handler
 from application.handlers.marketing_strategy.generate_marketing_strategy_handler import generate_marketing_strategy_handler
+from application.handlers.marketing_strategy.get_marketing_strategy_handler import get_marketing_strategy_handler
+from application.handlers.marketing_strategy.get_brand_marketing_marketing_strategies_handler import get_brand_marketing_marketing_strategies_handler
 
 
 def register_general_routes(router: APIRouter):
@@ -169,13 +171,15 @@ def register_general_routes(router: APIRouter):
     @router.get("/knowledges/{knowledge_id}/brand-marketing/{brand_markeging_id}/marketing-strategy/generate")
     def knowledge_marketing_strategy_generate( knowledge_id: int, brand_markeging_id: int ):
         return generate_marketing_strategy_handler( knowledge_id=knowledge_id, brand_markeging_id=brand_markeging_id )
-    
-    
-    
-    
-    
-    
-    
+
+    @router.get("/brand-marketing/{brand_marketing_id}/marketing-strategy")
+    def get_brand_marketing_marketing_strategies( brand_marketing_id: int ):
+        return get_brand_marketing_marketing_strategies_handler( brand_marketing_id=brand_marketing_id )
+
+    @router.get("/marketing-strategy/{id}")
+    def get_marketing_strategy( id: int ):
+        return get_marketing_strategy_handler( id=id )
+
 
     # -----------------------------
     # Sales assets
