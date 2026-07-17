@@ -46,3 +46,6 @@ from domain.models.advertisement.advertisement_objection import AdvertisementObj
 
 # Experiments
 from domain.models.experiment.experiment import Experiment
+
+# Brand marketing
+from domain.models.brand_marketing.brand_marketing import BrandMarketing

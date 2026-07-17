@@ -24,3 +24,4 @@ class TableName(str, Enum):
     ADVERTISEMENT_VISUALIZATIONS = "advertisement_visualizations"
     ADVERTISEMENT_OBJECTIONS = "advertisement_objections"
     KNOWLEDGE_EXPERIMENTS = "knowledge_experiments"
+    BRAND_MARKETING = "brand_marketing"

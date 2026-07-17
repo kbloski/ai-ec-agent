@@ -28,6 +28,8 @@ from application.handlers.experiments.knowledge_experiments_generate_handler imp
 from application.handlers.experiments.get_knowledge_experiments_handler import get_knowledge_experiments_handler
 from application.handlers.experiments.get_knowledge_experiment_handler import get_knowledge_experiment_handler
 from application.handlers.brand_marketing.generate_brand_marketing_handler import generate_brand_marketing_handler
+from application.handlers.brand_marketing.get_brand_marketing_handler import get_brand_marketing_handler
+from application.handlers.brand_marketing.get_knowledge_brand_marketings_handler import get_knowledge_brand_marketings_handler
 
 
 def register_general_routes(router: APIRouter):
@@ -198,3 +200,11 @@ def register_general_routes(router: APIRouter):
     @router.get("/knowledges/{knowledge_id}/brand-marketing/generate")
     def knowledge_brand_marketing_generate( knowledge_id: int ):
         return generate_brand_marketing_handler( knowledge_id=knowledge_id )
+
+    @router.get("/knowledges/{knowledge_id}/brand-marketing")
+    def get_knowledge_brand_marketing( knowledge_id: int ):
+        return get_knowledge_brand_marketings_handler( knowledge_id=knowledge_id )
+
+    @router.get("/brand-marketing/{id}")
+    def get_brand_marketing( id: int ):
+        return get_brand_marketing_handler( id=id )

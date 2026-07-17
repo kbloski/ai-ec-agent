@@ -3,13 +3,14 @@ import json
 from di.container import Container
 from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
 from domain.enums.ollama_message_role import OllamaMessageRole
+from domain.models.brand_marketing.brand_marketing import BrandMarketing
 
 
 SYSTEM_PROMPT = """
 Jesteś ekspertem od brand strategy oraz brand marketingu.
 
 Twoim zadaniem jest przeanalizowanie danych knowledge base:
-- produktu,
+- oferty,
 - grup docelowych,
 - customer voice,
 - problemów klientów,
@@ -180,6 +181,8 @@ def generate_brand_marketing_handler(
 
     knowledge_service = container.knowledge_service()
     ollama_service = container.ollama_service()
+    brand_marketing_repository = container.brand_marketing_repository()
+    brand_marketing_service = container.brand_marketing_service()
 
     knowledge_details = knowledge_service.get_knowledge_details_by_id(
         knowledge_id=knowledge_id
@@ -209,4 +212,45 @@ def generate_brand_marketing_handler(
         ]
     )
 
-    return json.loads(response.content.strip())
+    data = json.loads(response.content.strip())
+
+    entity = BrandMarketing(
+        knowledge_id=knowledge_id,
+        brand_name=data.get("brand_name"),
+        brand_positioning=data.get("brand_positioning"),
+        brand_category=data.get("brand_category"),
+        brand_target_customer=data.get("brand_target_customer"),
+        brand_competitive_difference=data.get("brand_competitive_difference"),
+        brand_purpose=data.get("brand_purpose"),
+        brand_promise=data.get("brand_promise"),
+        brand_personality=data.get("brand_personality", []),
+        brand_values=data.get("brand_values", []),
+        brand_voice=data.get("brand_voice"),
+        brand_tone=data.get("brand_tone"),
+        brand_tone_social_media=data.get("brand_tone_social_media"),
+        brand_tone_customer_communication=data.get("brand_tone_customer_communication"),
+        tagline=data.get("tagline"),
+        unique_selling_proposition=data.get("unique_selling_proposition"),
+        key_messages=data.get("key_messages", []),
+        target_perception=data.get("target_perception", []),
+        target_emotions=data.get("target_emotions", []),
+        brand_associations=data.get("brand_associations", []),
+        customer_desires=data.get("customer_desires", []),
+        customer_pains=data.get("customer_pains", []),
+        customer_fears=data.get("customer_fears", []),
+        customer_objections=data.get("customer_objections", []),
+        purchase_motivators=data.get("purchase_motivators", []),
+        brand_story=data.get("brand_story"),
+        brand_story_angle=data.get("brand_story_angle"),
+        customer_transformation=data.get("customer_transformation"),
+        content_pillars=data.get("content_pillars", []),
+        storytelling_angles=data.get("storytelling_angles", []),
+        ugc_direction=data.get("ugc_direction", []),
+        visual_style=data.get("visual_style"),
+        visual_direction=data.get("visual_direction"),
+        brand_always_do=data.get("brand_always_do", []),
+        brand_never_do=data.get("brand_never_do", []),
+    )
+    created = brand_marketing_repository.create(entity)
+
+    return brand_marketing_service.get_brand_marketing_by_id(id=created.id)

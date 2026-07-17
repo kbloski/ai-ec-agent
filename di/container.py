@@ -41,6 +41,9 @@ from application.services.advertisement_service import AdvertisementService
 from infrastructure.repositories.experiments_repository import ExperimentsRepository
 from application.assemblers.experiment_assembler import ExperimentAssembler
 from application.services.experiment_service import ExperimentService
+from infrastructure.repositories.brand_marketing_repository import BrandMarketingRepository
+from application.assemblers.brand_marketing_assembler import BrandMarketingAssembler
+from application.services.brand_marketing_service import BrandMarketingService
 
 class Container(containers.DeclarativeContainer):
     db = providers.Factory(
@@ -206,6 +209,12 @@ class Container(containers.DeclarativeContainer):
         db=db
     )
 
+    brand_marketing_repository = providers.Singleton(
+        BrandMarketingRepository,
+        logger=logger,
+        db=db
+    )
+
 
     # --------------------------
     # Assemblery
@@ -265,6 +274,11 @@ class Container(containers.DeclarativeContainer):
         ExperimentAssembler,
         logger=logger,
     )
+
+    brand_marketing_assembler = providers.Singleton(
+        BrandMarketingAssembler,
+        logger=logger,
+    )
     # --------------------------
     # Serwisy
     # --------------------------
@@ -318,6 +332,13 @@ class Container(containers.DeclarativeContainer):
         logger=logger,
         experiments_repository=experiments_repository,
         experiment_assembler=experiment_assembler
+    )
+
+    brand_marketing_service = providers.Singleton(
+        BrandMarketingService,
+        logger=logger,
+        brand_marketing_repository=brand_marketing_repository,
+        brand_marketing_assembler=brand_marketing_assembler
     )
 
 
