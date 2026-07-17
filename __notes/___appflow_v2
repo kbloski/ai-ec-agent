@@ -1,55 +1,174 @@
-                           OFFER
-                             |
-                             v
+                              OFFER
+                                |
+                                v
 
-                     KNOWLEDGE BASE
-                             |
-                             v
+                         KNOWLEDGE BASE
+                                |
+                                v
 
                   CUSTOMER & MARKET INSIGHTS
-                             |
-                             v
 
-                    STRATEGY LAYER
+        (customer voice, market data, competitors,
+         audience understanding, buying motivations)
 
-        +--------------------+--------------------+
-        |                    |                    |
-        v                    v                    v
-
- BRAND STRATEGY       OFFER STRATEGY       MARKETING STRATEGY
-                             |
-                             v
-
-                     MESSAGE STRATEGY
-                             |
-                             |
-              +--------------+--------------+
-              |                             |
-              v                             v
-
-        SALES ASSET ENGINE          EXPERIMENT ENGINE
-              |                             |
-              v                             |
-        Ads / Landing / Emails              |
-        UGC / Creatives                     |
-              |                             |
+                                |
+                                v
 
 
-########################## TODO ######################### 
-              +--------------+--------------+
-                             |
-                             v
+                         STRATEGY LAYER
+
+        +----------------------+----------------------+
+        |                      |                      |
+        v                      v                      v
+
+  BRAND STRATEGY        OFFER STRATEGY        MARKETING STRATEGY
+
+  positioning           value proposition     channels
+  differentiation       packaging             funnel
+  perception            pricing               acquisition
+
+
+                                |
+                                v
+
+
+                       MESSAGE STRATEGY
+
+        (jak komunikujemy wartość)
+
+        - hooks
+        - pain angles
+        - benefit angles
+        - objections
+        - proof points
+        - claims
+        - emotional triggers
+
+
+                                |
+                                v
+
+
+                     SALES ASSET ENGINE
+
+        (produkcja materiałów)
+
+        +----------------+----------------+----------------+
+        |                |                |                |
+        v                v                v                v
+
+       ADS       LANDING PAGES        EMAILS           UGC
+                                                     CREATIVES
+
+
+                                |
+                                v
+
+
+                    CAMPAIGN BUILDING
+
+        (składanie kampanii)
+
+        - wybór audience
+        - wybór kanału
+        - budżet
+        - placement
+        - tracking
+        - KPI
+        - eksperyment setup
+
+
+                                |
+                                v
+
 
                     CAMPAIGN EXECUTION
-                             |
-                             v
+
+        (kampania działa na rynku)
+
+        Traffic → Users → Leads → Customers
+
+
+                                |
+                                v
+
 
                     PERFORMANCE DATA
-                             |
-                             v
+
+        dane ilościowe:
+        - impressions
+        - CTR
+        - CPC
+        - CVR
+        - CAC
+        - ROAS
+        - revenue
+
+        dane jakościowe:
+        - comments
+        - reviews
+        - objections
+        - customer feedback
+
+
+                                |
+                                v
+
+
+                    EXPERIMENT ENGINE
+
+        (analiza i decyzje co testować dalej)
+
+        Testuje:
+
+        - audience hypothesis
+        - offer hypothesis
+        - message hypothesis
+        - creative hypothesis
+        - channel hypothesis
+
+
+                                |
+                                v
+
 
                     LEARNING ENGINE
-                             |
-                             v
+
+        AI odpowiada:
+
+        - co działa?
+        - dla kogo?
+        - dlaczego?
+        - jakie wzorce powtarzają się?
+
+
+                                |
+                                v
+
 
                  KNOWLEDGE BASE UPDATE
+
+                                |
+                                v
+
+
+                 UPDATED INSIGHTS
+
+                                |
+                                v
+
+
+                 UPDATED STRATEGY
+
+                                |
+                                |
+                                v
+
+                       NEW ITERATION
+                                |
+                                |
+                                +--------------------+
+                                                     |
+                                                     v
+
+                                             NEW ASSETS
