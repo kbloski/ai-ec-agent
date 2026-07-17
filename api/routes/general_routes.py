@@ -19,7 +19,6 @@ from application.handlers.checklist.create_checklist_for_analysis_handler import
 from application.handlers.checklist.get_analysis_checklists_handler import get_analyse_checklists_handler
 from application.handlers.checklist.get_checklist_by_id_handler import get_checklist_by_id_handler
 from application.handlers.advertisement.knowledge_advertisement_generate_handler import knowledge_advertisement_generate_handler
-from application.handlers.sales_assets.generate_sales_asset_handler import generate_sales_asset_handler
 from application.handlers.brand_marketing.generate_brand_marketing_handler import generate_brand_marketing_handler
 from application.handlers.brand_marketing.get_brand_marketing_handler import get_brand_marketing_handler
 from application.handlers.brand_marketing.get_knowledge_brand_marketings_handler import get_knowledge_brand_marketings_handler
@@ -32,6 +31,7 @@ from application.handlers.offer_strategy.get_marketing_strategy_offer_strategies
 from application.handlers.message_strategy.generate_message_strategy_handler import generate_message_strategy_handler
 from application.handlers.message_strategy.get_message_strategy_handler import get_message_strategy_handler
 from application.handlers.message_strategy.get_offer_strategy_message_strategies_handler import get_offer_strategy_message_strategies_handler
+from application.handlers.page_strategy.generate_page_strategy_json_handler import generate_page_strategy_json_handler
 
 
 def register_general_routes(router: APIRouter):
@@ -222,16 +222,22 @@ def register_general_routes(router: APIRouter):
 
 
     # -----------------------------
-    # Sales assets
+    # Page strategy
     # -----------------------------
-    @router.get("/knowledges/{knowledge_id}/sales-assets/generate")
-    def knowledge_sales_asset_generate(knowledge_id: int, type: str = "landing_page"):
-        return generate_sales_asset_handler(knowledge_id=knowledge_id, type=type)
+    @router.get("/knowledges/{knowledge_id}/brand-marketing/{brand_marketing_id}/marketing-strategy/{marketing_strategy_id}/offer-strategy/{offer_strategy_id}/message-strategy/{message_strategy_id}/page-strategy/generate")
+    def knowledge_page_strategy_generate( knowledge_id: int, brand_marketing_id: int, marketing_strategy_id: int, offer_strategy_id: int, message_strategy_id: int ):
+        return generate_page_strategy_json_handler(
+            knowledge_id=knowledge_id,
+            message_strategy_id=message_strategy_id,
+            brand_marketing_id=brand_marketing_id,
+            marketing_strategy_id=marketing_strategy_id,
+            offer_strategy_id=offer_strategy_id
+        )
 
 
     # -----------------------------
     # Knowledges advertisement
     # -----------------------------
-    @router.get("/knowledges/{knowledge_id}/advertisements/generate")
-    def knowledge_advertisement_generate( knowledge_id : int, count: int = 3 ):
-        return knowledge_advertisement_generate_handler( knowledge_id=knowledge_id, count=count )
+    # @router.get("/knowledges/{knowledge_id}/advertisements/generate")
+    # def knowledge_advertisement_generate( knowledge_id : int, count: int = 3 ):
+    #     return knowledge_advertisement_generate_handler( knowledge_id=knowledge_id, count=count )
