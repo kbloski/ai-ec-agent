@@ -40,3 +40,6 @@ from domain.models.offer_strategy.offer_strategy import OfferStrategy
 
 # Message strategy
 from domain.models.message_strategy.message_strategy import MessageStrategy
+
+# Ad strategy
+from domain.models.ad_strategy.ad_strategy import AdStrategy

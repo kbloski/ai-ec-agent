@@ -33,6 +33,8 @@ from application.handlers.message_strategy.get_message_strategy_handler import g
 from application.handlers.message_strategy.get_offer_strategy_message_strategies_handler import get_offer_strategy_message_strategies_handler
 from application.handlers.page_strategy.generate_page_strategy_json_handler import generate_page_strategy_json_handler
 from application.handlers.ad_strategy.generate_ad_strategy_handler import generate_ad_strategy_handler
+from application.handlers.ad_strategy.get_ad_strategy_handler import get_ad_strategy_handler
+from application.handlers.ad_strategy.get_message_strategy_ad_strategies_handler import get_message_strategy_ad_strategies_handler
 
 
 def register_general_routes(router: APIRouter):
@@ -234,6 +236,14 @@ def register_general_routes(router: APIRouter):
             offer_strategy_id=offer_strategy_id,
             message_strategy_id=message_strategy_id
         )
+
+    @router.get("/message-strategy/{message_strategy_id}/ad-strategy")
+    def get_message_strategy_ad_strategies( message_strategy_id: int ):
+        return get_message_strategy_ad_strategies_handler( message_strategy_id=message_strategy_id )
+
+    @router.get("/ad-strategy/{id}")
+    def get_ad_strategy( id: int ):
+        return get_ad_strategy_handler( id=id )
 
 
     # -----------------------------

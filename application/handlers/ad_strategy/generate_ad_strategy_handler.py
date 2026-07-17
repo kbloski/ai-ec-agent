@@ -3,6 +3,7 @@ import json
 from di.container import Container
 from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
 from domain.enums.ollama_message_role import OllamaMessageRole
+from domain.models.ad_strategy.ad_strategy import AdStrategy
 
 
 SYSTEM_PROMPT = """
@@ -389,6 +390,9 @@ def generate_ad_strategy_handler(
         container.message_strategy_service()
     )
 
+    ad_strategy_repository = container.ad_strategy_repository()
+    ad_strategy_service = container.ad_strategy_service()
+
     ollama_service = container.ollama_service()
 
 
@@ -532,4 +536,22 @@ def generate_ad_strategy_handler(
         }
 
 
-    return result
+    entity = AdStrategy(
+        knowledge_id=knowledge_id,
+        brand_marketing_id=brand_marketing_id,
+        marketing_strategy_id=marketing_strategy_id,
+        offer_strategy_id=offer_strategy_id,
+        message_strategy_id=message_strategy_id,
+        objective=result.get("objective"),
+        customer_stage=result.get("customer_stage"),
+        priority_audiences=result.get("priority_audiences", []),
+        audience_angles=result.get("audience_angles", []),
+        message_angles=result.get("message_angles", []),
+        offer_angles=result.get("offer_angles", []),
+        creative_concepts=result.get("creative_concepts", []),
+        recommended_formats=result.get("recommended_formats", []),
+        testing_hypotheses=result.get("testing_hypotheses", []),
+    )
+    created = ad_strategy_repository.create(entity)
+
+    return ad_strategy_service.get_ad_strategy_by_id(id=created.id)

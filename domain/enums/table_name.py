@@ -18,3 +18,4 @@ class TableName(str, Enum):
     MARKETING_STRATEGY = "marketing_strategy"
     OFFER_STRATEGY = "offer_strategy"
     MESSAGE_STRATEGY = "message_strategy"
+    AD_STRATEGY = "ad_strategy"
