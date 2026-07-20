@@ -3,6 +3,7 @@ import json
 from di.container import Container
 from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
 from domain.enums.ollama_message_role import OllamaMessageRole
+from domain.models.ugc_creatives.ugc_creative import UgcCreative
 
 
 SYSTEM_PROMPT = """
@@ -307,6 +308,9 @@ def generate_ugc_creatives_handler(
         container.message_strategy_service()
     )
 
+    ugc_creative_repository = container.ugc_creative_repository()
+    ugc_creative_service = container.ugc_creative_service()
+
     ollama_service = container.ollama_service()
 
 
@@ -417,4 +421,51 @@ def generate_ugc_creatives_handler(
         }
 
 
-    return result.get("ugc_creatives", [])
+    created_ids = []
+
+
+    for item in result.get("ugc_creatives", []):
+
+        entity = UgcCreative(
+
+            knowledge_id=knowledge_id,
+
+            brand_marketing_id=brand_marketing_id,
+
+            marketing_strategy_id=marketing_strategy_id,
+
+            offer_strategy_id=offer_strategy_id,
+
+            message_strategy_id=message_strategy_id,
+
+            name=item.get("name"),
+
+            customer_persona=item.get("customer_persona"),
+
+            content_format=item.get("content_format"),
+
+            angle=item.get("angle"),
+
+            hook_idea=item.get("hook_idea"),
+
+            video_flow=item.get("video_flow", []),
+
+            recording_style=item.get("recording_style"),
+
+            platform_fit=item.get("platform_fit", []),
+
+            cta=item.get("cta"),
+
+            why_it_should_work=item.get("why_it_should_work"),
+
+        )
+
+        created = ugc_creative_repository.create(entity)
+
+        created_ids.append(created.id)
+
+
+    return [
+        ugc_creative_service.get_ugc_creative_by_id(id)
+        for id in created_ids
+    ]

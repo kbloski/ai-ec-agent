@@ -42,6 +42,8 @@ from application.handlers.ad_execution.get_creative_strategy_ad_executions_handl
 from application.handlers.creative_strategy.get_creative_strategy_handler import get_creative_strategy_handler
 from application.handlers.creative_strategy.get_ad_strategy_creative_strategies_handler import get_ad_strategy_creative_strategies_handler
 from application.handlers.ugc_creatives.generate_ugc_creatives_handler import generate_ugc_creatives_handler
+from application.handlers.ugc_creatives.get_ugc_creative_handler import get_ugc_creative_handler
+from application.handlers.ugc_creatives.get_message_strategy_ugc_creatives_handler import get_message_strategy_ugc_creatives_handler
 from application.handlers.page_strategy.get_page_strategy_handler import get_page_strategy_handler
 from application.handlers.page_strategy.get_message_strategy_page_strategies_handler import get_message_strategy_page_strategies_handler
 from application.handlers.page_blueprint.generate_page_blueprint_handler import generate_page_blueprint_handler
@@ -277,6 +279,14 @@ def register_general_routes(router: APIRouter):
             offer_strategy_id=offer_strategy_id,
             message_strategy_id=message_strategy_id
         )
+
+    @router.get("/message-strategy/{message_strategy_id}/ugc-creatives")
+    def get_message_strategy_ugc_creatives( message_strategy_id: int ):
+        return get_message_strategy_ugc_creatives_handler( message_strategy_id=message_strategy_id )
+
+    @router.get("/ugc-creatives/{id}")
+    def get_ugc_creative( id: int ):
+        return get_ugc_creative_handler( id=id )
 
 
     # -----------------------------
