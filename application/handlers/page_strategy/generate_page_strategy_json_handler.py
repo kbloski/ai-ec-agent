@@ -3,6 +3,7 @@ import json
 from di.container import Container
 from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
 from domain.enums.ollama_message_role import OllamaMessageRole
+from domain.models.page_strategy.page_strategy import PageStrategy
 
 
 SYSTEM_PROMPT = """
@@ -290,6 +291,9 @@ def generate_page_strategy_json_handler(
     marketing_strategy_service = container.marketing_strategy_service()
     offer_strategy_service = container.offer_strategy_service()
 
+    page_strategy_repository = container.page_strategy_repository()
+    page_strategy_service = container.page_strategy_service()
+
     ollama_service = container.ollama_service()
 
 
@@ -408,10 +412,71 @@ def generate_page_strategy_json_handler(
 
     except Exception:
 
-        result = {
+        return {
             "raw_response": response.content
         }
 
 
 
-    return result
+    page_strategy_data = result.get("page_strategy", {})
+
+
+    entity = PageStrategy(
+
+        knowledge_id=knowledge_id,
+
+        brand_marketing_id=brand_marketing_id,
+
+        marketing_strategy_id=marketing_strategy_id,
+
+        offer_strategy_id=offer_strategy_id,
+
+        message_strategy_id=message_strategy_id,
+
+        goal=page_strategy_data.get("goal"),
+
+        conversion_action=page_strategy_data.get("conversion_action"),
+
+        target_audience=page_strategy_data.get("target_audience"),
+
+        customer_awareness_level=page_strategy_data.get("customer_awareness_level"),
+
+        customer_journey_stage=page_strategy_data.get("customer_journey_stage"),
+
+        core_value_proposition=page_strategy_data.get("core_value_proposition"),
+
+        main_message=page_strategy_data.get("main_message"),
+
+        message_angle=page_strategy_data.get("message_angle"),
+
+        customer_problem=page_strategy_data.get("customer_problem"),
+
+        customer_desire=page_strategy_data.get("customer_desire"),
+
+        emotional_drivers=page_strategy_data.get("emotional_drivers", []),
+
+        rational_drivers=page_strategy_data.get("rational_drivers", []),
+
+        purchase_motivators=page_strategy_data.get("purchase_motivators", []),
+
+        purchase_barriers=page_strategy_data.get("purchase_barriers", []),
+
+        objections_to_resolve=page_strategy_data.get("objections_to_resolve", []),
+
+        trust_requirements=page_strategy_data.get("trust_requirements", []),
+
+        competitive_positioning=page_strategy_data.get("competitive_positioning"),
+
+        brand_voice_direction=page_strategy_data.get("brand_voice_direction"),
+
+        conversion_strategy=page_strategy_data.get("conversion_strategy"),
+
+        customer_journey_strategy=page_strategy_data.get("customer_journey_strategy", []),
+
+    )
+
+
+    created = page_strategy_repository.create(entity)
+
+
+    return page_strategy_service.get_page_strategy_by_id(id=created.id)

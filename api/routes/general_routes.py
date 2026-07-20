@@ -42,6 +42,11 @@ from application.handlers.ad_execution.get_creative_strategy_ad_executions_handl
 from application.handlers.creative_strategy.get_creative_strategy_handler import get_creative_strategy_handler
 from application.handlers.creative_strategy.get_ad_strategy_creative_strategies_handler import get_ad_strategy_creative_strategies_handler
 from application.handlers.ugc_creatives.generate_ugc_creatives_handler import generate_ugc_creatives_handler
+from application.handlers.page_strategy.get_page_strategy_handler import get_page_strategy_handler
+from application.handlers.page_strategy.get_offer_strategy_page_strategies_handler import get_offer_strategy_page_strategies_handler
+from application.handlers.page_blueprint.generate_page_blueprint_handler import generate_page_blueprint_handler
+from application.handlers.page_blueprint.get_page_blueprint_handler import get_page_blueprint_handler
+from application.handlers.page_blueprint.get_page_strategy_page_blueprints_handler import get_page_strategy_page_blueprints_handler
 
 
 
@@ -327,6 +332,37 @@ def register_general_routes(router: APIRouter):
             marketing_strategy_id=marketing_strategy_id,
             offer_strategy_id=offer_strategy_id
         )
+
+    @router.get("/offer-strategy/{offer_strategy_id}/page-strategy")
+    def get_offer_strategy_page_strategies( offer_strategy_id: int ):
+        return get_offer_strategy_page_strategies_handler( offer_strategy_id=offer_strategy_id )
+
+    @router.get("/page-strategy/{id}")
+    def get_page_strategy( id: int ):
+        return get_page_strategy_handler( id=id )
+
+
+    # -----------------------------
+    # Page blueprint
+    # -----------------------------
+    @router.get("/knowledges/{knowledge_id}/brand-marketing/{brand_marketing_id}/marketing-strategy/{marketing_strategy_id}/offer-strategy/{offer_strategy_id}/message-strategy/{message_strategy_id}/page-strategy/{page_strategy_id}/page-blueprint/generate")
+    def knowledge_page_blueprint_generate( knowledge_id: int, brand_marketing_id: int, marketing_strategy_id: int, offer_strategy_id: int, message_strategy_id: int, page_strategy_id: int ):
+        return generate_page_blueprint_handler(
+            knowledge_id=knowledge_id,
+            message_strategy_id=message_strategy_id,
+            brand_marketing_id=brand_marketing_id,
+            marketing_strategy_id=marketing_strategy_id,
+            offer_strategy_id=offer_strategy_id,
+            page_strategy_id=page_strategy_id
+        )
+
+    @router.get("/page-strategy/{page_strategy_id}/page-blueprint")
+    def get_page_strategy_page_blueprints( page_strategy_id: int ):
+        return get_page_strategy_page_blueprints_handler( page_strategy_id=page_strategy_id )
+
+    @router.get("/page-blueprint/{id}")
+    def get_page_blueprint( id: int ):
+        return get_page_blueprint_handler( id=id )
 
 
     # -----------------------------

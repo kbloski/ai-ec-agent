@@ -46,6 +46,12 @@ from application.services.creative_strategy_service import CreativeStrategyServi
 from infrastructure.repositories.ad_execution_repository import AdExecutionRepository
 from application.assemblers.ad_execution_assembler import AdExecutionAssembler
 from application.services.ad_execution_service import AdExecutionService
+from infrastructure.repositories.page_strategy_repository import PageStrategyRepository
+from application.assemblers.page_strategy_assembler import PageStrategyAssembler
+from application.services.page_strategy_service import PageStrategyService
+from infrastructure.repositories.page_blueprint_repository import PageBlueprintRepository
+from application.assemblers.page_blueprint_assembler import PageBlueprintAssembler
+from application.services.page_blueprint_service import PageBlueprintService
 
 class Container(containers.DeclarativeContainer):
     db = providers.Singleton(
@@ -193,6 +199,18 @@ class Container(containers.DeclarativeContainer):
         db=db
     )
 
+    page_strategy_repository = providers.Singleton(
+        PageStrategyRepository,
+        logger=logger,
+        db=db
+    )
+
+    page_blueprint_repository = providers.Singleton(
+        PageBlueprintRepository,
+        logger=logger,
+        db=db
+    )
+
 
     # --------------------------
     # Assemblery
@@ -263,6 +281,16 @@ class Container(containers.DeclarativeContainer):
 
     ad_execution_assembler = providers.Singleton(
         AdExecutionAssembler,
+        logger=logger,
+    )
+
+    page_strategy_assembler = providers.Singleton(
+        PageStrategyAssembler,
+        logger=logger,
+    )
+
+    page_blueprint_assembler = providers.Singleton(
+        PageBlueprintAssembler,
         logger=logger,
     )
     # --------------------------
@@ -346,4 +374,18 @@ class Container(containers.DeclarativeContainer):
         logger=logger,
         ad_execution_repository=ad_execution_repository,
         ad_execution_assembler=ad_execution_assembler
+    )
+
+    page_strategy_service = providers.Singleton(
+        PageStrategyService,
+        logger=logger,
+        page_strategy_repository=page_strategy_repository,
+        page_strategy_assembler=page_strategy_assembler
+    )
+
+    page_blueprint_service = providers.Singleton(
+        PageBlueprintService,
+        logger=logger,
+        page_blueprint_repository=page_blueprint_repository,
+        page_blueprint_assembler=page_blueprint_assembler
     )
