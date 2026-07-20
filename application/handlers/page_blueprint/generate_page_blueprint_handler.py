@@ -6,8 +6,22 @@ from domain.enums.ollama_message_role import OllamaMessageRole
 from domain.models.page_blueprint.page_blueprint import PageBlueprint
 
 
+
 SYSTEM_PROMPT = """
-Stwórz PAGE BLUEPRINT landing page na podstawie dostarczonych danych:
+Jesteś ekspertem od:
+
+- E-commerce Landing Page Architecture
+- Conversion Rate Optimization
+- Direct Response Marketing
+- Product Page Psychology
+- Customer Journey Design
+
+
+Twoim zadaniem jest stworzenie PAGE BLUEPRINT
+dla sprzedażowego landing page produktu fizycznego.
+
+
+Na podstawie:
 
 - Knowledge Base
 - Page Strategy
@@ -17,97 +31,123 @@ Stwórz PAGE BLUEPRINT landing page na podstawie dostarczonych danych:
 - Offer Strategy
 
 
-Page Blueprint określa:
+Page Blueprint NIE jest finalnym copy.
+
+
+Określa:
 
 - strukturę strony,
 - kolejność sekcji,
-- rolę konwersyjną każdej sekcji,
-- elementy wymagane do wygenerowania później.
+- funkcję każdej sekcji,
+- elementy potrzebne później do wygenerowania copy.
 
 
-Nie generuj:
 
-- finalnego copy,
-- headline'ów,
-- sloganów,
+NIE GENERUJ:
+
+- headline,
+- subheadline,
+- body copy,
+- CTA,
+- tekstów sprzedażowych,
+- HTML,
+- CSS,
 - designu,
-- HTML/CSS,
 - obrazów.
 
 
-Celem strony jest przeprowadzenie użytkownika przez proces:
+
+CEL LANDING PAGE:
+
 
 ATTENTION
-→ PROBLEM AWARENESS
-→ SOLUTION AWARENESS
-→ VALUE
-→ TRUST
-→ OBJECTION REMOVAL
-→ CONVERSION
+
+↓
+
+PROBLEM AWARENESS
+
+↓
+
+PRODUCT DESIRE
+
+↓
+
+VALUE UNDERSTANDING
+
+↓
+
+TRUST
+
+↓
+
+PURCHASE DECISION
 
 
 
-SEKCJE LANDING PAGE:
+KONTEKST:
 
 
-REQUIRED SECTIONS:
+Tworzysz głównie:
 
-Używaj ich w większości landing page sprzedażowych.
+- e-commerce,
+- produkty fizyczne,
+- low ticket,
+- direct response,
+- pojedynczy produkt.
+
+
+
+AVAILABLE SECTION TYPES:
+
 
 
 hero
 
 Cel:
-Pierwszy kontakt użytkownika ze stroną.
-Przekazuje główną wartość.
+Pierwszy kontakt.
+Przekazuje główną wartość produktu.
 
 
 problem
 
 Cel:
-Pokazuje problem klienta i konsekwencje.
+Pokazuje problem, frustrację lub potrzebę klienta.
 
 
 solution
 
 Cel:
-Przedstawia rozwiązanie.
+Pokazuje produkt jako rozwiązanie problemu.
 
 
 benefits
 
 Cel:
-Pokazuje rezultaty i wartość.
+Pokazuje rezultaty i korzyści.
 
 
 features
 
 Cel:
-Pokazuje elementy produktu/usługi.
+Pokazuje konkretne cechy produktu.
 
 
 how_it_works
 
 Cel:
-Wyjaśnia proces działania.
+Wyjaśnia działanie produktu.
 
 
 social_proof
 
 Cel:
-Buduje wiarygodność.
+Buduje zaufanie poprzez dowody.
 
 
 offer
 
 Cel:
-Prezentuje zakres oferty.
-
-
-pricing
-
-Cel:
-Prezentuje cenę lub model zakupu.
+Pokazuje co klient otrzymuje.
 
 
 risk_reversal
@@ -116,26 +156,26 @@ Cel:
 Zmniejsza ryzyko zakupu.
 
 
-objection_handling
-
-Cel:
-Usuwa bariery zakupowe.
-
-
 faq
 
 Cel:
-Odpowiada na pytania.
+Usuwa ostatnie pytania i obiekcje.
 
 
 final_cta
 
 Cel:
-Prowadzi do konwersji.
+Prowadzi do zakupu.
 
 
 
-OPTIONAL SECTIONS:
+OPTIONAL SECTION TYPES:
+
+
+
+product_showcase
+
+Użyj gdy produkt wymaga wizualnego przedstawienia.
 
 
 comparison
@@ -145,53 +185,88 @@ Użyj gdy klient porównuje rozwiązania.
 
 testimonials
 
-Użyj gdy opinie klientów zwiększają zaufanie.
-
-
-case_studies
-
-Użyj gdy wyniki klientów są ważnym argumentem.
-
-
-unique_mechanism
-
-Użyj gdy produkt wymaga wyjaśnienia dlaczego działa.
+Użyj gdy opinie zwiększają konwersję.
 
 
 before_after
 
-Użyj gdy transformacja klienta jest kluczowa.
+Użyj gdy produkt powoduje transformację.
 
 
-trust_bar
+unique_mechanism
 
-Użyj gdy potrzebne są dodatkowe dowody wiarygodności.
+Użyj gdy trzeba wyjaśnić dlaczego produkt działa.
 
 
 bonus_stack
 
-Użyj gdy oferta posiada bonusy.
+Użyj gdy oferta posiada dodatkowe elementy.
 
 
 urgency
 
-Użyj gdy istnieje realny powód szybkiej decyzji.
+Użyj tylko gdy istnieje prawdziwy powód szybkiej decyzji.
+
+
+pricing
+
+Użyj gdy cena lub warianty mają wpływ na decyzję.
 
 
 
 ZASADY WYBORU:
 
 
-- Nie używaj wszystkich sekcji.
-- Dodawaj tylko sekcje mające konkretną funkcję sprzedażową.
-- Required oznacza sekcję niezbędną dla skuteczności strony.
-- Optional oznacza sekcję zwiększającą konwersję, ale nie wymaganą.
+
+Nie używaj wszystkich sekcji.
+
+
+Dla większości e-commerce low ticket:
+
+hero
+problem
+solution
+benefits
+features
+social_proof
+offer
+risk_reversal
+faq
+final_cta
+
+
+są najczęściej wymagane.
+
+
+
+Nie dodawaj:
+
+- case studies,
+- zaawansowanych sekcji B2B,
+- strategii,
+- copy.
+
+
+
+SECTION PRIORITY:
+
+
+"required"
+
+Sekcja konieczna dla skuteczności strony.
+
+
+"optional"
+
+Sekcja zwiększająca konwersję,
+ale możliwa do pominięcia.
+
 
 
 OUTPUT FORMAT:
 
 
-Zwróć dokładnie taki JSON:
+Zwróć dokładnie:
 
 
 {
@@ -204,11 +279,12 @@ Zwróć dokładnie taki JSON:
         "sections": [
 
             {
+
                 "order": 1,
 
                 "section_type": "",
 
-                "section_priority": "required",
+                "section_priority": "",
 
                 "purpose": "",
 
@@ -225,6 +301,7 @@ Zwróć dokładnie taki JSON:
                 "objection_targets": [],
 
                 "notes": ""
+
             }
 
         ]
@@ -234,21 +311,26 @@ Zwróć dokładnie taki JSON:
 
 
 
-RESTRICTIONS:
+STRICT JSON RULES:
 
 
-- root JSON musi zawsze posiadać "page_blueprint"
-- "page_blueprint" musi posiadać "sections"
-- "sections" musi być tablicą
+- root JSON musi posiadać "page_blueprint"
+- page_blueprint musi posiadać "sections"
+- sections musi być tablicą
 - każda sekcja musi być obiektem
-- nie zwracaj tablicy jako root
-- nie dodawaj żadnego tekstu przed JSON
-- nie dodawaj żadnego tekstu po JSON
+- section_type zawsze po angielsku
+- wszystkie klucze JSON zawsze po angielsku
+- nie generuj copy
+- nie generuj tekstów reklamowych
 - nie używaj markdown
 - nie używaj ```json
+- nie dodawaj komentarzy
+- nie dodawaj tekstu poza JSON
 - wszystkie pola muszą istnieć
 - nie używaj null
+
 """
+
 
 
 USER_PROMPT_TEMPLATE = """
@@ -283,14 +365,18 @@ MARKETING STRATEGY:
 OFFER STRATEGY:
 
 {offer_strategy_json}
+
 """
+
 
 
 def extract_json(content: str):
 
     content = content.strip()
 
+
     if "```" in content:
+
         content = (
             content
             .replace("```json", "")
@@ -298,13 +384,18 @@ def extract_json(content: str):
             .strip()
         )
 
+
     start = content.find("{")
+
     end = content.rfind("}")
 
+
     if start == -1 or end == -1:
+
         raise ValueError(
             "JSON object not found"
         )
+
 
     return content[start:end + 1]
 
@@ -360,6 +451,7 @@ def generate_page_blueprint_handler(
     )
 
 
+
     page_strategy = (
         page_strategy_service
         .get_page_strategy_by_id(
@@ -408,6 +500,7 @@ def generate_page_blueprint_handler(
     )
 
 
+
     def serialize(obj):
 
         return json.dumps(
@@ -416,6 +509,7 @@ def generate_page_blueprint_handler(
             indent=2,
             default=str
         )
+
 
 
     user_prompt = USER_PROMPT_TEMPLATE.format(
@@ -443,7 +537,9 @@ def generate_page_blueprint_handler(
         offer_strategy_json=serialize(
             offer_strategy
         )
+
     )
+
 
 
     response = ollama_service.chat_llm(
@@ -465,22 +561,26 @@ def generate_page_blueprint_handler(
     )
 
 
+
     try:
 
         content = extract_json(
             response.content
         )
 
+
         result = json.loads(
             content
         )
 
 
-    except Exception:
+    except Exception as e:
 
         return {
 
             "error": "Invalid JSON response",
+
+            "exception": str(e),
 
             "raw_response": response.content
 
@@ -496,6 +596,7 @@ def generate_page_blueprint_handler(
     )
 
 
+
     if not page_blueprint_data:
 
         return {
@@ -507,12 +608,14 @@ def generate_page_blueprint_handler(
         }
 
 
+
     sections = (
         page_blueprint_data.get(
             "sections",
             []
         )
     )
+
 
 
     if not isinstance(
@@ -530,6 +633,50 @@ def generate_page_blueprint_handler(
 
 
 
+    allowed_sections = {
+
+        "hero",
+        "problem",
+        "solution",
+        "benefits",
+        "features",
+        "how_it_works",
+        "social_proof",
+        "offer",
+        "risk_reversal",
+        "faq",
+        "final_cta",
+        "product_showcase",
+        "comparison",
+        "testimonials",
+        "before_after",
+        "unique_mechanism",
+        "bonus_stack",
+        "urgency",
+        "pricing"
+
+    }
+
+
+
+    for section in sections:
+
+
+        if (
+            section.get("section_type")
+            not in allowed_sections
+        ):
+
+            return {
+
+                "error": "Invalid section_type",
+
+                "section": section
+
+            }
+
+
+
     entity = PageBlueprint(
 
         page_strategy_id=page_strategy_id,
@@ -537,14 +684,14 @@ def generate_page_blueprint_handler(
         page_type=(
             page_blueprint_data.get(
                 "page_type",
-                ""
+                "ecommerce_product"
             )
         ),
 
         primary_conversion_goal=(
             page_blueprint_data.get(
                 "primary_conversion_goal",
-                ""
+                "purchase"
             )
         ),
 
@@ -553,11 +700,13 @@ def generate_page_blueprint_handler(
     )
 
 
+
     created = (
         page_blueprint_repository.create(
             entity
         )
     )
+
 
 
     return (
