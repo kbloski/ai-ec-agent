@@ -10,15 +10,21 @@ Jesteś ekspertem od:
 
 - Conversion Copywriting
 - Direct Response Marketing
+- E-commerce Copywriting
 - Landing Page Copywriting
 - Customer Psychology
 - Persuasive Writing
 - Offer Communication
+- Low Ticket Product Marketing
 
 
 Twoim zadaniem jest stworzenie PAGE COPY
 na podstawie:
 
+- Knowledge Base
+- Brand Marketing
+- Marketing Strategy
+- Page Blueprint
 - Page Content Plan
 - Page Strategy
 - Message Strategy
@@ -34,6 +40,7 @@ Tworzysz:
 - subheadline,
 - body_copy,
 - bullet_points,
+- content_blocks,
 - CTA,
 - supporting_text.
 
@@ -41,18 +48,17 @@ Tworzysz:
 Nie tworzysz:
 
 - strategii,
-- struktury strony,
 - nowych sekcji,
 - HTML,
 - CSS,
 - React,
-- komponentów,
+- komponentów UI,
 - obrazów,
 - promptów wizualnych.
 
 
 
-ZASADY:
+ZASADY GENEROWANIA:
 
 
 1. Używaj dokładnie sekcji przekazanych w PAGE CONTENT PLAN.
@@ -64,24 +70,29 @@ ZASADY:
 3. Nie zmieniaj kolejności sekcji.
 
 
-4. Każda sekcja musi realizować cel określony w PAGE CONTENT PLAN.
+4. Każda sekcja musi realizować cel określony w Page Blueprint.
 
 
 5. Copy musi:
 
 - komunikować wartość produktu,
-- odpowiadać na potrzeby klienta,
+- pokazywać transformację klienta,
 - usuwać obiekcje,
-- zwiększać zaufanie,
+- budować zaufanie,
+- zwiększać chęć zakupu,
 - prowadzić do konwersji.
+
 
 
 6. Nie wymyślaj nowych faktów.
 
-Używaj wyłącznie informacji zawartych w dostarczonym kontekście.
+Używaj wyłącznie informacji zawartych
+w dostarczonym kontekście.
+
 
 
 7. Unikaj pustych fraz marketingowych.
+
 
 Nie używaj:
 
@@ -91,6 +102,123 @@ Nie używaj:
 - przełomowy,
 - wyjątkowy,
 - niesamowity.
+
+
+
+CONTENT BLOCKS:
+
+
+Niektóre sekcje wymagają elementów wewnętrznych.
+
+Jeżeli sekcja potrzebuje listy elementów,
+użyj pola:
+
+"content_blocks"
+
+
+
+Przykłady:
+
+
+
+problem:
+
+content_blocks:
+
+[
+ {
+   "type": "problem_item",
+   "title": "",
+   "description": ""
+ }
+]
+
+
+
+
+benefits:
+
+content_blocks:
+
+[
+ {
+   "type": "benefit",
+   "title": "",
+   "description": ""
+ }
+]
+
+
+
+
+features:
+
+content_blocks:
+
+[
+ {
+   "type": "feature",
+   "title": "",
+   "description": "",
+   "specification": ""
+ }
+]
+
+
+
+
+offer:
+
+content_blocks:
+
+[
+ {
+   "type": "offer_card",
+   "name": "",
+   "price": "",
+   "included_items": [],
+   "cta": ""
+ }
+]
+
+
+
+
+faq:
+
+content_blocks:
+
+[
+ {
+   "type": "faq_item",
+   "question": "",
+   "answer": ""
+ }
+]
+
+
+
+
+comparison:
+
+content_blocks:
+
+[
+ {
+   "type": "comparison_row",
+   "criterion": "",
+   "product_value": "",
+   "alternative_value": ""
+ }
+]
+
+
+
+ZASADA:
+
+content_blocks NIE są nowymi sekcjami.
+
+Są tylko elementami wewnątrz istniejącej sekcji.
 
 
 
@@ -122,6 +250,7 @@ OUTPUT FORMAT:
 Zwróć dokładnie:
 
 
+
 {
     "page_copy": {
 
@@ -140,6 +269,8 @@ Zwróć dokładnie:
 
                 "bullet_points": [],
 
+                "content_blocks": [],
+
                 "cta": "",
 
                 "supporting_text": ""
@@ -153,11 +284,12 @@ Zwróć dokładnie:
 
 
 
+
 STRICT JSON RULES:
 
 
 - zwróć wyłącznie JSON,
-- używaj tylko standardowych podwójnych cudzysłowów ",
+- używaj tylko standardowych podwójnych cudzysłowów,
 - nigdy nie używaj znaków „ ”,
 - wszystkie klucze muszą być po angielsku,
 - nie używaj markdown,
@@ -167,6 +299,7 @@ STRICT JSON RULES:
 - nie dodawaj tekstu po JSON,
 - nie używaj null,
 - bullet_points zawsze musi być tablicą,
+- content_blocks zawsze musi być tablicą,
 - wszystkie pola muszą istnieć.
 """
 
@@ -217,23 +350,16 @@ OFFER STRATEGY:
 """
 
 
+
 def normalize_json(content: str):
 
     replacements = {
-        "„": '"',
-        "”": '"',
-        "‚": '"',
+        "‚": "'",
         "’": "'",
     }
 
-
     for old, new in replacements.items():
-
-        content = content.replace(
-            old,
-            new
-        )
-
+        content = content.replace(old, new)
 
     return content.strip()
 
@@ -242,7 +368,6 @@ def normalize_json(content: str):
 def extract_json(content: str):
 
     content = content.strip()
-
 
     if "```" in content:
 
@@ -283,42 +408,18 @@ def generate_page_copy_handler(
     container = Container()
 
 
-    page_content_plan_service = (
-        container.page_content_plan_service()
-    )
+    page_content_plan_service = container.page_content_plan_service()
+    page_strategy_service = container.page_strategy_service()
+    message_strategy_service = container.message_strategy_service()
+    offer_strategy_service = container.offer_strategy_service()
 
-    page_strategy_service = (
-        container.page_strategy_service()
-    )
+    knowledge_service = container.knowledge_service()
+    brand_marketing_service = container.brand_marketing_service()
+    marketing_strategy_service = container.marketing_strategy_service()
 
-    message_strategy_service = (
-        container.message_strategy_service()
-    )
+    page_blueprint_service = container.page_blueprint_service()
 
-    offer_strategy_service = (
-        container.offer_strategy_service()
-    )
-
-    knowledge_service = (
-        container.knowledge_service()
-    )
-
-    brand_marketing_service = (
-        container.brand_marketing_service()
-    )
-
-    marketing_strategy_service = (
-        container.marketing_strategy_service()
-    )
-
-    page_blueprint_service = (
-        container.page_blueprint_service()
-    )
-
-
-    ollama_service = (
-        container.ollama_service()
-    )
+    ollama_service = container.ollama_service()
 
 
 
@@ -400,9 +501,7 @@ def generate_page_copy_handler(
 
     user_prompt = USER_PROMPT_TEMPLATE.format(
 
-        knowledge_json=serialize(
-            knowledge
-        ),
+        knowledge_json=serialize(knowledge),
 
         brand_marketing_json=serialize(
             brand_marketing
@@ -473,14 +572,6 @@ def generate_page_copy_handler(
         )
 
 
-        if isinstance(result, str):
-
-            result = json.loads(
-                result
-            )
-
-
-
     except Exception as e:
 
         return {
@@ -499,24 +590,11 @@ def generate_page_copy_handler(
 
         return {
 
-            "error": "Missing page_copy object",
+            "error": "Missing page_copy",
 
             "raw_response": response.content
 
         }
-
-
-
-    if "sections" not in result["page_copy"]:
-
-        return {
-
-            "error": "Missing sections",
-
-            "raw_response": response.content
-
-        }
-
 
 
     return result
