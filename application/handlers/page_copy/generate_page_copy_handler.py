@@ -3,6 +3,7 @@ import json
 from di.container import Container
 from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
 from domain.enums.ollama_message_role import OllamaMessageRole
+from domain.models.page_copy.page_copy import PageCopy
 
 
 SYSTEM_PROMPT = """
@@ -419,6 +420,9 @@ def generate_page_copy_handler(
 
     page_blueprint_service = container.page_blueprint_service()
 
+    page_copy_repository = container.page_copy_repository()
+    page_copy_service = container.page_copy_service()
+
     ollama_service = container.ollama_service()
 
 
@@ -597,4 +601,19 @@ def generate_page_copy_handler(
         }
 
 
-    return result
+    page_copy_data = result.get("page_copy", {})
+
+
+    entity = PageCopy(
+
+        page_content_plan_id=page_content_plan_id,
+
+        sections=page_copy_data.get("sections", []),
+
+    )
+
+
+    created = page_copy_repository.create(entity)
+
+
+    return page_copy_service.get_page_copy_by_id(id=created.id)
