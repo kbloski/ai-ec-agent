@@ -147,6 +147,16 @@ KNOWLEDGE BASE:
 {knowledge_json}
 
 
+BRAND MARKETING:
+
+{brand_marketing_json}
+
+
+MARKETING STRATEGY:
+
+{marketing_strategy_json}
+
+
 PAGE STRATEGY:
 
 {page_strategy_json}
@@ -176,12 +186,14 @@ def generate_page_content_plan_handler(
     offer_strategy_id: int,
     message_strategy_id: int,
     page_strategy_id: int,
-    page_blueprint_id: int
+    page_blueprint_id: int,
 ):
 
     container = Container()
 
     knowledge_service = container.knowledge_service()
+    brand_marketing_service = container.brand_marketing_service()
+    marketing_strategy_service = container.marketing_strategy_service()
     page_strategy_service = container.page_strategy_service()
     page_blueprint_service = container.page_blueprint_service()
     message_strategy_service = container.message_strategy_service()
@@ -228,6 +240,20 @@ def generate_page_content_plan_handler(
     )
 
 
+    brand_marketing = (
+        brand_marketing_service.get_brand_marketing_by_id(
+            id=brand_marketing_id
+        )
+    )
+
+
+    marketing_strategy = (
+        marketing_strategy_service.get_marketing_strategy_by_id(
+            id=marketing_strategy_id
+        )
+    )
+
+
     def serialize(obj):
         return json.dumps(
             obj.to_dict(),
@@ -240,6 +266,10 @@ def generate_page_content_plan_handler(
     user_prompt = USER_PROMPT_TEMPLATE.format(
 
         knowledge_json=serialize(knowledge),
+
+        brand_marketing_json=serialize(brand_marketing),
+
+        marketing_strategy_json=serialize(marketing_strategy),
 
         page_strategy_json=serialize(page_strategy),
 
