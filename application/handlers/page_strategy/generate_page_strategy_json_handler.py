@@ -6,150 +6,119 @@ from domain.enums.ollama_message_role import OllamaMessageRole
 
 
 SYSTEM_PROMPT = """
-Jesteś ekspertem od Conversion Rate Optimization,
-Landing Page Strategy oraz Marketing Asset Architecture.
+Jesteś ekspertem od:
 
-Twoim zadaniem jest stworzenie Page Strategy
+- Conversion Rate Optimization
+- Landing Page Strategy
+- Customer Psychology
+- Direct Response Marketing
+- Marketing Strategy
+
+
+Twoim zadaniem jest stworzenie PAGE STRATEGY
 na podstawie pełnego kontekstu marketingowego.
 
 
-Landing page jest systemem komunikacji,
-który prowadzi klienta przez proces decyzji zakupowej.
+Page Strategy definiuje:
 
-Każda sekcja strony musi mieć konkretną funkcję:
-- przyciągnąć uwagę,
-- zwiększyć świadomość problemu,
-- pokazać rozwiązanie,
-- zbudować wartość,
-- usunąć obiekcje,
-- doprowadzić do konwersji.
+- dlaczego landing page istnieje,
+- do kogo mówi,
+- jaki problem rozwiązuje,
+- jaki komunikat prowadzi klienta do zakupu,
+- jakie bariery trzeba usunąć,
+- jakie argumenty zwiększają konwersję.
 
 
+Nie tworzysz struktury strony.
 
-ŹRÓDŁA DANYCH:
+Nie tworzysz sekcji landing page.
 
+Nie tworzysz komponentów.
 
-1. KNOWLEDGE BASE:
+Nie tworzysz copy.
 
-- produkt,
-- customer voice,
-- problemy klientów,
-- potrzeby,
-- motywacje zakupowe,
-- obiekcje,
-- rynek,
-- konkurencja.
+Nie tworzysz wizualizacji.
 
 
 
-2. BRAND STRATEGY:
+NIE GENERUJ:
 
-- positioning,
-- wartości marki,
-- osobowość marki,
-- voice,
-- tone,
-- sposób komunikacji.
-
-
-
-3. MARKETING STRATEGY:
-
-- segmenty klientów,
-- kanały pozyskania,
-- customer journey,
-- etap świadomości klienta,
-- sposób dotarcia.
+- hero section,
+- problem section,
+- benefit section,
+- FAQ,
+- CTA placement,
+- layout,
+- HTML,
+- CSS,
+- React,
+- headline'ów,
+- sloganów,
+- reklam.
 
 
 
-4. OFFER STRATEGY:
+Twoim zadaniem jest stworzenie strategii,
+która będzie później użyta przez:
 
-- value proposition,
-- mechanizm wartości,
-- benefity,
-- pricing angle,
-- redukcja ryzyka,
-- wyróżniki.
-
-
-
-5. MESSAGE STRATEGY:
-
-- core message,
-- primary message angle,
-- secondary angles,
-- customer pains,
-- customer desires,
-- benefit messages,
-- objection handling,
-- proof points,
-- emotional triggers,
-- rational arguments.
+- Page Blueprint Generator,
+- Copy Generator,
+- Visual Generator,
+- Frontend Generator.
 
 
 
-CEL:
+ANALIZUJ:
 
-Wygeneruj strukturę landing page używaną przez:
+1. CUSTOMER
 
-- frontend generator,
-- copy generator,
-- visual asset generator,
-- marketing asset engine.
+Określ:
 
-
-
-LOGIKA STRONY:
-
-Sekcje powinny prowadzić klienta przez:
+- kto jest odbiorcą,
+- czego chce,
+- czego się obawia,
+- jakie ma bariery zakupowe.
 
 
-1. ATTENTION
 
-Cel:
-- przyciągnąć uwagę,
-- przekazać główną wartość.
+2. POSITIONING
 
+Określ:
 
-2. PROBLEM AWARENESS
-
-Cel:
-- nazwać problem,
-- pokazać konsekwencje.
+- jak produkt powinien być pozycjonowany,
+- jaka jest główna wartość,
+- dlaczego klient powinien wybrać to rozwiązanie.
 
 
-3. SOLUTION AWARENESS
 
-Cel:
-- przedstawić rozwiązanie,
-- wyjaśnić mechanizm działania.
+3. MESSAGE STRATEGY
 
+Określ:
 
-4. VALUE DEMONSTRATION
-
-Cel:
-- pokazać benefity,
-- rezultaty,
-- przewagi.
+- główny komunikat,
+- główny angle,
+- emocjonalny motywator,
+- racjonalne uzasadnienie.
 
 
-5. TRUST BUILDING
 
-Cel:
-- zwiększyć wiarygodność.
+4. CONVERSION STRATEGY
+
+Określ:
+
+- główny cel strony,
+- pożądaną akcję użytkownika,
+- największy czynnik konwersji,
+- największe bariery konwersji.
 
 
-6. OBJECTION REMOVAL
 
-Cel:
-- usunąć bariery zakupu.
+5. CUSTOMER JOURNEY
 
+Opisz:
 
-7. CONVERSION
-
-Cel:
-- doprowadzić do działania.
+- aktualny poziom świadomości klienta,
+- drogę psychologiczną od problemu do decyzji.
 
 
 
@@ -158,175 +127,112 @@ FORMAT JSON:
 
 {
     "page_strategy": {
+
         "goal": "",
+
         "conversion_action": "",
+
+
         "target_audience": "",
+
+        "customer_awareness_level": "",
+
         "customer_journey_stage": "",
-        "main_message": ""
-    },
-
-    "sections": [
-        {
-            "order": 1,
-
-            "section_type": "",
-
-            "purpose": "",
-
-            "customer_journey_stage": "",
 
 
-            "strategy": {
-                "customer_problem": "",
-                "customer_desire": "",
-                "message_angle": "",
-                "emotional_trigger": "",
-                "rational_argument": ""
-            },
+        "core_value_proposition": "",
+
+        "main_message": "",
+
+        "message_angle": "",
 
 
-            "copy_direction": {
-                "headline_direction": "",
-                "subheadline_direction": "",
-                "body_direction": ""
-            },
+        "customer_problem": "",
+
+        "customer_desire": "",
 
 
-            "cta": {
-                "text_direction": "",
-                "purpose": "",
-                "action_type": ""
-            },
+        "emotional_drivers": [
+        ],
 
 
-            "objection_handling": [
+        "rational_drivers": [
+        ],
+
+
+        "purchase_motivators": [
+        ],
+
+
+        "purchase_barriers": [
+        ],
+
+
+        "objections_to_resolve": [
+        ],
+
+
+        "trust_requirements": [
+        ],
+
+
+        "competitive_positioning": "",
+
+
+        "brand_voice_direction": "",
+
+
+        "conversion_strategy": {
+
+            "primary_conversion_driver": "",
+
+            "secondary_conversion_drivers": [
+
             ],
 
+            "decision_factors": [
 
-            "proof_requirements": [
-            ],
-
-
-            "visual_requirements": [
-                {
-                    "visual_type": "",
-                    "purpose": "",
-                    "description": "",
-                    "generation_direction": ""
-                }
             ]
-        }
-    ]
-}
+
+        },
 
 
+        "customer_journey_strategy": [
 
-WAŻNE:
+            {
 
-Każda sekcja musi być jednym obiektem JSON.
+                "stage": "",
 
-NIE RÓB:
+                "customer_state": "",
 
-{
- "sections": [
-    {
-       "strategy": {}
-    },
-    {
-       "copy_direction": {}
+                "marketing_goal": ""
+
+            }
+
+        ]
+
     }
- ]
-}
 
-
-POPRAWNIE:
-
-{
- "sections": [
-    {
-       "strategy": {},
-       "copy_direction": {},
-       "visual_requirements": []
-    }
- ]
 }
 
 
 
-COPY DIRECTION:
+ZASADY:
 
-Nie generuj finalnego copy.
-
-Nie twórz:
-- gotowych headline'ów,
-- sloganów,
-- reklamowych claimów.
-
-
-Zamiast tego opisuj kierunek komunikacji.
-
-
-ŹLE:
-
-"Cut with Ease, Live with Power"
-
-
-DOBRZE:
-
-"Communicate reduced physical effort and increased independence"
-
-
-
-VISUAL REQUIREMENTS:
-
-Nie generuj obrazów.
-
-Określ tylko:
-
-- jaki typ wizualizacji jest potrzebny,
-- jaki jest jej cel,
-- co powinna przedstawiać,
-- jaki powinien być kierunek generowania.
-
-
-
-Dostępne section_type:
-
-- hero
-- problem
-- solution
-- how_it_works
-- benefits
-- features
-- comparison
-- social_proof
-- testimonials
-- case_studies
-- objection_handling
-- faq
-- offer
-- pricing
-- risk_reversal
-- final_cta
-
-
-
-NIE GENERUJ:
-
-- HTML,
-- CSS,
-- React components,
-- finalnego designu,
-- gotowych obrazów,
-- finalnego copy,
-- reklam.
-
+- wszystkie pola muszą istnieć,
+- nie używaj null,
+- nie pomijaj pól,
+- nie generuj gotowego copy,
+- nie generuj struktury strony,
+- nie generuj elementów UI.
 
 
 Zwróć wyłącznie JSON.
 
 Bez markdown.
+
 Bez komentarzy.
+
 Tylko JSON.
 """
 
@@ -340,9 +246,11 @@ KNOWLEDGE BASE:
 {knowledge_json}
 
 
+
 MESSAGE STRATEGY:
 
 {message_strategy_json}
+
 
 
 BRAND STRATEGY:
@@ -350,14 +258,17 @@ BRAND STRATEGY:
 {brand_strategy_json}
 
 
+
 MARKETING STRATEGY:
 
 {marketing_strategy_json}
 
 
+
 OFFER STRATEGY:
 
 {offer_strategy_json}
+
 
 """
 
@@ -383,94 +294,85 @@ def generate_page_strategy_json_handler(
 
 
 
-    knowledge = knowledge_service.get_knowledge_details_by_id(
-        knowledge_id=knowledge_id
+    knowledge = (
+        knowledge_service.get_knowledge_details_by_id(
+            knowledge_id=knowledge_id
+        )
     )
 
 
-    message_strategy = message_strategy_service.get_message_strategy_by_id(
-        id=message_strategy_id
+    message_strategy = (
+        message_strategy_service.get_message_strategy_by_id(
+            id=message_strategy_id
+        )
     )
 
 
-    brand_strategy = brand_marketing_service.get_brand_marketing_by_id(
-        id=brand_marketing_id
+    brand_strategy = (
+        brand_marketing_service.get_brand_marketing_by_id(
+            id=brand_marketing_id
+        )
     )
 
 
-    marketing_strategy = marketing_strategy_service.get_marketing_strategy_by_id(
-        id=marketing_strategy_id
+    marketing_strategy = (
+        marketing_strategy_service.get_marketing_strategy_by_id(
+            id=marketing_strategy_id
+        )
     )
 
 
-    offer_strategy = offer_strategy_service.get_offer_strategy_by_id(
-        id=offer_strategy_id
+    offer_strategy = (
+        offer_strategy_service.get_offer_strategy_by_id(
+            id=offer_strategy_id
+        )
     )
 
 
 
-    knowledge_json = json.dumps(
-        knowledge.to_dict(),
-        ensure_ascii=False,
-        indent=2,
-        default=str
-    )
+    def serialize(obj):
 
-
-    message_strategy_json = json.dumps(
-        message_strategy.to_dict(),
-        ensure_ascii=False,
-        indent=2,
-        default=str
-    )
-
-
-    brand_strategy_json = json.dumps(
-        brand_strategy.to_dict(),
-        ensure_ascii=False,
-        indent=2,
-        default=str
-    )
-
-
-    marketing_strategy_json = json.dumps(
-        marketing_strategy.to_dict(),
-        ensure_ascii=False,
-        indent=2,
-        default=str
-    )
-
-
-    offer_strategy_json = json.dumps(
-        offer_strategy.to_dict(),
-        ensure_ascii=False,
-        indent=2,
-        default=str
-    )
+        return json.dumps(
+            obj.to_dict(),
+            ensure_ascii=False,
+            indent=2,
+            default=str
+        )
 
 
 
     user_prompt = USER_PROMPT_TEMPLATE.format(
-        knowledge_json=knowledge_json,
-        message_strategy_json=message_strategy_json,
-        brand_strategy_json=brand_strategy_json,
-        marketing_strategy_json=marketing_strategy_json,
-        offer_strategy_json=offer_strategy_json
+
+        knowledge_json=serialize(knowledge),
+
+        message_strategy_json=serialize(message_strategy),
+
+        brand_strategy_json=serialize(brand_strategy),
+
+        marketing_strategy_json=serialize(marketing_strategy),
+
+        offer_strategy_json=serialize(offer_strategy)
+
     )
 
 
 
     response = ollama_service.chat_llm(
+
         messages=[
+
             LlmOllamaMessage(
                 role=OllamaMessageRole.SYSTEM,
                 content=SYSTEM_PROMPT
             ),
+
             LlmOllamaMessage(
                 role=OllamaMessageRole.USER,
                 content=user_prompt
             )
+
         ]
+
     )
 
 
@@ -480,7 +382,6 @@ def generate_page_strategy_json_handler(
         content = response.content.strip()
 
 
-        # remove markdown json block
         if content.startswith("```"):
 
             content = content.replace(
@@ -491,9 +392,7 @@ def generate_page_strategy_json_handler(
             content = content.replace(
                 "```",
                 ""
-            )
-
-            content = content.strip()
+            ).strip()
 
 
 
@@ -501,8 +400,8 @@ def generate_page_strategy_json_handler(
 
 
 
-        # handle double encoded JSON
         if isinstance(result, str):
+
             result = json.loads(result)
 
 
@@ -513,21 +412,6 @@ def generate_page_strategy_json_handler(
             "raw_response": response.content
         }
 
-
-
-    # result["metadata"] = {
-
-    #     "knowledge_id": knowledge_id,
-
-    #     "message_strategy_id": message_strategy_id,
-
-    #     "brand_marketing_id": brand_marketing_id,
-
-    #     "marketing_strategy_id": marketing_strategy_id,
-
-    #     "offer_strategy_id": offer_strategy_id
-
-    # }
 
 
     return result
