@@ -41,6 +41,8 @@ from application.handlers.ad_execution.get_ad_execution_handler import get_ad_ex
 from application.handlers.ad_execution.get_creative_strategy_ad_executions_handler import get_creative_strategy_ad_executions_handler
 from application.handlers.creative_strategy.get_creative_strategy_handler import get_creative_strategy_handler
 from application.handlers.creative_strategy.get_ad_strategy_creative_strategies_handler import get_ad_strategy_creative_strategies_handler
+from application.handlers.ugc_creatives.generate_ugc_creatives_handler import generate_ugc_creatives_handler
+
 
 
 def register_general_routes(router: APIRouter):
@@ -250,6 +252,20 @@ def register_general_routes(router: APIRouter):
     @router.get("/ad-strategy/{id}")
     def get_ad_strategy( id: int ):
         return get_ad_strategy_handler( id=id )
+
+
+    # -----------------------------
+    # UGC creatives
+    # -----------------------------
+    @router.get("/knowledges/{knowledge_id}/brand-marketing/{brand_marketing_id}/marketing-strategy/{marketing_strategy_id}/offer-strategy/{offer_strategy_id}/message-strategy/{message_strategy_id}/ugc-creatives/generate")
+    def knowledge_ugc_creatives_generate( knowledge_id: int, brand_marketing_id: int, marketing_strategy_id: int, offer_strategy_id: int, message_strategy_id: int ):
+        return generate_ugc_creatives_handler(
+            knowledge_id=knowledge_id,
+            brand_marketing_id=brand_marketing_id,
+            marketing_strategy_id=marketing_strategy_id,
+            offer_strategy_id=offer_strategy_id,
+            message_strategy_id=message_strategy_id
+        )
 
 
     # -----------------------------
