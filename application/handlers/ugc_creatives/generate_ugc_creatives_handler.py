@@ -4,7 +4,8 @@ from di.container import Container
 from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
 from domain.enums.ollama_message_role import OllamaMessageRole
 from domain.models.ugc_creatives.ugc_creative import UgcCreative
-
+from infrastructure.ai.prompts.constraints.uniqueness_prompt import build_uniqueness_constraint_prompt
+from application.mappers.ugc_creative_mapper import UgcCreativeMapper
 
 SYSTEM_PROMPT = """
 Jesteś ekspertem od:
@@ -312,7 +313,9 @@ def generate_ugc_creatives_handler(
     ugc_creative_service = container.ugc_creative_service()
 
     ollama_service = container.ollama_service()
-
+    
+    ugc_creatives_db =  ugc_creative_repository.get_by_message_strategy_id(message_strategy_id=message_strategy_id)
+    existed_ugc_creatives_str = json.dumps([UgcCreativeMapper.to_dto(i).to_dict() for i in ugc_creatives_db])
 
 
     knowledge = (
@@ -383,7 +386,11 @@ def generate_ugc_creatives_handler(
                 role=OllamaMessageRole.SYSTEM,
                 content=SYSTEM_PROMPT
             ),
-
+            
+            LlmOllamaMessage(
+                role=OllamaMessageRole.USER,
+                content=build_uniqueness_constraint_prompt(existed_ugc_creatives_str)
+            ),
 
             LlmOllamaMessage(
                 role=OllamaMessageRole.USER,
