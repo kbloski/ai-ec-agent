@@ -275,6 +275,10 @@ OFFER STRATEGY:
 
 
 def generate_page_strategy_json_handler(
+    knowledge_id: int,
+    brand_marketing_id: int,
+    marketing_strategy_id: int,
+    offer_strategy_id: int,
     message_strategy_id: int
 ):
 
@@ -303,28 +307,28 @@ def generate_page_strategy_json_handler(
 
     knowledge = (
         knowledge_service.get_knowledge_details_by_id(
-            knowledge_id=message_strategy.knowledge_id
+            knowledge_id=knowledge_id
         )
     )
 
 
     brand_strategy = (
         brand_marketing_service.get_brand_marketing_by_id(
-            id=message_strategy.brand_marketing_id
+            id=brand_marketing_id
         )
     )
 
 
     marketing_strategy = (
         marketing_strategy_service.get_marketing_strategy_by_id(
-            id=message_strategy.marketing_strategy_id
+            id=marketing_strategy_id
         )
     )
 
 
     offer_strategy = (
         offer_strategy_service.get_offer_strategy_by_id(
-            id=message_strategy.offer_strategy_id
+            id=offer_strategy_id
         )
     )
 

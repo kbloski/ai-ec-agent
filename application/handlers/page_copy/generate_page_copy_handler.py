@@ -160,13 +160,19 @@ OFFER STRATEGY:
 
 
 def generate_page_copy_handler(
+    knowledge_id: int,
+    brand_marketing_id: int,
+    marketing_strategy_id: int,
+    offer_strategy_id: int,
+    message_strategy_id: int,
+    page_strategy_id: int,
+    page_blueprint_id: int,
     page_content_plan_id: int
 ):
 
     container = Container()
 
     page_content_plan_service = container.page_content_plan_service()
-    page_blueprint_service = container.page_blueprint_service()
     page_strategy_service = container.page_strategy_service()
     message_strategy_service = container.message_strategy_service()
     offer_strategy_service = container.offer_strategy_service()
@@ -184,30 +190,23 @@ def generate_page_copy_handler(
     )
 
 
-    page_blueprint = (
-        page_blueprint_service.get_page_blueprint_by_id(
-            id=page_content_plan.page_blueprint_id
-        )
-    )
-
-
     page_strategy = (
         page_strategy_service.get_page_strategy_by_id(
-            id=page_blueprint.page_strategy_id
+            id=page_strategy_id
         )
     )
 
 
     message_strategy = (
         message_strategy_service.get_message_strategy_by_id(
-            id=page_strategy.message_strategy_id
+            id=message_strategy_id
         )
     )
 
 
     offer_strategy = (
         offer_strategy_service.get_offer_strategy_by_id(
-            id=message_strategy.offer_strategy_id
+            id=offer_strategy_id
         )
     )
 

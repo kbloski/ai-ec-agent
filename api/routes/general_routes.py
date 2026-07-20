@@ -329,9 +329,13 @@ def register_general_routes(router: APIRouter):
     # -----------------------------
     # Page strategy
     # -----------------------------
-    @router.get("/message-strategy/{message_strategy_id}/page-strategy/generate")
-    def message_strategy_page_strategy_generate( message_strategy_id: int ):
+    @router.get("/knowledges/{knowledge_id}/brand-marketing/{brand_marketing_id}/marketing-strategy/{marketing_strategy_id}/offer-strategy/{offer_strategy_id}/message-strategy/{message_strategy_id}/page-strategy/generate")
+    def message_strategy_page_strategy_generate( knowledge_id: int, brand_marketing_id: int, marketing_strategy_id: int, offer_strategy_id: int, message_strategy_id: int ):
         return generate_page_strategy_json_handler(
+            knowledge_id=knowledge_id,
+            brand_marketing_id=brand_marketing_id,
+            marketing_strategy_id=marketing_strategy_id,
+            offer_strategy_id=offer_strategy_id,
             message_strategy_id=message_strategy_id
         )
 
@@ -347,9 +351,14 @@ def register_general_routes(router: APIRouter):
     # -----------------------------
     # Page blueprint
     # -----------------------------
-    @router.get("/page-strategy/{page_strategy_id}/page-blueprint/generate")
-    def page_strategy_page_blueprint_generate( page_strategy_id: int ):
+    @router.get("/knowledges/{knowledge_id}/brand-marketing/{brand_marketing_id}/marketing-strategy/{marketing_strategy_id}/offer-strategy/{offer_strategy_id}/message-strategy/{message_strategy_id}/page-strategy/{page_strategy_id}/page-blueprint/generate")
+    def page_strategy_page_blueprint_generate( knowledge_id: int, brand_marketing_id: int, marketing_strategy_id: int, offer_strategy_id: int, message_strategy_id: int, page_strategy_id: int ):
         return generate_page_blueprint_handler(
+            knowledge_id=knowledge_id,
+            brand_marketing_id=brand_marketing_id,
+            marketing_strategy_id=marketing_strategy_id,
+            offer_strategy_id=offer_strategy_id,
+            message_strategy_id=message_strategy_id,
             page_strategy_id=page_strategy_id
         )
 
@@ -365,9 +374,15 @@ def register_general_routes(router: APIRouter):
     # -----------------------------
     # Page content plan
     # -----------------------------
-    @router.get("/page-blueprint/{page_blueprint_id}/page-content-plan/generate")
-    def page_blueprint_page_content_plan_generate( page_blueprint_id: int ):
+    @router.get("/knowledges/{knowledge_id}/brand-marketing/{brand_marketing_id}/marketing-strategy/{marketing_strategy_id}/offer-strategy/{offer_strategy_id}/message-strategy/{message_strategy_id}/page-strategy/{page_strategy_id}/page-blueprint/{page_blueprint_id}/page-content-plan/generate")
+    def page_blueprint_page_content_plan_generate( knowledge_id: int, brand_marketing_id: int, marketing_strategy_id: int, offer_strategy_id: int, message_strategy_id: int, page_strategy_id: int, page_blueprint_id: int ):
         return generate_page_content_plan_handler(
+            knowledge_id=knowledge_id,
+            brand_marketing_id=brand_marketing_id,
+            marketing_strategy_id=marketing_strategy_id,
+            offer_strategy_id=offer_strategy_id,
+            message_strategy_id=message_strategy_id,
+            page_strategy_id=page_strategy_id,
             page_blueprint_id=page_blueprint_id
         )
 
@@ -383,9 +398,16 @@ def register_general_routes(router: APIRouter):
     # -----------------------------
     # Page copy
     # -----------------------------
-    @router.get("/page-content-plan/{page_content_plan_id}/page-copy/generate")
-    def page_content_plan_page_copy_generate( page_content_plan_id: int ):
+    @router.get("/knowledges/{knowledge_id}/brand-marketing/{brand_marketing_id}/marketing-strategy/{marketing_strategy_id}/offer-strategy/{offer_strategy_id}/message-strategy/{message_strategy_id}/page-strategy/{page_strategy_id}/page-blueprint/{page_blueprint_id}/page-content-plan/{page_content_plan_id}/page-copy/generate")
+    def page_content_plan_page_copy_generate( knowledge_id: int, brand_marketing_id: int, marketing_strategy_id: int, offer_strategy_id: int, message_strategy_id: int, page_strategy_id: int, page_blueprint_id: int, page_content_plan_id: int ):
         return generate_page_copy_handler(
+            knowledge_id=knowledge_id,
+            brand_marketing_id=brand_marketing_id,
+            marketing_strategy_id=marketing_strategy_id,
+            offer_strategy_id=offer_strategy_id,
+            message_strategy_id=message_strategy_id,
+            page_strategy_id=page_strategy_id,
+            page_blueprint_id=page_blueprint_id,
             page_content_plan_id=page_content_plan_id
         )
 
