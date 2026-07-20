@@ -3,6 +3,7 @@ logs/
 app.db
 uploads/*
 !uploads/dev/
+*:Zone.Identifier
 
 # Environments
 # .env
