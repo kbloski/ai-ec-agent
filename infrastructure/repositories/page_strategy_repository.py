@@ -22,10 +22,10 @@ class PageStrategyRepository:
     def get_by_id(self, id: int) -> Optional[PageStrategy]:
         return self.db.query(PageStrategy).filter(PageStrategy.id == id).first()
 
-    # 🔍 GET BY OFFER STRATEGY ID
-    def get_by_offer_strategy_id(self, offer_strategy_id: int) -> List[PageStrategy]:
+    # 🔍 GET BY MESSAGE STRATEGY ID
+    def get_by_message_strategy_id(self, message_strategy_id: int) -> List[PageStrategy]:
         return (
             self.db.query(PageStrategy)
-            .filter(PageStrategy.offer_strategy_id == offer_strategy_id)
+            .filter(PageStrategy.message_strategy_id == message_strategy_id)
             .all()
         )

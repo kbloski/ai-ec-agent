@@ -8,11 +8,6 @@ class PageBlueprintMapper:
     def to_dto(item: PageBlueprint) -> PageBlueprintDto:
         return PageBlueprintDto(
             id=item.id,
-            knowledge_id=item.knowledge_id,
-            brand_marketing_id=item.brand_marketing_id,
-            marketing_strategy_id=item.marketing_strategy_id,
-            offer_strategy_id=item.offer_strategy_id,
-            message_strategy_id=item.message_strategy_id,
             page_strategy_id=item.page_strategy_id,
             page_type=item.page_type,
             primary_conversion_goal=item.primary_conversion_goal,

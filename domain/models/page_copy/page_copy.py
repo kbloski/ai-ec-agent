@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, JSON
+from sqlalchemy import Column, Integer, DateTime, ForeignKey, JSON
 from sqlalchemy.sql import func
 
 from infrastructure.database.db import Base
@@ -6,21 +6,18 @@ from common.mixins.json_serializable import JSONSerializable
 from domain.enums.table_name import TableName
 
 
-class PageBlueprint(Base, JSONSerializable):
+class PageCopy(Base, JSONSerializable):
 
-    __tablename__ = TableName.PAGE_BLUEPRINT.value
+    __tablename__ = TableName.PAGE_COPY.value
 
     # primary key
     id = Column(Integer, primary_key=True, autoincrement=True)
 
-    page_strategy_id = Column(
+    page_content_plan_id = Column(
         Integer,
-        ForeignKey(TableName.PAGE_STRATEGY + ".id"),
-        nullable=False
+        ForeignKey(TableName.PAGE_CONTENT_PLAN + ".id"),
+        nullable=True
     )
-
-    page_type = Column(String, nullable=True)
-    primary_conversion_goal = Column(String, nullable=True)
 
     sections = Column(JSON, nullable=True)
 

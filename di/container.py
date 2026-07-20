@@ -52,6 +52,12 @@ from application.services.page_strategy_service import PageStrategyService
 from infrastructure.repositories.page_blueprint_repository import PageBlueprintRepository
 from application.assemblers.page_blueprint_assembler import PageBlueprintAssembler
 from application.services.page_blueprint_service import PageBlueprintService
+from infrastructure.repositories.page_content_plan_repository import PageContentPlanRepository
+from application.assemblers.page_content_plan_assembler import PageContentPlanAssembler
+from application.services.page_content_plan_service import PageContentPlanService
+from infrastructure.repositories.page_copy_repository import PageCopyRepository
+from application.assemblers.page_copy_assembler import PageCopyAssembler
+from application.services.page_copy_service import PageCopyService
 
 class Container(containers.DeclarativeContainer):
     db = providers.Singleton(
@@ -211,6 +217,18 @@ class Container(containers.DeclarativeContainer):
         db=db
     )
 
+    page_content_plan_repository = providers.Singleton(
+        PageContentPlanRepository,
+        logger=logger,
+        db=db
+    )
+
+    page_copy_repository = providers.Singleton(
+        PageCopyRepository,
+        logger=logger,
+        db=db
+    )
+
 
     # --------------------------
     # Assemblery
@@ -291,6 +309,16 @@ class Container(containers.DeclarativeContainer):
 
     page_blueprint_assembler = providers.Singleton(
         PageBlueprintAssembler,
+        logger=logger,
+    )
+
+    page_content_plan_assembler = providers.Singleton(
+        PageContentPlanAssembler,
+        logger=logger,
+    )
+
+    page_copy_assembler = providers.Singleton(
+        PageCopyAssembler,
         logger=logger,
     )
     # --------------------------
@@ -388,4 +416,18 @@ class Container(containers.DeclarativeContainer):
         logger=logger,
         page_blueprint_repository=page_blueprint_repository,
         page_blueprint_assembler=page_blueprint_assembler
+    )
+
+    page_content_plan_service = providers.Singleton(
+        PageContentPlanService,
+        logger=logger,
+        page_content_plan_repository=page_content_plan_repository,
+        page_content_plan_assembler=page_content_plan_assembler
+    )
+
+    page_copy_service = providers.Singleton(
+        PageCopyService,
+        logger=logger,
+        page_copy_repository=page_copy_repository,
+        page_copy_assembler=page_copy_assembler
     )

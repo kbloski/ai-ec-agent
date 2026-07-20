@@ -336,19 +336,14 @@ OFFER STRATEGY:
 
 
 def generate_page_blueprint_handler(
-    page_strategy_id: int,
-    message_strategy_id: int,
-    brand_marketing_id: int,
-    marketing_strategy_id: int,
-    knowledge_id: int,
-    offer_strategy_id: int
+    page_strategy_id: int
 ):
 
     container = Container()
 
-    knowledge_service = container.knowledge_service()
     page_strategy_service = container.page_strategy_service()
     message_strategy_service = container.message_strategy_service()
+    knowledge_service = container.knowledge_service()
     brand_marketing_service = container.brand_marketing_service()
     marketing_strategy_service = container.marketing_strategy_service()
     offer_strategy_service = container.offer_strategy_service()
@@ -358,11 +353,6 @@ def generate_page_blueprint_handler(
 
     ollama_service = container.ollama_service()
 
-    knowledge = (
-        knowledge_service.get_knowledge_details_by_id(
-            knowledge_id=knowledge_id
-        )
-    )
 
     page_strategy = (
         page_strategy_service.get_page_strategy_by_id(
@@ -370,29 +360,41 @@ def generate_page_blueprint_handler(
         )
     )
 
+
     message_strategy = (
         message_strategy_service.get_message_strategy_by_id(
-            id=message_strategy_id
+            id=page_strategy.message_strategy_id
         )
     )
+
+
+    knowledge = (
+        knowledge_service.get_knowledge_details_by_id(
+            knowledge_id=message_strategy.knowledge_id
+        )
+    )
+
 
     brand_strategy = (
         brand_marketing_service.get_brand_marketing_by_id(
-            id=brand_marketing_id
+            id=message_strategy.brand_marketing_id
         )
     )
+
 
     marketing_strategy = (
         marketing_strategy_service.get_marketing_strategy_by_id(
-            id=marketing_strategy_id
+            id=message_strategy.marketing_strategy_id
         )
     )
 
+
     offer_strategy = (
         offer_strategy_service.get_offer_strategy_by_id(
-            id=offer_strategy_id
+            id=message_strategy.offer_strategy_id
         )
     )
+
 
     def serialize(obj):
         return json.dumps(
@@ -402,6 +404,7 @@ def generate_page_blueprint_handler(
             default=str
         )
 
+
     user_prompt = USER_PROMPT_TEMPLATE.format(
         knowledge_json=serialize(knowledge),
         page_strategy_json=serialize(page_strategy),
@@ -410,6 +413,7 @@ def generate_page_blueprint_handler(
         marketing_strategy_json=serialize(marketing_strategy),
         offer_strategy_json=serialize(offer_strategy)
     )
+
 
     response = ollama_service.chat_llm(
         messages=[
@@ -424,13 +428,13 @@ def generate_page_blueprint_handler(
         ]
     )
 
+
     try:
         content = response.content.strip()
 
         if content.startswith("```"):
             content = content.replace("```json", "")
-            content = content.replace("```", "")
-            content = content.strip()
+            content = content.replace("```", "").strip()
 
         result = json.loads(content)
 
@@ -442,19 +446,10 @@ def generate_page_blueprint_handler(
             "raw_response": response.content
         }
 
+
     page_blueprint_data = result.get("page_blueprint", {})
 
     entity = PageBlueprint(
-
-        knowledge_id=knowledge_id,
-
-        brand_marketing_id=brand_marketing_id,
-
-        marketing_strategy_id=marketing_strategy_id,
-
-        offer_strategy_id=offer_strategy_id,
-
-        message_strategy_id=message_strategy_id,
 
         page_strategy_id=page_strategy_id,
 

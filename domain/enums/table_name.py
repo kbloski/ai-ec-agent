@@ -23,3 +23,5 @@ class TableName(str, Enum):
     AD_EXECUTION = "ad_execution"
     PAGE_STRATEGY = "page_strategy"
     PAGE_BLUEPRINT = "page_blueprint"
+    PAGE_CONTENT_PLAN = "page_content_plan"
+    PAGE_COPY = "page_copy"

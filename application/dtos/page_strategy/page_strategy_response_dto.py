@@ -8,10 +8,6 @@ class PageStrategyDto(JSONSerializable):
     def __init__(
         self,
         id: int,
-        knowledge_id: int,
-        brand_marketing_id: int,
-        marketing_strategy_id: int,
-        offer_strategy_id: int,
         message_strategy_id: int,
         goal: Optional[str],
         conversion_action: Optional[str],
@@ -35,10 +31,6 @@ class PageStrategyDto(JSONSerializable):
         customer_journey_strategy: Optional[List[dict]],
     ):
         self.id = id
-        self.knowledge_id = knowledge_id
-        self.brand_marketing_id = brand_marketing_id
-        self.marketing_strategy_id = marketing_strategy_id
-        self.offer_strategy_id = offer_strategy_id
         self.message_strategy_id = message_strategy_id
         self.goal = goal
         self.conversion_action = conversion_action
@@ -66,10 +58,6 @@ class PageStrategyDto(JSONSerializable):
 
         data = {
             "id": self.id,
-            "knowledge_id": self.knowledge_id,
-            "brand_marketing_id": self.brand_marketing_id,
-            "marketing_strategy_id": self.marketing_strategy_id,
-            "offer_strategy_id": self.offer_strategy_id,
             "message_strategy_id": self.message_strategy_id,
             "goal": self.goal,
             "conversion_action": self.conversion_action,

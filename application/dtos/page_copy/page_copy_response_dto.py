@@ -3,20 +3,16 @@ from typing import Optional, List
 from common.mixins.json_serializable import JSONSerializable
 
 
-class PageBlueprintDto(JSONSerializable):
+class PageCopyDto(JSONSerializable):
 
     def __init__(
         self,
         id: int,
-        page_strategy_id: int,
-        page_type: Optional[str],
-        primary_conversion_goal: Optional[str],
+        page_content_plan_id: Optional[int],
         sections: Optional[List[dict]],
     ):
         self.id = id
-        self.page_strategy_id = page_strategy_id
-        self.page_type = page_type
-        self.primary_conversion_goal = primary_conversion_goal
+        self.page_content_plan_id = page_content_plan_id
         self.sections = sections
 
     def to_dict(self, exclude=None):
@@ -24,9 +20,7 @@ class PageBlueprintDto(JSONSerializable):
 
         data = {
             "id": self.id,
-            "page_strategy_id": self.page_strategy_id,
-            "page_type": self.page_type,
-            "primary_conversion_goal": self.primary_conversion_goal,
+            "page_content_plan_id": self.page_content_plan_id,
             "sections": self.sections,
         }
 

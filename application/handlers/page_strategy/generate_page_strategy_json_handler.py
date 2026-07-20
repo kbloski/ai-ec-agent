@@ -275,11 +275,7 @@ OFFER STRATEGY:
 
 
 def generate_page_strategy_json_handler(
-    knowledge_id: int,
-    message_strategy_id: int,
-    brand_marketing_id: int,
-    marketing_strategy_id: int,
-    offer_strategy_id: int
+    message_strategy_id: int
 ):
 
     container = Container()
@@ -298,13 +294,6 @@ def generate_page_strategy_json_handler(
 
 
 
-    knowledge = (
-        knowledge_service.get_knowledge_details_by_id(
-            knowledge_id=knowledge_id
-        )
-    )
-
-
     message_strategy = (
         message_strategy_service.get_message_strategy_by_id(
             id=message_strategy_id
@@ -312,23 +301,30 @@ def generate_page_strategy_json_handler(
     )
 
 
+    knowledge = (
+        knowledge_service.get_knowledge_details_by_id(
+            knowledge_id=message_strategy.knowledge_id
+        )
+    )
+
+
     brand_strategy = (
         brand_marketing_service.get_brand_marketing_by_id(
-            id=brand_marketing_id
+            id=message_strategy.brand_marketing_id
         )
     )
 
 
     marketing_strategy = (
         marketing_strategy_service.get_marketing_strategy_by_id(
-            id=marketing_strategy_id
+            id=message_strategy.marketing_strategy_id
         )
     )
 
 
     offer_strategy = (
         offer_strategy_service.get_offer_strategy_by_id(
-            id=offer_strategy_id
+            id=message_strategy.offer_strategy_id
         )
     )
 
@@ -403,7 +399,6 @@ def generate_page_strategy_json_handler(
         result = json.loads(content)
 
 
-
         if isinstance(result, str):
 
             result = json.loads(result)
@@ -422,14 +417,6 @@ def generate_page_strategy_json_handler(
 
 
     entity = PageStrategy(
-
-        knowledge_id=knowledge_id,
-
-        brand_marketing_id=brand_marketing_id,
-
-        marketing_strategy_id=marketing_strategy_id,
-
-        offer_strategy_id=offer_strategy_id,
 
         message_strategy_id=message_strategy_id,
 

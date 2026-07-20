@@ -33,7 +33,7 @@ class PageStrategyService:
         page_strategy_dto = PageStrategyMapper.to_dto(page_strategy_db)
         return self.page_strategy_assembler.assemble_dto(page_strategy_dto)
 
-    def get_page_strategies_by_offer_strategy(self, offer_strategy_id: int) -> List[PageStrategyDto]:
-        items = self.page_strategy_repository.get_by_offer_strategy_id(offer_strategy_id)
+    def get_page_strategies_by_message_strategy(self, message_strategy_id: int) -> List[PageStrategyDto]:
+        items = self.page_strategy_repository.get_by_message_strategy_id(message_strategy_id)
         dtos = [PageStrategyMapper.to_dto(item) for item in items]
         return [self.page_strategy_assembler.assemble_dto(dto) for dto in dtos]
