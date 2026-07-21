@@ -1,6 +1,6 @@
 # Custom
 logs/
-app.db
+# app.db
 uploads/*
 !uploads/dev/
 *:Zone.Identifier
