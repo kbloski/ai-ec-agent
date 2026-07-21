@@ -2,8 +2,11 @@ import { useParams } from 'react-router-dom'
 import { DetailShell } from '@/components/DetailShell'
 import { ResourceList } from '@/components/ResourceList'
 import { Button } from '@/components/ui/button'
-import { useGetKnowledgeQuery } from '@/features/knowledge/knowledgeApi'
-import { useGenerateTargetAudiencesMutation } from '@/features/targetAudiences/targetAudiencesApi'
+import { useDeleteKnowledgeInsightMutation, useGetKnowledgeQuery } from '@/features/knowledge/knowledgeApi'
+import {
+  useDeleteTargetAudienceMutation,
+  useGenerateTargetAudiencesMutation,
+} from '@/features/targetAudiences/targetAudiencesApi'
 import {
   useCreateAnalysisMutation,
   useDeleteAnalysisMutation,
@@ -20,6 +23,8 @@ export default function KnowledgeDetailPage() {
   const { data: knowledge, isLoading, error } = useGetKnowledgeQuery(knowledgeId)
 
   const [generateAudiences, generateAudiencesState] = useGenerateTargetAudiencesMutation()
+  const [deleteKnowledgeInsight] = useDeleteKnowledgeInsightMutation()
+  const [deleteTargetAudience] = useDeleteTargetAudienceMutation()
 
   const analysisList = useListAnalysisForKnowledgeQuery(knowledgeId)
   const [createAnalysis, createAnalysisState] = useCreateAnalysisMutation()
@@ -38,15 +43,11 @@ export default function KnowledgeDetailPage() {
       isLoading={isLoading}
       error={error}
       collapsibleFields={['offer_insights', 'target_audiences']}
+      itemActions={{
+        offer_insights: (item) => deleteKnowledgeInsight({ id: item.id as number, knowledgeId }),
+        target_audiences: (item) => deleteTargetAudience({ id: item.id as number, knowledgeId }),
+      }}
     >
-      <Button
-        size="sm"
-        onClick={() => generateAudiences({ knowledgeId })}
-        disabled={generateAudiencesState.isLoading}
-      >
-        {generateAudiencesState.isLoading ? 'Generowanie…' : 'Generuj grupy docelowe'}
-      </Button>
-
       <ResourceList
         title="Analizy"
         items={analysisList.data}
@@ -72,6 +73,14 @@ export default function KnowledgeDetailPage() {
         generateLabel="Generuj brand marketing"
         onDelete={(item) => deleteBrandMarketing({ id: item.id as number, knowledgeId })}
       />
+
+      <Button
+        size="sm"
+        onClick={() => generateAudiences({ knowledgeId })}
+        disabled={generateAudiencesState.isLoading}
+      >
+        {generateAudiencesState.isLoading ? 'Generowanie…' : 'Generuj grupy docelowe'}
+      </Button>
     </DetailShell>
   )
 }

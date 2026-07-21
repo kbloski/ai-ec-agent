@@ -3,6 +3,7 @@ import { DetailShell } from '@/components/DetailShell'
 import { ResourceList } from '@/components/ResourceList'
 import { Button } from '@/components/ui/button'
 import {
+  useDeleteOfferInsightMutation,
   useDeleteOfferMutation,
   useGenerateOfferSuggestionsMutation,
   useGetOfferQuery,
@@ -22,6 +23,7 @@ export default function OfferDetailPage() {
   const [generateKnowledge, { isLoading: isGenerating }] = useGenerateKnowledgeMutation()
   const [deleteKnowledge] = useDeleteKnowledgeMutation()
   const [deleteOffer] = useDeleteOfferMutation()
+  const [deleteOfferInsight] = useDeleteOfferInsightMutation()
   const [generateSuggestions, generateSuggestionsState] = useGenerateOfferSuggestionsMutation()
 
   return (
@@ -33,6 +35,9 @@ export default function OfferDetailPage() {
       isLoading={isLoading}
       error={error}
       collapsibleFields={['offer_items', 'offer_insights']}
+      itemActions={{
+        offer_insights: (item) => deleteOfferInsight({ id: item.id as number, offerId }),
+      }}
     >
       <Button
         size="sm"

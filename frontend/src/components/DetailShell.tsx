@@ -13,6 +13,7 @@ interface DetailShellProps {
   children?: ReactNode
   exclude?: string[]
   collapsibleFields?: string[]
+  itemActions?: Record<string, (item: Record<string, unknown>) => void>
 }
 
 /** Shared layout for every "detail" page: title, entity fields, optional child sections. */
@@ -26,6 +27,7 @@ export function DetailShell({
   children,
   exclude,
   collapsibleFields,
+  itemActions,
 }: DetailShellProps) {
   return (
     <div className="grid grid-cols-1 gap-6 p-6 md:grid-cols-[280px_1fr]">
@@ -55,7 +57,12 @@ export function DetailShell({
 
         {data && (
           <div className="rounded-lg border p-4">
-            <EntityFields data={data} exclude={exclude} collapsibleFields={collapsibleFields} />
+            <EntityFields
+              data={data}
+              exclude={exclude}
+              collapsibleFields={collapsibleFields}
+              itemActions={itemActions}
+            />
           </div>
         )}
       </div>

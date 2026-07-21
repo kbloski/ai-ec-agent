@@ -607,48 +607,6 @@ def generate_ad_execution_handler(
 
 
 
-        total_duration = sum(
-
-            scene.get(
-
-                "duration_seconds",
-
-                0
-
-            )
-
-            for scene in scenes
-
-        )
-
-
-
-        if total_duration != video_duration_seconds:
-
-
-            return {
-
-
-                "error":
-                "Generated scenes duration mismatch",
-
-
-                "expected":
-                video_duration_seconds,
-
-
-                "generated":
-                total_duration,
-
-
-                "data":
-                item
-
-            }
-
-
-
-
         entity = AdExecution(
 
 

@@ -1,5 +1,6 @@
 import { ChevronDown } from 'lucide-react'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
+import { Button } from '@/components/ui/button'
 
 const LABEL_OVERRIDES: Record<string, string> = {
   id: 'ID',
@@ -22,11 +23,32 @@ function isPrimitive(value: unknown): value is string | number | boolean {
   )
 }
 
-function ObjectArray({ items }: { items: Record<string, unknown>[] }) {
+function ObjectArray({
+  items,
+  onDelete,
+}: {
+  items: Record<string, unknown>[]
+  onDelete?: (item: Record<string, unknown>) => void
+}) {
   return (
     <div className="space-y-2">
       {items.map((item, i) => (
-        <div key={i} className="rounded-md border p-3">
+        <div key={i} className="space-y-2 rounded-md border p-3">
+          {onDelete && (
+            <div className="flex justify-end">
+              <Button
+                size="sm"
+                variant="black"
+                onClick={() => {
+                  if (window.confirm('Czy na pewno usunąć ten element?')) {
+                    onDelete(item)
+                  }
+                }}
+              >
+                Usuń
+              </Button>
+            </div>
+          )}
           <EntityFields data={item} />
         </div>
       ))}
@@ -77,11 +99,14 @@ export function EntityFields({
   data,
   exclude = [],
   collapsibleFields = [],
+  itemActions = {},
 }: {
   data: Record<string, unknown>
   exclude?: string[]
   /** Array-of-objects fields rendered as a collapsed-by-default dropdown instead of always expanded. */
   collapsibleFields?: string[]
+  /** Per-field delete handler for items of a collapsible array field, keyed by field name. */
+  itemActions?: Record<string, (item: Record<string, unknown>) => void>
 }) {
   const entries = Object.entries(data).filter(([key]) => key !== 'id' && !exclude.includes(key))
 
@@ -99,7 +124,7 @@ export function EntityFields({
                 {label(key)} ({(value as unknown[]).length})
               </CollapsibleTrigger>
               <CollapsibleContent className="pt-2">
-                <ObjectArray items={value as Record<string, unknown>[]} />
+                <ObjectArray items={value as Record<string, unknown>[]} onDelete={itemActions[key]} />
               </CollapsibleContent>
             </Collapsible>
           )
