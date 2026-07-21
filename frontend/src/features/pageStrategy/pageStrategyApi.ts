@@ -1,0 +1,31 @@
+import { api } from '@/store/api'
+import { listTag, itemTag } from '@/lib/tags'
+import type { Entity } from '@/types'
+
+export const pageStrategyApi = api.injectEndpoints({
+  endpoints: (builder) => ({
+    listPageStrategyForMessageStrategy: builder.query<Entity[], number>({
+      query: (messageStrategyId) => `/message-strategy/${messageStrategyId}/page-strategy`,
+      providesTags: (result, _err, messageStrategyId) => [
+        ...(result ?? []).map((item) => itemTag('PageStrategy', item.id)),
+        listTag('PageStrategy', messageStrategyId),
+      ],
+    }),
+    getPageStrategy: builder.query<Entity, number>({
+      query: (id) => `/page-strategy/${id}`,
+      providesTags: (_result, _err, id) => [itemTag('PageStrategy', id)],
+    }),
+    /** ctx: the parent MessageStrategy entity. */
+    generatePageStrategy: builder.mutation<Entity, Entity>({
+      query: (ms) =>
+        `/knowledges/${ms.knowledge_id}/brand-marketing/${ms.brand_marketing_id}/marketing-strategy/${ms.marketing_strategy_id}/offer-strategy/${ms.offer_strategy_id}/message-strategy/${ms.id}/page-strategy/generate`,
+      invalidatesTags: (_result, _err, ms) => [listTag('PageStrategy', ms.id)],
+    }),
+  }),
+})
+
+export const {
+  useListPageStrategyForMessageStrategyQuery,
+  useGetPageStrategyQuery,
+  useGeneratePageStrategyMutation,
+} = pageStrategyApi

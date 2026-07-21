@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { TAG_TYPES } from '@/lib/tags'
 
 const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8002'
 
@@ -10,6 +11,6 @@ const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8002'
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({ baseUrl: API_URL }),
-  tagTypes: [],
+  tagTypes: TAG_TYPES,
   endpoints: () => ({}),
 })

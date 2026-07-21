@@ -1,0 +1,31 @@
+import { api } from '@/store/api'
+import { listTag, itemTag } from '@/lib/tags'
+import type { Entity } from '@/types'
+
+export const creativeStrategyApi = api.injectEndpoints({
+  endpoints: (builder) => ({
+    listCreativeStrategyForAdStrategy: builder.query<Entity[], number>({
+      query: (adStrategyId) => `/ad-strategy/${adStrategyId}/creative-strategy`,
+      providesTags: (result, _err, adStrategyId) => [
+        ...(result ?? []).map((item) => itemTag('CreativeStrategy', item.id)),
+        listTag('CreativeStrategy', adStrategyId),
+      ],
+    }),
+    getCreativeStrategy: builder.query<Entity, number>({
+      query: (id) => `/creative-strategy/${id}`,
+      providesTags: (_result, _err, id) => [itemTag('CreativeStrategy', id)],
+    }),
+    /** ctx: the parent AdStrategy entity. */
+    generateCreativeStrategy: builder.mutation<Entity, Entity>({
+      query: (as) =>
+        `/knowledges/${as.knowledge_id}/brand-marketing/${as.brand_marketing_id}/marketing-strategy/${as.marketing_strategy_id}/offer-strategy/${as.offer_strategy_id}/message-strategy/${as.message_strategy_id}/ad-strategy/${as.id}/creative-strategy/generate`,
+      invalidatesTags: (_result, _err, as) => [listTag('CreativeStrategy', as.id)],
+    }),
+  }),
+})
+
+export const {
+  useListCreativeStrategyForAdStrategyQuery,
+  useGetCreativeStrategyQuery,
+  useGenerateCreativeStrategyMutation,
+} = creativeStrategyApi

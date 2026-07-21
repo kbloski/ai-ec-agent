@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 
 from application.handlers.offers.get_offers import get_offers
+from application.handlers.offers.create_offer import create_offer
 from application.handlers.offers.seed_full_offer import seed_full_offer
 from application.handlers.offers.get_offer import get_offer_handler
 from application.handlers.offers.offer_knowledge_generate import offer_knowledge_generate_handler
@@ -73,6 +74,21 @@ def register_general_routes(router: APIRouter):
     @router.get("/offers/seed-full")
     def seed_full(page: int = 1):
         return seed_full_offer()
+
+    # POST in future
+    @router.get("/offers/create")
+    def create_offer_route(
+        name: str,
+        buying_price: float,
+        selling_price: float | None = None,
+        details: str | None = None,
+    ):
+        return create_offer(
+            name=name,
+            buying_price=buying_price,
+            selling_price=selling_price,
+            details=details,
+        )
 
     @router.get("/offers/{id}")
     def get_offer_details(id: int):
