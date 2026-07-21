@@ -1,39 +1,27 @@
-Python versja 3.14
+# ai-ec-agent
 
-Tworzenie venv 
-python.exe -m venv venv
-D:\Python\3.14\python.exe -m venv venv
+Monorepo: FastAPI backend + React frontend.
 
-// Instalacja pakietow
-.\venv\Scripts\python.exe -m pip install -r requirements.txt
-(w venv)
+- [`backend/`](backend/README.md) — FastAPI app (Python), generates the full
+  offer→knowledge→strategy→ads/page pipeline described in
+  [`APPLICATION_FLOW.md`](APPLICATION_FLOW.md).
+- [`frontend/`](frontend/) — React (Vite + TypeScript) app.
 
-// Zapisywanie nowej konfiguracji pakietow 
-.\venv\Scripts\python.exe -m pip freeze > requirements.txt (musi byc wywolane w venv)
+## Quick start
 
-Aby skorzysta z venv w powershell
-.\venv\Scripts\Activate.ps1     
+Backend:
 
-Aby skorzysta z venv w ubuntu terminal
-source .\venv\bin\activate
+```bash
+cd backend
+source venv/bin/activate
+python main.py
+```
 
+Frontend:
 
-Aby uruchomi aplikacje
-.\venv\Scripts\python.exe .\main.py      
-
-
-
-
-// Migracje
-alembic revision --autogenerate -m "opis zmiany" - dodawanie migracji
-alembic upgrade head --sql      - test updatu
-alembic upgrade head            - aplikowanie migracji
-
-
-alembic upgrade +1 - migracja do przodu
-alembic upgrade <revision_id> - konkretna
-alembic downgrade -1 - migracja do tylu
-
-alembic history - lista migracji
-alembic current - aktualna wersja db
-alembic downgrade base
+```bash
+cd frontend
+npm install
+cp .env.example .env   # set VITE_API_URL to the backend's URL
+npm run dev
+```

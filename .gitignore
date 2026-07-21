@@ -1,9 +1,9 @@
 # Custom
-logs/
+backend/logs/
 # app.db
-uploads/*
-!uploads/dev/
-*:Zone.Identifier
+backend/uploads/*
+backend/!uploads/dev/
+backend/*:Zone.Identifier
 
 # Environments
 # .env
@@ -225,3 +225,13 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# --------------------
+# Frontend (frontend/)
+# --------------------
+frontend/node_modules
+frontend/dist
+frontend/dist-ssr
+frontend/*.local
+frontend/.env
+!frontend/src/lib/
