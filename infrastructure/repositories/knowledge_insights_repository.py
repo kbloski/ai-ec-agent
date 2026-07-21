@@ -10,6 +10,23 @@ class KnowledgeInsightsRepository:
     def __init__(self, logger : Logger, db: Session):
         self.db = db
 
+    # ➕ CREATE MANY
+    def create_many(
+        self,
+        items: list[KnowledgeInsight]
+    ) -> list[KnowledgeInsight]:
+
+        if not items:
+            return []
+
+        self.db.add_all(items)
+        self.db.commit()
+
+        for insight in items:
+            self.db.refresh(insight)
+
+        return items
+
     # 🔍 GET BY ID
     def find_by_offer_id_or_knowledge_id(
         self,

@@ -10,6 +10,7 @@ from application.handlers.target_audience.generate_target_audience_handler impor
 from application.handlers.target_audience.get_target_audience_handler import get_target_audience_handler
 from application.handlers.target_audience.get_target_audience_preview_handler import get_target_audience_preview_handler
 from application.handlers.offers.suggest_offer_data_handler import suggets_offer_data_handler
+# from application.handlers.offers.suggest_offer_knowledge_data_handler import suggest_offer_knowledge_data_handler
 from application.handlers.analysis.knowledge_analysis_answers_generate_handler import knowledge_analysis_answers_generate_handler
 from application.handlers.analysis.create_analysis_for_knowledge_handler import create_analysis_for_knowledge_handler
 from application.handlers.analysis.get_analysis_by_id_hanlder import get_analysis_by_id_handler
@@ -103,6 +104,10 @@ def register_general_routes(router: APIRouter):
     @router.get("/knowledges/{knowledge_id}")
     def get_offer_knowledge( knowledge_id : int):
         return get_offer_knowledge_handler( knowledge_id=knowledge_id)
+
+    # @router.get("/knowledges/{knowledge_id}/suggestions")
+    # def suggest_offer_knowledge_data(knowledge_id: int):
+    #     return suggest_offer_knowledge_data_handler(knowledge_id=knowledge_id)
 
 
 

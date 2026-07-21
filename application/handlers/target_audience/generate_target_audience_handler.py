@@ -51,6 +51,12 @@ Return ONLY valid JSON.
 No markdown.
 No comments.
 No text outside JSON.
+
+Requirements:
+
+- confidence MUST be a float between 0 and 1.
+- score MUST be an integer between 0 and 10.
+- Never use words like "high", "medium", "low" for confidence.
 """
 
 
