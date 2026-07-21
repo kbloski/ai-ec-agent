@@ -21,6 +21,8 @@ Aby skorzysta z venv w ubuntu terminal
 source .\venv\bin\activate
 
 
+
+
 Aby uruchomi aplikacje
 .\venv\Scripts\python.exe .\main.py      
 
