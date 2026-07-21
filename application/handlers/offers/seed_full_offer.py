@@ -18,6 +18,7 @@ def seed_full_offer():
         offer_assembler = container.offer_assembler()
         path_service = container.path_service()
         uploads_path = Path(path_service.UPLOADS_DEV) / "offers" / "mini_pila" 
+        uploads_path = Path(path_service.UPLOADS_DEV) / "offers" / "sloik_uczuc" 
 
         payload = None
         with open(uploads_path / "data.json", "r", encoding="utf-8") as file:

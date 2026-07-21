@@ -1,0 +1,34 @@
+{
+  "name": "Słoik Dobrych Myśli – 100 inspirujących wiadomości na każdy dzień",
+  "buying_price": 18.50,
+  "details": "Elegancki szklany słoik wypełniony 100 kolorowymi karteczkami z dobrymi myślami, krótkimi afirmacjami, motywującymi wiadomościami i słowami wsparcia. Każdy z 6 kolorów symbolizuje inną kategorię, dzięki czemu codzienne losowanie staje się małym rytuałem. Idealny jako prezent dla bliskiej osoby lub dla siebie. W zestawie znajduje się estetyczna karta z krótką instrukcją korzystania.",
+  "target_audience": [
+    "osoby szukające oryginalnego prezentu",
+    "kobiety w wieku 20–45 lat",
+    "osoby dbające o swój dobrostan psychiczny",
+    "miłośnicy codziennych rytuałów i self-care",
+    "osoby potrzebujące codziennej dawki motywacji",
+    "partnerzy szukający wyjątkowego upominku",
+    "dzieci kupujące prezent dla rodziców lub dziadków"
+  ],
+  "pain_points": [
+    "brak pomysłu na wyjątkowy prezent",
+    "codzienny stres i natłok obowiązków",
+    "gorsze dni i spadek motywacji",
+    "potrzeba chwili zatrzymania i refleksji",
+    "trudność w wyrażaniu uczuć bliskim",
+    "chęć podarowania czegoś z emocjonalnym przekazem zamiast kolejnego przedmiotu"
+  ],
+  "offer_items": [
+    {
+      "name": "Słoik Dobrych Myśli",
+      "quantity": 1,
+      "details": "Szklany słoik z elegancką etykietą zawierający 100 kolorowych karteczek z inspirującymi wiadomościami."
+    },
+    {
+      "name": "Karta z instrukcją",
+      "quantity": 1,
+      "details": "Elegancka karta wyjaśniająca znaczenie kolorów oraz sposób korzystania ze słoika."
+    }
+  ]
+}
