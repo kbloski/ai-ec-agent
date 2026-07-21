@@ -17,6 +17,17 @@ class OfferKnowledgeRepository:
     def get_by_offer_id(self, offer_id: int) -> Optional[OfferKnowledge]:
         return self.db.query(OfferKnowledge).filter(OfferKnowledge.offer_id == offer_id).all()
 
+    # ❌ DELETE
+    def delete(self, id: int) -> bool:
+        item = self.db.query(OfferKnowledge).filter(OfferKnowledge.id == id).first()
+
+        if not item:
+            return False
+
+        self.db.delete(item)
+        self.db.commit()
+        return True
+
     # def search(self, page: int = 1, page_size: int = 20) -> PaginatedResult[Offer]:
     #         page = max(1, page)
     #         page_size = max(1, page_size)

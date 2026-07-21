@@ -19,7 +19,22 @@ class OfferItemsRepository:
 # 🔍 GET BY OFFER ID
     def get_by_offer_id(self, offer_id: int) -> list[OfferItem]:
         return self.db.query(OfferItem).filter(OfferItem.offer_id == offer_id).all()
-    
+
+    # 🔍 GET BY ID
+    def get_by_id(self, id: int) -> Optional[OfferItem]:
+        return self.db.query(OfferItem).filter(OfferItem.id == id).first()
+
+    # ❌ DELETE
+    def delete(self, id: int) -> bool:
+        offer_item = self.db.query(OfferItem).filter(OfferItem.id == id).first()
+
+        if not offer_item:
+            return False
+
+        self.db.delete(offer_item)
+        self.db.commit()
+        return True
+
     # def search(self, page: int = 1, page_size: int = 20) -> PaginatedResult[Offer]:
     #         page = max(1, page)
     #         page_size = max(1, page_size)
@@ -39,9 +54,3 @@ class OfferItemsRepository:
     #             page_size=page_size,
     #             total_items=total_items,
     #         )
-
-
-    # def delete_all(self) -> int:
-    #     deleted = self.db.query(OfferItem).delete()
-    #     self.db.commit()
-    #     return deleted

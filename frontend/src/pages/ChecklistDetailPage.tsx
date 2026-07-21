@@ -1,7 +1,13 @@
 import { useParams } from 'react-router-dom'
 import { DetailShell } from '@/components/DetailShell'
+import { ResourceList } from '@/components/ResourceList'
 import { Button } from '@/components/ui/button'
-import { useGenerateChecklistMutation, useGetChecklistQuery } from '@/features/checklists/checklistsApi'
+import {
+  useDeleteChecklistItemMutation,
+  useGenerateChecklistMutation,
+  useGetChecklistQuery,
+} from '@/features/checklists/checklistsApi'
+import type { Entity } from '@/types'
 
 export default function ChecklistDetailPage() {
   const { knowledgeId: knowledgeIdParam, analysisId: analysisIdParam, checklistId: checklistIdParam } =
@@ -12,6 +18,7 @@ export default function ChecklistDetailPage() {
 
   const { data, isLoading, error } = useGetChecklistQuery(checklistId)
   const [generateChecklist, generateState] = useGenerateChecklistMutation()
+  const [deleteChecklistItem] = useDeleteChecklistItemMutation()
 
   return (
     <DetailShell
@@ -21,6 +28,7 @@ export default function ChecklistDetailPage() {
       data={data}
       isLoading={isLoading}
       error={error}
+      exclude={['checklist_items']}
     >
       <Button
         size="sm"
@@ -29,6 +37,15 @@ export default function ChecklistDetailPage() {
       >
         {generateState.isLoading ? 'Generowanie…' : 'Generuj zadania'}
       </Button>
+
+      <ResourceList
+        title="Zadania"
+        items={data?.checklist_items as Entity[] | undefined}
+        isLoading={isLoading}
+        error={error}
+        itemLabel={(item) => (item.title as string) ?? `#${item.id}`}
+        onDelete={(item) => deleteChecklistItem({ id: item.id as number, checklistId })}
+      />
     </DetailShell>
   )
 }

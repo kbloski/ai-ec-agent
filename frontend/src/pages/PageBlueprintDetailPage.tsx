@@ -5,6 +5,7 @@ import { useGetPageBlueprintQuery } from '@/features/pageBlueprint/pageBlueprint
 import { useGetPageStrategyQuery } from '@/features/pageStrategy/pageStrategyApi'
 import { useGetMessageStrategyQuery } from '@/features/messageStrategy/messageStrategyApi'
 import {
+  useDeletePageContentPlanMutation,
   useGeneratePageContentPlanMutation,
   useListPageContentPlanForPageBlueprintQuery,
 } from '@/features/pageContentPlan/pageContentPlanApi'
@@ -24,6 +25,7 @@ export default function PageBlueprintDetailPage() {
 
   const list = useListPageContentPlanForPageBlueprintQuery(id)
   const [generate, generateState] = useGeneratePageContentPlanMutation()
+  const [deletePageContentPlan] = useDeletePageContentPlanMutation()
 
   return (
     <DetailShell
@@ -51,6 +53,7 @@ export default function PageBlueprintDetailPage() {
         }
         isGenerating={generateState.isLoading}
         generateLabel="Generuj content plan"
+        onDelete={(item) => deletePageContentPlan({ id: item.id as number, pageBlueprintId: id })}
       />
     </DetailShell>
   )

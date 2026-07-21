@@ -24,6 +24,17 @@ export const analysisApi = api.injectEndpoints({
         `/knowledges/${knowledgeId}/analysis/${analysisId}/answers/generate`,
       invalidatesTags: (_result, _err, { analysisId }) => [itemTag('Analysis', analysisId)],
     }),
+    deleteAnalysis: builder.mutation<void, { id: number; knowledgeId: number }>({
+      query: ({ id }) => `/analysis/${id}/delete`,
+      invalidatesTags: (_result, _err, { id, knowledgeId }) => [
+        listTag('Analysis', knowledgeId),
+        itemTag('Analysis', id),
+      ],
+    }),
+    deleteAnalysisQuestion: builder.mutation<void, { id: number; analysisId: number }>({
+      query: ({ id }) => `/analysis-questions/${id}/delete`,
+      invalidatesTags: (_result, _err, { analysisId }) => [itemTag('Analysis', analysisId)],
+    }),
   }),
 })
 
@@ -32,4 +43,6 @@ export const {
   useGetAnalysisQuery,
   useCreateAnalysisMutation,
   useGenerateAnalysisAnswersMutation,
+  useDeleteAnalysisMutation,
+  useDeleteAnalysisQuestionMutation,
 } = analysisApi

@@ -29,3 +29,14 @@ class MessageStrategyRepository:
             .filter(MessageStrategy.offer_strategy_id == offer_strategy_id)
             .all()
         )
+
+    # ❌ DELETE
+    def delete(self, id: int) -> bool:
+        item = self.db.query(MessageStrategy).filter(MessageStrategy.id == id).first()
+
+        if not item:
+            return False
+
+        self.db.delete(item)
+        self.db.commit()
+        return True

@@ -2,8 +2,17 @@ import { useParams } from 'react-router-dom'
 import { DetailShell } from '@/components/DetailShell'
 import { ResourceList } from '@/components/ResourceList'
 import { Button } from '@/components/ui/button'
-import { useGenerateAnalysisAnswersMutation, useGetAnalysisQuery } from '@/features/analysis/analysisApi'
-import { useCreateChecklistMutation, useListChecklistsForAnalysisQuery } from '@/features/checklists/checklistsApi'
+import type { Entity } from '@/types'
+import {
+  useDeleteAnalysisQuestionMutation,
+  useGenerateAnalysisAnswersMutation,
+  useGetAnalysisQuery,
+} from '@/features/analysis/analysisApi'
+import {
+  useCreateChecklistMutation,
+  useDeleteChecklistMutation,
+  useListChecklistsForAnalysisQuery,
+} from '@/features/checklists/checklistsApi'
 
 export default function AnalysisDetailPage() {
   const { knowledgeId: knowledgeIdParam, analysisId: analysisIdParam } = useParams()
@@ -12,9 +21,11 @@ export default function AnalysisDetailPage() {
 
   const { data: analysis, isLoading, error } = useGetAnalysisQuery(analysisId)
   const [generateAnswers, generateAnswersState] = useGenerateAnalysisAnswersMutation()
+  const [deleteAnalysisQuestion] = useDeleteAnalysisQuestionMutation()
 
   const checklists = useListChecklistsForAnalysisQuery(analysisId)
   const [createChecklist, createChecklistState] = useCreateChecklistMutation()
+  const [deleteChecklist] = useDeleteChecklistMutation()
 
   return (
     <DetailShell
@@ -24,6 +35,7 @@ export default function AnalysisDetailPage() {
       data={analysis}
       isLoading={isLoading}
       error={error}
+      exclude={['anlysis_questions']}
     >
       <div>
         <Button
@@ -45,6 +57,16 @@ export default function AnalysisDetailPage() {
         onGenerate={() => createChecklist({ knowledgeId, analysisId })}
         isGenerating={createChecklistState.isLoading}
         generateLabel="Utwórz checklistę"
+        onDelete={(item) => deleteChecklist({ id: item.id as number, analysisId })}
+      />
+
+      <ResourceList
+        title="Pytania"
+        items={analysis?.anlysis_questions as Entity[] | undefined}
+        isLoading={isLoading}
+        error={error}
+        itemLabel={(item) => (item.question as string) ?? `#${item.id}`}
+        onDelete={(item) => deleteAnalysisQuestion({ id: item.id as number, analysisId })}
       />
     </DetailShell>
   )

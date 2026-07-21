@@ -29,6 +29,13 @@ export const pageContentPlanApi = api.injectEndpoints({
         listTag('PageContentPlan', pageBlueprintId),
       ],
     }),
+    deletePageContentPlan: builder.mutation<void, { id: number; pageBlueprintId: number }>({
+      query: ({ id }) => `/page-content-plan/${id}/delete`,
+      invalidatesTags: (_result, _err, { id, pageBlueprintId }) => [
+        listTag('PageContentPlan', pageBlueprintId),
+        itemTag('PageContentPlan', id),
+      ],
+    }),
   }),
 })
 
@@ -36,4 +43,5 @@ export const {
   useListPageContentPlanForPageBlueprintQuery,
   useGetPageContentPlanQuery,
   useGeneratePageContentPlanMutation,
+  useDeletePageContentPlanMutation,
 } = pageContentPlanApi

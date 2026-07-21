@@ -28,6 +28,17 @@ export const checklistsApi = api.injectEndpoints({
         `/knowledges/${knowledgeId}/analysis/${analysisId}/checklists/${checklistId}/generate`,
       invalidatesTags: (_result, _err, { checklistId }) => [itemTag('Checklist', checklistId)],
     }),
+    deleteChecklistItem: builder.mutation<void, { id: number; checklistId: number }>({
+      query: ({ id }) => `/checklist-items/${id}/delete`,
+      invalidatesTags: (_result, _err, { checklistId }) => [itemTag('Checklist', checklistId)],
+    }),
+    deleteChecklist: builder.mutation<void, { id: number; analysisId: number }>({
+      query: ({ id }) => `/checklists/${id}/delete`,
+      invalidatesTags: (_result, _err, { id, analysisId }) => [
+        listTag('Checklist', analysisId),
+        itemTag('Checklist', id),
+      ],
+    }),
   }),
 })
 
@@ -36,4 +47,6 @@ export const {
   useGetChecklistQuery,
   useCreateChecklistMutation,
   useGenerateChecklistMutation,
+  useDeleteChecklistItemMutation,
+  useDeleteChecklistMutation,
 } = checklistsApi

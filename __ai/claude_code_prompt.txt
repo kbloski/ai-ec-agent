@@ -80,3 +80,33 @@ Jeżeli w projekcie istnieją już katalogi o powyższych nazwach, dodawaj do ni
 Każdy nowy moduł, komponent React, klasa lub plik powinien mieć jednoznacznie określoną odpowiedzialność i naturalnie wpisywać się w istniejącą strukturę projektu.
 
 Nie przenoś plików ani nie reorganizuj katalogów wyłącznie z powodów estetycznych. Wprowadzaj możliwie najmniejszy zakres zmian niezbędny do realizacji zadania.
+
+
+
+---
+
+# Frontend i komponenty UI
+
+Frontend powinien wykorzystywać istniejący system komponentów oraz obowiązujące standardy projektu.
+
+Przestrzegaj zasad:
+
+* korzystaj z komponentów dostępnych w projekcie zamiast tworzyć własne odpowiedniki,
+* dla elementów interfejsu użytkownika preferuj komponenty z biblioteki **shadcn/ui**, jeżeli projekt już z niej korzysta,
+* jeżeli wymagany komponent nie istnieje w aktualnej instalacji shadcn/ui, dodaj go zgodnie z oficjalnym sposobem instalacji i strukturą projektu,
+* nie implementuj ręcznie komponentów, które są dostępne lub mogą zostać dodane przez shadcn/ui,
+* zachowuj spójność wizualną aplikacji poprzez wykorzystanie istniejących wariantów, stylów i tokenów projektowych.
+
+Przed utworzeniem nowego komponentu UI sprawdź:
+
+* czy odpowiedni komponent istnieje już w projekcie,
+* czy można rozszerzyć istniejący komponent,
+* czy wymagany element jest dostępny w shadcn/ui.
+
+Nowe komponenty React twórz wyłącznie wtedy, gdy:
+
+* reprezentują konkretną odpowiedzialność biznesową,
+* nie są prostym wrapperem na istniejący komponent UI,
+* ich wydzielenie poprawia czytelność lub możliwość ponownego użycia.
+
+Unikaj tworzenia własnych rozwiązań UI zastępujących standardowe komponenty biblioteki.

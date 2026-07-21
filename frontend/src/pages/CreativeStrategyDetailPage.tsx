@@ -4,6 +4,7 @@ import { DetailShell } from '@/components/DetailShell'
 import { Button } from '@/components/ui/button'
 import { useGetCreativeStrategyQuery } from '@/features/creativeStrategy/creativeStrategyApi'
 import {
+  useDeleteAdExecutionMutation,
   useGenerateAdExecutionMutation,
   useListAdExecutionForCreativeStrategyQuery,
 } from '@/features/adExecution/adExecutionApi'
@@ -14,6 +15,7 @@ export default function CreativeStrategyDetailPage() {
 
   const list = useListAdExecutionForCreativeStrategyQuery(id)
   const [generate, generateState] = useGenerateAdExecutionMutation()
+  const [deleteAdExecution] = useDeleteAdExecutionMutation()
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -72,18 +74,31 @@ export default function CreativeStrategyDetailPage() {
 
         {list.isLoading && <p className="text-sm text-muted-foreground">Ładowanie…</p>}
         {Boolean(list.error) && <p className="text-sm text-destructive">Błąd pobierania.</p>}
-        <ul className="space-y-1">
-          {list.data?.map((item) => (
-            <li key={item.id}>
-              <Link
-                to={`/ad-execution/${item.id}`}
-                className="block rounded-md border px-3 py-2 text-sm hover:bg-accent"
-              >
-                {(item.name as string) ?? `#${item.id}`}
-              </Link>
-            </li>
-          ))}
-        </ul>
+        {!list.isLoading && !list.error && (list.data?.length ?? 0) === 0 && (
+          <p className="text-sm text-muted-foreground">Brak elementów — wygeneruj pierwszy.</p>
+        )}
+        {(list.data?.length ?? 0) > 0 && (
+          <ul className="-mx-4 divide-y border-t">
+            {list.data?.map((item) => (
+              <li key={item.id} className="flex items-center gap-2 px-4 py-2.5 hover:bg-accent/50">
+                <Link to={`/ad-execution/${item.id}`} className="flex-1 truncate text-sm hover:underline">
+                  {(item.name as string) ?? `#${item.id}`}
+                </Link>
+                <Button
+                  size="sm"
+                  variant="black"
+                  onClick={() => {
+                    if (window.confirm('Czy na pewno usunąć ten element?')) {
+                      deleteAdExecution({ id: item.id as number, creativeStrategyId: id })
+                    }
+                  }}
+                >
+                  Usuń
+                </Button>
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
     </DetailShell>
   )

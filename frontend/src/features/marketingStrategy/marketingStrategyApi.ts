@@ -23,6 +23,13 @@ export const marketingStrategyApi = api.injectEndpoints({
         listTag('MarketingStrategy', brandMarketing.id),
       ],
     }),
+    deleteMarketingStrategy: builder.mutation<void, { id: number; brandMarketingId: number }>({
+      query: ({ id }) => `/marketing-strategy/${id}/delete`,
+      invalidatesTags: (_result, _err, { id, brandMarketingId }) => [
+        listTag('MarketingStrategy', brandMarketingId),
+        itemTag('MarketingStrategy', id),
+      ],
+    }),
   }),
 })
 
@@ -30,4 +37,5 @@ export const {
   useListMarketingStrategyForBrandMarketingQuery,
   useGetMarketingStrategyQuery,
   useGenerateMarketingStrategyMutation,
+  useDeleteMarketingStrategyMutation,
 } = marketingStrategyApi

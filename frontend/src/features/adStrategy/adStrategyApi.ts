@@ -21,6 +21,13 @@ export const adStrategyApi = api.injectEndpoints({
         `/knowledges/${ms.knowledge_id}/brand-marketing/${ms.brand_marketing_id}/marketing-strategy/${ms.marketing_strategy_id}/offer-strategy/${ms.offer_strategy_id}/message-strategy/${ms.id}/ad-strategy/generate`,
       invalidatesTags: (_result, _err, ms) => [listTag('AdStrategy', ms.id)],
     }),
+    deleteAdStrategy: builder.mutation<void, { id: number; messageStrategyId: number }>({
+      query: ({ id }) => `/ad-strategy/${id}/delete`,
+      invalidatesTags: (_result, _err, { id, messageStrategyId }) => [
+        listTag('AdStrategy', messageStrategyId),
+        itemTag('AdStrategy', id),
+      ],
+    }),
   }),
 })
 
@@ -28,4 +35,5 @@ export const {
   useListAdStrategyForMessageStrategyQuery,
   useGetAdStrategyQuery,
   useGenerateAdStrategyMutation,
+  useDeleteAdStrategyMutation,
 } = adStrategyApi

@@ -60,3 +60,13 @@ class KnowledgeAnalysisRepository:
             )
             .first()
         )
+
+    # ❌ DELETE BY ANALYSIS ID
+    def delete_by_analysis_id(self, analysis_id: int) -> int:
+        deleted = (
+            self.db.query(KnowledgeAnalysis)
+            .filter(KnowledgeAnalysis.analysis_id == analysis_id)
+            .delete()
+        )
+        self.db.commit()
+        return deleted

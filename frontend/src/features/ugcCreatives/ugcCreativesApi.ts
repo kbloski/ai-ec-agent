@@ -21,6 +21,13 @@ export const ugcCreativesApi = api.injectEndpoints({
         `/knowledges/${ms.knowledge_id}/brand-marketing/${ms.brand_marketing_id}/marketing-strategy/${ms.marketing_strategy_id}/offer-strategy/${ms.offer_strategy_id}/message-strategy/${ms.id}/ugc-creatives/generate`,
       invalidatesTags: (_result, _err, ms) => [listTag('UgcCreative', ms.id)],
     }),
+    deleteUgcCreative: builder.mutation<void, { id: number; messageStrategyId: number }>({
+      query: ({ id }) => `/ugc-creatives/${id}/delete`,
+      invalidatesTags: (_result, _err, { id, messageStrategyId }) => [
+        listTag('UgcCreative', messageStrategyId),
+        itemTag('UgcCreative', id),
+      ],
+    }),
   }),
 })
 
@@ -28,4 +35,5 @@ export const {
   useListUgcCreativesForMessageStrategyQuery,
   useGetUgcCreativeQuery,
   useGenerateUgcCreativesMutation,
+  useDeleteUgcCreativeMutation,
 } = ugcCreativesApi

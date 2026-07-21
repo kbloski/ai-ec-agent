@@ -65,3 +65,13 @@ class AnalysisChecklistRepository:
             )
             .first()
         )
+
+    # ❌ DELETE BY CHECKLIST ID
+    def delete_by_checklist_id(self, checklist_id: int) -> int:
+        deleted = (
+            self.db.query(AnalysisChecklist)
+            .filter(AnalysisChecklist.checklist_id == checklist_id)
+            .delete()
+        )
+        self.db.commit()
+        return deleted

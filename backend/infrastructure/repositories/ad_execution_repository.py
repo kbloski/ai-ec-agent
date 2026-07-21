@@ -29,3 +29,14 @@ class AdExecutionRepository:
             .filter(AdExecution.creative_strategy_id == creative_strategy_id)
             .all()
         )
+
+    # ❌ DELETE
+    def delete(self, id: int) -> bool:
+        item = self.db.query(AdExecution).filter(AdExecution.id == id).first()
+
+        if not item:
+            return False
+
+        self.db.delete(item)
+        self.db.commit()
+        return True

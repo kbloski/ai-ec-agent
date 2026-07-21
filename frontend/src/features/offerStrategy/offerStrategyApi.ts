@@ -21,6 +21,13 @@ export const offerStrategyApi = api.injectEndpoints({
         `/knowledges/${ms.knowledge_id}/brand-marketing/${ms.brand_marketing_id}/marketing-strategy/${ms.id}/offer-strategy/generate`,
       invalidatesTags: (_result, _err, ms) => [listTag('OfferStrategy', ms.id)],
     }),
+    deleteOfferStrategy: builder.mutation<void, { id: number; marketingStrategyId: number }>({
+      query: ({ id }) => `/offer-strategy/${id}/delete`,
+      invalidatesTags: (_result, _err, { id, marketingStrategyId }) => [
+        listTag('OfferStrategy', marketingStrategyId),
+        itemTag('OfferStrategy', id),
+      ],
+    }),
   }),
 })
 
@@ -28,4 +35,5 @@ export const {
   useListOfferStrategyForMarketingStrategyQuery,
   useGetOfferStrategyQuery,
   useGenerateOfferStrategyMutation,
+  useDeleteOfferStrategyMutation,
 } = offerStrategyApi

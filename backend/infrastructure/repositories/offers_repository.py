@@ -59,3 +59,14 @@ class OffersRepository:
         deleted = self.db.query(Offer).delete()
         self.db.commit()
         return deleted
+
+    # ❌ DELETE
+    def delete(self, id: int) -> bool:
+        offer = self.db.query(Offer).filter(Offer.id == id).first()
+
+        if not offer:
+            return False
+
+        self.db.delete(offer)
+        self.db.commit()
+        return True

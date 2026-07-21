@@ -16,6 +16,7 @@ class AnalysisDto(JSONSerializable):
 
         data = {
             "id": self.id,
+            "anlysis_questions": [q.to_dict() for q in self.anlysis_questions],
         }
 
         return {k: v for k, v in data.items() if k not in exclude}

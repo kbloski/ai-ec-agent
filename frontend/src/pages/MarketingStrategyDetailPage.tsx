@@ -3,6 +3,7 @@ import { DetailShell } from '@/components/DetailShell'
 import { ResourceList } from '@/components/ResourceList'
 import { useGetMarketingStrategyQuery } from '@/features/marketingStrategy/marketingStrategyApi'
 import {
+  useDeleteOfferStrategyMutation,
   useGenerateOfferStrategyMutation,
   useListOfferStrategyForMarketingStrategyQuery,
 } from '@/features/offerStrategy/offerStrategyApi'
@@ -13,6 +14,7 @@ export default function MarketingStrategyDetailPage() {
 
   const list = useListOfferStrategyForMarketingStrategyQuery(id)
   const [generate, generateState] = useGenerateOfferStrategyMutation()
+  const [deleteOfferStrategy] = useDeleteOfferStrategyMutation()
 
   return (
     <DetailShell
@@ -33,6 +35,7 @@ export default function MarketingStrategyDetailPage() {
         onGenerate={() => marketingStrategy && generate(marketingStrategy)}
         isGenerating={generateState.isLoading}
         generateLabel="Generuj offer strategy"
+        onDelete={(item) => deleteOfferStrategy({ id: item.id as number, marketingStrategyId: id })}
       />
     </DetailShell>
   )

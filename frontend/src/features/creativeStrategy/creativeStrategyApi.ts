@@ -21,6 +21,13 @@ export const creativeStrategyApi = api.injectEndpoints({
         `/knowledges/${as.knowledge_id}/brand-marketing/${as.brand_marketing_id}/marketing-strategy/${as.marketing_strategy_id}/offer-strategy/${as.offer_strategy_id}/message-strategy/${as.message_strategy_id}/ad-strategy/${as.id}/creative-strategy/generate`,
       invalidatesTags: (_result, _err, as) => [listTag('CreativeStrategy', as.id)],
     }),
+    deleteCreativeStrategy: builder.mutation<void, { id: number; adStrategyId: number }>({
+      query: ({ id }) => `/creative-strategy/${id}/delete`,
+      invalidatesTags: (_result, _err, { id, adStrategyId }) => [
+        listTag('CreativeStrategy', adStrategyId),
+        itemTag('CreativeStrategy', id),
+      ],
+    }),
   }),
 })
 
@@ -28,4 +35,5 @@ export const {
   useListCreativeStrategyForAdStrategyQuery,
   useGetCreativeStrategyQuery,
   useGenerateCreativeStrategyMutation,
+  useDeleteCreativeStrategyMutation,
 } = creativeStrategyApi

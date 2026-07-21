@@ -47,6 +47,18 @@ class AnalysisQuestionsRepository:
         return self.db.query(AnalysisQuestion).filter(
             or_(*filters)
         ).all()
-    
-    
 
+    # 🔍 GET BY ID
+    def get_by_id(self, id: int) -> Optional[AnalysisQuestion]:
+        return self.db.query(AnalysisQuestion).filter(AnalysisQuestion.id == id).first()
+
+    # ❌ DELETE
+    def delete(self, id: int) -> bool:
+        item = self.db.query(AnalysisQuestion).filter(AnalysisQuestion.id == id).first()
+
+        if not item:
+            return False
+
+        self.db.delete(item)
+        self.db.commit()
+        return True

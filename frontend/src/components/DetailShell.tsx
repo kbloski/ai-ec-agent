@@ -11,6 +11,8 @@ interface DetailShellProps {
   isLoading: boolean
   error?: unknown
   children?: ReactNode
+  exclude?: string[]
+  collapsibleFields?: string[]
 }
 
 /** Shared layout for every "detail" page: title, entity fields, optional child sections. */
@@ -22,27 +24,41 @@ export function DetailShell({
   isLoading,
   error,
   children,
+  exclude,
+  collapsibleFields,
 }: DetailShellProps) {
   return (
-    <div className="mx-auto max-w-3xl space-y-6 p-6">
-      {backTo && (
-        <Link to={backTo} className="text-sm text-muted-foreground hover:underline">
-          {backLabel}
-        </Link>
-      )}
+    <div className="grid grid-cols-1 gap-6 p-6 md:grid-cols-[280px_1fr]">
+      <aside className="order-2 space-y-4 md:order-1">
+        <h2 className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+          Zasoby
+        </h2>
+        {data &&
+          (children ? (
+            <div className="space-y-4">{children}</div>
+          ) : (
+            <p className="text-sm text-muted-foreground">Brak powiązanych zasobów.</p>
+          ))}
+      </aside>
 
-      <h1 className="text-2xl font-semibold">{title}</h1>
+      <div className="order-1 max-w-3xl space-y-6 md:order-2">
+        {backTo && (
+          <Link to={backTo} className="text-sm text-muted-foreground hover:underline">
+            {backLabel}
+          </Link>
+        )}
 
-      {isLoading && <p className="text-sm text-muted-foreground">Ładowanie…</p>}
-      {Boolean(error) && <p className="text-sm text-destructive">Nie udało się pobrać danych.</p>}
+        <h1 className="text-2xl font-semibold">{title}</h1>
 
-      {data && (
-        <div className="rounded-lg border p-4">
-          <EntityFields data={data} />
-        </div>
-      )}
+        {isLoading && <p className="text-sm text-muted-foreground">Ładowanie…</p>}
+        {Boolean(error) && <p className="text-sm text-destructive">Nie udało się pobrać danych.</p>}
 
-      {data && <div className="space-y-4">{children}</div>}
+        {data && (
+          <div className="rounded-lg border p-4">
+            <EntityFields data={data} exclude={exclude} collapsibleFields={collapsibleFields} />
+          </div>
+        )}
+      </div>
     </div>
   )
 }

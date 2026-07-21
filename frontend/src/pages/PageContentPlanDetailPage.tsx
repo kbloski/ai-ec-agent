@@ -6,6 +6,7 @@ import { useGetPageBlueprintQuery } from '@/features/pageBlueprint/pageBlueprint
 import { useGetPageStrategyQuery } from '@/features/pageStrategy/pageStrategyApi'
 import { useGetMessageStrategyQuery } from '@/features/messageStrategy/messageStrategyApi'
 import {
+  useDeletePageCopyMutation,
   useGeneratePageCopyMutation,
   useListPageCopyForPageContentPlanQuery,
 } from '@/features/pageCopy/pageCopyApi'
@@ -29,6 +30,7 @@ export default function PageContentPlanDetailPage() {
 
   const list = useListPageCopyForPageContentPlanQuery(id)
   const [generate, generateState] = useGeneratePageCopyMutation()
+  const [deletePageCopy] = useDeletePageCopyMutation()
 
   return (
     <DetailShell
@@ -58,6 +60,7 @@ export default function PageContentPlanDetailPage() {
         }
         isGenerating={generateState.isLoading}
         generateLabel="Generuj page copy"
+        onDelete={(item) => deletePageCopy({ id: item.id as number, pageContentPlanId: id })}
       />
     </DetailShell>
   )

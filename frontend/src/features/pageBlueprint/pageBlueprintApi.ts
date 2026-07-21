@@ -26,6 +26,13 @@ export const pageBlueprintApi = api.injectEndpoints({
         `/knowledges/${chain.knowledge_id}/brand-marketing/${chain.brand_marketing_id}/marketing-strategy/${chain.marketing_strategy_id}/offer-strategy/${chain.offer_strategy_id}/message-strategy/${chain.id}/page-strategy/${pageStrategyId}/page-blueprint/generate`,
       invalidatesTags: (_result, _err, { pageStrategyId }) => [listTag('PageBlueprint', pageStrategyId)],
     }),
+    deletePageBlueprint: builder.mutation<void, { id: number; pageStrategyId: number }>({
+      query: ({ id }) => `/page-blueprint/${id}/delete`,
+      invalidatesTags: (_result, _err, { id, pageStrategyId }) => [
+        listTag('PageBlueprint', pageStrategyId),
+        itemTag('PageBlueprint', id),
+      ],
+    }),
   }),
 })
 
@@ -33,4 +40,5 @@ export const {
   useListPageBlueprintForPageStrategyQuery,
   useGetPageBlueprintQuery,
   useGeneratePageBlueprintMutation,
+  useDeletePageBlueprintMutation,
 } = pageBlueprintApi

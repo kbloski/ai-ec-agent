@@ -2,12 +2,18 @@ import { useParams } from 'react-router-dom'
 import { DetailShell } from '@/components/DetailShell'
 import { ResourceList } from '@/components/ResourceList'
 import { useGetMessageStrategyQuery } from '@/features/messageStrategy/messageStrategyApi'
-import { useGenerateAdStrategyMutation, useListAdStrategyForMessageStrategyQuery } from '@/features/adStrategy/adStrategyApi'
 import {
+  useDeleteAdStrategyMutation,
+  useGenerateAdStrategyMutation,
+  useListAdStrategyForMessageStrategyQuery,
+} from '@/features/adStrategy/adStrategyApi'
+import {
+  useDeleteUgcCreativeMutation,
   useGenerateUgcCreativesMutation,
   useListUgcCreativesForMessageStrategyQuery,
 } from '@/features/ugcCreatives/ugcCreativesApi'
 import {
+  useDeletePageStrategyMutation,
   useGeneratePageStrategyMutation,
   useListPageStrategyForMessageStrategyQuery,
 } from '@/features/pageStrategy/pageStrategyApi'
@@ -18,12 +24,15 @@ export default function MessageStrategyDetailPage() {
 
   const adStrategies = useListAdStrategyForMessageStrategyQuery(id)
   const [generateAdStrategy, generateAdStrategyState] = useGenerateAdStrategyMutation()
+  const [deleteAdStrategy] = useDeleteAdStrategyMutation()
 
   const ugcCreatives = useListUgcCreativesForMessageStrategyQuery(id)
   const [generateUgc, generateUgcState] = useGenerateUgcCreativesMutation()
+  const [deleteUgcCreative] = useDeleteUgcCreativeMutation()
 
   const pageStrategies = useListPageStrategyForMessageStrategyQuery(id)
   const [generatePageStrategy, generatePageStrategyState] = useGeneratePageStrategyMutation()
+  const [deletePageStrategy] = useDeletePageStrategyMutation()
 
   return (
     <DetailShell
@@ -44,6 +53,7 @@ export default function MessageStrategyDetailPage() {
         onGenerate={() => messageStrategy && generateAdStrategy(messageStrategy)}
         isGenerating={generateAdStrategyState.isLoading}
         generateLabel="Generuj ad strategy"
+        onDelete={(item) => deleteAdStrategy({ id: item.id as number, messageStrategyId: id })}
       />
 
       <ResourceList
@@ -56,6 +66,7 @@ export default function MessageStrategyDetailPage() {
         onGenerate={() => messageStrategy && generateUgc(messageStrategy)}
         isGenerating={generateUgcState.isLoading}
         generateLabel="Generuj UGC creatives"
+        onDelete={(item) => deleteUgcCreative({ id: item.id as number, messageStrategyId: id })}
       />
 
       <ResourceList
@@ -68,6 +79,7 @@ export default function MessageStrategyDetailPage() {
         onGenerate={() => messageStrategy && generatePageStrategy(messageStrategy)}
         isGenerating={generatePageStrategyState.isLoading}
         generateLabel="Generuj page strategy"
+        onDelete={(item) => deletePageStrategy({ id: item.id as number, messageStrategyId: id })}
       />
     </DetailShell>
   )

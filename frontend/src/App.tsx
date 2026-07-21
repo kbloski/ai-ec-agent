@@ -1,4 +1,5 @@
-import { Link, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
+import { AppShell } from '@/components/AppShell'
 import OffersPage from '@/pages/OffersPage'
 import OfferDetailPage from '@/pages/OfferDetailPage'
 import KnowledgeDetailPage from '@/pages/KnowledgeDetailPage'
@@ -20,14 +21,8 @@ import PageCopyDetailPage from '@/pages/PageCopyDetailPage'
 
 function App() {
   return (
-    <div className="min-h-svh">
-      <nav className="border-b p-4">
-        <Link to="/" className="text-sm font-medium">
-          ai-ec-agent
-        </Link>
-      </nav>
-
-      <Routes>
+    <Routes>
+      <Route element={<AppShell />}>
         <Route path="/" element={<OffersPage />} />
         <Route path="/offers/:offerId" element={<OfferDetailPage />} />
         <Route path="/knowledges/:knowledgeId" element={<KnowledgeDetailPage />} />
@@ -49,8 +44,8 @@ function App() {
         <Route path="/page-blueprint/:id" element={<PageBlueprintDetailPage />} />
         <Route path="/page-content-plan/:id" element={<PageContentPlanDetailPage />} />
         <Route path="/page-copy/:id" element={<PageCopyDetailPage />} />
-      </Routes>
-    </div>
+      </Route>
+    </Routes>
   )
 }
 

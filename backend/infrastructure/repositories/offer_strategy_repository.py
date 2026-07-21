@@ -29,3 +29,14 @@ class OfferStrategyRepository:
             .filter(OfferStrategy.marketing_strategy_id == marketing_strategy_id)
             .all()
         )
+
+    # ❌ DELETE
+    def delete(self, id: int) -> bool:
+        item = self.db.query(OfferStrategy).filter(OfferStrategy.id == id).first()
+
+        if not item:
+            return False
+
+        self.db.delete(item)
+        self.db.commit()
+        return True

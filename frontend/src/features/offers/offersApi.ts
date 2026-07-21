@@ -36,7 +36,31 @@ export const offersApi = api.injectEndpoints({
       query: (params) => ({ url: '/offers/create', params }),
       invalidatesTags: [listTag('Offer', 'root')],
     }),
+    deleteOffer: builder.mutation<void, number>({
+      query: (id) => `/offers/${id}/delete`,
+      invalidatesTags: (_result, _err, id) => [listTag('Offer', 'root'), itemTag('Offer', id)],
+    }),
+    deleteOfferItem: builder.mutation<void, { id: number; offerId: number }>({
+      query: ({ id }) => `/offer-items/${id}/delete`,
+      invalidatesTags: (_result, _err, { offerId }) => [itemTag('Offer', offerId)],
+    }),
+    deleteOfferInsight: builder.mutation<void, { id: number; offerId: number }>({
+      query: ({ id }) => `/offer-insights/${id}/delete`,
+      invalidatesTags: (_result, _err, { offerId }) => [itemTag('Offer', offerId)],
+    }),
+    generateOfferSuggestions: builder.mutation<Entity, number>({
+      query: (id) => `/offers/${id}/suggestions`,
+      invalidatesTags: (_result, _err, id) => [itemTag('Offer', id)],
+    }),
   }),
 })
 
-export const { useListOffersQuery, useGetOfferQuery, useCreateOfferMutation } = offersApi
+export const {
+  useListOffersQuery,
+  useGetOfferQuery,
+  useCreateOfferMutation,
+  useDeleteOfferMutation,
+  useDeleteOfferItemMutation,
+  useDeleteOfferInsightMutation,
+  useGenerateOfferSuggestionsMutation,
+} = offersApi

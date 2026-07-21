@@ -47,6 +47,18 @@ class OfferInsightsRepository:
         return self.db.query(OfferInsight).filter(
             or_(*filters)
         ).all()
-    
-    
 
+    # 🔍 GET BY ID
+    def get_by_id(self, id: int) -> Optional[OfferInsight]:
+        return self.db.query(OfferInsight).filter(OfferInsight.id == id).first()
+
+    # ❌ DELETE
+    def delete(self, id: int) -> bool:
+        item = self.db.query(OfferInsight).filter(OfferInsight.id == id).first()
+
+        if not item:
+            return False
+
+        self.db.delete(item)
+        self.db.commit()
+        return True

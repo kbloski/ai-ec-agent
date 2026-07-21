@@ -30,6 +30,13 @@ export const pageCopyApi = api.injectEndpoints({
         listTag('PageCopy', pageContentPlanId),
       ],
     }),
+    deletePageCopy: builder.mutation<void, { id: number; pageContentPlanId: number }>({
+      query: ({ id }) => `/page-copy/${id}/delete`,
+      invalidatesTags: (_result, _err, { id, pageContentPlanId }) => [
+        listTag('PageCopy', pageContentPlanId),
+        itemTag('PageCopy', id),
+      ],
+    }),
   }),
 })
 
@@ -37,4 +44,5 @@ export const {
   useListPageCopyForPageContentPlanQuery,
   useGetPageCopyQuery,
   useGeneratePageCopyMutation,
+  useDeletePageCopyMutation,
 } = pageCopyApi

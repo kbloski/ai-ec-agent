@@ -3,6 +3,7 @@ import { DetailShell } from '@/components/DetailShell'
 import { ResourceList } from '@/components/ResourceList'
 import { useGetAdStrategyQuery } from '@/features/adStrategy/adStrategyApi'
 import {
+  useDeleteCreativeStrategyMutation,
   useGenerateCreativeStrategyMutation,
   useListCreativeStrategyForAdStrategyQuery,
 } from '@/features/creativeStrategy/creativeStrategyApi'
@@ -13,6 +14,7 @@ export default function AdStrategyDetailPage() {
 
   const list = useListCreativeStrategyForAdStrategyQuery(id)
   const [generate, generateState] = useGenerateCreativeStrategyMutation()
+  const [deleteCreativeStrategy] = useDeleteCreativeStrategyMutation()
 
   return (
     <DetailShell
@@ -33,6 +35,7 @@ export default function AdStrategyDetailPage() {
         onGenerate={() => adStrategy && generate(adStrategy)}
         isGenerating={generateState.isLoading}
         generateLabel="Generuj creative strategy"
+        onDelete={(item) => deleteCreativeStrategy({ id: item.id as number, adStrategyId: id })}
       />
     </DetailShell>
   )

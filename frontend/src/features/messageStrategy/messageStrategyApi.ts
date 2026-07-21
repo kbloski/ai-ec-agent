@@ -21,6 +21,13 @@ export const messageStrategyApi = api.injectEndpoints({
         `/knowledges/${os.knowledge_id}/brand-marketing/${os.brand_marketing_id}/marketing-strategy/${os.marketing_strategy_id}/offer-strategy/${os.id}/message-strategy/generate`,
       invalidatesTags: (_result, _err, os) => [listTag('MessageStrategy', os.id)],
     }),
+    deleteMessageStrategy: builder.mutation<void, { id: number; offerStrategyId: number }>({
+      query: ({ id }) => `/message-strategy/${id}/delete`,
+      invalidatesTags: (_result, _err, { id, offerStrategyId }) => [
+        listTag('MessageStrategy', offerStrategyId),
+        itemTag('MessageStrategy', id),
+      ],
+    }),
   }),
 })
 
@@ -28,4 +35,5 @@ export const {
   useListMessageStrategyForOfferStrategyQuery,
   useGetMessageStrategyQuery,
   useGenerateMessageStrategyMutation,
+  useDeleteMessageStrategyMutation,
 } = messageStrategyApi

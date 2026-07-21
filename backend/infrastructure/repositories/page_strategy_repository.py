@@ -29,3 +29,14 @@ class PageStrategyRepository:
             .filter(PageStrategy.message_strategy_id == message_strategy_id)
             .all()
         )
+
+    # ❌ DELETE
+    def delete(self, id: int) -> bool:
+        item = self.db.query(PageStrategy).filter(PageStrategy.id == id).first()
+
+        if not item:
+            return False
+
+        self.db.delete(item)
+        self.db.commit()
+        return True

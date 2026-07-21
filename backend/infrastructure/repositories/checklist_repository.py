@@ -26,3 +26,14 @@ class ChecklistRepository:
             .filter(Checklist.id.in_(ids))
             .all()
         )
+
+    # ❌ DELETE
+    def delete(self, id: int) -> bool:
+        item = self.db.query(Checklist).filter(Checklist.id == id).first()
+
+        if not item:
+            return False
+
+        self.db.delete(item)
+        self.db.commit()
+        return True

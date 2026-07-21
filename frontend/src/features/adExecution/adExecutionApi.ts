@@ -31,6 +31,13 @@ export const adExecutionApi = api.injectEndpoints({
         listTag('AdExecution', creativeStrategy.id),
       ],
     }),
+    deleteAdExecution: builder.mutation<void, { id: number; creativeStrategyId: number }>({
+      query: ({ id }) => `/ad-execution/${id}/delete`,
+      invalidatesTags: (_result, _err, { id, creativeStrategyId }) => [
+        listTag('AdExecution', creativeStrategyId),
+        itemTag('AdExecution', id),
+      ],
+    }),
   }),
 })
 
@@ -38,4 +45,5 @@ export const {
   useListAdExecutionForCreativeStrategyQuery,
   useGetAdExecutionQuery,
   useGenerateAdExecutionMutation,
+  useDeleteAdExecutionMutation,
 } = adExecutionApi

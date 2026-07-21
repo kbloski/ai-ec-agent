@@ -1,13 +1,16 @@
 import { useParams } from 'react-router-dom'
 import { DetailShell } from '@/components/DetailShell'
 import { ResourceList } from '@/components/ResourceList'
+import { Button } from '@/components/ui/button'
 import { useGetKnowledgeQuery } from '@/features/knowledge/knowledgeApi'
+import { useGenerateTargetAudiencesMutation } from '@/features/targetAudiences/targetAudiencesApi'
 import {
-  useGenerateTargetAudiencesMutation,
-  useListTargetAudiencesForKnowledgeQuery,
-} from '@/features/targetAudiences/targetAudiencesApi'
-import { useCreateAnalysisMutation, useListAnalysisForKnowledgeQuery } from '@/features/analysis/analysisApi'
+  useCreateAnalysisMutation,
+  useDeleteAnalysisMutation,
+  useListAnalysisForKnowledgeQuery,
+} from '@/features/analysis/analysisApi'
 import {
+  useDeleteBrandMarketingMutation,
   useGenerateBrandMarketingMutation,
   useListBrandMarketingForKnowledgeQuery,
 } from '@/features/brandMarketing/brandMarketingApi'
@@ -16,14 +19,15 @@ export default function KnowledgeDetailPage() {
   const knowledgeId = Number(useParams().knowledgeId)
   const { data: knowledge, isLoading, error } = useGetKnowledgeQuery(knowledgeId)
 
-  const audiences = useListTargetAudiencesForKnowledgeQuery(knowledgeId)
   const [generateAudiences, generateAudiencesState] = useGenerateTargetAudiencesMutation()
 
   const analysisList = useListAnalysisForKnowledgeQuery(knowledgeId)
   const [createAnalysis, createAnalysisState] = useCreateAnalysisMutation()
+  const [deleteAnalysis] = useDeleteAnalysisMutation()
 
   const brandMarketingList = useListBrandMarketingForKnowledgeQuery(knowledgeId)
   const [generateBrandMarketing, generateBrandMarketingState] = useGenerateBrandMarketingMutation()
+  const [deleteBrandMarketing] = useDeleteBrandMarketingMutation()
 
   return (
     <DetailShell
@@ -33,17 +37,15 @@ export default function KnowledgeDetailPage() {
       data={knowledge}
       isLoading={isLoading}
       error={error}
+      collapsibleFields={['offer_insights', 'target_audiences']}
     >
-      <ResourceList
-        title="Grupy docelowe"
-        items={audiences.data}
-        isLoading={audiences.isLoading}
-        error={audiences.error}
-        linkTo={(item) => `/target-audiences/${item.id}`}
-        onGenerate={() => generateAudiences({ knowledgeId })}
-        isGenerating={generateAudiencesState.isLoading}
-        generateLabel="Generuj grupy docelowe"
-      />
+      <Button
+        size="sm"
+        onClick={() => generateAudiences({ knowledgeId })}
+        disabled={generateAudiencesState.isLoading}
+      >
+        {generateAudiencesState.isLoading ? 'Generowanie…' : 'Generuj grupy docelowe'}
+      </Button>
 
       <ResourceList
         title="Analizy"
@@ -55,6 +57,7 @@ export default function KnowledgeDetailPage() {
         onGenerate={() => createAnalysis({ knowledgeId })}
         isGenerating={createAnalysisState.isLoading}
         generateLabel="Utwórz analizę"
+        onDelete={(item) => deleteAnalysis({ id: item.id as number, knowledgeId })}
       />
 
       <ResourceList
@@ -67,6 +70,7 @@ export default function KnowledgeDetailPage() {
         onGenerate={() => generateBrandMarketing({ knowledgeId })}
         isGenerating={generateBrandMarketingState.isLoading}
         generateLabel="Generuj brand marketing"
+        onDelete={(item) => deleteBrandMarketing({ id: item.id as number, knowledgeId })}
       />
     </DetailShell>
   )

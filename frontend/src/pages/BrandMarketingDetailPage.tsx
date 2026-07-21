@@ -3,6 +3,7 @@ import { DetailShell } from '@/components/DetailShell'
 import { ResourceList } from '@/components/ResourceList'
 import { useGetBrandMarketingQuery } from '@/features/brandMarketing/brandMarketingApi'
 import {
+  useDeleteMarketingStrategyMutation,
   useGenerateMarketingStrategyMutation,
   useListMarketingStrategyForBrandMarketingQuery,
 } from '@/features/marketingStrategy/marketingStrategyApi'
@@ -13,6 +14,7 @@ export default function BrandMarketingDetailPage() {
 
   const list = useListMarketingStrategyForBrandMarketingQuery(id)
   const [generate, generateState] = useGenerateMarketingStrategyMutation()
+  const [deleteMarketingStrategy] = useDeleteMarketingStrategyMutation()
 
   return (
     <DetailShell
@@ -33,6 +35,9 @@ export default function BrandMarketingDetailPage() {
         onGenerate={() => brandMarketing && generate(brandMarketing)}
         isGenerating={generateState.isLoading}
         generateLabel="Generuj marketing strategy"
+        onDelete={(item) =>
+          deleteMarketingStrategy({ id: item.id as number, brandMarketingId: id })
+        }
       />
     </DetailShell>
   )

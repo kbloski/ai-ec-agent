@@ -29,3 +29,14 @@ class MarketingStrategyRepository:
             .filter(MarketingStrategy.brand_marketing_id == brand_marketing_id)
             .all()
         )
+
+    # ❌ DELETE
+    def delete(self, id: int) -> bool:
+        item = self.db.query(MarketingStrategy).filter(MarketingStrategy.id == id).first()
+
+        if not item:
+            return False
+
+        self.db.delete(item)
+        self.db.commit()
+        return True

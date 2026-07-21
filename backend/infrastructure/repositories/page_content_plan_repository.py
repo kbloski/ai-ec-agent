@@ -29,3 +29,14 @@ class PageContentPlanRepository:
             .filter(PageContentPlan.page_blueprint_id == page_blueprint_id)
             .all()
         )
+
+    # ❌ DELETE
+    def delete(self, id: int) -> bool:
+        item = self.db.query(PageContentPlan).filter(PageContentPlan.id == id).first()
+
+        if not item:
+            return False
+
+        self.db.delete(item)
+        self.db.commit()
+        return True

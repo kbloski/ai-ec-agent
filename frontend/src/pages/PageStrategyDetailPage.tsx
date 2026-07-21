@@ -4,6 +4,7 @@ import { ResourceList } from '@/components/ResourceList'
 import { useGetPageStrategyQuery } from '@/features/pageStrategy/pageStrategyApi'
 import { useGetMessageStrategyQuery } from '@/features/messageStrategy/messageStrategyApi'
 import {
+  useDeletePageBlueprintMutation,
   useGeneratePageBlueprintMutation,
   useListPageBlueprintForPageStrategyQuery,
 } from '@/features/pageBlueprint/pageBlueprintApi'
@@ -20,6 +21,7 @@ export default function PageStrategyDetailPage() {
 
   const list = useListPageBlueprintForPageStrategyQuery(id)
   const [generate, generateState] = useGeneratePageBlueprintMutation()
+  const [deletePageBlueprint] = useDeletePageBlueprintMutation()
 
   return (
     <DetailShell
@@ -42,6 +44,7 @@ export default function PageStrategyDetailPage() {
         }
         isGenerating={generateState.isLoading}
         generateLabel="Generuj page blueprint"
+        onDelete={(item) => deletePageBlueprint({ id: item.id as number, pageStrategyId: id })}
       />
     </DetailShell>
   )
