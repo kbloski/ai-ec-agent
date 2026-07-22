@@ -1,5 +1,5 @@
 import json
-
+from random import randint
 from di.container import Container
 
 from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
@@ -304,33 +304,18 @@ Duration:
 
 
 def generate_ad_execution_handler(
-
     knowledge_id: int,
-
     brand_marketing_id: int,
-
     marketing_strategy_id: int,
-
     offer_strategy_id: int,
-
     message_strategy_id: int,
-
     ad_strategy_id: int,
-
     creative_strategy_id: int,
-
-
     video_duration_seconds: int = 15,
-
     platform: str = "Meta Ads",
-
     format: str = "Vertical Video 9:16"
-
 ):
-
-
     container = Container()
-
 
 
     knowledge_service = (
@@ -441,68 +426,26 @@ def generate_ad_execution_handler(
     )
 
 
-
     def serialize(obj):
-
         return json.dumps(
-
             obj.to_dict(),
-
             ensure_ascii=False,
-
             indent=2,
-
             default=str
-
         )
 
 
-
     user_prompt = USER_PROMPT_TEMPLATE.format(
-
-        knowledge_json=serialize(
-            knowledge
-        ),
-
-
-        brand_strategy_json=serialize(
-            brand_strategy
-        ),
-
-
-        marketing_strategy_json=serialize(
-            marketing_strategy
-        ),
-
-
-        offer_strategy_json=serialize(
-            offer_strategy
-        ),
-
-
-        message_strategy_json=serialize(
-            message_strategy
-        ),
-
-
-        ad_strategy_json=serialize(
-            ad_strategy
-        ),
-
-
-        creative_strategy_json=serialize(
-            creative_strategy
-        ),
-
-
+        knowledge_json=serialize(knowledge),
+        brand_strategy_json=serialize(brand_strategy),
+        marketing_strategy_json=serialize(marketing_strategy),
+        offer_strategy_json=serialize(offer_strategy),
+        message_strategy_json=serialize(message_strategy),
+        ad_strategy_json=serialize(ad_strategy),
+        creative_strategy_json=serialize( creative_strategy ),
         platform=platform,
-
-
         format=format,
-
-
         duration_seconds=video_duration_seconds
-
     )
 
 
@@ -510,14 +453,9 @@ def generate_ad_execution_handler(
     response = ollama_service.chat_llm(
 
         messages=[
-
-
             LlmOllamaMessage(
-
                 role=OllamaMessageRole.SYSTEM,
-
                 content=SYSTEM_PROMPT
-
             ),
 
 
@@ -536,200 +474,66 @@ def generate_ad_execution_handler(
 
 
     try:
-
-
         content = response.content.strip()
-
-
-
+        
         if content.startswith("```"):
-
-
             content = (
-
                 content
-
                 .replace(
                     "```json",
                     ""
                 )
-
                 .replace(
                     "```",
                     ""
                 )
-
                 .strip()
-
             )
-
-
 
         result = json.loads(
             content
         )
 
-
-
     except json.JSONDecodeError:
-
-
         return {
-
             "raw_response":
             response.content
-
         }
-
-
 
     created_ids = []
 
-
-
-    for item in result.get(
-
-        "ad_executions",
-
-        []
-
-    ):
-
-
-
+    for item in result.get( "ad_executions", [] ):
         scenes = item.get(
-
-            "scenes",
-
-            []
-
+            "scenes",[]
         )
-
-
 
         entity = AdExecution(
-
-
             knowledge_id=knowledge_id,
-
-
             brand_marketing_id=brand_marketing_id,
-
-
             marketing_strategy_id=marketing_strategy_id,
-
-
             offer_strategy_id=offer_strategy_id,
-
-
             message_strategy_id=message_strategy_id,
-
-
             ad_strategy_id=ad_strategy_id,
-
-
             creative_strategy_id=creative_strategy_id,
-
-
-
-            name=item.get(
-
-                "name"
-
-            ),
-
-
-
-            execution=item.get(
-
-                "execution"
-
-            ),
-
-
-
-            hook_strategy=item.get(
-
-                "hook_strategy"
-
-            ),
-
-
-
-            structure=item.get(
-
-                "structure",
-
-                []
-
-            ),
-
-
-
+            name=f"{randint(0, 1000)}{item.get('name')}",
+            execution=item.get("execution"),
+            hook_strategy=item.get("hook_strategy"),
+            structure=item.get("structure", []),
             scenes=scenes,
-
-
-
-            asset_requirements=item.get(
-
-                "asset_requirements",
-
-                []
-
-            ),
-
-
-
-            production_notes=item.get(
-
-                "production_notes"
-
-            ),
-
-
-
-            cta=item.get(
-
-                "cta"
-
-            )
-
+            asset_requirements=item.get("asset_requirements", []),
+            production_notes=item.get("production_notes"),
+            cta=item.get("cta")
         )
-
-
 
         created = (
-
-            ad_execution_repository
-
-            .create(
-
-                entity
-
-            )
-
+            ad_execution_repository .create( entity )
         )
-
-
 
         created_ids.append(
-
             created.id
-
         )
-
-
 
     return [
-
-        ad_execution_service
-
-        .get_ad_execution_by_id(
-
-            id
-
-        )
-
+        ad_execution_service.get_ad_execution_by_id( id )
         for id in created_ids
-
     ]
