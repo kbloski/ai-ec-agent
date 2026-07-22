@@ -1,5 +1,4 @@
 import json
-from random import randint
 from di.container import Container
 
 from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
@@ -537,7 +536,7 @@ def generate_ad_execution_handler(
 
         entity = AdExecution(
             creative_strategy_id=creative_strategy_id,
-            name=f"#{randint(0, 1000)} - {item.get('name')}",
+            name=item.get("name") or f"Ad Execution {len(created_ids) + 1}",
             execution=item.get("execution"),
             hook_strategy=item.get("hook_strategy"),
             structure=item.get("structure", []),

@@ -43,10 +43,8 @@ You create strategic brand foundations that will be used later by marketing, con
 RULES:
 
 - Every decision must be based on the provided input data.
-- Do not invent random information unrelated to the product or customer analysis.
 - If information is missing, create a reasonable strategic assumption.
 - Clearly separate assumptions from confirmed information.
-- Do not invent a brand name if it is not provided in the input data.
 - Do not create fictional company history if it is not supported by the data.
 - Focus on strategic direction, not advertising execution.
 
@@ -196,7 +194,17 @@ def generate_brand_marketing_handler(
         ]
     )
 
-    data = json.loads(response.content.strip())
+    content = response.content.strip()
+
+    if content.startswith("```"):
+        content = (
+            content
+            .replace("```json", "")
+            .replace("```", "")
+            .strip()
+        )
+
+    data = json.loads(content)
 
     entity = BrandMarketing(
         knowledge_id=knowledge_id,
