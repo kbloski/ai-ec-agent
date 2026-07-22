@@ -316,11 +316,9 @@ def register_general_routes(router: APIRouter):
     # -----------------------------
     # Offer strategy
     # -----------------------------
-    @router.get("/knowledges/{knowledge_id}/brand-marketing/{brand_marketing_id}/marketing-strategy/{marketing_strategy_id}/offer-strategy/generate")
-    def knowledge_offer_strategy_generate( knowledge_id: int, brand_marketing_id: int, marketing_strategy_id: int ):
+    @router.get("/marketing-strategy/{marketing_strategy_id}/offer-strategy/generate")
+    def knowledge_offer_strategy_generate(  marketing_strategy_id: int ):
         return generate_offer_strategy_handler(
-            knowledge_id=knowledge_id,
-            brand_marketing_id=brand_marketing_id,
             marketing_strategy_id=marketing_strategy_id
         )
 

@@ -207,8 +207,6 @@ MARKETING STRATEGY:
 
 
 def generate_offer_strategy_handler(
-    knowledge_id: int,
-    brand_marketing_id: int,
     marketing_strategy_id: int
 ):
 
@@ -221,21 +219,17 @@ def generate_offer_strategy_handler(
     offer_strategy_repository = container.offer_strategy_repository()
     offer_strategy_service = container.offer_strategy_service()
 
-
-    knowledge = knowledge_service.get_knowledge_details_by_id(
-        knowledge_id=knowledge_id
-    )
-
-
-    brand_strategy = brand_marketing_service.get_brand_marketing_by_id(
-        id=brand_marketing_id
-    )
-
-
     marketing_strategy = marketing_strategy_service.get_marketing_strategy_by_id(
         id=marketing_strategy_id
     )
+    
+    brand_strategy = brand_marketing_service.get_brand_marketing_by_id(
+        id=marketing_strategy.brand_marketing_id
+    )
 
+    knowledge = knowledge_service.get_knowledge_details_by_id(
+        knowledge_id=brand_strategy.knowledge_id
+    )
 
     knowledge_json = json.dumps(
         knowledge.to_dict(),
