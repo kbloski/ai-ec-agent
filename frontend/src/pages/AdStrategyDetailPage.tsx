@@ -31,7 +31,7 @@ export default function AdStrategyDetailPage() {
         isLoading={list.isLoading}
         error={list.error}
         linkTo={(item) => `/creative-strategy/${item.id}`}
-        itemLabel={(item) => (item.name as string) ?? `#${item.id}`}
+        itemLabel={(item) => `#${item.id} ${(item.name as string) ?? ''}`.trim()}
         onGenerate={() => adStrategy && generate(adStrategy)}
         isGenerating={generateState.isLoading}
         generateLabel="Generuj creative strategy"
