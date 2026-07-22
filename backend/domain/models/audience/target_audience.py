@@ -15,7 +15,7 @@ class TargetAudience(Base, JSONSerializable):
     # Relation
     knowledge_id = Column(
         Integer,
-        ForeignKey(TableName.OFFER_KNOWLEDGE + ".id"),
+        ForeignKey(TableName.OFFER_KNOWLEDGE + ".id", ondelete="CASCADE"),
         nullable=True,
         index=True,
     )

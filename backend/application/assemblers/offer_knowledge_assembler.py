@@ -19,7 +19,7 @@ class OfferKnowledgeAssembler:
         self.target_audiences_repository = target_audiences_repository
 
     def assemble_dto(self, item : OfferKnowledgeDto) -> OfferKnowledgeDto:
-        offer_insights = self.knowledge_insights_repository.find_by_offer_id_or_knowledge_id(item.id)
+        offer_insights = self.knowledge_insights_repository.find_by_knowledge_id(item.id)
         item.offer_insights = [
             KnowledgeInsightMapper.to_dto(i)
             for i in offer_insights

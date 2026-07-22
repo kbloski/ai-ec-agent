@@ -7,7 +7,6 @@ class KnowledgeInsightMapper:
     def to_dto(item : KnowledgeInsight) -> KnowledgeInsightDto:
         return KnowledgeInsightDto(
             id = item.id,
-            offer_id = item.offer_id,
             knowledge_id = item.knowledge_id,
             type = item.type,
             content_status = item.content_status,

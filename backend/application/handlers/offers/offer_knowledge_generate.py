@@ -260,7 +260,6 @@ TASK:
                         continue
 
                     insight = KnowledgeInsight(
-                        offer_id=offer_id,
                         knowledge_id=offer_knowledge.id,
                         type=insight_type,
                         value=str(item),

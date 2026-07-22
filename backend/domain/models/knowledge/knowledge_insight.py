@@ -12,17 +12,9 @@ class KnowledgeInsight(Base, JSONSerializable):
     # Primary key
     id = Column(Integer, primary_key=True, autoincrement=True)
 
-    # Relation to offer
-    offer_id = Column(
-        Integer,
-        ForeignKey(TableName.OFFERS + ".id"),
-        nullable=False,
-        index=True,
-    )
-
     knowledge_id = Column(
         Integer,
-        ForeignKey(TableName.OFFER_KNOWLEDGE + ".id"),
+        ForeignKey(TableName.OFFER_KNOWLEDGE + ".id", ondelete="CASCADE"),
         nullable=True,
         index=True,
     )
@@ -54,5 +46,5 @@ class KnowledgeInsight(Base, JSONSerializable):
 
     # useful composite index for queries
     __table_args__ = (
-        Index("ix_knowledge_insight_offer_type_status", "offer_id", "type", "content_status"),
+        Index("ix_knowledge_insight_knowledge_type_status", "knowledge_id", "type", "content_status"),
     )

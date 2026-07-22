@@ -17,7 +17,7 @@ class AnalysisQuestion(Base, JSONSerializable):
 
     analysis_id = Column(
         Integer,
-        ForeignKey("analysis.id"),
+        ForeignKey("analysis.id", ondelete="CASCADE"),
         nullable=False
     )
 

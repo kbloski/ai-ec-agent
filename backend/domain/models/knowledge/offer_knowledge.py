@@ -15,7 +15,7 @@ class OfferKnowledge(Base, JSONSerializable):
     # Related offer
     offer_id = Column(
         Integer,
-        ForeignKey(TableName.OFFERS+".id"),
+        ForeignKey(TableName.OFFERS+".id", ondelete="CASCADE"),
         nullable=False,
     )
 

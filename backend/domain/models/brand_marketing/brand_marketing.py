@@ -16,7 +16,7 @@ class BrandMarketing(Base, JSONSerializable):
     # relation to product knowledge
     knowledge_id = Column(
         Integer,
-        ForeignKey(TableName.OFFER_KNOWLEDGE.value+".id"),
+        ForeignKey(TableName.OFFER_KNOWLEDGE.value+".id", ondelete="CASCADE"),
         nullable=False
     )
 

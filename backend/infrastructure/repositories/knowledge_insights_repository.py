@@ -1,6 +1,5 @@
 from sqlalchemy import func
 from sqlalchemy.orm import Session
-from sqlalchemy import or_
 from typing import List, Optional
 from domain.models.knowledge.knowledge_insight import KnowledgeInsight
 from infrastructure.logging.logger import Logger
@@ -28,29 +27,13 @@ class KnowledgeInsightsRepository:
         return items
 
     # 🔍 GET BY ID
-    def find_by_offer_id_or_knowledge_id(
+    def find_by_knowledge_id(
         self,
-        offer_id: Optional[int] = None,
-        knowledge_id: Optional[int] = None
+        knowledge_id: int
     ) -> list[KnowledgeInsight]:
 
-        filters = []
-
-        if offer_id is not None:
-            filters.append(
-                KnowledgeInsight.offer_id == offer_id
-            )
-
-        if knowledge_id is not None:
-            filters.append(
-                KnowledgeInsight.knowledge_id == knowledge_id
-            )
-
-        if not filters:
-            return []
-
         return self.db.query(KnowledgeInsight).filter(
-            or_(*filters)
+            KnowledgeInsight.knowledge_id == knowledge_id
         ).all()
 
     # 🔍 GET BY ID
