@@ -24,7 +24,7 @@ export const adExecutionApi = api.injectEndpoints({
     }),
     generateAdExecution: builder.mutation<Entity, GenerateAdExecutionArgs>({
       query: ({ creativeStrategy: cs, ...params }) => ({
-        url: `/knowledges/${cs.knowledge_id}/brand-marketing/${cs.brand_marketing_id}/marketing-strategy/${cs.marketing_strategy_id}/offer-strategy/${cs.offer_strategy_id}/message-strategy/${cs.message_strategy_id}/ad-strategy/${cs.ad_strategy_id}/creative-strategy/${cs.id}/ad-execution/generate`,
+        url: `/creative-strategy/${cs.id}/ad-execution/generate`,
         params,
       }),
       invalidatesTags: (_result, _err, { creativeStrategy }) => [

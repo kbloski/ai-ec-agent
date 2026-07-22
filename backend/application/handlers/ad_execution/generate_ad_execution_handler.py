@@ -335,12 +335,6 @@ Duration:
 
 
 def generate_ad_execution_handler(
-    knowledge_id: int,
-    brand_marketing_id: int,
-    marketing_strategy_id: int,
-    offer_strategy_id: int,
-    message_strategy_id: int,
-    ad_strategy_id: int,
     creative_strategy_id: int,
     video_duration_seconds: int = 15,
     platform: str = "Meta Ads",
@@ -401,42 +395,10 @@ def generate_ad_execution_handler(
 
 
 
-    knowledge = (
-        knowledge_service
-        .get_knowledge_details_by_id(
-            knowledge_id
-        )
-    )
-
-
-    brand_strategy = (
-        brand_marketing_service
-        .get_brand_marketing_by_id(
-            id=brand_marketing_id
-        )
-    )
-
-
-    marketing_strategy = (
-        marketing_strategy_service
-        .get_marketing_strategy_by_id(
-            id=marketing_strategy_id
-        )
-    )
-
-
-    offer_strategy = (
-        offer_strategy_service
-        .get_offer_strategy_by_id(
-            id=offer_strategy_id
-        )
-    )
-
-
-    message_strategy = (
-        message_strategy_service
-        .get_message_strategy_by_id(
-            id=message_strategy_id
+    creative_strategy = (
+        creative_strategy_service
+        .get_creative_strategy_by_id(
+            id=creative_strategy_id
         )
     )
 
@@ -444,15 +406,47 @@ def generate_ad_execution_handler(
     ad_strategy = (
         ad_strategy_service
         .get_ad_strategy_by_id(
-            id=ad_strategy_id
+            id=creative_strategy.ad_strategy_id
         )
     )
 
 
-    creative_strategy = (
-        creative_strategy_service
-        .get_creative_strategy_by_id(
-            id=creative_strategy_id
+    message_strategy = (
+        message_strategy_service
+        .get_message_strategy_by_id(
+            id=ad_strategy.message_strategy_id
+        )
+    )
+
+
+    offer_strategy = (
+        offer_strategy_service
+        .get_offer_strategy_by_id(
+            id=message_strategy.offer_strategy_id
+        )
+    )
+
+
+    marketing_strategy = (
+        marketing_strategy_service
+        .get_marketing_strategy_by_id(
+            id=offer_strategy.marketing_strategy_id
+        )
+    )
+
+
+    brand_strategy = (
+        brand_marketing_service
+        .get_brand_marketing_by_id(
+            id=marketing_strategy.brand_marketing_id
+        )
+    )
+
+
+    knowledge = (
+        knowledge_service
+        .get_knowledge_details_by_id(
+            knowledge_id=brand_strategy.knowledge_id
         )
     )
 

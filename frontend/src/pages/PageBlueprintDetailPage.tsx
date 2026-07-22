@@ -2,8 +2,6 @@ import { useParams } from 'react-router-dom'
 import { DetailShell } from '@/components/DetailShell'
 import { ResourceList } from '@/components/ResourceList'
 import { useGetPageBlueprintQuery } from '@/features/pageBlueprint/pageBlueprintApi'
-import { useGetPageStrategyQuery } from '@/features/pageStrategy/pageStrategyApi'
-import { useGetMessageStrategyQuery } from '@/features/messageStrategy/messageStrategyApi'
 import {
   useDeletePageContentPlanMutation,
   useGeneratePageContentPlanMutation,
@@ -13,15 +11,6 @@ import {
 export default function PageBlueprintDetailPage() {
   const id = Number(useParams().id)
   const { data: pageBlueprint, isLoading, error } = useGetPageBlueprintQuery(id)
-
-  const { data: pageStrategy } = useGetPageStrategyQuery(
-    pageBlueprint?.page_strategy_id as number,
-    { skip: !pageBlueprint },
-  )
-  const { data: messageStrategy } = useGetMessageStrategyQuery(
-    pageStrategy?.message_strategy_id as number,
-    { skip: !pageStrategy },
-  )
 
   const list = useListPageContentPlanForPageBlueprintQuery(id)
   const [generate, generateState] = useGeneratePageContentPlanMutation()
@@ -43,14 +32,7 @@ export default function PageBlueprintDetailPage() {
         error={list.error}
         linkTo={(item) => `/page-content-plan/${item.id}`}
         itemLabel={(item) => `#${item.id}`}
-        onGenerate={() =>
-          messageStrategy &&
-          generate({
-            chain: messageStrategy,
-            pageStrategyId: pageBlueprint!.page_strategy_id as number,
-            pageBlueprintId: id,
-          })
-        }
+        onGenerate={() => generate(id)}
         isGenerating={generateState.isLoading}
         generateLabel="Generuj content plan"
         onDelete={(item) => deletePageContentPlan({ id: item.id as number, pageBlueprintId: id })}

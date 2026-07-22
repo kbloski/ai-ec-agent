@@ -143,13 +143,7 @@ OFFER STRATEGY:
 
 
 def generate_page_content_plan_handler(
-    knowledge_id: int,
-    brand_marketing_id: int,
-    marketing_strategy_id: int,
-    offer_strategy_id: int,
-    message_strategy_id: int,
-    page_strategy_id: int,
-    page_blueprint_id: int,
+    page_blueprint_id: int
 ):
 
     container = Container()
@@ -177,42 +171,42 @@ def generate_page_content_plan_handler(
 
     page_strategy = (
         page_strategy_service.get_page_strategy_by_id(
-            id=page_strategy_id
+            id=page_blueprint.page_strategy_id
         )
     )
 
 
     message_strategy = (
         message_strategy_service.get_message_strategy_by_id(
-            id=message_strategy_id
-        )
-    )
-
-
-    knowledge = (
-        knowledge_service.get_knowledge_details_by_id(
-            knowledge_id=knowledge_id
+            id=page_strategy.message_strategy_id
         )
     )
 
 
     offer_strategy = (
         offer_strategy_service.get_offer_strategy_by_id(
-            id=offer_strategy_id
-        )
-    )
-
-
-    brand_marketing = (
-        brand_marketing_service.get_brand_marketing_by_id(
-            id=brand_marketing_id
+            id=message_strategy.offer_strategy_id
         )
     )
 
 
     marketing_strategy = (
         marketing_strategy_service.get_marketing_strategy_by_id(
-            id=marketing_strategy_id
+            id=offer_strategy.marketing_strategy_id
+        )
+    )
+
+
+    brand_marketing = (
+        brand_marketing_service.get_brand_marketing_by_id(
+            id=marketing_strategy.brand_marketing_id
+        )
+    )
+
+
+    knowledge = (
+        knowledge_service.get_knowledge_details_by_id(
+            knowledge_id=brand_marketing.knowledge_id
         )
     )
 

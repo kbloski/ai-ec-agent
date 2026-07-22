@@ -241,10 +241,6 @@ MESSAGE STRATEGY:
 
 
 def generate_ugc_creatives_handler(
-    knowledge_id: int,
-    brand_marketing_id: int,
-    marketing_strategy_id: int,
-    offer_strategy_id: int,
     message_strategy_id: int
 ):
 
@@ -273,42 +269,42 @@ def generate_ugc_creatives_handler(
     ugc_creative_service = container.ugc_creative_service()
 
     ollama_service = container.ollama_service()
-    
+
     ugc_creatives_db =  ugc_creative_repository.get_by_message_strategy_id(message_strategy_id=message_strategy_id)
     existed_ugc_creatives_str = json.dumps([UgcCreativeMapper.to_dto(i).to_dict() for i in ugc_creatives_db])
 
 
-    knowledge = (
-        knowledge_service.get_knowledge_details_by_id(
-            knowledge_id=knowledge_id
-        )
-    )
-
-
-    brand_strategy = (
-        brand_marketing_service.get_brand_marketing_by_id(
-            id=brand_marketing_id
-        )
-    )
-
-
-    marketing_strategy = (
-        marketing_strategy_service.get_marketing_strategy_by_id(
-            id=marketing_strategy_id
+    message_strategy = (
+        message_strategy_service.get_message_strategy_by_id(
+            id=message_strategy_id
         )
     )
 
 
     offer_strategy = (
         offer_strategy_service.get_offer_strategy_by_id(
-            id=offer_strategy_id
+            id=message_strategy.offer_strategy_id
         )
     )
 
 
-    message_strategy = (
-        message_strategy_service.get_message_strategy_by_id(
-            id=message_strategy_id
+    marketing_strategy = (
+        marketing_strategy_service.get_marketing_strategy_by_id(
+            id=offer_strategy.marketing_strategy_id
+        )
+    )
+
+
+    brand_strategy = (
+        brand_marketing_service.get_brand_marketing_by_id(
+            id=marketing_strategy.brand_marketing_id
+        )
+    )
+
+
+    knowledge = (
+        knowledge_service.get_knowledge_details_by_id(
+            knowledge_id=brand_strategy.knowledge_id
         )
     )
 

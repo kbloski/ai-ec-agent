@@ -359,16 +359,37 @@ def register_general_routes(router: APIRouter):
         return delete_message_strategy_handler(id=id)
 
 
+
+    # -----------------------------
+    # UGC creatives
+    # -----------------------------
+    @router.get("/message-strategy/{message_strategy_id}/ugc-creatives/generate")
+    def knowledge_ugc_creatives_generate( message_strategy_id: int ):
+        return generate_ugc_creatives_handler(
+            message_strategy_id=message_strategy_id
+        )
+
+    @router.get("/message-strategy/{message_strategy_id}/ugc-creatives")
+    def get_message_strategy_ugc_creatives( message_strategy_id: int ):
+        return get_message_strategy_ugc_creatives_handler( message_strategy_id=message_strategy_id )
+
+    @router.get("/ugc-creatives/{id}")
+    def get_ugc_creative( id: int ):
+        return get_ugc_creative_handler( id=id )
+
+    # DELETE in future
+    @router.get("/ugc-creatives/{id}/delete")
+    def delete_ugc_creative_route( id: int ):
+        return delete_ugc_creative_handler(id=id)
+    
+    
+    
     # -----------------------------
     # Ad strategy
     # -----------------------------
-    @router.get("/knowledges/{knowledge_id}/brand-marketing/{brand_marketing_id}/marketing-strategy/{marketing_strategy_id}/offer-strategy/{offer_strategy_id}/message-strategy/{message_strategy_id}/ad-strategy/generate")
-    def knowledge_ad_strategy_generate( knowledge_id: int, brand_marketing_id: int, marketing_strategy_id: int, offer_strategy_id: int, message_strategy_id: int ):
+    @router.get("/message-strategy/{message_strategy_id}/ad-strategy/generate")
+    def knowledge_ad_strategy_generate( message_strategy_id: int ):
         return generate_ad_strategy_handler(
-            knowledge_id=knowledge_id,
-            brand_marketing_id=brand_marketing_id,
-            marketing_strategy_id=marketing_strategy_id,
-            offer_strategy_id=offer_strategy_id,
             message_strategy_id=message_strategy_id
         )
 
@@ -386,44 +407,13 @@ def register_general_routes(router: APIRouter):
         return delete_ad_strategy_handler(id=id)
 
 
-    # -----------------------------
-    # UGC creatives
-    # -----------------------------
-    @router.get("/knowledges/{knowledge_id}/brand-marketing/{brand_marketing_id}/marketing-strategy/{marketing_strategy_id}/offer-strategy/{offer_strategy_id}/message-strategy/{message_strategy_id}/ugc-creatives/generate")
-    def knowledge_ugc_creatives_generate( knowledge_id: int, brand_marketing_id: int, marketing_strategy_id: int, offer_strategy_id: int, message_strategy_id: int ):
-        return generate_ugc_creatives_handler(
-            knowledge_id=knowledge_id,
-            brand_marketing_id=brand_marketing_id,
-            marketing_strategy_id=marketing_strategy_id,
-            offer_strategy_id=offer_strategy_id,
-            message_strategy_id=message_strategy_id
-        )
-
-    @router.get("/message-strategy/{message_strategy_id}/ugc-creatives")
-    def get_message_strategy_ugc_creatives( message_strategy_id: int ):
-        return get_message_strategy_ugc_creatives_handler( message_strategy_id=message_strategy_id )
-
-    @router.get("/ugc-creatives/{id}")
-    def get_ugc_creative( id: int ):
-        return get_ugc_creative_handler( id=id )
-
-    # DELETE in future
-    @router.get("/ugc-creatives/{id}/delete")
-    def delete_ugc_creative_route( id: int ):
-        return delete_ugc_creative_handler(id=id)
-
 
     # -----------------------------
     # Creative strategy
     # -----------------------------
-    @router.get("/knowledges/{knowledge_id}/brand-marketing/{brand_marketing_id}/marketing-strategy/{marketing_strategy_id}/offer-strategy/{offer_strategy_id}/message-strategy/{message_strategy_id}/ad-strategy/{ad_strategy_id}/creative-strategy/generate")
-    def knowledge_creative_strategy_generate( knowledge_id: int, brand_marketing_id: int, marketing_strategy_id: int, offer_strategy_id: int, message_strategy_id: int, ad_strategy_id: int ):
+    @router.get("/ad-strategy/{ad_strategy_id}/creative-strategy/generate")
+    def knowledge_creative_strategy_generate( ad_strategy_id: int ):
         return generate_creative_strategy_handler(
-            knowledge_id=knowledge_id,
-            brand_marketing_id=brand_marketing_id,
-            marketing_strategy_id=marketing_strategy_id,
-            offer_strategy_id=offer_strategy_id,
-            message_strategy_id=message_strategy_id,
             ad_strategy_id=ad_strategy_id
         )
 
@@ -444,16 +434,18 @@ def register_general_routes(router: APIRouter):
     # -----------------------------
     # Ad execution
     # -----------------------------
-    @router.get("/knowledges/{knowledge_id}/brand-marketing/{brand_marketing_id}/marketing-strategy/{marketing_strategy_id}/offer-strategy/{offer_strategy_id}/message-strategy/{message_strategy_id}/ad-strategy/{ad_strategy_id}/creative-strategy/{creative_strategy_id}/ad-execution/generate")
-    def creative_strategy_ad_execution_generate( knowledge_id: int, brand_marketing_id: int, marketing_strategy_id: int, offer_strategy_id: int, message_strategy_id: int, ad_strategy_id: int, creative_strategy_id: int ):
+    @router.get("/creative-strategy/{creative_strategy_id}/ad-execution/generate")
+    def creative_strategy_ad_execution_generate(
+        creative_strategy_id: int,
+        video_duration_seconds: int = 15,
+        platform: str = "Meta Ads",
+        format: str = "Vertical Video 9:16"
+    ):
         return generate_ad_execution_handler(
-            knowledge_id=knowledge_id,
-            brand_marketing_id=brand_marketing_id,
-            marketing_strategy_id=marketing_strategy_id,
-            offer_strategy_id=offer_strategy_id,
-            message_strategy_id=message_strategy_id,
-            ad_strategy_id=ad_strategy_id,
-            creative_strategy_id=creative_strategy_id
+            creative_strategy_id=creative_strategy_id,
+            video_duration_seconds=video_duration_seconds,
+            platform=platform,
+            format=format
         )
 
     @router.get("/creative-strategy/{creative_strategy_id}/ad-execution")
@@ -473,13 +465,9 @@ def register_general_routes(router: APIRouter):
     # -----------------------------
     # Page strategy
     # -----------------------------
-    @router.get("/knowledges/{knowledge_id}/brand-marketing/{brand_marketing_id}/marketing-strategy/{marketing_strategy_id}/offer-strategy/{offer_strategy_id}/message-strategy/{message_strategy_id}/page-strategy/generate")
-    def message_strategy_page_strategy_generate( knowledge_id: int, brand_marketing_id: int, marketing_strategy_id: int, offer_strategy_id: int, message_strategy_id: int ):
+    @router.get("/message-strategy/{message_strategy_id}/page-strategy/generate")
+    def message_strategy_page_strategy_generate( message_strategy_id: int ):
         return generate_page_strategy_json_handler(
-            knowledge_id=knowledge_id,
-            brand_marketing_id=brand_marketing_id,
-            marketing_strategy_id=marketing_strategy_id,
-            offer_strategy_id=offer_strategy_id,
             message_strategy_id=message_strategy_id
         )
 
@@ -500,14 +488,9 @@ def register_general_routes(router: APIRouter):
     # -----------------------------
     # Page blueprint
     # -----------------------------
-    @router.get("/knowledges/{knowledge_id}/brand-marketing/{brand_marketing_id}/marketing-strategy/{marketing_strategy_id}/offer-strategy/{offer_strategy_id}/message-strategy/{message_strategy_id}/page-strategy/{page_strategy_id}/page-blueprint/generate")
-    def page_strategy_page_blueprint_generate( knowledge_id: int, brand_marketing_id: int, marketing_strategy_id: int, offer_strategy_id: int, message_strategy_id: int, page_strategy_id: int ):
+    @router.get("/page-strategy/{page_strategy_id}/page-blueprint/generate")
+    def page_strategy_page_blueprint_generate( page_strategy_id: int ):
         return generate_page_blueprint_handler(
-            knowledge_id=knowledge_id,
-            brand_marketing_id=brand_marketing_id,
-            marketing_strategy_id=marketing_strategy_id,
-            offer_strategy_id=offer_strategy_id,
-            message_strategy_id=message_strategy_id,
             page_strategy_id=page_strategy_id
         )
 
@@ -528,15 +511,9 @@ def register_general_routes(router: APIRouter):
     # -----------------------------
     # Page content plan
     # -----------------------------
-    @router.get("/knowledges/{knowledge_id}/brand-marketing/{brand_marketing_id}/marketing-strategy/{marketing_strategy_id}/offer-strategy/{offer_strategy_id}/message-strategy/{message_strategy_id}/page-strategy/{page_strategy_id}/page-blueprint/{page_blueprint_id}/page-content-plan/generate")
-    def page_blueprint_page_content_plan_generate( knowledge_id: int, brand_marketing_id: int, marketing_strategy_id: int, offer_strategy_id: int, message_strategy_id: int, page_strategy_id: int, page_blueprint_id: int ):
+    @router.get("/page-blueprint/{page_blueprint_id}/page-content-plan/generate")
+    def page_blueprint_page_content_plan_generate( page_blueprint_id: int ):
         return generate_page_content_plan_handler(
-            knowledge_id=knowledge_id,
-            brand_marketing_id=brand_marketing_id,
-            marketing_strategy_id=marketing_strategy_id,
-            offer_strategy_id=offer_strategy_id,
-            message_strategy_id=message_strategy_id,
-            page_strategy_id=page_strategy_id,
             page_blueprint_id=page_blueprint_id
         )
 
@@ -557,16 +534,9 @@ def register_general_routes(router: APIRouter):
     # -----------------------------
     # Page copy
     # -----------------------------
-    @router.get("/knowledges/{knowledge_id}/brand-marketing/{brand_marketing_id}/marketing-strategy/{marketing_strategy_id}/offer-strategy/{offer_strategy_id}/message-strategy/{message_strategy_id}/page-strategy/{page_strategy_id}/page-blueprint/{page_blueprint_id}/page-content-plan/{page_content_plan_id}/page-copy/generate")
-    def page_content_plan_page_copy_generate( knowledge_id: int, brand_marketing_id: int, marketing_strategy_id: int, offer_strategy_id: int, message_strategy_id: int, page_strategy_id: int, page_blueprint_id: int, page_content_plan_id: int ):
+    @router.get("/page-content-plan/{page_content_plan_id}/page-copy/generate")
+    def page_content_plan_page_copy_generate( page_content_plan_id: int ):
         return generate_page_copy_handler(
-            knowledge_id=knowledge_id,
-            brand_marketing_id=brand_marketing_id,
-            marketing_strategy_id=marketing_strategy_id,
-            offer_strategy_id=offer_strategy_id,
-            message_strategy_id=message_strategy_id,
-            page_strategy_id=page_strategy_id,
-            page_blueprint_id=page_blueprint_id,
             page_content_plan_id=page_content_plan_id
         )
 
