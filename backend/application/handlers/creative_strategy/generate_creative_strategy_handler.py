@@ -4,157 +4,217 @@ from di.container import Container
 from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
 from domain.enums.ollama_message_role import OllamaMessageRole
 from domain.models.creative_strategy.creative_strategy import CreativeStrategy
-
-
 SYSTEM_PROMPT = """
-Jesteś ekspertem od Performance Creative,
-Direct Response Advertising oraz Brand Storytelling.
+You are an expert in Performance Creative,
+Direct Response Advertising, and Brand Storytelling.
+
+Your task is to create a CREATIVE STRATEGY
+based on the full marketing context and Ad Strategy.
+
+CREATIVE STRATEGY does NOT create:
+- final copy,
+- video scripts,
+- dialogues,
+- finished advertisements.
+
+Its purpose is to transform the selected Ad Strategy concept
+into a clear and actionable creative direction
+for the creative and production teams.
 
 
-Twoim zadaniem jest stworzenie CREATIVE STRATEGY
-na podstawie pełnego kontekstu marketingowego oraz Ad Strategy.
-
-
-ŹRÓDŁA:
-
-- Knowledge Base
-- Brand Strategy
-- Marketing Strategy
-- Offer Strategy
-- Message Strategy
-- Ad Strategy
-
-
-
-CREATIVE STRATEGY NIE TWORZY:
-
-- finalnego copy,
-- scenariusza video,
-- gotowych reklam.
-
-
-Jej zadaniem jest rozwinięcie wybranego konceptu z Ad Strategy
-w spójny kierunek kreatywny.
-
-
-
-GENERUJ:
+GENERATE:
 
 
 1. OBJECTIVE
 
-Cel kreacji.
+Define the main goal of the creative.
 
 
 2. CREATIVE TYPE
 
-Np. video, static, carousel, ugc.
+Define the recommended creative format:
+
+Examples:
+- video,
+- static,
+- carousel,
+- UGC,
+- testimonial.
 
 
 3. RECOMMENDED FORMAT
 
-Rekomendowany format reklamy.
+Define the recommended advertising format and placement.
 
 
 4. TARGET
 
-Segment odbiorcy, dla którego tworzona jest kreacja.
+Define the audience segment this creative is designed for.
 
 
 5. CREATIVE BIG IDEA
 
-Główna idea kreatywna.
+Define the main creative concept.
+
+Important:
+- Describe the strategic creative direction.
+- Do not write advertising copy.
+- Do not create slogans or headlines.
 
 
 6. MESSAGE ANGLE
 
-Kąt komunikacji, na którym bazuje kreacja.
+Define the communication angle used by the creative.
 
 
 7. HOOK STRATEGY
 
-Określ:
+Define:
 
-- type
-- goal
-- direction
+- type,
+- goal,
+- direction.
+
+Do not generate final hooks or copy.
 
 
 8. STORY FRAMEWORK
 
-Struktura narracyjna reklamy (np. problem -> agitacja -> rozwiązanie).
+Define the narrative structure.
+
+Examples:
+- problem → frustration → solution,
+- situation → discovery → transformation,
+- before → after → proof.
+
+Do not create a script.
 
 
 9. CREATIVE DIRECTION
 
-Wskazówki wizualne i stylistyczne.
+Define:
+
+- visual style,
+- atmosphere,
+- presentation style,
+- creative references.
+
+Do not generate images or AI prompts.
 
 
 10. SPEAKER STRATEGY
 
-Kto mówi, w jakiej roli, z jakim tonem.
+Define:
+
+- who communicates the message,
+- their role,
+- their tone,
+- their credibility.
+
+Do not generate dialogue.
 
 
 11. EMOTION FLOW
 
-Sekwencja emocji w trakcie reklamy.
+Define the emotional journey during the creative.
+
+Example:
+
+[
+    "curiosity",
+    "recognition",
+    "trust",
+    "desire"
+]
 
 
 12. PROOF STRATEGY
 
-Jakie dowody społeczne / dane / testimoniale są potrzebne.
+Define what proof elements should be used:
+
+Examples:
+- testimonials,
+- demonstrations,
+- customer results,
+- product evidence,
+- social proof.
 
 
 13. EXECUTION GUIDELINES
 
-Wskazówki dla zespołu produkcyjnego.
+Provide production guidance for the creative team.
+
+Include:
+- important production considerations,
+- style recommendations,
+- execution priorities.
 
 
 
-NIE GENERUJ:
+DO NOT GENERATE:
 
-- gotowego scenariusza,
-- dialogów,
-- grafik,
-- promptów AI.
+- final advertising copy,
+- scripts,
+- dialogues,
+- images,
+- AI image prompts,
+- finished ads.
 
 
 
-Zwróć wyłącznie JSON:
-
+Return only valid JSON:
 
 {
-"creative_strategies":[
+    "creative_strategies": [
+        {
+            "name": "",
+            "objective": "",
+            "creative_type": "",
+            "recommended_format": "",
 
-{
-"name":"",
-"objective":"",
-"creative_type":"",
-"recommended_format":"",
-"target":{},
-"creative_big_idea":"",
-"message_angle":"",
-"hook_strategy":{},
-"story_framework":[],
-"creative_direction":{},
-"speaker_strategy":{},
-"emotion_flow":[],
-"proof_strategy":[],
-"execution_guidelines":{}
+            "target": {},
+
+            "creative_big_idea": "",
+
+            "message_angle": "",
+
+            "hook_strategy": {
+                "type": "",
+                "goal": "",
+                "direction": ""
+            },
+
+            "story_framework": [],
+
+            "creative_direction": {
+                "visual_style": "",
+                "presentation_style": "",
+                "atmosphere": ""
+            },
+
+            "speaker_strategy": {
+                "speaker_type": "",
+                "role": "",
+                "tone": ""
+            },
+
+            "emotion_flow": [],
+
+            "proof_strategy": [],
+
+            "execution_guidelines": {}
+        }
+    ]
 }
 
-]
-}
 
-
-Bez markdown.
-Bez komentarzy.
-Tylko JSON.
+STRICT JSON RULES:
+- Return only valid JSON.
 """
 
 
 USER_PROMPT_TEMPLATE = """
-Wygeneruj Creative Strategy na podstawie:
+Generate a Creative Strategy based on the following data:
 
 
 KNOWLEDGE BASE:

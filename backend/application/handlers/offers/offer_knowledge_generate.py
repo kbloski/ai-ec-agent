@@ -116,22 +116,15 @@ Use this structure as a foundation, but extend it when necessary:
     "problem_solved": [],
     "solution": [],
     "transformation": [],
-
     "offer_components": [],
-
     "features": [],
     "functional_benefits": [],
     "emotional_benefits": [],
-
     "value_proposition": "",
-
     "differentiators": [],
-
     "strengths": [],
     "limitations": [],
-
     "assumptions": [],
-
     "additional_insights": []
 }
 """

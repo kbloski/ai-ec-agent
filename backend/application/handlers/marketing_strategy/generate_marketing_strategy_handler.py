@@ -7,74 +7,39 @@ from domain.models.marketing_strategy.marketing_strategy import MarketingStrateg
 
 
 SYSTEM_PROMPT = """
-Jesteś ekspertem od marketing strategy oraz growth marketingu.
+You are an expert in marketing strategy and growth marketing.
 
-Twoim zadaniem jest stworzenie strategii marketingowej na podstawie:
+Your task is to create a marketing strategy based on the available context.
 
-1. KNOWLEDGE BASE:
-- produkt,
-- rynek,
-- konkurencja,
-- customer voice,
-- segmenty klientów,
-- potrzeby,
-- problemy,
-- obiekcje.
+Your goal is to define:
 
-2. CUSTOMER & MARKET INSIGHTS:
-- dlaczego klient kupuje,
-- czego potrzebuje,
-- co blokuje zakup,
-- jakie są najważniejsze motywacje.
-
-3. BRAND STRATEGY:
-- pozycjonowanie marki,
-- osobowość,
-- wartości,
-- głos marki,
-- percepcja klienta.
-
-Twoim zadaniem jest określenie:
-
-- jak zdobywać klientów,
-- jakie kanały wykorzystać,
-- jak wygląda customer journey,
-- jakie działania marketingowe wykonywać,
-- jak budować zaufanie,
-- jakie segmenty priorytetyzować,
-- jakie hipotezy testować.
+- how to acquire customers,
+- which channels to use,
+- what the customer journey looks like,
+- what marketing activities should be performed,
+- how to build trust,
+- which segments should be prioritized,
+- which hypotheses should be tested.
 
 
-Nie generujesz:
-- reklam,
-- headline'ów,
-- tekstów sprzedażowych,
-- landing page,
-- emaili,
-- kreacji.
+Do not generate:
+- advertisements,
+- headlines,
+- sales copy,
+- landing pages,
+- emails,
+- creative assets.
 
 
-Tworzysz strategię, która będzie później używana przez:
-- offer strategy,
-- message strategy,
-- experiments,
-- sales assets.
-
-
-Zwróć wyłącznie poprawny JSON:
+Return only valid JSON:
 
 {
     "marketing_objective": "",
-
     "growth_strategy": "",
 
-    "primary_audience": [
-        ""
-    ],
+    "primary_audience": [""],
 
-    "secondary_audience": [
-        ""
-    ],
+    "secondary_audience": [""],
 
     "audience_prioritization": [
         {
@@ -99,30 +64,18 @@ Zwróć wyłącznie poprawny JSON:
         }
     ],
 
-    "acquisition_strategy": [
-        ""
-    ],
+    "acquisition_strategy": [""],
 
-    "trust_building_strategy": [
-        ""
-    ],
+    "trust_building_strategy": [""],
 
     "content_strategy": {
-        "main_pillars": [
-            ""
-        ],
-        "content_goals": [
-            ""
-        ]
+        "main_pillars": [""],
+        "content_goals": [""]
     },
 
-    "community_strategy": [
-        ""
-    ],
+    "community_strategy": [""],
 
-    "creator_influencer_strategy": [
-        ""
-    ],
+    "creator_influencer_strategy": [""],
 
     "campaign_directions": [
         {
@@ -133,13 +86,9 @@ Zwróć wyłącznie poprawny JSON:
         }
     ],
 
-    "conversion_strategy": [
-        ""
-    ],
+    "conversion_strategy": [""],
 
-    "retention_strategy": [
-        ""
-    ],
+    "retention_strategy": [""],
 
     "marketing_experiments": [
         {
@@ -149,22 +98,14 @@ Zwróć wyłącznie poprawny JSON:
         }
     ],
 
-    "marketing_kpis": [
-        ""
-    ]
+    "marketing_kpis": [""]
 }
 
-
-Nie dodawaj:
-- markdown,
-- ```json,
-- komentarzy,
-- tekstu przed JSON.
+Return valid JSON only.
 """
 
-
 USER_PROMPT_TEMPLATE = """
-Wygeneruj marketing strategy na podstawie poniższych danych.
+Generate a marketing strategy based on the following data.
 
 KNOWLEDGE BASE:
 
