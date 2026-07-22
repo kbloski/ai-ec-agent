@@ -24,6 +24,8 @@ class OllamaService:
             return ""
 
     def chat_llm(self, messages: list[LlmOllamaMessage]) -> LlmOllamaMessage:
+        self.output_rules_prompt = self._load_prompt(self.path_service.OUTPUT_RULES_PROMPT)
+
         """Obsługuje standardowe modele tekstowe (LLM)"""
         try:
             # ✅ Naprawione: Konwertujemy obiekty domenowe na słowniki akceptowane przez Ollamę
