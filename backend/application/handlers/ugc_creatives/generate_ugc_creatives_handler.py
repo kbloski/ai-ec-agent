@@ -395,14 +395,6 @@ def generate_ugc_creatives_handler(
 
         entity = UgcCreative(
 
-            knowledge_id=knowledge_id,
-
-            brand_marketing_id=brand_marketing_id,
-
-            marketing_strategy_id=marketing_strategy_id,
-
-            offer_strategy_id=offer_strategy_id,
-
             message_strategy_id=message_strategy_id,
 
             name=item.get("name"),

@@ -8,8 +8,6 @@ class OfferStrategyDto(JSONSerializable):
     def __init__(
         self,
         id: int,
-        knowledge_id: int,
-        brand_marketing_id: int,
         marketing_strategy_id: int,
         offer_name: Optional[str],
         offer_positioning: Optional[str],
@@ -31,8 +29,6 @@ class OfferStrategyDto(JSONSerializable):
         conversion_levers: Optional[List[str]],
     ):
         self.id = id
-        self.knowledge_id = knowledge_id
-        self.brand_marketing_id = brand_marketing_id
         self.marketing_strategy_id = marketing_strategy_id
         self.offer_name = offer_name
         self.offer_positioning = offer_positioning
@@ -58,8 +54,6 @@ class OfferStrategyDto(JSONSerializable):
 
         data = {
             "id": self.id,
-            "knowledge_id": self.knowledge_id,
-            "brand_marketing_id": self.brand_marketing_id,
             "marketing_strategy_id": self.marketing_strategy_id,
             "offer_name": self.offer_name,
             "offer_positioning": self.offer_positioning,

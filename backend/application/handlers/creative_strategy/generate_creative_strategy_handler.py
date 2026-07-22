@@ -419,16 +419,6 @@ def generate_creative_strategy_handler(
 
         entity = CreativeStrategy(
 
-            knowledge_id=knowledge_id,
-
-            brand_marketing_id=brand_marketing_id,
-
-            marketing_strategy_id=marketing_strategy_id,
-
-            offer_strategy_id=offer_strategy_id,
-
-            message_strategy_id=message_strategy_id,
-
             ad_strategy_id=ad_strategy_id,
 
             name=item.get("name"),

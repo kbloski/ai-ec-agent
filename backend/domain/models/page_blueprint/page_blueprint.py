@@ -15,7 +15,7 @@ class PageBlueprint(Base, JSONSerializable):
 
     page_strategy_id = Column(
         Integer,
-        ForeignKey(TableName.PAGE_STRATEGY + ".id"),
+        ForeignKey(TableName.PAGE_STRATEGY + ".id", ondelete="CASCADE"),
         nullable=False
     )
 

@@ -14,15 +14,9 @@ class MarketingStrategy(Base, JSONSerializable):
     id = Column(Integer, primary_key=True, autoincrement=True)
 
     # relations
-    knowledge_id = Column(
-        Integer,
-        ForeignKey("knowledge.id"),
-        nullable=False
-    )
-
     brand_marketing_id = Column(
         Integer,
-        ForeignKey(TableName.BRAND_MARKETING + ".id"),
+        ForeignKey(TableName.BRAND_MARKETING + ".id", ondelete="CASCADE"),
         nullable=False
     )
 

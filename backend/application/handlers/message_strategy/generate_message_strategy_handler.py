@@ -317,9 +317,6 @@ def generate_message_strategy_handler(
     data = data.get("message_strategy", {})
 
     entity = MessageStrategy(
-        knowledge_id=knowledge_id,
-        brand_marketing_id=brand_marketing_id,
-        marketing_strategy_id=marketing_strategy_id,
         offer_strategy_id=offer_strategy_id,
         core_message=data.get("core_message"),
         brand_message=data.get("brand_message"),

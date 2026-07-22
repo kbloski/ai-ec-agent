@@ -15,7 +15,7 @@ class PageCopy(Base, JSONSerializable):
 
     page_content_plan_id = Column(
         Integer,
-        ForeignKey(TableName.PAGE_CONTENT_PLAN + ".id"),
+        ForeignKey(TableName.PAGE_CONTENT_PLAN + ".id", ondelete="CASCADE"),
         nullable=True
     )
 

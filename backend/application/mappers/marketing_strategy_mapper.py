@@ -8,7 +8,6 @@ class MarketingStrategyMapper:
     def to_dto(item: MarketingStrategy) -> MarketingStrategyDto:
         return MarketingStrategyDto(
             id=item.id,
-            knowledge_id=item.knowledge_id,
             brand_marketing_id=item.brand_marketing_id,
             marketing_objective=item.marketing_objective,
             growth_strategy=item.growth_strategy,

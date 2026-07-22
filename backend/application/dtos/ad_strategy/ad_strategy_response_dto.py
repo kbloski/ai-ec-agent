@@ -8,10 +8,6 @@ class AdStrategyDto(JSONSerializable):
     def __init__(
         self,
         id: int,
-        knowledge_id: int,
-        brand_marketing_id: int,
-        marketing_strategy_id: int,
-        offer_strategy_id: int,
         message_strategy_id: int,
         objective: Optional[dict],
         customer_stage: Optional[str],
@@ -24,10 +20,6 @@ class AdStrategyDto(JSONSerializable):
         testing_hypotheses: Optional[List[dict]],
     ):
         self.id = id
-        self.knowledge_id = knowledge_id
-        self.brand_marketing_id = brand_marketing_id
-        self.marketing_strategy_id = marketing_strategy_id
-        self.offer_strategy_id = offer_strategy_id
         self.message_strategy_id = message_strategy_id
         self.objective = objective
         self.customer_stage = customer_stage
@@ -44,10 +36,6 @@ class AdStrategyDto(JSONSerializable):
 
         data = {
             "id": self.id,
-            "knowledge_id": self.knowledge_id,
-            "brand_marketing_id": self.brand_marketing_id,
-            "marketing_strategy_id": self.marketing_strategy_id,
-            "offer_strategy_id": self.offer_strategy_id,
             "message_strategy_id": self.message_strategy_id,
             "objective": self.objective,
             "customer_stage": self.customer_stage,

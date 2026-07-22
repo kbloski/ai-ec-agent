@@ -286,8 +286,6 @@ def generate_offer_strategy_handler(
     data = data.get("offer_strategy", {})
 
     entity = OfferStrategy(
-        knowledge_id=knowledge_id,
-        brand_marketing_id=brand_marketing_id,
         marketing_strategy_id=marketing_strategy_id,
         offer_name=data.get("offer_name"),
         offer_positioning=data.get("offer_positioning"),

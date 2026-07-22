@@ -15,7 +15,7 @@ class PageContentPlan(Base, JSONSerializable):
 
     page_blueprint_id = Column(
         Integer,
-        ForeignKey(TableName.PAGE_BLUEPRINT + ".id"),
+        ForeignKey(TableName.PAGE_BLUEPRINT + ".id", ondelete="CASCADE"),
         nullable=True
     )
 

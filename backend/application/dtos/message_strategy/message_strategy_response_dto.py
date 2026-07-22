@@ -8,9 +8,6 @@ class MessageStrategyDto(JSONSerializable):
     def __init__(
         self,
         id: int,
-        knowledge_id: int,
-        brand_marketing_id: int,
-        marketing_strategy_id: int,
         offer_strategy_id: int,
         core_message: Optional[str],
         brand_message: Optional[str],
@@ -31,9 +28,6 @@ class MessageStrategyDto(JSONSerializable):
         ugc_angles: Optional[List[str]],
     ):
         self.id = id
-        self.knowledge_id = knowledge_id
-        self.brand_marketing_id = brand_marketing_id
-        self.marketing_strategy_id = marketing_strategy_id
         self.offer_strategy_id = offer_strategy_id
         self.core_message = core_message
         self.brand_message = brand_message
@@ -58,9 +52,6 @@ class MessageStrategyDto(JSONSerializable):
 
         data = {
             "id": self.id,
-            "knowledge_id": self.knowledge_id,
-            "brand_marketing_id": self.brand_marketing_id,
-            "marketing_strategy_id": self.marketing_strategy_id,
             "offer_strategy_id": self.offer_strategy_id,
             "core_message": self.core_message,
             "brand_message": self.brand_message,

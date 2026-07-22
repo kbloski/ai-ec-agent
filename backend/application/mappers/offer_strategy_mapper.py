@@ -8,8 +8,6 @@ class OfferStrategyMapper:
     def to_dto(item: OfferStrategy) -> OfferStrategyDto:
         return OfferStrategyDto(
             id=item.id,
-            knowledge_id=item.knowledge_id,
-            brand_marketing_id=item.brand_marketing_id,
             marketing_strategy_id=item.marketing_strategy_id,
             offer_name=item.offer_name,
             offer_positioning=item.offer_positioning,

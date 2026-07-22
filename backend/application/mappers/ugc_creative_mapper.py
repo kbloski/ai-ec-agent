@@ -8,10 +8,6 @@ class UgcCreativeMapper:
     def to_dto(item: UgcCreative) -> UgcCreativeDto:
         return UgcCreativeDto(
             id=item.id,
-            knowledge_id=item.knowledge_id,
-            brand_marketing_id=item.brand_marketing_id,
-            marketing_strategy_id=item.marketing_strategy_id,
-            offer_strategy_id=item.offer_strategy_id,
             message_strategy_id=item.message_strategy_id,
             name=item.name,
             customer_persona=item.customer_persona,

@@ -14,45 +14,9 @@ class AdExecution(Base, JSONSerializable):
     id = Column(Integer, primary_key=True, autoincrement=True)
 
     # relations
-    knowledge_id = Column(
-        Integer,
-        ForeignKey("knowledge.id"),
-        nullable=False
-    )
-
-    brand_marketing_id = Column(
-        Integer,
-        ForeignKey(TableName.BRAND_MARKETING + ".id"),
-        nullable=False
-    )
-
-    marketing_strategy_id = Column(
-        Integer,
-        ForeignKey(TableName.MARKETING_STRATEGY + ".id"),
-        nullable=False
-    )
-
-    offer_strategy_id = Column(
-        Integer,
-        ForeignKey(TableName.OFFER_STRATEGY + ".id"),
-        nullable=False
-    )
-
-    message_strategy_id = Column(
-        Integer,
-        ForeignKey(TableName.MESSAGE_STRATEGY + ".id"),
-        nullable=False
-    )
-
-    ad_strategy_id = Column(
-        Integer,
-        ForeignKey(TableName.AD_STRATEGY + ".id"),
-        nullable=False
-    )
-
     creative_strategy_id = Column(
         Integer,
-        ForeignKey(TableName.CREATIVE_STRATEGY + ".id"),
+        ForeignKey(TableName.CREATIVE_STRATEGY + ".id", ondelete="CASCADE"),
         nullable=False
     )
 

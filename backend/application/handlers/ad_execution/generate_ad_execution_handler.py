@@ -536,12 +536,6 @@ def generate_ad_execution_handler(
         )
 
         entity = AdExecution(
-            knowledge_id=knowledge_id,
-            brand_marketing_id=brand_marketing_id,
-            marketing_strategy_id=marketing_strategy_id,
-            offer_strategy_id=offer_strategy_id,
-            message_strategy_id=message_strategy_id,
-            ad_strategy_id=ad_strategy_id,
             creative_strategy_id=creative_strategy_id,
             name=f"#{randint(0, 1000)} - {item.get('name')}",
             execution=item.get("execution"),

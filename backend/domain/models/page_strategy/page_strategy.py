@@ -16,7 +16,7 @@ class PageStrategy(Base, JSONSerializable):
 
     message_strategy_id = Column(
         Integer,
-        ForeignKey(TableName.MESSAGE_STRATEGY + ".id"),
+        ForeignKey(TableName.MESSAGE_STRATEGY + ".id", ondelete="CASCADE"),
         nullable=False
     )
 

@@ -8,9 +8,6 @@ class MessageStrategyMapper:
     def to_dto(item: MessageStrategy) -> MessageStrategyDto:
         return MessageStrategyDto(
             id=item.id,
-            knowledge_id=item.knowledge_id,
-            brand_marketing_id=item.brand_marketing_id,
-            marketing_strategy_id=item.marketing_strategy_id,
             offer_strategy_id=item.offer_strategy_id,
             core_message=item.core_message,
             brand_message=item.brand_message,

@@ -182,7 +182,6 @@ def generate_marketing_strategy_handler(
     data = json.loads(response.content.strip())
 
     entity = MarketingStrategy(
-        knowledge_id=knowledge_id,
         brand_marketing_id=brand_markeging_id,
         marketing_objective=data.get("marketing_objective"),
         growth_strategy=data.get("growth_strategy"),

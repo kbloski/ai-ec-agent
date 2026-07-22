@@ -8,7 +8,6 @@ class MarketingStrategyDto(JSONSerializable):
     def __init__(
         self,
         id: int,
-        knowledge_id: int,
         brand_marketing_id: int,
         marketing_objective: Optional[str],
         growth_strategy: Optional[str],
@@ -29,7 +28,6 @@ class MarketingStrategyDto(JSONSerializable):
         marketing_kpis: Optional[List[str]],
     ):
         self.id = id
-        self.knowledge_id = knowledge_id
         self.brand_marketing_id = brand_marketing_id
         self.marketing_objective = marketing_objective
         self.growth_strategy = growth_strategy
@@ -54,7 +52,6 @@ class MarketingStrategyDto(JSONSerializable):
 
         data = {
             "id": self.id,
-            "knowledge_id": self.knowledge_id,
             "brand_marketing_id": self.brand_marketing_id,
             "marketing_objective": self.marketing_objective,
             "growth_strategy": self.growth_strategy,

@@ -462,10 +462,6 @@ def generate_ad_strategy_handler(
 
 
     entity = AdStrategy(
-        knowledge_id=knowledge_id,
-        brand_marketing_id=brand_marketing_id,
-        marketing_strategy_id=marketing_strategy_id,
-        offer_strategy_id=offer_strategy_id,
         message_strategy_id=message_strategy_id,
         objective=result.get("objective"),
         customer_stage=result.get("customer_stage"),

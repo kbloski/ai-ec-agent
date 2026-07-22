@@ -8,11 +8,6 @@ class CreativeStrategyDto(JSONSerializable):
     def __init__(
         self,
         id: int,
-        knowledge_id: int,
-        brand_marketing_id: int,
-        marketing_strategy_id: int,
-        offer_strategy_id: int,
-        message_strategy_id: int,
         ad_strategy_id: int,
         name: Optional[str],
         objective: Optional[str],
@@ -30,11 +25,6 @@ class CreativeStrategyDto(JSONSerializable):
         execution_guidelines: Optional[dict],
     ):
         self.id = id
-        self.knowledge_id = knowledge_id
-        self.brand_marketing_id = brand_marketing_id
-        self.marketing_strategy_id = marketing_strategy_id
-        self.offer_strategy_id = offer_strategy_id
-        self.message_strategy_id = message_strategy_id
         self.ad_strategy_id = ad_strategy_id
         self.name = name
         self.objective = objective
@@ -56,11 +46,6 @@ class CreativeStrategyDto(JSONSerializable):
 
         data = {
             "id": self.id,
-            "knowledge_id": self.knowledge_id,
-            "brand_marketing_id": self.brand_marketing_id,
-            "marketing_strategy_id": self.marketing_strategy_id,
-            "offer_strategy_id": self.offer_strategy_id,
-            "message_strategy_id": self.message_strategy_id,
             "ad_strategy_id": self.ad_strategy_id,
             "name": self.name,
             "objective": self.objective,

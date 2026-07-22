@@ -8,10 +8,6 @@ class AdStrategyMapper:
     def to_dto(item: AdStrategy) -> AdStrategyDto:
         return AdStrategyDto(
             id=item.id,
-            knowledge_id=item.knowledge_id,
-            brand_marketing_id=item.brand_marketing_id,
-            marketing_strategy_id=item.marketing_strategy_id,
-            offer_strategy_id=item.offer_strategy_id,
             message_strategy_id=item.message_strategy_id,
             objective=item.objective,
             customer_stage=item.customer_stage,
