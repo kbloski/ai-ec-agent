@@ -306,48 +306,38 @@ STRICT JSON RULES:
 
 
 USER_PROMPT_TEMPLATE = """
-Wygeneruj Page Copy na podstawie:
-
+Generate Page Copy based on the following marketing context:
 
 KNOWLEDGE BASE:
-
 {knowledge_json}
 
 
-BRAND MARKETING:
-
+BRAND MARKETING STRATEGY:
 {brand_marketing_json}
 
 
 MARKETING STRATEGY:
-
 {marketing_strategy_json}
 
 
 PAGE BLUEPRINT:
-
 {page_blueprint_json}
 
 
 PAGE CONTENT PLAN:
-
 {page_content_plan_json}
 
 
 PAGE STRATEGY:
-
 {page_strategy_json}
 
 
 MESSAGE STRATEGY:
-
 {message_strategy_json}
 
 
 OFFER STRATEGY:
-
 {offer_strategy_json}
-
 """
 
 

@@ -39,7 +39,6 @@ Your goal is to determine:
 3. How to effectively reach them.
 
 Rules:
-
 - Analyze the specific product.
 - Do not create generic customer groups.
 - Separate facts from assumptions.
@@ -47,16 +46,11 @@ Rules:
 - Label assumptions.
 - Results must be useful for advertising and marketing.
 
-Return ONLY valid JSON.
-No markdown.
-No comments.
-No text outside JSON.
-
 Requirements:
-
 - confidence MUST be a float between 0 and 1.
-- score MUST be an integer between 0 and 10.
-- Never use words like "high", "medium", "low" for confidence.
+- score MUST be an integer between 0 and 1.
+
+Return ONLY valid JSON.
 """
 
 
