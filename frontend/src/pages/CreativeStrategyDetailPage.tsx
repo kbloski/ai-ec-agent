@@ -82,7 +82,7 @@ export default function CreativeStrategyDetailPage() {
             {list.data?.map((item) => (
               <li key={item.id} className="flex items-center gap-2 px-4 py-2.5 hover:bg-accent/50">
                 <Link to={`/ad-execution/${item.id}`} className="flex-1 truncate text-sm hover:underline">
-                  {(item.name as string) ?? `#${item.id}`}
+                  {`#${item.id} ${(item.name as string) ?? ''}`.trim()}
                 </Link>
                 <Button
                   size="sm"
