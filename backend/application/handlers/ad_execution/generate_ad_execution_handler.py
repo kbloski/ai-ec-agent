@@ -86,7 +86,6 @@ Każda sekcja posiada następujący format:
     "end_second": 3,
     "goal": "",
     "emotion": "",
-    "example_scenario": ""
 }
 
 ---
