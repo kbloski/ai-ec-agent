@@ -106,7 +106,7 @@ Define:
 
 
 
-7. CREATIVE DIRECTIONS
+7. CREATIVE CONCEPTS
 
 Define strategic creative directions that can later be developed into advertisements.
 
@@ -211,7 +211,7 @@ Return only valid JSON:
     ],
 
 
-    "creative_directions": [
+    "creative_concepts": [
         {
             "name": "",
             "idea": "",

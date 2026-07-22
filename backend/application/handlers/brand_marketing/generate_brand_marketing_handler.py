@@ -78,8 +78,6 @@ Return only valid JSON using exactly this structure:
     "brand_purpose": "",
     "brand_promise": "",
 
-    "brand_archetype": "",
-
     "brand_personality": [],
 
     "brand_values": [],
@@ -92,9 +90,9 @@ Return only valid JSON using exactly this structure:
 
     "brand_tone_customer_communication": "",
 
-    "brand_statement": "",
+    "tagline": "",
 
-    "strategic_differentiator": "",
+    "unique_selling_proposition": "",
 
     "key_messages": [],
 

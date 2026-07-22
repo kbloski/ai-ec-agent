@@ -139,17 +139,6 @@ Define:
 
 
 
-9. CUSTOMER VALUE EQUATION
-
-Define:
-
-- desired customer outcome,
-- perceived probability of achieving the outcome,
-- time required to achieve the result,
-- effort required from the customer.
-
-
-
 OUTPUT JSON:
 {
     "offer_strategy": {
@@ -166,12 +155,6 @@ OUTPUT JSON:
         "secondary_benefits": [],
         "functional_benefits": [],
         "emotional_benefits": [],
-        "customer_value_equation": {
-            "dream_outcome": "",
-            "perceived_likelihood_of_achievement": "",
-            "time_to_result": "",
-            "effort_required": ""
-        },
         "offer_structure": {
             "core_product": "",
             "included_elements": [],
@@ -300,6 +283,7 @@ def generate_offer_strategy_handler(
 
 
     data = json.loads(response.content.strip())
+    data = data.get("offer_strategy", {})
 
     entity = OfferStrategy(
         knowledge_id=knowledge_id,
@@ -308,7 +292,7 @@ def generate_offer_strategy_handler(
         offer_name=data.get("offer_name"),
         offer_positioning=data.get("offer_positioning"),
         core_value_proposition=data.get("core_value_proposition"),
-        main_customer_problem=data.get("main_customer_problem"),
+        main_customer_problem=data.get("customer_problem", {}).get("main_problem"),
         solution_mechanism=data.get("solution_mechanism"),
         primary_benefit=data.get("primary_benefit"),
         secondary_benefits=data.get("secondary_benefits", []),

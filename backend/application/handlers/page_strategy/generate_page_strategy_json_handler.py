@@ -61,7 +61,6 @@ Determine:
 - who the most valuable customer is,
 - what the customer wants to achieve,
 - what problem the customer wants to solve,
-- what the customer is afraid of,
 - what purchase barriers they have,
 - what their main purchase motivators are.
 
@@ -117,9 +116,8 @@ JSON FORMAT:
 
         "target_customer": {
             "description": "",
-            "desires": [],
-            "problems": [],
-            "fears": [],
+            "desire": "",
+            "problem": "",
             "purchase_motivators": []
         },
 
@@ -334,6 +332,7 @@ def generate_page_strategy_json_handler(
 
 
     page_strategy_data = result.get("page_strategy", {})
+    target_customer = page_strategy_data.get("target_customer", {})
 
 
     entity = PageStrategy(
@@ -344,7 +343,7 @@ def generate_page_strategy_json_handler(
 
         conversion_action=page_strategy_data.get("conversion_action"),
 
-        target_audience=page_strategy_data.get("target_audience"),
+        target_audience=target_customer.get("description"),
 
         customer_awareness_level=page_strategy_data.get("customer_awareness_level"),
 
@@ -356,15 +355,15 @@ def generate_page_strategy_json_handler(
 
         message_angle=page_strategy_data.get("message_angle"),
 
-        customer_problem=page_strategy_data.get("customer_problem"),
+        customer_problem=target_customer.get("problem"),
 
-        customer_desire=page_strategy_data.get("customer_desire"),
+        customer_desire=target_customer.get("desire"),
 
         emotional_drivers=page_strategy_data.get("emotional_drivers", []),
 
         rational_drivers=page_strategy_data.get("rational_drivers", []),
 
-        purchase_motivators=page_strategy_data.get("purchase_motivators", []),
+        purchase_motivators=target_customer.get("purchase_motivators", []),
 
         purchase_barriers=page_strategy_data.get("purchase_barriers", []),
 

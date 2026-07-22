@@ -169,7 +169,6 @@ OUTPUT JSON:
         "audience_messages": [],
         "customer_pain_points": [],
         "customer_desires": [],
-        "purchase_motivators": [],
         "benefit_messages": [],
         "feature_to_benefit_mapping": [
             {
@@ -315,6 +314,7 @@ def generate_message_strategy_handler(
 
 
     data = json.loads(response.content.strip())
+    data = data.get("message_strategy", {})
 
     entity = MessageStrategy(
         knowledge_id=knowledge_id,
