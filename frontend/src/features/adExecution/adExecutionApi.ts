@@ -2,11 +2,12 @@ import { api } from '@/store/api'
 import { listTag, itemTag } from '@/lib/tags'
 import type { Entity } from '@/types'
 
-interface GenerateAdExecutionArgs {
-  creativeStrategy: Entity
-  video_duration_seconds?: number
-  platform?: string
-  format?: string
+interface CreateAdExecutionArgs {
+  creativeStrategyId: number
+  creative_type: string
+  platform: string
+  format: string
+  name?: string
 }
 
 export const adExecutionApi = api.injectEndpoints({
@@ -22,13 +23,13 @@ export const adExecutionApi = api.injectEndpoints({
       query: (id) => `/ad-execution/${id}`,
       providesTags: (_result, _err, id) => [itemTag('AdExecution', id)],
     }),
-    generateAdExecution: builder.mutation<Entity, GenerateAdExecutionArgs>({
-      query: ({ creativeStrategy: cs, ...params }) => ({
-        url: `/creative-strategy/${cs.id}/ad-execution/generate`,
+    createAdExecution: builder.mutation<Entity, CreateAdExecutionArgs>({
+      query: ({ creativeStrategyId, ...params }) => ({
+        url: `/creative-strategy/${creativeStrategyId}/ad-execution/create`,
         params,
       }),
-      invalidatesTags: (_result, _err, { creativeStrategy }) => [
-        listTag('AdExecution', creativeStrategy.id),
+      invalidatesTags: (_result, _err, { creativeStrategyId }) => [
+        listTag('AdExecution', creativeStrategyId),
       ],
     }),
     deleteAdExecution: builder.mutation<void, { id: number; creativeStrategyId: number }>({
@@ -44,6 +45,6 @@ export const adExecutionApi = api.injectEndpoints({
 export const {
   useListAdExecutionForCreativeStrategyQuery,
   useGetAdExecutionQuery,
-  useGenerateAdExecutionMutation,
+  useCreateAdExecutionMutation,
   useDeleteAdExecutionMutation,
 } = adExecutionApi

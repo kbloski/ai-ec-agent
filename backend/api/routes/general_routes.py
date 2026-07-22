@@ -58,6 +58,10 @@ from application.handlers.ad_execution.generate_ad_execution_handler import gene
 from application.handlers.ad_execution.get_ad_execution_handler import get_ad_execution_handler
 from application.handlers.ad_execution.get_creative_strategy_ad_executions_handler import get_creative_strategy_ad_executions_handler
 from application.handlers.ad_execution.delete_ad_execution_handler import delete_ad_execution_handler
+from application.handlers.video_creative_execution.generate_video_creative_execution_handler import generate_video_creative_execution_handler
+from application.handlers.video_creative_execution.get_video_creative_execution_handler import get_video_creative_execution_handler
+from application.handlers.video_creative_execution.get_ad_execution_video_creative_executions_handler import get_ad_execution_video_creative_executions_handler
+from application.handlers.video_creative_execution.delete_video_creative_execution_handler import delete_video_creative_execution_handler
 from application.handlers.creative_strategy.get_creative_strategy_handler import get_creative_strategy_handler
 from application.handlers.creative_strategy.get_ad_strategy_creative_strategies_handler import get_ad_strategy_creative_strategies_handler
 from application.handlers.creative_strategy.delete_creative_strategy_handler import delete_creative_strategy_handler
@@ -441,18 +445,20 @@ def register_general_routes(router: APIRouter):
     # -----------------------------
     # Ad execution
     # -----------------------------
-    @router.get("/creative-strategy/{creative_strategy_id}/ad-execution/generate")
-    def creative_strategy_ad_execution_generate(
+    @router.get("/creative-strategy/{creative_strategy_id}/ad-execution/create")
+    def creative_strategy_ad_execution_create(
         creative_strategy_id: int,
-        video_duration_seconds: int = 15,
-        platform: str = "Meta Ads",
-        format: str = "Vertical Video 9:16"
+        creative_type: str,
+        platform: str,
+        format: str,
+        name: str | None = None
     ):
         return generate_ad_execution_handler(
             creative_strategy_id=creative_strategy_id,
-            video_duration_seconds=video_duration_seconds,
+            creative_type=creative_type,
             platform=platform,
-            format=format
+            format=format,
+            name=name
         )
 
     @router.get("/creative-strategy/{creative_strategy_id}/ad-execution")
@@ -467,6 +473,33 @@ def register_general_routes(router: APIRouter):
     @router.get("/ad-execution/{id}/delete")
     def delete_ad_execution_route( id: int ):
         return delete_ad_execution_handler(id=id)
+
+
+    # -----------------------------
+    # Video creative execution
+    # -----------------------------
+    @router.get("/ad-execution/{ad_execution_id}/video-creative-execution/generate")
+    def ad_execution_video_creative_execution_generate(
+        ad_execution_id: int,
+        duration_seconds: int = 15
+    ):
+        return generate_video_creative_execution_handler(
+            ad_execution_id=ad_execution_id,
+            duration_seconds=duration_seconds
+        )
+
+    @router.get("/ad-execution/{ad_execution_id}/video-creative-execution")
+    def get_ad_execution_video_creative_executions( ad_execution_id: int ):
+        return get_ad_execution_video_creative_executions_handler( ad_execution_id=ad_execution_id )
+
+    @router.get("/video-creative-execution/{id}")
+    def get_video_creative_execution( id: int ):
+        return get_video_creative_execution_handler( id=id )
+
+    # DELETE in future
+    @router.get("/video-creative-execution/{id}/delete")
+    def delete_video_creative_execution_route( id: int ):
+        return delete_video_creative_execution_handler(id=id)
 
 
     # -----------------------------

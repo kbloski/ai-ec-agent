@@ -4,8 +4,8 @@ import { DetailShell } from '@/components/DetailShell'
 import { Button } from '@/components/ui/button'
 import { useGetCreativeStrategyQuery } from '@/features/creativeStrategy/creativeStrategyApi'
 import {
+  useCreateAdExecutionMutation,
   useDeleteAdExecutionMutation,
-  useGenerateAdExecutionMutation,
   useListAdExecutionForCreativeStrategyQuery,
 } from '@/features/adExecution/adExecutionApi'
 
@@ -14,16 +14,16 @@ export default function CreativeStrategyDetailPage() {
   const { data: creativeStrategy, isLoading, error } = useGetCreativeStrategyQuery(id)
 
   const list = useListAdExecutionForCreativeStrategyQuery(id)
-  const [generate, generateState] = useGenerateAdExecutionMutation()
+  const [createAdExecution, createState] = useCreateAdExecutionMutation()
   const [deleteAdExecution] = useDeleteAdExecutionMutation()
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!creativeStrategy) return
     const formData = new FormData(e.currentTarget)
-    await generate({
-      creativeStrategy,
-      video_duration_seconds: Number(formData.get('video_duration_seconds')) || 15,
+    await createAdExecution({
+      creativeStrategyId: id,
+      name: String(formData.get('name') || '') || undefined,
+      creative_type: String(formData.get('creative_type') || 'video'),
       platform: String(formData.get('platform') || 'Meta Ads'),
       format: String(formData.get('format') || 'Vertical Video 9:16'),
     }).unwrap()
@@ -43,13 +43,20 @@ export default function CreativeStrategyDetailPage() {
 
         <form onSubmit={handleSubmit} className="flex flex-wrap items-end gap-2">
           <label className="text-xs">
-            Czas trwania (s)
-            <input
-              name="video_duration_seconds"
-              type="number"
-              defaultValue={15}
-              className="block w-28 rounded-md border px-2 py-1 text-sm"
-            />
+            Nazwa
+            <input name="name" className="block w-40 rounded-md border px-2 py-1 text-sm" />
+          </label>
+          <label className="text-xs">
+            Typ kreacji
+            <select
+              name="creative_type"
+              defaultValue="video"
+              className="block w-32 rounded-md border px-2 py-1 text-sm"
+            >
+              <option value="video">video</option>
+              <option value="image">image</option>
+              <option value="carousel">carousel</option>
+            </select>
           </label>
           <label className="text-xs">
             Platforma
@@ -67,8 +74,8 @@ export default function CreativeStrategyDetailPage() {
               className="block w-48 rounded-md border px-2 py-1 text-sm"
             />
           </label>
-          <Button type="submit" size="sm" disabled={generateState.isLoading}>
-            {generateState.isLoading ? 'Generowanie…' : 'Generuj ad execution'}
+          <Button type="submit" size="sm" disabled={createState.isLoading}>
+            {createState.isLoading ? 'Tworzenie…' : 'Utwórz ad execution'}
           </Button>
         </form>
 

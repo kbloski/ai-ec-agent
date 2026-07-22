@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, JSON
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.sql import func
 
 from infrastructure.database.db import Base
@@ -22,13 +22,9 @@ class AdExecution(Base, JSONSerializable):
 
     name = Column(String, nullable=True)
 
-    execution = Column(JSON, nullable=True)
-    hook_strategy = Column(JSON, nullable=True)
-    structure = Column(JSON, nullable=True)
-    scenes = Column(JSON, nullable=True)
-    asset_requirements = Column(JSON, nullable=True)
-    production_notes = Column(JSON, nullable=True)
-    cta = Column(JSON, nullable=True)
+    creative_type = Column(String, nullable=False)
+    platform = Column(String, nullable=True)
+    format = Column(String, nullable=True)
 
     # timestamps
     created_at = Column(

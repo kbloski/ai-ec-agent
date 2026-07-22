@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional
 
 from common.mixins.json_serializable import JSONSerializable
 
@@ -10,24 +10,16 @@ class AdExecutionDto(JSONSerializable):
         id: int,
         creative_strategy_id: int,
         name: Optional[str],
-        execution: Optional[dict],
-        hook_strategy: Optional[dict],
-        structure: Optional[List[dict]],
-        scenes: Optional[List[dict]],
-        asset_requirements: Optional[List[str]],
-        production_notes: Optional[dict],
-        cta: Optional[dict],
+        creative_type: str,
+        platform: Optional[str],
+        format: Optional[str],
     ):
         self.id = id
         self.creative_strategy_id = creative_strategy_id
         self.name = name
-        self.execution = execution
-        self.hook_strategy = hook_strategy
-        self.structure = structure
-        self.scenes = scenes
-        self.asset_requirements = asset_requirements
-        self.production_notes = production_notes
-        self.cta = cta
+        self.creative_type = creative_type
+        self.platform = platform
+        self.format = format
 
     def to_dict(self, exclude=None):
         exclude = set(exclude or [])
@@ -36,13 +28,9 @@ class AdExecutionDto(JSONSerializable):
             "id": self.id,
             "creative_strategy_id": self.creative_strategy_id,
             "name": self.name,
-            "execution": self.execution,
-            "hook_strategy": self.hook_strategy,
-            "structure": self.structure,
-            "scenes": self.scenes,
-            "asset_requirements": self.asset_requirements,
-            "production_notes": self.production_notes,
-            "cta": self.cta,
+            "creative_type": self.creative_type,
+            "platform": self.platform,
+            "format": self.format,
         }
 
         return {k: v for k, v in data.items() if k not in exclude}

@@ -11,6 +11,7 @@ export const TAG_TYPES = [
   'AdStrategy',
   'CreativeStrategy',
   'AdExecution',
+  'VideoCreativeExecution',
   'UgcCreative',
   'PageStrategy',
   'PageBlueprint',
