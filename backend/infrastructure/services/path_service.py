@@ -10,6 +10,9 @@ class PathService:
 
         self.UPLOADS_DEV = self.BASE_DIR / "uploads" / "dev"
         self.UPLOADS_PROD = self.BASE_DIR / "uploads" / "prod"
+
+        self.PROMPTS_DIR = self.BASE_DIR / "infrastructure" / "ai" / "prompts"
+        self.GLOBAL_SYSTEM_PROMPT = self.PROMPTS_DIR / "global.system.md"
         
         # self.DATA_DIR = self.BASE_DIR / "data"
         # self.RAW_ECOMMERCE_KNOWLEDGE = self.DATA_DIR / "raw" / "ecommerce_knowledge"

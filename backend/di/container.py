@@ -347,7 +347,8 @@ class Container(containers.DeclarativeContainer):
     ollama_service =  providers.Singleton(
         OllamaService,
         logger=logger,
-        settings=settings
+        settings=settings,
+        path_service=path_service,
     )
 
     knowledge_service = providers.Singleton(

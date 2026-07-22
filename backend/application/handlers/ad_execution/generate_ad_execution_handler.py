@@ -369,14 +369,10 @@ def generate_ad_execution_handler(
                 role=OllamaMessageRole.SYSTEM,
                 content=SYSTEM_PROMPT
             ),
-
-
+        
             LlmOllamaMessage(
-
                 role=OllamaMessageRole.USER,
-
                 content=user_prompt
-
             )
 
         ]
