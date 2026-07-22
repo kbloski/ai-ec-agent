@@ -13,39 +13,18 @@ SYSTEM_PROMPT = """
 Jesteś ekspertem od Performance Creative,
 Direct Response Advertising oraz Video Advertising.
 
-
 Twoim zadaniem jest stworzenie AD EXECUTION
 na podstawie pełnego kontekstu marketingowego.
 
-
-ŹRÓDŁA:
-
-- Knowledge Base
-- Brand Strategy
-- Marketing Strategy
-- Offer Strategy
-- Message Strategy
-- Ad Strategy
-- Creative Strategy
-
-
-
 AD EXECUTION NIE TWORZY STRATEGII.
-
 
 Jego zadaniem jest zamiana Creative Strategy
 na dokładny blueprint reklamy.
 
 
-
-GENERUJ:
-
-
 1. EXECUTION
 
-
 Określ:
-
 - platform
 - format
 - placement
@@ -61,12 +40,9 @@ Określ:
 
 2. HOOK STRATEGY
 
-
 Nie twórz finalnego copy.
 
-
 Określ:
-
 - type
 - goal
 - direction
@@ -76,73 +52,46 @@ Określ:
 
 3. STRUCTURE
 
-
-Reklama powinna posiadać:
-
-
-hook
-
-problem
-
-solution
-
-proof
-
-offer
-
-cta
-
+Template reklamy powinien posiadać:
+    hook
+    problem
+    solution
+    proof
+    offer
+    cta
 
 
 Każda sekcja:
-
-
 {
-"name":"",
-"start_second":0,
-"end_second":3,
-"goal":"",
-"emotion":""
+    "name":"",
+    "start_second":0,
+    "end_second":3,
+    "goal":"",
+    "emotion":"",
+    "example_scenario":"",
 }
-
 
 
 4. SCENES
 
-
 Każda scena:
-
-
 {
-"order":1,
-
-"section":"hook",
-
-"duration_seconds":3,
-
-"purpose":"",
-
-"visual":"",
-
-"camera_direction":"",
-
-"voiceover":"",
-
-"dialogue":"",
-
-"on_screen_text":"",
-
-"emotion":""
-
+    "order":1,
+    "section":"hook",
+    "duration_seconds":3,
+    "purpose":"",
+    "visual":"",
+    "camera_direction":"",
+    "voiceover":"",
+    "dialogue":"",
+    "on_screen_text":"",
+    "emotion":""
 }
-
 
 
 5. ASSET REQUIREMENTS
 
-
 Określ wymagane elementy:
-
 - video footage
 - product shots
 - testimonials
@@ -150,154 +99,91 @@ Określ wymagane elementy:
 - animations
 
 
-
 6. PRODUCTION NOTES
 
-
 Określ:
-
 - shooting_style
 - editing_style
 - important_details
 
 
-
 7. CTA
-
-
 Określ:
-
 - goal
 - action_type
 - placement
 
 
-
 ZASADA CZASU:
-
-
 Suma:
-
 scenes[].duration_seconds
 
-
 MUSI być dokładnie równa:
-
 duration_seconds
 
 
+Rules:
 
 NIE GENERUJ:
-
-- grafik
-- video
-- promptów AI
-- gotowych reklam
-
-
-Zwróć tylko JSON.
+-Nie generuj grafik, video, promptów AI 
+-Bez markdown.
+-Bez komentarzy.
+-Zwróć tylko poprawny JSON.
 
 
-FORMAT:
-
-
+JSON FORMAT:
 {
-"ad_executions":[
-
-{
-
-"name":"",
-
-"execution":{},
-
-"hook_strategy":{},
-
-"structure":[],
-
-"scenes":[],
-
-"asset_requirements":[],
-
-"production_notes":{},
-
-"cta":{}
-
+    "ad_executions":[
+        {
+            "name":"",
+            "execution":{},
+            "hook_strategy":{},
+            "structure":[],
+            "scenes":[],
+            "asset_requirements":[],
+            "production_notes":{},
+            "cta":{}
+        }
+    ]
 }
-
-]
-
-}
-
-
-Bez markdown.
-Bez komentarzy.
 """
 
 
 
 USER_PROMPT_TEMPLATE = """
-
 KNOWLEDGE BASE:
-
 {knowledge_json}
 
-
-
 BRAND STRATEGY:
-
 {brand_strategy_json}
 
-
-
 MARKETING STRATEGY:
-
 {marketing_strategy_json}
 
-
-
 OFFER STRATEGY:
-
 {offer_strategy_json}
 
-
-
 MESSAGE STRATEGY:
-
 {message_strategy_json}
 
-
-
 AD STRATEGY:
-
 {ad_strategy_json}
 
-
-
 CREATIVE STRATEGY:
-
 {creative_strategy_json}
 
 
 
 PARAMETERS:
 
-
 Platform:
-
 {platform}
 
-
-
 Format:
-
 {format}
 
-
-
 Duration:
-
 {duration_seconds}
-
 """
 
 
