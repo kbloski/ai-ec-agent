@@ -339,12 +339,9 @@ def register_general_routes(router: APIRouter):
     # -----------------------------
     # Message strategy
     # -----------------------------
-    @router.get("/knowledges/{knowledge_id}/brand-marketing/{brand_marketing_id}/marketing-strategy/{marketing_strategy_id}/offer-strategy/{offer_strategy_id}/message-strategy/generate")
-    def knowledge_message_strategy_generate( knowledge_id: int, brand_marketing_id: int, marketing_strategy_id: int, offer_strategy_id: int ):
+    @router.get("/offer-strategy/{offer_strategy_id}/message-strategy/generate")
+    def knowledge_message_strategy_generate( offer_strategy_id: int ):
         return generate_message_strategy_handler(
-            knowledge_id=knowledge_id,
-            brand_marketing_id=brand_marketing_id,
-            marketing_strategy_id=marketing_strategy_id,
             offer_strategy_id=offer_strategy_id
         )
 
