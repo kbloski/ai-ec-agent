@@ -18,6 +18,7 @@ import PageStrategyDetailPage from '@/pages/PageStrategyDetailPage'
 import PageBlueprintDetailPage from '@/pages/PageBlueprintDetailPage'
 import PageContentPlanDetailPage from '@/pages/PageContentPlanDetailPage'
 import PageCopyDetailPage from '@/pages/PageCopyDetailPage'
+import SettingsPage from '@/pages/SettingsPage'
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
         <Route path="/page-blueprint/:id" element={<PageBlueprintDetailPage />} />
         <Route path="/page-content-plan/:id" element={<PageContentPlanDetailPage />} />
         <Route path="/page-copy/:id" element={<PageCopyDetailPage />} />
+        <Route path="/settings" element={<SettingsPage />} />
       </Route>
     </Routes>
   )

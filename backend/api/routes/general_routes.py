@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+from pydantic import BaseModel
 
 from application.handlers.offers.get_offers import get_offers
 from application.handlers.offers.create_offer import create_offer
@@ -79,6 +80,12 @@ from application.handlers.page_copy.generate_page_copy_handler import generate_p
 from application.handlers.page_copy.get_page_copy_handler import get_page_copy_handler
 from application.handlers.page_copy.get_page_content_plan_page_copies_handler import get_page_content_plan_page_copies_handler
 from application.handlers.page_copy.delete_page_copy_handler import delete_page_copy_handler
+from application.handlers.settings.get_output_prompt_handler import get_output_prompt_handler
+from application.handlers.settings.save_output_prompt_handler import save_output_prompt_handler
+
+
+class SaveOutputPromptRequest(BaseModel):
+    content: str
 
 
 
@@ -552,6 +559,18 @@ def register_general_routes(router: APIRouter):
     @router.get("/page-copy/{id}/delete")
     def delete_page_copy_route( id: int ):
         return delete_page_copy_handler(id=id)
+
+
+    # -----------------------------
+    # Settings
+    # -----------------------------
+    @router.get("/settings/output-prompt")
+    def get_output_prompt():
+        return get_output_prompt_handler()
+
+    @router.post("/settings/output-prompt")
+    def save_output_prompt_route( payload: SaveOutputPromptRequest ):
+        return save_output_prompt_handler( content=payload.content )
 
 
     # -----------------------------
