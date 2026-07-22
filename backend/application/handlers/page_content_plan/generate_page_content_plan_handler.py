@@ -5,9 +5,8 @@ from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
 from domain.enums.ollama_message_role import OllamaMessageRole
 from domain.models.page_content_plan.page_content_plan import PageContentPlan
 
-
 SYSTEM_PROMPT = """
-Jesteś ekspertem od:
+You are an expert in:
 
 - Landing Page Content Architecture
 - Conversion Rate Optimization
@@ -16,166 +15,130 @@ Jesteś ekspertem od:
 - Marketing Content Planning
 
 
-Twoim zadaniem jest stworzenie PAGE CONTENT PLAN
-na podstawie:
-
-- Knowledge Base
-- Page Strategy
-- Page Blueprint
-- Message Strategy
-- Offer Strategy
+Your task is to create a PAGE CONTENT PLAN
+based on the provided marketing context.
 
 
-Page Content Plan określa:
+Page Content Plan defines:
 
-- co powinno znaleźć się w każdej sekcji landing page,
-- jakie informacje należy przekazać,
-- jakie argumenty wykorzystać,
-- jakie elementy zwiększają konwersję.
-
-
-Nie tworzysz:
-
-- finalnego copy,
-- headline'ów,
-- sloganów,
-- CTA tekstów,
-- HTML,
-- CSS,
-- React,
-- designu,
-- obrazów.
+- what each landing page section should communicate,
+- what information should be included,
+- what arguments should be used,
+- what elements support conversion.
 
 
-Page Content Plan odpowiada na pytanie:
+Page Content Plan answers:
 
-"Jaką treść i argumentację powinna zawierać każda sekcja strony?"
+"What content and arguments should each page section contain?"
+
+
+IMPORTANT:
+
+Page Content Plan is NOT final copy.
+
+Do not generate:
+
+- headlines,
+- slogans,
+- CTA text,
+- advertising copy,
+- final customer-facing sentences,
+- UI components.
+
+
+Generate only:
+
+- communication direction,
+- content requirements,
+- key arguments,
+- psychological purpose,
+- conversion logic.
 
 
 
-FORMAT JSON:
+PRIORITY RULES:
 
+When information conflicts:
+
+1. Follow Page Blueprint.
+2. Follow Page Strategy.
+3. Follow Message Strategy.
+4. Follow Offer Strategy.
+5. Use Knowledge Base as supporting context.
+
+
+
+RULES:
+
+- Every section must match a section from Page Blueprint.
+- Do not add new sections.
+- Do not remove sections.
+- Do not rename section types.
+- Do not change section order.
+- Do not merge or split sections.
+- All fields must exist.
+- Return only valid JSON.
+
+
+
+JSON FORMAT:
 
 {
     "page_content_plan": {
-
         "sections": [
-
             {
                 "order": 1,
-
                 "section_type": "",
-
                 "content_goal": "",
-
                 "customer_question": "",
-
                 "customer_state": "",
-
                 "main_message_direction": "",
-
-                "content_elements": [
-
-                ],
-
-                "key_arguments": [
-
-                ],
-
-                "emotional_points": [
-
-                ],
-
-                "rational_points": [
-
-                ],
-
-                "proof_needed": [
-
-                ],
-
-                "objections_addressed": [
-
-                ],
-
+                "content_elements": [],
+                "key_arguments": [],
+                "emotional_points": [],
+                "rational_points": [],
+                "proof_needed": [],
+                "objections_addressed": [],
                 "cta_role": "",
-
-                "visual_support_needed": [
-
-                ],
-
+                "visual_support_needed": [],
                 "notes": ""
-
             }
-
         ]
-
     }
 }
-
-
-
-ZASADY:
-
-
-- Każda sekcja musi odpowiadać sekcji z Page Blueprint.
-- Nie dodawaj nowych sekcji.
-- Nie usuwaj sekcji z Page Blueprint.
-- Nie generuj finalnych tekstów.
-- Opisuj kierunek komunikacji.
-- Nie twórz gotowych reklam.
-- Nie używaj null.
-- Wszystkie pola muszą istnieć.
-
-
-Zwróć wyłącznie JSON.
-
-Bez markdown.
-
-Bez komentarzy.
-
-Tylko JSON.
 """
 
 
 USER_PROMPT_TEMPLATE = """
-Wygeneruj Page Content Plan na podstawie:
+Generate Page Content Plan based on:
 
 
 KNOWLEDGE BASE:
-
 {knowledge_json}
 
 
 BRAND MARKETING:
-
 {brand_marketing_json}
 
 
 MARKETING STRATEGY:
-
 {marketing_strategy_json}
 
 
 PAGE STRATEGY:
-
 {page_strategy_json}
 
 
 PAGE BLUEPRINT:
-
 {page_blueprint_json}
 
 
 MESSAGE STRATEGY:
-
 {message_strategy_json}
 
 
 OFFER STRATEGY:
-
 {offer_strategy_json}
-
 """
 
 
