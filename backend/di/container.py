@@ -49,9 +49,9 @@ from application.services.ugc_creative_service import UgcCreativeService
 from infrastructure.repositories.ad_execution_repository import AdExecutionRepository
 from application.assemblers.ad_execution_assembler import AdExecutionAssembler
 from application.services.ad_execution_service import AdExecutionService
-from infrastructure.repositories.video_creative_execution_repository import VideoCreativeExecutionRepository
-from application.assemblers.video_creative_execution_assembler import VideoCreativeExecutionAssembler
-from application.services.video_creative_execution_service import VideoCreativeExecutionService
+from infrastructure.repositories.creative_execution_repository import CreativeExecutionRepository
+from application.assemblers.creative_execution_assembler import CreativeExecutionAssembler
+from application.services.creative_execution_service import CreativeExecutionService
 from infrastructure.repositories.page_strategy_repository import PageStrategyRepository
 from application.assemblers.page_strategy_assembler import PageStrategyAssembler
 from application.services.page_strategy_service import PageStrategyService
@@ -217,8 +217,8 @@ class Container(containers.DeclarativeContainer):
         db=db
     )
 
-    video_creative_execution_repository = providers.Singleton(
-        VideoCreativeExecutionRepository,
+    creative_execution_repository = providers.Singleton(
+        CreativeExecutionRepository,
         logger=logger,
         db=db
     )
@@ -325,8 +325,8 @@ class Container(containers.DeclarativeContainer):
         logger=logger,
     )
 
-    video_creative_execution_assembler = providers.Singleton(
-        VideoCreativeExecutionAssembler,
+    creative_execution_assembler = providers.Singleton(
+        CreativeExecutionAssembler,
         logger=logger,
     )
 
@@ -440,11 +440,11 @@ class Container(containers.DeclarativeContainer):
         ad_execution_assembler=ad_execution_assembler
     )
 
-    video_creative_execution_service = providers.Singleton(
-        VideoCreativeExecutionService,
+    creative_execution_service = providers.Singleton(
+        CreativeExecutionService,
         logger=logger,
-        video_creative_execution_repository=video_creative_execution_repository,
-        video_creative_execution_assembler=video_creative_execution_assembler
+        creative_execution_repository=creative_execution_repository,
+        creative_execution_assembler=creative_execution_assembler
     )
 
     page_strategy_service = providers.Singleton(

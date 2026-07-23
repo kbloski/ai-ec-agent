@@ -58,10 +58,10 @@ from application.handlers.ad_execution.generate_ad_execution_handler import gene
 from application.handlers.ad_execution.get_ad_execution_handler import get_ad_execution_handler
 from application.handlers.ad_execution.get_creative_strategy_ad_executions_handler import get_creative_strategy_ad_executions_handler
 from application.handlers.ad_execution.delete_ad_execution_handler import delete_ad_execution_handler
-from application.handlers.video_creative_execution.generate_video_creative_execution_handler import generate_video_creative_execution_handler
-from application.handlers.video_creative_execution.get_video_creative_execution_handler import get_video_creative_execution_handler
-from application.handlers.video_creative_execution.get_ad_execution_video_creative_executions_handler import get_ad_execution_video_creative_executions_handler
-from application.handlers.video_creative_execution.delete_video_creative_execution_handler import delete_video_creative_execution_handler
+from application.handlers.creative_execution.generate_creative_execution_handler import generate_creative_execution_handler
+from application.handlers.creative_execution.get_creative_execution_handler import get_creative_execution_handler
+from application.handlers.creative_execution.get_ad_execution_creative_executions_handler import get_ad_execution_creative_executions_handler
+from application.handlers.creative_execution.delete_creative_execution_handler import delete_creative_execution_handler
 from application.handlers.creative_strategy.get_creative_strategy_handler import get_creative_strategy_handler
 from application.handlers.creative_strategy.get_ad_strategy_creative_strategies_handler import get_ad_strategy_creative_strategies_handler
 from application.handlers.creative_strategy.delete_creative_strategy_handler import delete_creative_strategy_handler
@@ -476,30 +476,30 @@ def register_general_routes(router: APIRouter):
 
 
     # -----------------------------
-    # Video creative execution
+    # Creative execution
     # -----------------------------
-    @router.get("/ad-execution/{ad_execution_id}/video-creative-execution/generate")
-    def ad_execution_video_creative_execution_generate(
+    @router.get("/ad-execution/{ad_execution_id}/creative-execution/generate")
+    def ad_execution_creative_execution_generate(
         ad_execution_id: int,
         duration_seconds: int = 15
     ):
-        return generate_video_creative_execution_handler(
+        return generate_creative_execution_handler(
             ad_execution_id=ad_execution_id,
             duration_seconds=duration_seconds
         )
 
-    @router.get("/ad-execution/{ad_execution_id}/video-creative-execution")
-    def get_ad_execution_video_creative_executions( ad_execution_id: int ):
-        return get_ad_execution_video_creative_executions_handler( ad_execution_id=ad_execution_id )
+    @router.get("/ad-execution/{ad_execution_id}/creative-execution")
+    def get_ad_execution_creative_executions( ad_execution_id: int ):
+        return get_ad_execution_creative_executions_handler( ad_execution_id=ad_execution_id )
 
-    @router.get("/video-creative-execution/{id}")
-    def get_video_creative_execution( id: int ):
-        return get_video_creative_execution_handler( id=id )
+    @router.get("/creative-execution/{id}")
+    def get_creative_execution( id: int ):
+        return get_creative_execution_handler( id=id )
 
     # DELETE in future
-    @router.get("/video-creative-execution/{id}/delete")
-    def delete_video_creative_execution_route( id: int ):
-        return delete_video_creative_execution_handler(id=id)
+    @router.get("/creative-execution/{id}/delete")
+    def delete_creative_execution_route( id: int ):
+        return delete_creative_execution_handler(id=id)
 
 
     # -----------------------------

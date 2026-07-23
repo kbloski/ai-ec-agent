@@ -4,10 +4,10 @@ import { DetailShell } from '@/components/DetailShell'
 import { Button } from '@/components/ui/button'
 import { useGetAdExecutionQuery } from '@/features/adExecution/adExecutionApi'
 import {
-  useDeleteVideoCreativeExecutionMutation,
-  useGenerateVideoCreativeExecutionMutation,
-  useListVideoCreativeExecutionForAdExecutionQuery,
-} from '@/features/videoCreativeExecution/videoCreativeExecutionApi'
+  useDeleteCreativeExecutionMutation,
+  useGenerateCreativeExecutionMutation,
+  useListCreativeExecutionForAdExecutionQuery,
+} from '@/features/creativeExecution/creativeExecutionApi'
 
 export default function AdExecutionDetailPage() {
   const id = Number(useParams().id)
@@ -15,9 +15,9 @@ export default function AdExecutionDetailPage() {
 
   const isVideo = data?.creative_type === 'video'
 
-  const list = useListVideoCreativeExecutionForAdExecutionQuery(id, { skip: !isVideo })
-  const [generate, generateState] = useGenerateVideoCreativeExecutionMutation()
-  const [deleteVideoCreativeExecution] = useDeleteVideoCreativeExecutionMutation()
+  const list = useListCreativeExecutionForAdExecutionQuery(id, { skip: !isVideo })
+  const [generate, generateState] = useGenerateCreativeExecutionMutation()
+  const [deleteCreativeExecution] = useDeleteCreativeExecutionMutation()
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -39,7 +39,7 @@ export default function AdExecutionDetailPage() {
     >
       {isVideo && (
         <section className="space-y-3 rounded-lg border p-4">
-          <h2 className="text-lg font-semibold">Video creative execution</h2>
+          <h2 className="text-lg font-semibold">Creative execution</h2>
 
           <form onSubmit={handleSubmit} className="flex flex-wrap items-end gap-2">
             <label className="text-xs">
@@ -66,7 +66,7 @@ export default function AdExecutionDetailPage() {
               {list.data?.map((item) => (
                 <li key={item.id} className="flex items-center gap-2 px-4 py-2.5 hover:bg-accent/50">
                   <Link
-                    to={`/video-creative-execution/${item.id}`}
+                    to={`/creative-execution/${item.id}`}
                     className="flex-1 truncate text-sm hover:underline"
                   >
                     {`#${item.id}`}
@@ -76,7 +76,7 @@ export default function AdExecutionDetailPage() {
                     variant="black"
                     onClick={() => {
                       if (window.confirm('Czy na pewno usunąć ten element?')) {
-                        deleteVideoCreativeExecution({ id: item.id as number, adExecutionId: id })
+                        deleteCreativeExecution({ id: item.id as number, adExecutionId: id })
                       }
                     }}
                   >

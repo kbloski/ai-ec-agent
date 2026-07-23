@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, JSON
+from sqlalchemy import Column, Integer, DateTime, ForeignKey, JSON
 from sqlalchemy.sql import func
 
 from infrastructure.database.db import Base
@@ -6,9 +6,9 @@ from common.mixins.json_serializable import JSONSerializable
 from domain.enums.table_name import TableName
 
 
-class VideoCreativeExecution(Base, JSONSerializable):
+class CreativeExecution(Base, JSONSerializable):
 
-    __tablename__ = TableName.VIDEO_CREATIVE_EXECUTION.value
+    __tablename__ = TableName.CREATIVE_EXECUTIONS.value
 
     # primary key
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -20,14 +20,7 @@ class VideoCreativeExecution(Base, JSONSerializable):
         nullable=False
     )
 
-    duration_seconds = Column(Integer, nullable=True)
-
-    hook_strategy = Column(JSON, nullable=True)
-    structure = Column(JSON, nullable=True)
-    scenes = Column(JSON, nullable=True)
-    asset_requirements = Column(JSON, nullable=True)
-    production_notes = Column(JSON, nullable=True)
-    cta = Column(JSON, nullable=True)
+    content_json = Column(JSON, nullable=False)
 
     # timestamps
     created_at = Column(

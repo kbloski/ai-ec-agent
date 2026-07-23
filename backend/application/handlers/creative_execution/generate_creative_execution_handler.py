@@ -10,8 +10,8 @@ from domain.enums.ollama_message_role import (
     OllamaMessageRole
 )
 
-from domain.models.video_creative_execution.video_creative_execution import (
-    VideoCreativeExecution
+from domain.models.creative_execution.creative_execution import (
+    CreativeExecution
 )
 
 
@@ -296,24 +296,26 @@ Do not write aggressive sales copy.
 
 Before returning:
 
-- Scene durations must equal total video duration.
-- Every section must have scenes.
+- Scene durations must equal the total video duration.
+- Every structure section must have at least one corresponding scene.
 - No empty fields.
 - No null values.
-- Return JSON only.
+- Return valid JSON only.
+- Return the production specification inside the `content` object.
 
 
 # Output Schema
 
 {
-"hook_strategy":{},
-"structure":[],
-"scenes":[],
-"asset_requirements":[],
-"production_notes":{},
-"cta":{}
+  "content": {
+    "hook_strategy": {},
+    "structure": [],
+    "scenes": [],
+    "asset_requirements": [],
+    "production_notes": {},
+    "cta": {}
+  }
 }
-
 """
 
 USER_PROMPT = """
@@ -360,7 +362,7 @@ Duration:
 """
 
 
-def generate_video_creative_execution_handler(
+def generate_creative_execution_handler(
     ad_execution_id: int,
     duration_seconds: int = 15
 ):
@@ -372,8 +374,8 @@ def generate_video_creative_execution_handler(
         container.ad_execution_service()
     )
 
-    video_creative_execution_service = (
-        container.video_creative_execution_service()
+    creative_execution_service = (
+        container.creative_execution_service()
     )
 
 
@@ -551,40 +553,19 @@ def generate_video_creative_execution_handler(
     )
 
 
-    entity = VideoCreativeExecution(
+    content_json = result.get(
+        "content",
+        result
+    )
+
+
+    entity = CreativeExecution(
 
         ad_execution_id=ad_execution_id,
 
-        duration_seconds=duration_seconds,
-
-        hook_strategy=result.get(
-            "hook_strategy"
-        ),
-
-        structure=result.get(
-            "structure",
-            []
-        ),
-
-        scenes=result.get(
-            "scenes",
-            []
-        ),
-
-        asset_requirements=result.get(
-            "asset_requirements",
-            []
-        ),
-
-        production_notes=result.get(
-            "production_notes"
-        ),
-
-        cta=result.get(
-            "cta"
-        )
+        content_json=content_json
 
     )
 
 
-    return video_creative_execution_service.create_video_creative_execution(entity)
+    return creative_execution_service.create_creative_execution(entity)

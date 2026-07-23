@@ -13,7 +13,7 @@ import MessageStrategyDetailPage from '@/pages/MessageStrategyDetailPage'
 import AdStrategyDetailPage from '@/pages/AdStrategyDetailPage'
 import CreativeStrategyDetailPage from '@/pages/CreativeStrategyDetailPage'
 import AdExecutionDetailPage from '@/pages/AdExecutionDetailPage'
-import VideoCreativeExecutionDetailPage from '@/pages/VideoCreativeExecutionDetailPage'
+import CreativeExecutionDetailPage from '@/pages/CreativeExecutionDetailPage'
 import UgcCreativeDetailPage from '@/pages/UgcCreativeDetailPage'
 import PageStrategyDetailPage from '@/pages/PageStrategyDetailPage'
 import PageBlueprintDetailPage from '@/pages/PageBlueprintDetailPage'
@@ -41,7 +41,7 @@ function App() {
         <Route path="/ad-strategy/:id" element={<AdStrategyDetailPage />} />
         <Route path="/creative-strategy/:id" element={<CreativeStrategyDetailPage />} />
         <Route path="/ad-execution/:id" element={<AdExecutionDetailPage />} />
-        <Route path="/video-creative-execution/:id" element={<VideoCreativeExecutionDetailPage />} />
+        <Route path="/creative-execution/:id" element={<CreativeExecutionDetailPage />} />
         <Route path="/ugc-creatives/:id" element={<UgcCreativeDetailPage />} />
         <Route path="/page-strategy/:id" element={<PageStrategyDetailPage />} />
         <Route path="/page-blueprint/:id" element={<PageBlueprintDetailPage />} />
