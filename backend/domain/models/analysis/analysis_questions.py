@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, Text, DateTime, ForeignKey, Float, JSON
+from sqlalchemy import Column, Integer, DateTime, ForeignKey
 from sqlalchemy.sql import func
 
 from common.mixins.json_serializable import JSONSerializable
@@ -17,30 +17,14 @@ class AnalysisQuestion(Base, JSONSerializable):
 
     analysis_id = Column(
         Integer,
-        ForeignKey("analysis.id", ondelete="CASCADE"),
+        ForeignKey(f"{TableName.ANALYSIS.value}.id", ondelete="CASCADE"),
         nullable=False
     )
 
-    question = Column(
-        Text,
-        nullable=False
-    )
-
-    answer = Column(
-        Text,
-        nullable=True
-    )
-
-    # Ocena jakości odpowiedzi 1-10
-    score = Column(
+    question_answer_id = Column(
         Integer,
-        nullable=True
-    )
-
-    # Pewność AI np. 0.92
-    confidence = Column(
-        Float,
-        nullable=True
+        ForeignKey(f"{TableName.QUESTION_ANSWERS.value}.id", ondelete="CASCADE"),
+        nullable=False
     )
 
     created_at = Column(

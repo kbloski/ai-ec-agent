@@ -22,9 +22,10 @@ from domain.models.audience.target_audience import TargetAudience
 from domain.models.checklist.checklist import Checklist
 from domain.models.checklist.checklist_item import ChecklistItem
 
-# Analysis 
+# Analysis
 from domain.models.analysis.analysis import Analysis
 from domain.models.analysis.analysis_questions import AnalysisQuestion
+from domain.models.analysis.question_answer import QuestionAnswer
 
 from domain.models.analysis.knowledge_analysis import KnowledgeAnalysis
 from domain.models.analysis.analysis_checklist import AnalysisChecklist

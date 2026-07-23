@@ -7,6 +7,7 @@ class AnalysisQuestionDto(JSONSerializable):
         self,
         id: int,
         analysis_id: int,
+        question_answer_id: int,
         question: str,
         answer: Optional[str],
         score: Optional[int],
@@ -14,6 +15,7 @@ class AnalysisQuestionDto(JSONSerializable):
     ):
         self.id = id
         self.analysis_id = analysis_id
+        self.question_answer_id = question_answer_id
         self.question = question
         self.answer = answer
         self.score = score
@@ -25,6 +27,7 @@ class AnalysisQuestionDto(JSONSerializable):
         data = {
             "id": self.id,
             "analysis_id": self.analysis_id,
+            "question_answer_id": self.question_answer_id,
             "question": self.question,
             "answer": self.answer,
             "score": self.score,

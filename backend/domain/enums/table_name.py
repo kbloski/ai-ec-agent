@@ -11,6 +11,7 @@ class TableName(str, Enum):
     ANALYSIS = "analysis"
     KNOWLEDGE_ANALYSIS = "knowledge_analysis"
     ANALYSIS_QUESTIONS= "analysis_questions"
+    QUESTION_ANSWERS = "question_answers"
     CHECKLIST = "checklist"
     CHECKLIST_ITEM = "checklist_item"
     ANALYSIS_CHECKLIST = "analysis_checklist"

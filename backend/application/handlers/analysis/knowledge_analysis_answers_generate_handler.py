@@ -9,6 +9,7 @@ from application.mappers.offer_knowledge_mapper import OfferKnowledgeMapper
 from application.mappers.analysis_question_mapper import AnalysisQuestionMapper
 
 from domain.models.analysis.analysis_questions import AnalysisQuestion
+from domain.models.analysis.question_answer import QuestionAnswer
 from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
 from domain.enums.ollama_message_role import OllamaMessageRole
 from domain.analysis.knowledge_analysis_questions import KNOWLEDGE_ANALYSIS_QUESTIONS
@@ -108,6 +109,7 @@ def knowledge_analysis_answers_generate_handler(
     knowledge_analysis_repository = container.knowledge_analysis_repository()
     analysis_repository = container.analysis_repository()
     analysis_questions_repository = container.analysis_questions_repository()
+    question_answer_repository = container.question_answer_repository()
 
     # Get analysis 
     knowledge_analysis_db = knowledge_analysis_repository.find_relation(knowledge_id=knowledge_id,analysis_id=analyse_id)
@@ -158,16 +160,27 @@ def knowledge_analysis_answers_generate_handler(
     logger.info(f"Knowledge analysis completed for knowledge_id={knowledge_id}, total_answers={len(final_analysis_questions_dicts)}")
     
     
-    # Analysis_questions insert to db
-    analysis_questions = [ AnalysisQuestion(
-        analysis_id=analyse_db.id,
+    # QuestionAnswer insert to db
+    question_answers = [ QuestionAnswer(
         question=a["question"],
         answer=a["answer"],
         score=a["score"],
         confidence=a["confidence"]
     ) for a in final_analysis_questions_dicts]
 
+    question_answers_db = question_answer_repository.create_many(items=question_answers)
+
+    # AnalysisQuestion (link) insert to db
+    analysis_questions = [ AnalysisQuestion(
+        analysis_id=analyse_db.id,
+        question_answer_id=qa.id
+    ) for qa in question_answers_db]
+
     analysis_questions_db = analysis_questions_repository.create_many(items=analysis_questions)
-    analysis_questions_dtos = [ AnalysisQuestionMapper.to_dto(aq) for aq in analysis_questions_db]
+
+    analysis_questions_dtos = [
+        AnalysisQuestionMapper.to_dto(aq, qa)
+        for aq, qa in zip(analysis_questions_db, question_answers_db)
+    ]
 
     return analysis_questions_dtos

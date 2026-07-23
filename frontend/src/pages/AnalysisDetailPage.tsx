@@ -35,7 +35,7 @@ export default function AnalysisDetailPage() {
       data={analysis}
       isLoading={isLoading}
       error={error}
-      exclude={['anlysis_questions']}
+      exclude={['analysis_questions']}
     >
       <div>
         <Button
@@ -62,7 +62,7 @@ export default function AnalysisDetailPage() {
 
       <ResourceList
         title="Pytania"
-        items={analysis?.anlysis_questions as Entity[] | undefined}
+        items={analysis?.analysis_questions as Entity[] | undefined}
         isLoading={isLoading}
         error={error}
         itemLabel={(item) => (item.question as string) ?? `#${item.id}`}
