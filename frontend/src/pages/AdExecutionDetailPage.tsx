@@ -14,8 +14,10 @@ export default function AdExecutionDetailPage() {
   const { data, isLoading, error } = useGetAdExecutionQuery(id)
 
   const isVideo = data?.creative_type === 'video'
+  const isImage = data?.creative_type === 'image'
+  const isGeneratable = isVideo || isImage
 
-  const list = useListCreativeExecutionForAdExecutionQuery(id, { skip: !isVideo })
+  const list = useListCreativeExecutionForAdExecutionQuery(id, { skip: !isGeneratable })
   const [generate, generateState] = useGenerateCreativeExecutionMutation()
   const [deleteCreativeExecution] = useDeleteCreativeExecutionMutation()
 
@@ -37,22 +39,24 @@ export default function AdExecutionDetailPage() {
       isLoading={isLoading}
       error={error}
     >
-      {isVideo && (
+      {isGeneratable && (
         <section className="space-y-3 rounded-lg border p-4">
           <h2 className="text-lg font-semibold">Creative execution</h2>
 
           <form onSubmit={handleSubmit} className="flex flex-wrap items-end gap-2">
-            <label className="text-xs">
-              Czas trwania (s)
-              <input
-                name="duration_seconds"
-                type="number"
-                defaultValue={15}
-                className="block w-28 rounded-md border px-2 py-1 text-sm"
-              />
-            </label>
+            {isVideo && (
+              <label className="text-xs">
+                Czas trwania (s)
+                <input
+                  name="duration_seconds"
+                  type="number"
+                  defaultValue={15}
+                  className="block w-28 rounded-md border px-2 py-1 text-sm"
+                />
+              </label>
+            )}
             <Button type="submit" size="sm" disabled={generateState.isLoading}>
-              {generateState.isLoading ? 'Generowanie…' : 'Generuj video creative execution'}
+              {generateState.isLoading ? 'Generowanie…' : 'Generuj creative execution'}
             </Button>
           </form>
 

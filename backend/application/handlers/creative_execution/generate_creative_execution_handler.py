@@ -641,7 +641,7 @@ Przed zwróceniem odpowiedzi:
 
 
 USER_PROMPT = """
-Generate video creative execution.
+Generate creative execution.
 
 AD EXECUTION:
 
@@ -831,31 +831,25 @@ def generate_creative_execution_handler(
     )
 
 
-    messages = []
-    if (ad_execution.format == CreativeTypes.VIDEO.value):
-        messages = [
-            LlmOllamaMessage(
-                role=OllamaMessageRole.SYSTEM,
-                content=VIDEO_CREATIVE_EXECUTION_PROMPT 
-            ),
-            LlmOllamaMessage(
-                role=OllamaMessageRole.USER,
-                content=prompt
-            )
-        ]
-    elif (ad_execution.format == CreativeTypes.IMAGE.value):
-        messages = [
-            LlmOllamaMessage(
-                role=OllamaMessageRole.SYSTEM,
-                content=IMAGE_CREATIVE_EXECUTION_PROMPT 
-            ),
-            LlmOllamaMessage(
-                role=OllamaMessageRole.USER,
-                content=prompt
-            )
-        ]
+    if (ad_execution.creative_type == CreativeTypes.VIDEO.value):
+        system_prompt = VIDEO_CREATIVE_EXECUTION_PROMPT
+    elif (ad_execution.creative_type == CreativeTypes.IMAGE.value):
+        system_prompt = IMAGE_CREATIVE_EXECUTION_PROMPT
     else:
-        None
+        raise ValueError(
+            f"Creative execution generation is not supported for creative type: {ad_execution.creative_type}"
+        )
+
+    messages = [
+        LlmOllamaMessage(
+            role=OllamaMessageRole.SYSTEM,
+            content=system_prompt
+        ),
+        LlmOllamaMessage(
+            role=OllamaMessageRole.USER,
+            content=prompt
+        )
+    ]
 
 
 
