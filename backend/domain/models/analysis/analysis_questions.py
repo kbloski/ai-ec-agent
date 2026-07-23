@@ -43,18 +43,6 @@ class AnalysisQuestion(Base, JSONSerializable):
         nullable=True
     )
 
-    # np. "problem", "customer", "emotion", "purchase_intent"
-    # category = Column(
-    #     Text,
-    #     nullable=True
-    # )
-
-    # dodatkowe dane analizy
-    # metadata = Column(
-    #     JSON,
-    #     nullable=True
-    # )
-
     created_at = Column(
         DateTime(timezone=True),
         server_default=func.now()
