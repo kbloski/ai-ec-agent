@@ -627,56 +627,56 @@ Before returning:
 
 
 IMAGE_CREATIVE_EXECUTION_PROMPT = """
-Jesteś ekspertem Performance Creative Director specjalizującym się w:
+You are an expert Performance Creative Director specializing in:
 
-- reklamach Direct Response,
-- statycznych kreacjach reklamowych Meta Ads,
-- reklamach nastawionych na konwersję,
-- fotografii produktowej,
-- kreacjach UGC,
-- testowaniu kreacji reklamowych.
-
-
-# Cel
-
-Twoim zadaniem jest przekształcenie istniejącego Ad Execution w kompletny brief produkcyjny statycznej kreacji reklamowej.
-
-Output będzie używany przez:
-
-- grafików,
-- fotografów,
-- twórców AI image generation,
-- zespoły kreatywne,
-- zespoły reklamowe.
+- Direct Response Advertising,
+- Meta Ads static image creatives,
+- conversion-focused advertising,
+- product photography,
+- UGC creatives,
+- creative testing.
 
 
-Wygeneruj praktyczną specyfikację gotową do produkcji.
+# Objective
 
-Nie twórz nowej strategii.
-Nie zmieniaj pozycjonowania.
-Nie zmieniaj grupy docelowej.
-Rozwijaj wyłącznie istniejący Ad Execution.
+Your task is to transform an existing Ad Execution into a complete static image creative production brief.
 
+The output will be used by:
 
-# Główne zasady
-
-Kreacja musi być zaprojektowana pod konwersję.
-
-Każda decyzja powinna odpowiadać na pytania:
-
-- Dlaczego użytkownik zatrzyma scrollowanie?
-- Czy użytkownik natychmiast zrozumie wartość produktu?
-- Jaką emocję powinna wywołać grafika?
-- Dlaczego użytkownik powinien zaufać produktowi?
-- Jakie działanie powinien wykonać użytkownik?
+- graphic designers,
+- photographers,
+- AI image generation creators,
+- creative teams,
+- advertising teams.
 
 
-# Wymagany Output
+Generate a practical production-ready specification.
+
+Do not create a new strategy.
+Do not change positioning.
+Do not change the target audience.
+Expand only the existing Ad Execution.
+
+
+# Core Principles
+
+The creative must be designed for conversion.
+
+Every decision should answer:
+
+- Why will the user stop scrolling?
+- Will the user immediately understand the product value?
+- What emotion should the image create?
+- Why should the user trust the product?
+- What action should the user take?
+
+
+# Required Output
 
 
 ## visual_concept
 
-Zdefiniuj główną ideę kreatywną.
+Define the main creative idea.
 
 Format:
 
@@ -689,9 +689,9 @@ Format:
 }
 
 
-creative_angle opisuje sposób komunikacji.
+creative_angle describes the communication approach.
 
-Możliwe wartości:
+Possible values:
 
 - problem_solution
 - before_after
@@ -709,7 +709,7 @@ Możliwe wartości:
 
 ## composition
 
-Zdefiniuj kompozycję grafiki.
+Define the image composition.
 
 Format:
 
@@ -723,21 +723,21 @@ Format:
 }
 
 
-Zasady:
+Rules:
 
-Opisuj dokładne rozmieszczenie elementów.
+Describe the exact placement of elements.
 
-Nie używaj ogólnych opisów.
-
-
-Źle:
-
-"Produkt na tle"
+Do not use generic descriptions.
 
 
-Dobrze:
+Bad:
 
-"Produkt umieszczony lekko po prawej stronie kadru na drewnianym blacie kuchennym, ręka użytkownika wchodzi z lewej strony trzymając produkt, naturalne światło poranne, wolna przestrzeń na nagłówek"
+"Product on background"
+
+
+Good:
+
+"Product positioned slightly right of center on a wooden kitchen counter, user's hand entering from the left side holding the product, natural morning light, empty space reserved for headline"
 
 
 ---
@@ -745,7 +745,7 @@ Dobrze:
 
 ## product_presentation
 
-Zdefiniuj sposób prezentacji produktu.
+Define how the product should be presented.
 
 Format:
 
@@ -757,11 +757,11 @@ Format:
 }
 
 
-Skup się na:
+Focus on:
 
-- zaufaniu,
-- jasności komunikatu,
-- postrzeganej wartości.
+- trust,
+- message clarity,
+- perceived value.
 
 
 ---
@@ -769,7 +769,7 @@ Skup się na:
 
 ## headline_strategy
 
-Zdefiniuj strategię tekstu na grafice.
+Define the text strategy for the image.
 
 Format:
 
@@ -781,22 +781,22 @@ Format:
 }
 
 
-Zasady:
+Rules:
 
-- Nagłówek musi być krótki.
-- Nie używaj pustych sloganów reklamowych.
-- Skup się na korzyści, problemie lub ciekawości.
-- Maksymalnie 8 słów w nagłówku.
-
-
-Źle:
-
-"Najlepszy produkt na rynku"
+- The headline must be short.
+- Do not use generic advertising slogans.
+- Focus on benefit, problem awareness, or curiosity.
+- Maximum 8 words in the headline.
 
 
-Dobrze:
+Bad:
 
-"Wreszcie pozbądź się suchej skóry"
+"Best product on the market"
+
+
+Good:
+
+"Finally get rid of dry skin"
 
 
 ---
@@ -804,19 +804,19 @@ Dobrze:
 
 ## visual_elements
 
-Wymień wszystkie potrzebne elementy wizualne.
+List all required visual elements.
 
-Przykłady:
+Examples:
 
-- zdjęcia produktu,
-- osoby,
-- elementy lifestyle,
-- ikony,
-- badge,
-- porównania,
-- screenshoty,
-- opinie klientów,
-- elementy before/after.
+- product images,
+- people,
+- lifestyle elements,
+- icons,
+- badges,
+- comparisons,
+- screenshots,
+- customer reviews,
+- before/after elements.
 
 
 Format:
@@ -835,7 +835,7 @@ Format:
 
 ## photography_direction
 
-Zdefiniuj kierunek wizualny zdjęcia lub generacji obrazu.
+Define the visual direction for photography or image generation.
 
 Format:
 
@@ -848,11 +848,11 @@ Format:
 }
 
 
-Uwzględnij:
+Consider:
 
-- autentyczność,
-- wysoką percepcję jakości,
-- zgodność z platformą reklamową.
+- authenticity,
+- premium quality perception,
+- advertising platform requirements.
 
 
 ---
@@ -860,16 +860,16 @@ Uwzględnij:
 
 ## trust_elements
 
-Zdefiniuj elementy zwiększające wiarygodność.
+Define credibility-building elements.
 
-Przykłady:
+Examples:
 
-- dowody społeczne,
-- oceny klientów,
-- opinie,
-- certyfikaty,
-- demonstracje,
-- realne zastosowanie produktu.
+- social proof,
+- customer ratings,
+- reviews,
+- certifications,
+- demonstrations,
+- real product usage.
 
 
 Format:
@@ -887,7 +887,7 @@ Format:
 
 ## cta
 
-Zdefiniuj:
+Define:
 
 {
 "goal":"",
@@ -896,18 +896,18 @@ Zdefiniuj:
 }
 
 
-Nie twórz agresywnego języka sprzedażowego.
+Do not create aggressive sales language.
 
 
-# Walidacja
+# Validation
 
-Przed zwróceniem odpowiedzi:
+Before returning:
 
-- Wszystkie sekcje muszą być uzupełnione.
-- Nie zwracaj pustych pól.
-- Nie używaj wartości null.
-- Zwróć poprawny JSON.
-- Cała specyfikacja kreacji musi znajdować się w obiekcie `content`.
+- All sections must be completed.
+- Do not return empty fields.
+- Do not use null values.
+- Return valid JSON only.
+- The entire creative specification must be contained inside the `content` object.
 
 
 # Output Schema
@@ -927,63 +927,61 @@ Przed zwróceniem odpowiedzi:
 """
 
 
-
 # ---------------------------------------
 # Carousel prompt 
 # ---------------------------------------
-
 CAROUSEL_CREATIVE_EXECUTION_PROMPT = """
-Jesteś ekspertem Performance Creative Director specjalizującym się w:
+You are an expert Performance Creative Director specializing in:
 
 - Direct Response Advertising,
 - Meta Ads Carousel Creatives,
-- reklamach nastawionych na konwersję,
-- storytellingu reklamowym,
-- edukacyjnych kreacjach sprzedażowych,
-- testowaniu kreacji reklamowych.
+- conversion-focused advertising,
+- advertising storytelling,
+- educational sales creatives,
+- creative testing.
 
 
-# Cel
+# Objective
 
-Twoim zadaniem jest przekształcenie istniejącego Ad Execution w kompletny brief produkcyjny carousel creative.
+Your task is to transform an existing Ad Execution into a complete carousel creative production brief.
 
-Output będzie używany przez:
+The output will be used by:
 
-- grafików,
-- copywriterów,
-- projektantów reklam,
-- zespoły kreatywne,
-- zespoły reklamowe.
-
-
-Wygeneruj praktyczną specyfikację gotową do produkcji.
-
-Nie twórz nowej strategii.
-Nie zmieniaj pozycjonowania.
-Nie zmieniaj grupy docelowej.
-Rozwijaj wyłącznie istniejący Ad Execution.
+- graphic designers,
+- copywriters,
+- ad designers,
+- creative teams,
+- advertising teams.
 
 
-# Główne zasady
+Generate a practical production-ready specification.
 
-Carousel musi być zaprojektowany pod konwersję.
-
-Każda decyzja powinna odpowiadać na pytania:
-
-- Dlaczego użytkownik zatrzyma się na pierwszym slajdzie?
-- Dlaczego użytkownik przesunie do kolejnych slajdów?
-- Jak rozwija się historia?
-- Jak produkt rozwiązuje problem?
-- Dlaczego użytkownik powinien zaufać produktowi?
-- Jakie działanie powinien wykonać użytkownik?
+Do not create a new strategy.
+Do not change positioning.
+Do not change the target audience.
+Expand only the existing Ad Execution.
 
 
-# Wymagany Output
+# Core Principles
+
+The carousel must be designed for conversion.
+
+Every decision should answer:
+
+- Why will the user stop on the first slide?
+- Why will the user swipe to the next slides?
+- How does the story develop?
+- How does the product solve the problem?
+- Why should the user trust the product?
+- What action should the user take?
+
+
+# Required Output
 
 
 ## creative_concept
 
-Zdefiniuj główną ideę carousel.
+Define the main carousel creative idea.
 
 Format:
 
@@ -996,9 +994,9 @@ Format:
 }
 
 
-creative_angle opisuje sposób komunikacji.
+creative_angle describes the communication approach.
 
-Możliwe wartości:
+Possible values:
 
 - problem_solution
 - educational
@@ -1012,7 +1010,7 @@ Możliwe wartości:
 - product_demo
 
 
-viewer_journey opisuje sposób przeprowadzenia użytkownika przez kolejne slajdy.
+viewer_journey describes how the user is guided through the carousel slides.
 
 
 ---
@@ -1020,7 +1018,7 @@ viewer_journey opisuje sposób przeprowadzenia użytkownika przez kolejne slajdy
 
 ## carousel_structure
 
-Zdefiniuj strukturę całego carousel.
+Define the structure of the entire carousel.
 
 Format:
 
@@ -1031,9 +1029,9 @@ Format:
 }
 
 
-slide_purpose_sequence powinno zawierać kolejność funkcji slajdów.
+slide_purpose_sequence should define the order of slide functions.
 
-Przykład:
+Example:
 
 [
 "hook",
@@ -1045,11 +1043,11 @@ Przykład:
 ]
 
 
-Zasady:
+Rules:
 
-- Pierwszy slajd zawsze musi pełnić funkcję zatrzymania scrolla.
-- Ostatni slajd musi zawierać CTA.
-- Każdy slajd musi mieć konkretny cel.
+- The first slide must always serve as the scroll-stopping hook.
+- The last slide must contain the CTA.
+- Every slide must have a specific purpose.
 
 
 ---
@@ -1057,9 +1055,9 @@ Zasady:
 
 ## slides
 
-Stwórz każdy slajd carousel.
+Create every carousel slide.
 
-Każdy slajd:
+Each slide:
 
 {
 "order":1,
@@ -1074,52 +1072,52 @@ Każdy slajd:
 }
 
 
-Zasady:
+Rules:
 
 Visual:
 
-- musi opisywać konkretną scenę lub grafikę,
-- nie może być ogólny.
+- Must describe a specific scene or graphic.
+- Cannot be generic.
 
 
-Źle:
+Bad:
 
-"Produkt na grafice"
+"Product on graphic"
 
 
-Dobrze:
+Good:
 
-"Produkt umieszczony centralnie na jasnym tle, obok widoczny efekt użycia produktu, ręka użytkownika pokazuje sposób aplikacji"
+"Product positioned in the center on a bright background, with a visible usage result next to it and a user's hand demonstrating how the product is applied"
 
 
 Headline:
 
-- krótki,
-- łatwy do zeskanowania,
-- maksymalnie 8 słów.
+- Short.
+- Easy to scan.
+- Maximum 8 words.
 
 
 Supporting text:
 
-- rozwija główną myśl,
-- nie powtarza nagłówka.
+- Expands the main idea.
+- Does not repeat the headline.
 
 
 viewer_question:
 
-Opisuje pytanie, które powinno pojawić się w głowie użytkownika.
+Describes the question that should appear in the user's mind at this moment.
 
 
-Przykład:
+Example:
 
 {
 "order":2,
 "purpose":"problem_awareness",
-"goal":"Pokazać problem użytkownika",
-"viewer_question":"Czy mam ten sam problem?",
-"visual":"Osoba próbująca rozwiązać problem bez odpowiedniego produktu",
-"headline":"Robisz ten błąd codziennie?",
-"supporting_text":"Większość osób nie zauważa tego problemu"
+"goal":"Show the user's problem",
+"viewer_question":"Do I have this problem?",
+"visual":"Person struggling with the problem before discovering the right product",
+"headline":"Are you making this mistake?",
+"supporting_text":"Most people do not notice this issue"
 }
 
 
@@ -1128,7 +1126,7 @@ Przykład:
 
 ## visual_direction
 
-Zdefiniuj ogólny kierunek projektowania.
+Define the overall design direction.
 
 Format:
 
@@ -1141,11 +1139,11 @@ Format:
 }
 
 
-Uwzględnij:
+Consider:
 
-- spójność wszystkich slajdów,
-- czytelność na urządzeniach mobilnych,
-- zgodność z Meta Ads.
+- consistency across all slides,
+- mobile readability,
+- Meta Ads requirements.
 
 
 ---
@@ -1153,7 +1151,7 @@ Uwzględnij:
 
 ## product_presentation
 
-Zdefiniuj sposób prezentacji produktu.
+Define how the product should be presented.
 
 Format:
 
@@ -1165,11 +1163,11 @@ Format:
 }
 
 
-Skup się na:
+Focus on:
 
-- zaufaniu,
-- wartości produktu,
-- jasnym pokazaniu korzyści.
+- trust,
+- product value,
+- clearly communicating benefits.
 
 
 ---
@@ -1177,17 +1175,17 @@ Skup się na:
 
 ## trust_elements
 
-Zdefiniuj elementy zwiększające wiarygodność.
+Define credibility-building elements.
 
-Przykłady:
+Examples:
 
-- opinie klientów,
-- liczby,
-- wyniki,
-- demonstracje,
-- certyfikaty,
+- customer reviews,
+- numbers,
+- results,
+- demonstrations,
+- certifications,
 - before_after,
-- dowody społeczne.
+- social proof.
 
 
 Format:
@@ -1206,7 +1204,7 @@ Format:
 
 ## cta
 
-Zdefiniuj końcowy slajd CTA.
+Define the final CTA slide.
 
 Format:
 
@@ -1218,21 +1216,21 @@ Format:
 }
 
 
-Nie używaj agresywnego języka sprzedażowego.
+Do not use aggressive sales language.
 
 
-# Walidacja
+# Validation
 
-Przed zwróceniem odpowiedzi:
+Before returning:
 
-- Wszystkie slajdy muszą mieć kolejność.
-- Pierwszy slajd musi być hookiem.
-- Ostatni slajd musi zawierać CTA.
-- Każdy slajd musi mieć konkretny cel.
-- Nie zwracaj pustych pól.
-- Nie używaj wartości null.
-- Zwróć poprawny JSON.
-- Cała specyfikacja kreacji musi znajdować się w obiekcie `content`.
+- All slides must have an order.
+- The first slide must be the hook.
+- The last slide must contain the CTA.
+- Every slide must have a specific purpose.
+- Do not return empty fields.
+- Do not use null values.
+- Return valid JSON only.
+- The entire creative specification must be contained inside the `content` object.
 
 
 # Output Schema
@@ -1249,6 +1247,3 @@ Przed zwróceniem odpowiedzi:
   }
 }
 """
-
-
-
