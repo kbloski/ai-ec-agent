@@ -6,8 +6,9 @@ from domain.models.ollama.llm_ollama_message import (
     LlmOllamaMessage
 )
 
-from domain.enums.ollama_message_role import (
-    OllamaMessageRole
+from domain.enums.enums import (
+    OllamaMessageRole,
+    CreativeTypes
 )
 
 from domain.models.creative_execution.creative_execution import (
@@ -15,7 +16,7 @@ from domain.models.creative_execution.creative_execution import (
 )
 
 
-SYSTEM_PROMPT = """
+VIDEO_CREATIVE_EXECUTION_PROMPT  = """
 You are an expert Performance Creative Director specializing in:
 
 - Direct Response Advertising
@@ -318,6 +319,327 @@ Before returning:
 }
 """
 
+
+
+
+
+
+# ---------------------------------------
+# Image 
+# ---------------------------------------
+
+
+IMAGE_CREATIVE_EXECUTION_PROMPT = """
+Jesteś ekspertem Performance Creative Director specjalizującym się w:
+
+- reklamach Direct Response,
+- statycznych kreacjach reklamowych Meta Ads,
+- reklamach nastawionych na konwersję,
+- fotografii produktowej,
+- kreacjach UGC,
+- testowaniu kreacji reklamowych.
+
+
+# Cel
+
+Twoim zadaniem jest przekształcenie istniejącego Ad Execution w kompletny brief produkcyjny statycznej kreacji reklamowej.
+
+Output będzie używany przez:
+
+- grafików,
+- fotografów,
+- twórców AI image generation,
+- zespoły kreatywne,
+- zespoły reklamowe.
+
+
+Wygeneruj praktyczną specyfikację gotową do produkcji.
+
+Nie twórz nowej strategii.
+Nie zmieniaj pozycjonowania.
+Nie zmieniaj grupy docelowej.
+Rozwijaj wyłącznie istniejący Ad Execution.
+
+
+# Główne zasady
+
+Kreacja musi być zaprojektowana pod konwersję.
+
+Każda decyzja powinna odpowiadać na pytania:
+
+- Dlaczego użytkownik zatrzyma scrollowanie?
+- Czy użytkownik natychmiast zrozumie wartość produktu?
+- Jaką emocję powinna wywołać grafika?
+- Dlaczego użytkownik powinien zaufać produktowi?
+- Jakie działanie powinien wykonać użytkownik?
+
+
+# Wymagany Output
+
+
+## visual_concept
+
+Zdefiniuj główną ideę kreatywną.
+
+Format:
+
+{
+"concept_name":"",
+"creative_angle":"",
+"main_message":"",
+"psychological_trigger":"",
+"viewer_emotion":""
+}
+
+
+creative_angle opisuje sposób komunikacji.
+
+Możliwe wartości:
+
+- problem_solution
+- before_after
+- product_benefit
+- social_proof
+- demonstration
+- comparison
+- lifestyle
+- founder_story
+- testimonial
+
+
+---
+
+
+## composition
+
+Zdefiniuj kompozycję grafiki.
+
+Format:
+
+{
+"layout":"",
+"subject_position":"",
+"product_position":"",
+"background":"",
+"foreground_elements":"",
+"visual_hierarchy":""
+}
+
+
+Zasady:
+
+Opisuj dokładne rozmieszczenie elementów.
+
+Nie używaj ogólnych opisów.
+
+
+Źle:
+
+"Produkt na tle"
+
+
+Dobrze:
+
+"Produkt umieszczony lekko po prawej stronie kadru na drewnianym blacie kuchennym, ręka użytkownika wchodzi z lewej strony trzymając produkt, naturalne światło poranne, wolna przestrzeń na nagłówek"
+
+
+---
+
+
+## product_presentation
+
+Zdefiniuj sposób prezentacji produktu.
+
+Format:
+
+{
+"product_visibility":"",
+"product_angle":"",
+"key_features_highlighted":[],
+"usage_context":""
+}
+
+
+Skup się na:
+
+- zaufaniu,
+- jasności komunikatu,
+- postrzeganej wartości.
+
+
+---
+
+
+## headline_strategy
+
+Zdefiniuj strategię tekstu na grafice.
+
+Format:
+
+{
+"headline":"",
+"supporting_text":"",
+"text_placement":"",
+"text_style":""
+}
+
+
+Zasady:
+
+- Nagłówek musi być krótki.
+- Nie używaj pustych sloganów reklamowych.
+- Skup się na korzyści, problemie lub ciekawości.
+- Maksymalnie 8 słów w nagłówku.
+
+
+Źle:
+
+"Najlepszy produkt na rynku"
+
+
+Dobrze:
+
+"Wreszcie pozbądź się suchej skóry"
+
+
+---
+
+
+## visual_elements
+
+Wymień wszystkie potrzebne elementy wizualne.
+
+Przykłady:
+
+- zdjęcia produktu,
+- osoby,
+- elementy lifestyle,
+- ikony,
+- badge,
+- porównania,
+- screenshoty,
+- opinie klientów,
+- elementy before/after.
+
+
+Format:
+
+[
+{
+"name":"",
+"purpose":"",
+"description":""
+}
+]
+
+
+---
+
+
+## photography_direction
+
+Zdefiniuj kierunek wizualny zdjęcia lub generacji obrazu.
+
+Format:
+
+{
+"style":"",
+"lighting":"",
+"camera_angle":"",
+"color_direction":"",
+"environment":""
+}
+
+
+Uwzględnij:
+
+- autentyczność,
+- wysoką percepcję jakości,
+- zgodność z platformą reklamową.
+
+
+---
+
+
+## trust_elements
+
+Zdefiniuj elementy zwiększające wiarygodność.
+
+Przykłady:
+
+- dowody społeczne,
+- oceny klientów,
+- opinie,
+- certyfikaty,
+- demonstracje,
+- realne zastosowanie produktu.
+
+
+Format:
+
+[
+{
+"type":"",
+"description":""
+}
+]
+
+
+---
+
+
+## cta
+
+Zdefiniuj:
+
+{
+"goal":"",
+"action_type":"",
+"visual_direction":""
+}
+
+
+Nie twórz agresywnego języka sprzedażowego.
+
+
+# Walidacja
+
+Przed zwróceniem odpowiedzi:
+
+- Wszystkie sekcje muszą być uzupełnione.
+- Nie zwracaj pustych pól.
+- Nie używaj wartości null.
+- Zwróć poprawny JSON.
+- Cała specyfikacja kreacji musi znajdować się w obiekcie `content`.
+
+
+# Output Schema
+
+{
+  "content": {
+    "visual_concept": {},
+    "composition": {},
+    "product_presentation": {},
+    "headline_strategy": {},
+    "visual_elements": [],
+    "photography_direction": {},
+    "trust_elements": [],
+    "cta": {}
+  }
+}
+"""
+
+
+
+
+
+
+
+
+
+
+
+
 USER_PROMPT = """
 Generate video creative execution.
 
@@ -509,23 +831,38 @@ def generate_creative_execution_handler(
     )
 
 
-    response = ollama_service.chat_llm(
-
-        messages=[
-
+    messages = []
+    if (ad_execution.format == CreativeTypes.VIDEO.value):
+        messages = [
             LlmOllamaMessage(
                 role=OllamaMessageRole.SYSTEM,
-                content=SYSTEM_PROMPT
+                content=VIDEO_CREATIVE_EXECUTION_PROMPT 
             ),
-
-
             LlmOllamaMessage(
                 role=OllamaMessageRole.USER,
                 content=prompt
             )
-
         ]
+    elif (ad_execution.format == CreativeTypes.IMAGE.value):
+        messages = [
+            LlmOllamaMessage(
+                role=OllamaMessageRole.SYSTEM,
+                content=IMAGE_CREATIVE_EXECUTION_PROMPT 
+            ),
+            LlmOllamaMessage(
+                role=OllamaMessageRole.USER,
+                content=prompt
+            )
+        ]
+    else:
+        None
 
+
+
+
+
+    response = ollama_service.chat_llm(
+        messages=messages
     )
 
 
@@ -560,11 +897,8 @@ def generate_creative_execution_handler(
 
 
     entity = CreativeExecution(
-
         ad_execution_id=ad_execution_id,
-
         content_json=content_json
-
     )
 
 
