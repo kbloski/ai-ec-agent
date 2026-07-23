@@ -15,7 +15,8 @@ export default function AdExecutionDetailPage() {
 
   const isVideo = data?.creative_type === 'video'
   const isImage = data?.creative_type === 'image'
-  const isGeneratable = isVideo || isImage
+  const isCarousel = data?.creative_type === 'carousel'
+  const isGeneratable = isVideo || isImage || isCarousel
 
   const list = useListCreativeExecutionForAdExecutionQuery(id, { skip: !isGeneratable })
   const [generate, generateState] = useGenerateCreativeExecutionMutation()
@@ -24,9 +25,13 @@ export default function AdExecutionDetailPage() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
+    const durationRaw = formData.get('duration_seconds')
+    const slidesRaw = formData.get('number_of_slides')
+
     await generate({
       adExecutionId: id,
-      duration_seconds: Number(formData.get('duration_seconds')) || 15,
+      ...(durationRaw ? { duration_seconds: Number(durationRaw) } : {}),
+      ...(slidesRaw ? { number_of_slides: Number(slidesRaw) } : {}),
     }).unwrap()
   }
 
@@ -51,6 +56,17 @@ export default function AdExecutionDetailPage() {
                   name="duration_seconds"
                   type="number"
                   defaultValue={15}
+                  className="block w-28 rounded-md border px-2 py-1 text-sm"
+                />
+              </label>
+            )}
+            {isCarousel && (
+              <label className="text-xs">
+                Liczba slajdów
+                <input
+                  name="number_of_slides"
+                  type="number"
+                  defaultValue={5}
                   className="block w-28 rounded-md border px-2 py-1 text-sm"
                 />
               </label>

@@ -17,7 +17,7 @@ export const creativeExecutionApi = api.injectEndpoints({
     }),
     generateCreativeExecution: builder.mutation<
       Entity,
-      { adExecutionId: number; duration_seconds?: number }
+      { adExecutionId: number; duration_seconds?: number; number_of_slides?: number }
     >({
       query: ({ adExecutionId, ...params }) => ({
         url: `/ad-execution/${adExecutionId}/creative-execution/generate`,

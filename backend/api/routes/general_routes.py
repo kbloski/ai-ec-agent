@@ -481,11 +481,13 @@ def register_general_routes(router: APIRouter):
     @router.get("/ad-execution/{ad_execution_id}/creative-execution/generate")
     def ad_execution_creative_execution_generate(
         ad_execution_id: int,
-        duration_seconds: int = 15
+        duration_seconds: int | None = None,
+        number_of_slides: int | None = None
     ):
         return generate_creative_execution_handler(
             ad_execution_id=ad_execution_id,
-            duration_seconds=duration_seconds
+            duration_seconds=duration_seconds,
+            number_of_slides=number_of_slides
         )
 
     @router.get("/ad-execution/{ad_execution_id}/creative-execution")

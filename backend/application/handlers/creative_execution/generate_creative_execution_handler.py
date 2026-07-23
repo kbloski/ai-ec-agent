@@ -1,5 +1,7 @@
 import json
 
+from typing import Optional
+
 from di.container import Container
 
 from domain.models.ollama.llm_ollama_message import (
@@ -15,6 +17,301 @@ from domain.models.creative_execution.creative_execution import (
     CreativeExecution
 )
 
+
+
+
+
+
+USER_PROMPT = """
+Generate creative execution.
+
+AD EXECUTION:
+
+{ad_execution}
+
+
+CREATIVE STRATEGY:
+
+{creative_strategy}
+
+
+BRAND STRATEGY:
+
+{brand_strategy}
+
+
+MARKETING STRATEGY:
+
+{marketing_strategy}
+
+
+OFFER STRATEGY:
+
+{offer_strategy}
+
+
+MESSAGE STRATEGY:
+
+{message_strategy}
+
+
+AD STRATEGY:
+
+{ad_strategy}
+"""
+
+
+def generate_creative_execution_handler(
+    ad_execution_id: int,
+    duration_seconds: Optional[int] = None,
+    number_of_slides: Optional[int] = None
+):
+
+    container = Container()
+
+
+    ad_execution_service = (
+        container.ad_execution_service()
+    )
+
+    creative_execution_service = (
+        container.creative_execution_service()
+    )
+
+
+    ollama_service = (
+        container.ollama_service()
+    )
+
+
+    creative_strategy_service = (
+        container.creative_strategy_service()
+    )
+
+    brand_marketing_service = (
+        container.brand_marketing_service()
+    )
+
+    marketing_strategy_service = (
+        container.marketing_strategy_service()
+    )
+
+    offer_strategy_service = (
+        container.offer_strategy_service()
+    )
+
+    message_strategy_service = (
+        container.message_strategy_service()
+    )
+
+    ad_strategy_service = (
+        container.ad_strategy_service()
+    )
+
+
+    ad_execution = (
+        ad_execution_service
+        .get_ad_execution_by_id(
+            ad_execution_id
+        )
+    )
+
+
+    creative_strategy = (
+        creative_strategy_service
+        .get_creative_strategy_by_id(
+            ad_execution.creative_strategy_id
+        )
+    )
+
+
+    ad_strategy = (
+        ad_strategy_service
+        .get_ad_strategy_by_id(
+            creative_strategy.ad_strategy_id
+        )
+    )
+
+
+    message_strategy = (
+        message_strategy_service
+        .get_message_strategy_by_id(
+            ad_strategy.message_strategy_id
+        )
+    )
+
+
+    offer_strategy = (
+        offer_strategy_service
+        .get_offer_strategy_by_id(
+            message_strategy.offer_strategy_id
+        )
+    )
+
+
+    marketing_strategy = (
+        marketing_strategy_service
+        .get_marketing_strategy_by_id(
+            offer_strategy.marketing_strategy_id
+        )
+    )
+
+
+    brand_strategy = (
+        brand_marketing_service
+        .get_brand_marketing_by_id(
+            marketing_strategy.brand_marketing_id
+        )
+    )
+
+
+    def serialize(obj):
+
+        return json.dumps(
+            obj.to_dict(),
+            ensure_ascii=False,
+            indent=2,
+            default=str
+        )
+
+    # Create user prompt 
+
+    prompt = USER_PROMPT.format(
+
+        ad_execution=serialize(
+            ad_execution
+        ),
+
+        creative_strategy=serialize(
+            creative_strategy
+        ),
+
+        brand_strategy=serialize(
+            brand_strategy
+        ),
+
+        marketing_strategy=serialize(
+            marketing_strategy
+        ),
+
+        offer_strategy=serialize(
+            offer_strategy
+        ),
+
+        message_strategy=serialize(
+            message_strategy
+        ),
+
+        ad_strategy=serialize(
+            ad_strategy
+        )
+    )
+
+
+    if duration_seconds is not None:
+        prompt += f"""
+
+
+Duration:
+
+{duration_seconds} seconds
+"""
+
+    if number_of_slides is not None:
+        prompt += f"""
+
+
+Number of slides:
+
+{number_of_slides}
+"""
+
+
+    # Generate response from chat 
+
+    if (ad_execution.creative_type == CreativeTypes.VIDEO.value):
+        system_prompt = VIDEO_CREATIVE_EXECUTION_PROMPT
+    elif (ad_execution.creative_type == CreativeTypes.IMAGE.value):
+        system_prompt = IMAGE_CREATIVE_EXECUTION_PROMPT
+    elif (ad_execution.creative_type == CreativeTypes.CAROUSEL.value):
+        system_prompt = CAROUSEL_CREATIVE_EXECUTION_PROMPT
+    else:
+        raise ValueError(
+            f"Creative execution generation is not supported for creative type: {ad_execution.creative_type}"
+        )
+
+    messages = [
+        LlmOllamaMessage(
+            role=OllamaMessageRole.SYSTEM,
+            content=system_prompt
+        ),
+        LlmOllamaMessage(
+            role=OllamaMessageRole.USER,
+            content=prompt
+        )
+    ]
+
+
+
+
+
+    response = ollama_service.chat_llm(
+        messages=messages
+    )
+
+
+    content = response.content.strip()
+
+
+    if content.startswith("```"):
+
+        content = (
+            content
+            .replace(
+                "```json",
+                ""
+            )
+            .replace(
+                "```",
+                ""
+            )
+            .strip()
+        )
+
+
+    result = json.loads(
+        content
+    )
+
+
+    content_json = result.get(
+        "content",
+        result
+    )
+
+
+    entity = CreativeExecution(
+        ad_execution_id=ad_execution_id,
+        content_json=content_json
+    )
+
+
+    return creative_execution_service.create_creative_execution(entity)
+
+
+
+
+
+
+
+
+
+
+
+
+# ---------------------------------------
+# VIDEO  PROMPT
+# ---------------------------------------
 
 VIDEO_CREATIVE_EXECUTION_PROMPT  = """
 You are an expert Performance Creative Director specializing in:
@@ -325,7 +622,7 @@ Before returning:
 
 
 # ---------------------------------------
-# Image 
+# Image prompt
 # ---------------------------------------
 
 
@@ -631,269 +928,327 @@ Przed zwróceniem odpowiedzi:
 
 
 
+# ---------------------------------------
+# Carousel prompt 
+# ---------------------------------------
+
+CAROUSEL_CREATIVE_EXECUTION_PROMPT = """
+Jesteś ekspertem Performance Creative Director specjalizującym się w:
+
+- Direct Response Advertising,
+- Meta Ads Carousel Creatives,
+- reklamach nastawionych na konwersję,
+- storytellingu reklamowym,
+- edukacyjnych kreacjach sprzedażowych,
+- testowaniu kreacji reklamowych.
 
 
+# Cel
+
+Twoim zadaniem jest przekształcenie istniejącego Ad Execution w kompletny brief produkcyjny carousel creative.
+
+Output będzie używany przez:
+
+- grafików,
+- copywriterów,
+- projektantów reklam,
+- zespoły kreatywne,
+- zespoły reklamowe.
 
 
+Wygeneruj praktyczną specyfikację gotową do produkcji.
+
+Nie twórz nowej strategii.
+Nie zmieniaj pozycjonowania.
+Nie zmieniaj grupy docelowej.
+Rozwijaj wyłącznie istniejący Ad Execution.
 
 
+# Główne zasady
+
+Carousel musi być zaprojektowany pod konwersję.
+
+Każda decyzja powinna odpowiadać na pytania:
+
+- Dlaczego użytkownik zatrzyma się na pierwszym slajdzie?
+- Dlaczego użytkownik przesunie do kolejnych slajdów?
+- Jak rozwija się historia?
+- Jak produkt rozwiązuje problem?
+- Dlaczego użytkownik powinien zaufać produktowi?
+- Jakie działanie powinien wykonać użytkownik?
 
 
-
-USER_PROMPT = """
-Generate creative execution.
-
-AD EXECUTION:
-
-{ad_execution}
+# Wymagany Output
 
 
-CREATIVE STRATEGY:
+## creative_concept
 
-{creative_strategy}
+Zdefiniuj główną ideę carousel.
 
+Format:
 
-BRAND STRATEGY:
-
-{brand_strategy}
-
-
-MARKETING STRATEGY:
-
-{marketing_strategy}
-
-
-OFFER STRATEGY:
-
-{offer_strategy}
+{
+"concept_name":"",
+"creative_angle":"",
+"main_message":"",
+"psychological_trigger":"",
+"viewer_journey":""
+}
 
 
-MESSAGE STRATEGY:
+creative_angle opisuje sposób komunikacji.
 
-{message_strategy}
+Możliwe wartości:
+
+- problem_solution
+- educational
+- product_benefits
+- before_after
+- comparison
+- myth_busting
+- social_proof
+- testimonial
+- step_by_step
+- product_demo
 
 
-AD STRATEGY:
-
-{ad_strategy}
+viewer_journey opisuje sposób przeprowadzenia użytkownika przez kolejne slajdy.
 
 
-Duration:
+---
 
-{duration_seconds} seconds
+
+## carousel_structure
+
+Zdefiniuj strukturę całego carousel.
+
+Format:
+
+{
+"number_of_slides":0,
+"story_flow":"",
+"slide_purpose_sequence":[]
+}
+
+
+slide_purpose_sequence powinno zawierać kolejność funkcji slajdów.
+
+Przykład:
+
+[
+"hook",
+"problem_awareness",
+"solution_introduction",
+"benefit_explanation",
+"proof",
+"cta"
+]
+
+
+Zasady:
+
+- Pierwszy slajd zawsze musi pełnić funkcję zatrzymania scrolla.
+- Ostatni slajd musi zawierać CTA.
+- Każdy slajd musi mieć konkretny cel.
+
+
+---
+
+
+## slides
+
+Stwórz każdy slajd carousel.
+
+Każdy slajd:
+
+{
+"order":1,
+"purpose":"",
+"goal":"",
+"viewer_question":"",
+"visual":"",
+"headline":"",
+"supporting_text":"",
+"design_direction":"",
+"cta":""
+}
+
+
+Zasady:
+
+Visual:
+
+- musi opisywać konkretną scenę lub grafikę,
+- nie może być ogólny.
+
+
+Źle:
+
+"Produkt na grafice"
+
+
+Dobrze:
+
+"Produkt umieszczony centralnie na jasnym tle, obok widoczny efekt użycia produktu, ręka użytkownika pokazuje sposób aplikacji"
+
+
+Headline:
+
+- krótki,
+- łatwy do zeskanowania,
+- maksymalnie 8 słów.
+
+
+Supporting text:
+
+- rozwija główną myśl,
+- nie powtarza nagłówka.
+
+
+viewer_question:
+
+Opisuje pytanie, które powinno pojawić się w głowie użytkownika.
+
+
+Przykład:
+
+{
+"order":2,
+"purpose":"problem_awareness",
+"goal":"Pokazać problem użytkownika",
+"viewer_question":"Czy mam ten sam problem?",
+"visual":"Osoba próbująca rozwiązać problem bez odpowiedniego produktu",
+"headline":"Robisz ten błąd codziennie?",
+"supporting_text":"Większość osób nie zauważa tego problemu"
+}
+
+
+---
+
+
+## visual_direction
+
+Zdefiniuj ogólny kierunek projektowania.
+
+Format:
+
+{
+"design_style":"",
+"color_direction":"",
+"typography_style":"",
+"image_style":"",
+"consistency_rules":[]
+}
+
+
+Uwzględnij:
+
+- spójność wszystkich slajdów,
+- czytelność na urządzeniach mobilnych,
+- zgodność z Meta Ads.
+
+
+---
+
+
+## product_presentation
+
+Zdefiniuj sposób prezentacji produktu.
+
+Format:
+
+{
+"product_visibility":"",
+"product_placement":"",
+"key_features_highlighted":[],
+"usage_context":""
+}
+
+
+Skup się na:
+
+- zaufaniu,
+- wartości produktu,
+- jasnym pokazaniu korzyści.
+
+
+---
+
+
+## trust_elements
+
+Zdefiniuj elementy zwiększające wiarygodność.
+
+Przykłady:
+
+- opinie klientów,
+- liczby,
+- wyniki,
+- demonstracje,
+- certyfikaty,
+- before_after,
+- dowody społeczne.
+
+
+Format:
+
+[
+{
+"type":"",
+"description":"",
+"recommended_slide":0
+}
+]
+
+
+---
+
+
+## cta
+
+Zdefiniuj końcowy slajd CTA.
+
+Format:
+
+{
+"goal":"",
+"action_type":"",
+"headline":"",
+"visual_direction":""
+}
+
+
+Nie używaj agresywnego języka sprzedażowego.
+
+
+# Walidacja
+
+Przed zwróceniem odpowiedzi:
+
+- Wszystkie slajdy muszą mieć kolejność.
+- Pierwszy slajd musi być hookiem.
+- Ostatni slajd musi zawierać CTA.
+- Każdy slajd musi mieć konkretny cel.
+- Nie zwracaj pustych pól.
+- Nie używaj wartości null.
+- Zwróć poprawny JSON.
+- Cała specyfikacja kreacji musi znajdować się w obiekcie `content`.
+
+
+# Output Schema
+
+{
+  "content": {
+    "creative_concept": {},
+    "carousel_structure": {},
+    "slides": [],
+    "visual_direction": {},
+    "product_presentation": {},
+    "trust_elements": [],
+    "cta": {}
+  }
+}
 """
 
 
-def generate_creative_execution_handler(
-    ad_execution_id: int,
-    duration_seconds: int = 15
-):
 
-    container = Container()
-
-
-    ad_execution_service = (
-        container.ad_execution_service()
-    )
-
-    creative_execution_service = (
-        container.creative_execution_service()
-    )
-
-
-    ollama_service = (
-        container.ollama_service()
-    )
-
-
-    creative_strategy_service = (
-        container.creative_strategy_service()
-    )
-
-    brand_marketing_service = (
-        container.brand_marketing_service()
-    )
-
-    marketing_strategy_service = (
-        container.marketing_strategy_service()
-    )
-
-    offer_strategy_service = (
-        container.offer_strategy_service()
-    )
-
-    message_strategy_service = (
-        container.message_strategy_service()
-    )
-
-    ad_strategy_service = (
-        container.ad_strategy_service()
-    )
-
-
-    ad_execution = (
-        ad_execution_service
-        .get_ad_execution_by_id(
-            ad_execution_id
-        )
-    )
-
-
-    creative_strategy = (
-        creative_strategy_service
-        .get_creative_strategy_by_id(
-            ad_execution.creative_strategy_id
-        )
-    )
-
-
-    ad_strategy = (
-        ad_strategy_service
-        .get_ad_strategy_by_id(
-            creative_strategy.ad_strategy_id
-        )
-    )
-
-
-    message_strategy = (
-        message_strategy_service
-        .get_message_strategy_by_id(
-            ad_strategy.message_strategy_id
-        )
-    )
-
-
-    offer_strategy = (
-        offer_strategy_service
-        .get_offer_strategy_by_id(
-            message_strategy.offer_strategy_id
-        )
-    )
-
-
-    marketing_strategy = (
-        marketing_strategy_service
-        .get_marketing_strategy_by_id(
-            offer_strategy.marketing_strategy_id
-        )
-    )
-
-
-    brand_strategy = (
-        brand_marketing_service
-        .get_brand_marketing_by_id(
-            marketing_strategy.brand_marketing_id
-        )
-    )
-
-
-    def serialize(obj):
-
-        return json.dumps(
-            obj.to_dict(),
-            ensure_ascii=False,
-            indent=2,
-            default=str
-        )
-
-
-    prompt = USER_PROMPT.format(
-
-        ad_execution=serialize(
-            ad_execution
-        ),
-
-        creative_strategy=serialize(
-            creative_strategy
-        ),
-
-        brand_strategy=serialize(
-            brand_strategy
-        ),
-
-        marketing_strategy=serialize(
-            marketing_strategy
-        ),
-
-        offer_strategy=serialize(
-            offer_strategy
-        ),
-
-        message_strategy=serialize(
-            message_strategy
-        ),
-
-        ad_strategy=serialize(
-            ad_strategy
-        ),
-
-        duration_seconds=duration_seconds
-    )
-
-
-    if (ad_execution.creative_type == CreativeTypes.VIDEO.value):
-        system_prompt = VIDEO_CREATIVE_EXECUTION_PROMPT
-    elif (ad_execution.creative_type == CreativeTypes.IMAGE.value):
-        system_prompt = IMAGE_CREATIVE_EXECUTION_PROMPT
-    else:
-        raise ValueError(
-            f"Creative execution generation is not supported for creative type: {ad_execution.creative_type}"
-        )
-
-    messages = [
-        LlmOllamaMessage(
-            role=OllamaMessageRole.SYSTEM,
-            content=system_prompt
-        ),
-        LlmOllamaMessage(
-            role=OllamaMessageRole.USER,
-            content=prompt
-        )
-    ]
-
-
-
-
-
-    response = ollama_service.chat_llm(
-        messages=messages
-    )
-
-
-    content = response.content.strip()
-
-
-    if content.startswith("```"):
-
-        content = (
-            content
-            .replace(
-                "```json",
-                ""
-            )
-            .replace(
-                "```",
-                ""
-            )
-            .strip()
-        )
-
-
-    result = json.loads(
-        content
-    )
-
-
-    content_json = result.get(
-        "content",
-        result
-    )
-
-
-    entity = CreativeExecution(
-        ad_execution_id=ad_execution_id,
-        content_json=content_json
-    )
-
-
-    return creative_execution_service.create_creative_execution(entity)
