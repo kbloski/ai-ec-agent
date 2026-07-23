@@ -1,16 +1,12 @@
 from di.container import Container
 
 from domain.models.ad_execution.ad_execution import AdExecution
+from domain.enums.enums import CreativeTypes
+
+ALLOWED_CREATIVE_TYPES = [item.value for item in CreativeTypes]
 
 
-ALLOWED_CREATIVE_TYPES = [
-    "video",
-    "image",
-    "carousel"
-]
-
-
-def generate_ad_execution_handler(
+def create_ad_execution_handler(
     creative_strategy_id: int,
     creative_type: str,
     platform: str,

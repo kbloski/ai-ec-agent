@@ -11,3 +11,4 @@ from domain.enums.ollama_message_role import OllamaMessageRole
 from domain.enums.purchasing_power import PurchasingPower
 from domain.enums.salses_asset_type import SalsesAssetType
 from domain.enums.table_name import TableName
+from domain.enums.creative_types import CreativeTypes
