@@ -1,0 +1,6 @@
+Dodać dla creative_execution podczas tworzenia, 
+że jeśli jest jakiś typ wybierany to nie usuwa innych pól, to jest jeden widok tylko 
+je wyłącza, 
+dodać że można wybrać ads_framework i createive_agnels, również z funkcjonalnością random,
+dodać do prompta obsługę tego,
+w promptach dodać funkcje python build_ dla promptów które się powtarzają etc... 
