@@ -1,0 +1,37 @@
+[
+  {
+    "id": "ugc_problem_solution",
+    "name": "UGC Problem Solution",
+    "type": "video_ad_framework",
+    "category": "UGC",
+    "goal": "conversion",
+    "description": "Reklama wyglądająca jak naturalna wypowiedź użytkownika, pokazująca problem i rozwiązanie produktem.",
+    "structure": [
+      {
+        "step": 1,
+        "name": "Hook",
+        "purpose": "Przyciągnięcie uwagi widza w pierwszych sekundach."
+      },
+      {
+        "step": 2,
+        "name": "Problem",
+        "purpose": "Pokazanie problemu lub frustracji użytkownika."
+      },
+      {
+        "step": 3,
+        "name": "Product Introduction",
+        "purpose": "Naturalne przedstawienie produktu jako rozwiązania."
+      },
+      {
+        "step": 4,
+        "name": "Solution / Result",
+        "purpose": "Pokazanie efektu i głównej korzyści."
+      },
+      {
+        "step": 5,
+        "name": "Call To Action",
+        "purpose": "Zachęcenie użytkownika do działania."
+      }
+    ]
+  }
+]
