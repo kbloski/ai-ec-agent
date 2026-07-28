@@ -6,31 +6,37 @@
     "format": "video",
     "goal": "conversion",
     "description": "Reklama stylizowana na naturalne nagranie użytkownika, pokazująca realny problem, użycie produktu i efekt rozwiązania.",
+    "rules" : [],
     "structure": [
       {
         "step": 1,
         "name": "Hook",
-        "purpose": "Przyciągnięcie uwagi widza w pierwszych sekundach."
+        "purpose": "Przyciągnięcie uwagi widza w pierwszych sekundach.",
+        "rules" : []
       },
       {
         "step": 2,
         "name": "Problem",
-        "purpose": "Pokazanie problemu lub frustracji użytkownika."
+        "purpose": "Pokazanie problemu lub frustracji użytkownika.",
+        "rules" : []
       },
       {
         "step": 3,
         "name": "Product Introduction",
-        "purpose": "Naturalne przedstawienie produktu jako rozwiązania."
+        "purpose": "Naturalne przedstawienie produktu jako rozwiązania.",
+        "rules" : []
       },
       {
         "step": 4,
         "name": "Solution / Result",
-        "purpose": "Pokazanie efektu i głównej korzyści."
+        "purpose": "Pokazanie efektu i głównej korzyści.",
+        "rules" : []
       },
       {
         "step": 5,
         "name": "Call To Action",
-        "purpose": "Zachęcenie użytkownika do działania."
+        "purpose": "Zachęcenie użytkownika do działania.",
+        "rules" : []
       }
     ]
   }
