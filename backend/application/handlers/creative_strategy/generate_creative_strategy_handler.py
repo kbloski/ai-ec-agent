@@ -4,22 +4,31 @@ from di.container import Container
 from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
 from domain.enums.ollama_message_role import OllamaMessageRole
 from domain.models.creative_strategy.creative_strategy import CreativeStrategy
+
+
 SYSTEM_PROMPT = """
 You are an expert in Performance Creative,
-Direct Response Advertising, and Brand Storytelling.
+Direct Response Advertising, and Brand Strategy.
 
 Your task is to create a CREATIVE STRATEGY
-based on the full marketing context and Ad Strategy.
+based on the marketing context and Ad Strategy.
 
-CREATIVE STRATEGY does NOT create:
-- final copy,
+CREATIVE STRATEGY defines:
+- why this creative should exist,
+- what communication direction it should follow,
+- who it is for,
+- what message it should deliver.
+
+It does NOT define production details.
+
+DO NOT CREATE:
 - video scripts,
 - dialogues,
+- scenes,
+- visual directions,
+- creators,
+- camera instructions,
 - finished advertisements.
-
-Its purpose is to transform the selected Ad Strategy concept
-into a clear and actionable creative direction
-for the creative and production teams.
 
 
 GENERATE:
@@ -27,96 +36,79 @@ GENERATE:
 
 1. OBJECTIVE
 
-Define the main goal of the creative.
+Define the main business goal of the creative.
 
 
 2. CREATIVE TYPE
 
-Define the recommended creative format:
+Define the recommended creative category.
 
 Examples:
-- video,
-- static,
-- carousel,
 - UGC,
-- testimonial.
+- testimonial,
+- product demonstration,
+- educational,
+- comparison,
+- lifestyle.
 
 
 3. RECOMMENDED FORMAT
 
-Define the recommended advertising format and placement.
+Define the recommended advertising format.
+
+Examples:
+- short form video,
+- static image,
+- carousel.
 
 
 4. TARGET
 
-Define the audience segment this creative is designed for.
+Define the audience segment:
+
+Include:
+- demographics,
+- awareness level,
+- motivations,
+- pain points.
 
 
 5. CREATIVE BIG IDEA
 
-Define the main creative concept.
+Define the central creative concept.
 
 Important:
-- Describe the strategic creative direction.
+- Describe the strategic direction.
+- Do not write headlines.
 - Do not write advertising copy.
-- Do not create slogans or headlines.
 
 
 6. MESSAGE ANGLE
 
-Define the communication angle used by the creative.
+Define the main communication angle.
+
+Examples:
+- problem awareness,
+- transformation,
+- trust,
+- education,
+- proof.
 
 
 7. HOOK STRATEGY
 
 Define:
 
-- type,
-- goal,
-- direction.
+- hook type,
+- attention goal,
+- communication direction.
 
-Do not generate final hooks or copy.
-
-
-8. STORY FRAMEWORK
-
-Define the narrative structure.
-
-Examples:
-- problem → frustration → solution,
-- situation → discovery → transformation,
-- before → after → proof.
-
-Do not create a script.
+Do not generate actual hooks.
 
 
-9. CREATIVE DIRECTION
+8. EMOTION FLOW
 
-Define:
-
-- visual style,
-- atmosphere,
-- presentation style,
-- creative references.
-
-Do not generate images or AI prompts.
-
-
-10. SPEAKER STRATEGY
-
-Define:
-
-- who communicates the message,
-- their role,
-- their tone,
-- their credibility.
-
-Do not generate dialogue.
-
-
-11. EMOTION FLOW
-
-Define the emotional journey during the creative.
+Define the emotional journey.
 
 Example:
 
@@ -128,9 +120,9 @@ Example:
 ]
 
 
-12. PROOF STRATEGY
+9. PROOF STRATEGY
 
-Define what proof elements should be used:
+Define what evidence should support the message.
 
 Examples:
 - testimonials,
@@ -140,27 +132,6 @@ Examples:
 - social proof.
 
 
-13. EXECUTION GUIDELINES
-
-Provide production guidance for the creative team.
-
-Include:
-- important production considerations,
-- style recommendations,
-- execution priorities.
-
-
-
-DO NOT GENERATE:
-
-- final advertising copy,
-- scripts,
-- dialogues,
-- images,
-- AI image prompts,
-- finished ads.
-
-
 
 Return only valid JSON:
 
@@ -168,8 +139,11 @@ Return only valid JSON:
     "creative_strategies": [
         {
             "name": "",
+
             "objective": "",
+
             "creative_type": "",
+
             "recommended_format": "",
 
             "target": {},
@@ -184,25 +158,9 @@ Return only valid JSON:
                 "direction": ""
             },
 
-            "story_framework": [],
-
-            "creative_direction": {
-                "visual_style": "",
-                "presentation_style": "",
-                "atmosphere": ""
-            },
-
-            "speaker_strategy": {
-                "speaker_type": "",
-                "role": "",
-                "tone": ""
-            },
-
             "emotion_flow": [],
 
-            "proof_strategy": [],
-
-            "execution_guidelines": {}
+            "proof_strategy": []
         }
     ]
 }
@@ -432,17 +390,9 @@ def generate_creative_strategy_handler(
 
             hook_strategy=item.get("hook_strategy"),
 
-            story_framework=item.get("story_framework", []),
-
-            creative_direction=item.get("creative_direction"),
-
-            speaker_strategy=item.get("speaker_strategy"),
-
             emotion_flow=item.get("emotion_flow", []),
 
-            proof_strategy=item.get("proof_strategy", []),
-
-            execution_guidelines=item.get("execution_guidelines"),
+            proof_strategy=item.get("proof_strategy", [])
 
         )
 

@@ -17,10 +17,6 @@ class CreativeStrategyMapper:
             creative_big_idea=item.creative_big_idea,
             message_angle=item.message_angle,
             hook_strategy=item.hook_strategy,
-            story_framework=item.story_framework,
-            creative_direction=item.creative_direction,
-            speaker_strategy=item.speaker_strategy,
             emotion_flow=item.emotion_flow,
             proof_strategy=item.proof_strategy,
-            execution_guidelines=item.execution_guidelines,
         )
