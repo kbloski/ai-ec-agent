@@ -1,0 +1,112 @@
+[
+  {
+    "id": "personal_story",
+    "name": "Personal Story",
+    "description": "Reklama oparta na osobistej historii użytkownika, który miał konkretny problem i znalazł rozwiązanie.",
+    "purpose": "Budowanie identyfikacji odbiorcy z bohaterem reklamy poprzez pokazanie prawdziwego doświadczenia.",
+    "rules": [
+      "Historia powinna wyglądać jak autentyczne doświadczenie użytkownika.",
+      "Nie zaczynaj od przedstawienia produktu.",
+      "Skup się na problemie, emocjach i zmianie po użyciu produktu."
+    ]
+  },
+  {
+    "id": "problem_solution",
+    "name": "Problem Solution",
+    "description": "Reklama skupiająca się na problemie użytkownika i pokazująca produkt jako rozwiązanie.",
+    "purpose": "Pokazanie odbiorcy, dlaczego produkt jest odpowiedzią na jego konkretną potrzebę.",
+    "rules": [
+      "Problem musi być konkretny i łatwy do utożsamienia.",
+      "Nie skupiaj się tylko na funkcjach produktu.",
+      "Pokaż zmianę, jaką produkt umożliwia."
+    ]
+  },
+  {
+    "id": "before_after",
+    "name": "Before After",
+    "description": "Reklama pokazująca kontrast między sytuacją przed użyciem produktu a rezultatem po jego zastosowaniu.",
+    "purpose": "Szybkie pokazanie wartości produktu poprzez widoczną transformację.",
+    "rules": [
+      "Różnica między przed i po musi być jasna.",
+      "Nie używaj nierealnych lub przesadzonych obietnic.",
+      "Skup się na rezultacie, a nie tylko produkcie."
+    ]
+  },
+  {
+    "id": "social_proof",
+    "name": "Social Proof",
+    "description": "Reklama wykorzystująca doświadczenia innych osób, opinie lub dowody skuteczności produktu.",
+    "purpose": "Budowanie zaufania i zmniejszenie obaw przed zakupem.",
+    "rules": [
+      "Dowody powinny być konkretne i wiarygodne.",
+      "Unikaj ogólnych stwierdzeń bez wartości.",
+      "Pokazuj realne doświadczenia użytkowników."
+    ]
+  },
+  {
+    "id": "demonstration",
+    "name": "Product Demonstration",
+    "description": "Reklama pokazująca produkt podczas działania zamiast jedynie opisywania jego zalet.",
+    "purpose": "Udowodnienie wartości produktu poprzez pokazanie jego zastosowania.",
+    "rules": [
+      "Produkt powinien być pokazany w praktycznym użyciu.",
+      "Skup się na korzyściach, nie tylko funkcjach.",
+      "Pokaż konkretny efekt działania."
+    ]
+  },
+  {
+    "id": "curiosity_gap",
+    "name": "Curiosity Gap",
+    "description": "Reklama budująca ciekawość poprzez pozostawienie odbiorcy z pytaniem lub niepełną informacją.",
+    "purpose": "Zwiększenie zatrzymania uwagi i zachęcenie do obejrzenia dalszej części reklamy.",
+    "rules": [
+      "Nie ujawniaj całego rozwiązania od początku.",
+      "Stwórz naturalną ciekawość, a nie sztuczny clickbait.",
+      "Rozwiązanie powinno pojawić się po zbudowaniu zainteresowania."
+    ]
+  },
+  {
+    "id": "testimonial",
+    "name": "Testimonial",
+    "description": "Reklama oparta na wypowiedzi klienta opisującego swoje doświadczenie z produktem.",
+    "purpose": "Zwiększenie wiarygodności poprzez głos prawdziwego użytkownika.",
+    "rules": [
+      "Wypowiedź powinna skupiać się na konkretnym problemie.",
+      "Unikaj przesadnie reklamowego języka.",
+      "Pokazuj osobiste doświadczenie i rezultat."
+    ]
+  },
+  {
+    "id": "educational",
+    "name": "Educational",
+    "description": "Reklama dostarczająca wartościową wiedzę przed przedstawieniem produktu.",
+    "purpose": "Budowanie zaufania poprzez edukowanie odbiorcy.",
+    "rules": [
+      "Najpierw dostarcz wartość, potem przedstaw produkt.",
+      "Informacje powinny rozwiązywać realny problem.",
+      "Produkt powinien być naturalnym rozwinięciem tematu."
+    ]
+  },
+  {
+    "id": "comparison",
+    "name": "Comparison",
+    "description": "Reklama porównująca produkt z innymi sposobami rozwiązania problemu.",
+    "purpose": "Pokazanie przewagi produktu nad alternatywami.",
+    "rules": [
+      "Porównanie powinno być uczciwe i konkretne.",
+      "Skup się na różnicach ważnych dla klienta.",
+      "Nie krytykuj konkurencji bez uzasadnienia."
+    ]
+  },
+  {
+    "id": "founder_story",
+    "name": "Founder Story",
+    "description": "Reklama oparta na historii powstania produktu i problemie, który marka chciała rozwiązać.",
+    "purpose": "Budowanie emocjonalnej więzi i zaufania do marki.",
+    "rules": [
+      "Pokaż prawdziwy powód stworzenia produktu.",
+      "Skup się na misji i problemie klienta.",
+      "Nie zamieniaj historii w zwykłą prezentację firmy."
+    ]
+  }
+]

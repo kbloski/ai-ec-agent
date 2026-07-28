@@ -5,3 +5,13 @@ Mogę stworzyć albo podesłanie templatek z gotowymi strukturami do użycia
 co ogranicza ai, że będzie generować według schematu albo też powiem 
 tylko jakie typy reklam ma generować, ale przez to może wymyślać lub
 dawać zbyt ogólne reklamy, które i tak nie będą działać
+
+
+
+
+Generowanie aplikacji -
+Generowanie Ad strategy 
+Generowanie Creative strategy
+Dodawanie ram execution tzn configuracja - video, carousel etcc...
+- Wybieranie templates, durations, slides, frameworks
+Generowanie scenariusza (creative execution)
