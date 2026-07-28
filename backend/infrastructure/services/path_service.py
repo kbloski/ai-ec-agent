@@ -13,7 +13,10 @@ class PathService:
 
         self.PROMPTS_DIR = self.BASE_DIR / "infrastructure" / "ai" / "prompts"
         self.OUTPUT_RULES_PROMPT = self.PROMPTS_DIR / "output" / "output.rules.md"
-        
+
+        self.FRAMEWORKS_DIR = self.BASE_DIR / "infrastructure" / "ai" / "frameworks"
+        self.AD_FRAMEWORKS_FILE = self.FRAMEWORKS_DIR / "ad-frameworks.json"
+
         # self.DATA_DIR = self.BASE_DIR / "data"
         # self.RAW_ECOMMERCE_KNOWLEDGE = self.DATA_DIR / "raw" / "ecommerce_knowledge"
         # self.ECOMMERCE_KNOWLEDGE = self.DATA_DIR / "knowledge" / "ecommerce"

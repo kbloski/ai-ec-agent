@@ -58,6 +58,14 @@ MESSAGE STRATEGY:
 AD STRATEGY:
 
 {ad_strategy}
+
+
+AVAILABLE AD FRAMEWORKS:
+
+{ad_frameworks}
+
+
+
 """
 
 
@@ -106,6 +114,10 @@ def generate_creative_execution_handler(
 
     ad_strategy_service = (
         container.ad_strategy_service()
+    )
+
+    ad_frameworks_repository = (
+        container.ad_frameworks_repository()
     )
 
 
@@ -165,6 +177,9 @@ def generate_creative_execution_handler(
     )
 
 
+    ad_frameworks = ad_frameworks_repository.get_all()
+
+
     def serialize(obj):
 
         return json.dumps(
@@ -174,7 +189,7 @@ def generate_creative_execution_handler(
             default=str
         )
 
-    # Create user prompt 
+    # Create user prompt
 
     prompt = USER_PROMPT.format(
 
@@ -204,6 +219,13 @@ def generate_creative_execution_handler(
 
         ad_strategy=serialize(
             ad_strategy
+        ),
+
+        ad_frameworks=json.dumps(
+            ad_frameworks,
+            ensure_ascii=False,
+            indent=2,
+            default=str
         )
     )
 

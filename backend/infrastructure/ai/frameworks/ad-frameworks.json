@@ -1,12 +1,11 @@
 [
+  
   {
     "id": "ugc_problem_solution",
     "name": "UGC Problem Solution",
-    "formats": [
-      "video"
-    ],
+    "format": "video",
     "goal": "conversion",
-    "description": "Reklama wyglądająca jak naturalna wypowiedź użytkownika, pokazująca problem i rozwiązanie produktem.",
+    "description": "Reklama stylizowana na naturalne nagranie użytkownika, pokazująca realny problem, użycie produktu i efekt rozwiązania.",
     "structure": [
       {
         "step": 1,

@@ -7,6 +7,7 @@ from infrastructure.parsers.docx_parser import DocxParser
 from infrastructure.repositories.offers_repository import OffersRepository
 from infrastructure.repositories.offer_items_repository import OfferItemsRepository
 from infrastructure.services.path_service import PathService
+from infrastructure.repositories.ad_frameworks_repository import AdFrameworksRepository
 from infrastructure.parsers.txt_parser import TxtParser
 from core.settings import Settings
 from infrastructure.database.db import SessionLocal
@@ -364,6 +365,12 @@ class Container(containers.DeclarativeContainer):
     path_service =  providers.Singleton(
         PathService,
         logger=logger,
+    )
+
+    ad_frameworks_repository = providers.Singleton(
+        AdFrameworksRepository,
+        logger=logger,
+        path_service=path_service,
     )
 
     ollama_service =  providers.Singleton(
