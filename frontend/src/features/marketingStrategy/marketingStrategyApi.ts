@@ -15,6 +15,17 @@ export const marketingStrategyApi = api.injectEndpoints({
       query: (id) => `/marketing-strategy/${id}`,
       providesTags: (_result, _err, id) => [itemTag('MarketingStrategy', id)],
     }),
+    updateMarketingStrategy: builder.mutation<
+      Entity,
+      { id: number; fields: Record<string, unknown> }
+    >({
+      query: ({ id, fields }) => ({
+        url: `/marketing-strategy/${id}/update`,
+        method: 'POST',
+        body: { fields },
+      }),
+      invalidatesTags: (_result, _err, { id }) => [itemTag('MarketingStrategy', id)],
+    }),
     /** ctx: the parent BrandMarketing entity (carries knowledge_id + id). */
     generateMarketingStrategy: builder.mutation<Entity, Entity>({
       query: (brandMarketing) =>
@@ -38,4 +49,5 @@ export const {
   useGetMarketingStrategyQuery,
   useGenerateMarketingStrategyMutation,
   useDeleteMarketingStrategyMutation,
+  useUpdateMarketingStrategyMutation,
 } = marketingStrategyApi

@@ -2,7 +2,11 @@ import { useParams } from 'react-router-dom'
 import { DetailShell } from '@/components/DetailShell'
 import { ResourceList } from '@/components/ResourceList'
 import { Button } from '@/components/ui/button'
-import { useDeleteKnowledgeInsightMutation, useGetKnowledgeQuery } from '@/features/knowledge/knowledgeApi'
+import {
+  useDeleteKnowledgeInsightMutation,
+  useGetKnowledgeQuery,
+  useUpdateKnowledgeMutation,
+} from '@/features/knowledge/knowledgeApi'
 import {
   useDeleteTargetAudienceMutation,
   useGenerateTargetAudiencesMutation,
@@ -34,6 +38,8 @@ export default function KnowledgeDetailPage() {
   const [generateBrandMarketing, generateBrandMarketingState] = useGenerateBrandMarketingMutation()
   const [deleteBrandMarketing] = useDeleteBrandMarketingMutation()
 
+  const [updateKnowledge, updateKnowledgeState] = useUpdateKnowledgeMutation()
+
   return (
     <DetailShell
       title="Knowledge"
@@ -50,6 +56,10 @@ export default function KnowledgeDetailPage() {
       itemLinks={{
         offer_insights: (item) => `/knowledge-insights/${item.id}/edit`,
         target_audiences: (item) => `/target-audiences/${item.id}/edit`,
+      }}
+      editable={{
+        onSave: (fields) => updateKnowledge({ id: knowledgeId, fields }).unwrap(),
+        isSaving: updateKnowledgeState.isLoading,
       }}
     >
       <ResourceList

@@ -15,6 +15,14 @@ export const brandMarketingApi = api.injectEndpoints({
       query: (id) => `/brand-marketing/${id}`,
       providesTags: (_result, _err, id) => [itemTag('BrandMarketing', id)],
     }),
+    updateBrandMarketing: builder.mutation<Entity, { id: number; fields: Record<string, unknown> }>({
+      query: ({ id, fields }) => ({
+        url: `/brand-marketing/${id}/update`,
+        method: 'POST',
+        body: { fields },
+      }),
+      invalidatesTags: (_result, _err, { id }) => [itemTag('BrandMarketing', id)],
+    }),
     generateBrandMarketing: builder.mutation<Entity, { knowledgeId: number }>({
       query: ({ knowledgeId }) => `/knowledges/${knowledgeId}/brand-marketing/generate`,
       invalidatesTags: (_result, _err, { knowledgeId }) => [listTag('BrandMarketing', knowledgeId)],
@@ -34,4 +42,5 @@ export const {
   useGetBrandMarketingQuery,
   useGenerateBrandMarketingMutation,
   useDeleteBrandMarketingMutation,
+  useUpdateBrandMarketingMutation,
 } = brandMarketingApi

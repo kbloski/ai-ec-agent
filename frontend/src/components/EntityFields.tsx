@@ -2,27 +2,7 @@ import { ChevronDown } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { Button } from '@/components/ui/button'
-
-const LABEL_OVERRIDES: Record<string, string> = {
-  id: 'ID',
-  cta: 'CTA',
-  offer_items: 'Elementy oferty',
-  offer_insights: 'Insights',
-  target_audiences: 'Grupy docelowe',
-}
-
-function label(key: string): string {
-  if (LABEL_OVERRIDES[key]) return LABEL_OVERRIDES[key]
-  return key
-    .replace(/_/g, ' ')
-    .replace(/\b\w/g, (c) => c.toUpperCase())
-}
-
-function isPrimitive(value: unknown): value is string | number | boolean {
-  return (
-    typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean'
-  )
-}
+import { isPrimitive, label } from '@/lib/entityFields'
 
 function ObjectArray({
   items,

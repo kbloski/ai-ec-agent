@@ -1,7 +1,10 @@
 import { useParams } from 'react-router-dom'
 import { DetailShell } from '@/components/DetailShell'
 import { ResourceList } from '@/components/ResourceList'
-import { useGetMarketingStrategyQuery } from '@/features/marketingStrategy/marketingStrategyApi'
+import {
+  useGetMarketingStrategyQuery,
+  useUpdateMarketingStrategyMutation,
+} from '@/features/marketingStrategy/marketingStrategyApi'
 import {
   useDeleteOfferStrategyMutation,
   useGenerateOfferStrategyMutation,
@@ -15,6 +18,7 @@ export default function MarketingStrategyDetailPage() {
   const list = useListOfferStrategyForMarketingStrategyQuery(id)
   const [generate, generateState] = useGenerateOfferStrategyMutation()
   const [deleteOfferStrategy] = useDeleteOfferStrategyMutation()
+  const [updateMarketingStrategy, updateState] = useUpdateMarketingStrategyMutation()
 
   return (
     <DetailShell
@@ -24,6 +28,10 @@ export default function MarketingStrategyDetailPage() {
       data={marketingStrategy}
       isLoading={isLoading}
       error={error}
+      editable={{
+        onSave: (fields) => updateMarketingStrategy({ id, fields }).unwrap(),
+        isSaving: updateState.isLoading,
+      }}
     >
       <ResourceList
         title="Offer strategy"

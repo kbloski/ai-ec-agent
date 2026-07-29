@@ -32,6 +32,14 @@ export const offersApi = api.injectEndpoints({
       query: (id) => `/offers/${id}`,
       providesTags: (_result, _err, id) => [itemTag('Offer', id)],
     }),
+    updateOffer: builder.mutation<Entity, { id: number; fields: Record<string, unknown> }>({
+      query: ({ id, fields }) => ({
+        url: `/offers/${id}/update`,
+        method: 'POST',
+        body: { fields },
+      }),
+      invalidatesTags: (_result, _err, { id }) => [itemTag('Offer', id)],
+    }),
     createOffer: builder.mutation<Entity, CreateOfferArgs>({
       query: (params) => ({ url: '/offers/create', params }),
       invalidatesTags: [listTag('Offer', 'root')],
@@ -80,4 +88,5 @@ export const {
   useGenerateOfferSuggestionsMutation,
   useGetOfferInsightQuery,
   useUpdateOfferInsightMutation,
+  useUpdateOfferMutation,
 } = offersApi

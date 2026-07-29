@@ -17,6 +17,21 @@ class OfferKnowledgeRepository:
     def get_by_offer_id(self, offer_id: int) -> Optional[OfferKnowledge]:
         return self.db.query(OfferKnowledge).filter(OfferKnowledge.offer_id == offer_id).all()
 
+    def update(self, item: OfferKnowledge) -> OfferKnowledge:
+        existing_item = self.db.query(OfferKnowledge).filter(OfferKnowledge.id == item.id).first()
+
+        if not existing_item:
+            raise ValueError(f"OfferKnowledge with id {item.id} not found")
+
+        for key, value in item.__dict__.items():
+            if key != "_sa_instance_state":
+                setattr(existing_item, key, value)
+
+        self.db.commit()
+        self.db.refresh(existing_item)
+
+        return existing_item
+
     # ❌ DELETE
     def delete(self, id: int) -> bool:
         item = self.db.query(OfferKnowledge).filter(OfferKnowledge.id == id).first()

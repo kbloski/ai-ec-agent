@@ -7,6 +7,7 @@ import {
   useDeleteOfferMutation,
   useGenerateOfferSuggestionsMutation,
   useGetOfferQuery,
+  useUpdateOfferMutation,
 } from '@/features/offers/offersApi'
 import {
   useDeleteKnowledgeMutation,
@@ -25,6 +26,7 @@ export default function OfferDetailPage() {
   const [deleteOffer] = useDeleteOfferMutation()
   const [deleteOfferInsight] = useDeleteOfferInsightMutation()
   const [generateSuggestions, generateSuggestionsState] = useGenerateOfferSuggestionsMutation()
+  const [updateOffer, updateOfferState] = useUpdateOfferMutation()
 
   return (
     <DetailShell
@@ -40,6 +42,10 @@ export default function OfferDetailPage() {
       }}
       itemLinks={{
         offer_insights: (item) => `/offer-insights/${item.id}/edit`,
+      }}
+      editable={{
+        onSave: (fields) => updateOffer({ id: offerId, fields }).unwrap(),
+        isSaving: updateOfferState.isLoading,
       }}
     >
       <Button

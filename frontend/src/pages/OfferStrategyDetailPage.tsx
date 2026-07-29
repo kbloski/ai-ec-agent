@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom'
 import { DetailShell } from '@/components/DetailShell'
 import { ResourceList } from '@/components/ResourceList'
-import { useGetOfferStrategyQuery } from '@/features/offerStrategy/offerStrategyApi'
+import { useGetOfferStrategyQuery, useUpdateOfferStrategyMutation } from '@/features/offerStrategy/offerStrategyApi'
 import {
   useDeleteMessageStrategyMutation,
   useGenerateMessageStrategyMutation,
@@ -15,6 +15,7 @@ export default function OfferStrategyDetailPage() {
   const list = useListMessageStrategyForOfferStrategyQuery(id)
   const [generate, generateState] = useGenerateMessageStrategyMutation()
   const [deleteMessageStrategy] = useDeleteMessageStrategyMutation()
+  const [updateOfferStrategy, updateState] = useUpdateOfferStrategyMutation()
 
   return (
     <DetailShell
@@ -24,6 +25,10 @@ export default function OfferStrategyDetailPage() {
       data={offerStrategy}
       isLoading={isLoading}
       error={error}
+      editable={{
+        onSave: (fields) => updateOfferStrategy({ id, fields }).unwrap(),
+        isSaving: updateState.isLoading,
+      }}
     >
       <ResourceList
         title="Message strategy"

@@ -1,4 +1,4 @@
-from typing import Any, List, Optional
+from typing import Any, Dict, List, Optional
 
 from fastapi import APIRouter
 from pydantic import BaseModel
@@ -22,6 +22,11 @@ from application.handlers.offers.get_offer_insight_handler import get_offer_insi
 from application.handlers.offers.update_offer_insight_handler import update_offer_insight_handler
 from application.handlers.offers.get_knowledge_insight_handler import get_knowledge_insight_handler
 from application.handlers.offers.update_knowledge_insight_handler import update_knowledge_insight_handler
+from application.handlers.offers.update_offer_handler import update_offer_handler
+from application.handlers.offers.update_offer_knowledge_handler import update_offer_knowledge_handler
+from application.handlers.brand_marketing.update_brand_marketing_handler import update_brand_marketing_handler
+from application.handlers.marketing_strategy.update_marketing_strategy_handler import update_marketing_strategy_handler
+from application.handlers.offer_strategy.update_offer_strategy_handler import update_offer_strategy_handler
 from application.handlers.target_audience.generate_target_audience_handler import generate_target_audience_handler
 from application.handlers.target_audience.get_target_audience_handler import get_target_audience_handler
 from application.handlers.target_audience.get_target_audience_preview_handler import get_target_audience_preview_handler
@@ -102,6 +107,10 @@ class SaveOutputPromptRequest(BaseModel):
     content: str
 
 
+class UpdateFieldsRequest(BaseModel):
+    fields: Dict[str, Any]
+
+
 class UpdateOfferInsightRequest(BaseModel):
     content_status: str
 
@@ -170,6 +179,10 @@ def register_general_routes(router: APIRouter):
     def get_offer_details(id: int):
         return get_offer_handler(id=id)
 
+    @router.post("/offers/{id}/update")
+    def update_offer_route(id: int, payload: UpdateFieldsRequest):
+        return update_offer_handler(id=id, fields=payload.fields)
+
 
     @router.get("/offers/{id}/suggestions")
     def suggest_offer_data(id: int):
@@ -225,6 +238,10 @@ def register_general_routes(router: APIRouter):
     @router.get("/knowledges/{knowledge_id}")
     def get_offer_knowledge( knowledge_id : int):
         return get_offer_knowledge_handler( knowledge_id=knowledge_id)
+
+    @router.post("/knowledges/{id}/update")
+    def update_offer_knowledge_route(id: int, payload: UpdateFieldsRequest):
+        return update_offer_knowledge_handler(id=id, fields=payload.fields)
 
     # @router.get("/knowledges/{knowledge_id}/suggestions")
     # def suggest_offer_knowledge_data(knowledge_id: int):
@@ -360,6 +377,10 @@ def register_general_routes(router: APIRouter):
     def get_brand_marketing( id: int ):
         return get_brand_marketing_handler( id=id )
 
+    @router.post("/brand-marketing/{id}/update")
+    def update_brand_marketing_route(id: int, payload: UpdateFieldsRequest):
+        return update_brand_marketing_handler(id=id, fields=payload.fields)
+
     # DELETE in future
     @router.get("/brand-marketing/{id}/delete")
     def delete_brand_marketing_route( id: int ):
@@ -380,6 +401,10 @@ def register_general_routes(router: APIRouter):
     @router.get("/marketing-strategy/{id}")
     def get_marketing_strategy( id: int ):
         return get_marketing_strategy_handler( id=id )
+
+    @router.post("/marketing-strategy/{id}/update")
+    def update_marketing_strategy_route(id: int, payload: UpdateFieldsRequest):
+        return update_marketing_strategy_handler(id=id, fields=payload.fields)
 
     # DELETE in future
     @router.get("/marketing-strategy/{id}/delete")
@@ -403,6 +428,10 @@ def register_general_routes(router: APIRouter):
     @router.get("/offer-strategy/{id}")
     def get_offer_strategy( id: int ):
         return get_offer_strategy_handler( id=id )
+
+    @router.post("/offer-strategy/{id}/update")
+    def update_offer_strategy_route(id: int, payload: UpdateFieldsRequest):
+        return update_offer_strategy_handler(id=id, fields=payload.fields)
 
     # DELETE in future
     @router.get("/offer-strategy/{id}/delete")

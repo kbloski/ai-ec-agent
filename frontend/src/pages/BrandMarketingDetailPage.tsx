@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom'
 import { DetailShell } from '@/components/DetailShell'
 import { ResourceList } from '@/components/ResourceList'
-import { useGetBrandMarketingQuery } from '@/features/brandMarketing/brandMarketingApi'
+import { useGetBrandMarketingQuery, useUpdateBrandMarketingMutation } from '@/features/brandMarketing/brandMarketingApi'
 import {
   useDeleteMarketingStrategyMutation,
   useGenerateMarketingStrategyMutation,
@@ -15,6 +15,7 @@ export default function BrandMarketingDetailPage() {
   const list = useListMarketingStrategyForBrandMarketingQuery(id)
   const [generate, generateState] = useGenerateMarketingStrategyMutation()
   const [deleteMarketingStrategy] = useDeleteMarketingStrategyMutation()
+  const [updateBrandMarketing, updateState] = useUpdateBrandMarketingMutation()
 
   return (
     <DetailShell
@@ -24,6 +25,10 @@ export default function BrandMarketingDetailPage() {
       data={brandMarketing}
       isLoading={isLoading}
       error={error}
+      editable={{
+        onSave: (fields) => updateBrandMarketing({ id, fields }).unwrap(),
+        isSaving: updateState.isLoading,
+      }}
     >
       <ResourceList
         title="Marketing strategy"
