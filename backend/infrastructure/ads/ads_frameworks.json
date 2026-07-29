@@ -1,42 +1,260 @@
 [
-  
   {
     "id": "ugc_problem_solution",
     "name": "UGC Problem Solution",
     "format": "video",
     "goal": "conversion",
-    "description": "Reklama stylizowana na naturalne nagranie użytkownika, pokazująca realny problem, użycie produktu i efekt rozwiązania.",
-    "rules" : [],
+    "description": "Naturalne nagranie użytkownika pokazujące problem, odkrycie produktu i efekt po jego użyciu.",
+    "rules": [],
     "structure": [
       {
         "step": 1,
         "name": "Hook",
-        "purpose": "Przyciągnięcie uwagi widza w pierwszych sekundach.",
-        "rules" : []
+        "purpose": "Przyciągnij uwagę w pierwszych sekundach."
       },
       {
         "step": 2,
         "name": "Problem",
-        "purpose": "Pokazanie problemu lub frustracji użytkownika.",
-        "rules" : []
+        "purpose": "Pokaż problem lub frustrację użytkownika."
       },
       {
         "step": 3,
         "name": "Product Introduction",
-        "purpose": "Naturalne przedstawienie produktu jako rozwiązania.",
-        "rules" : []
+        "purpose": "Naturalnie przedstaw produkt jako rozwiązanie."
       },
       {
         "step": 4,
-        "name": "Solution / Result",
-        "purpose": "Pokazanie efektu i głównej korzyści.",
-        "rules" : []
+        "name": "Result",
+        "purpose": "Pokaż efekt oraz najważniejszą korzyść."
       },
       {
         "step": 5,
         "name": "Call To Action",
-        "purpose": "Zachęcenie użytkownika do działania.",
-        "rules" : []
+        "purpose": "Zachęć do działania."
+      }
+    ]
+  },
+  {
+    "id": "product_demo",
+    "name": "Product Demonstration",
+    "format": "video",
+    "goal": "conversion",
+    "description": "Krótka demonstracja produktu pokazująca jego działanie w praktyce i sposób rozwiązania problemu.",
+    "rules": [],
+    "structure": [
+      {
+        "step": 1,
+        "name": "Hook",
+        "purpose": "Pokaż efekt lub problem już na początku."
+      },
+      {
+        "step": 2,
+        "name": "Demonstration",
+        "purpose": "Zaprezentuj produkt podczas rzeczywistego użycia."
+      },
+      {
+        "step": 3,
+        "name": "Benefits",
+        "purpose": "Pokaż najważniejsze korzyści wynikające z działania produktu."
+      },
+      {
+        "step": 4,
+        "name": "CTA",
+        "purpose": "Wezwij odbiorcę do działania."
+      }
+    ]
+  },
+  {
+    "id": "before_after",
+    "name": "Before & After",
+    "format": "video",
+    "goal": "conversion",
+    "description": "Pokazanie realistycznej przemiany przed i po użyciu produktu z wykorzystaniem prawdziwych rezultatów.",
+    "rules": [
+      "Pokazuj realistyczne efekty.",
+      "Używaj prawdziwych zdjęć lub nagrań.",
+      "Podawaj liczby i czas transformacji."
+    ],
+    "structure": [
+      {
+        "step": 1,
+        "name": "Before",
+        "purpose": "Pokaż sytuację przed użyciem produktu."
+      },
+      {
+        "step": 2,
+        "name": "Transformation",
+        "purpose": "Pokaż proces zmiany."
+      },
+      {
+        "step": 3,
+        "name": "After",
+        "purpose": "Zaprezentuj rezultat wraz z liczbami lub dowodami."
+      },
+      {
+        "step": 4,
+        "name": "CTA",
+        "purpose": "Zachęć do działania."
+      }
+    ]
+  },
+  {
+    "id": "features_benefits",
+    "name": "Features & Benefits",
+    "format": "video",
+    "goal": "conversion",
+    "description": "Przedstawienie najważniejszych funkcji produktu oraz korzyści, jakie przynoszą użytkownikowi.",
+    "rules": [],
+    "structure": [
+      {
+        "step": 1,
+        "name": "Hook",
+        "purpose": "Zainteresuj odbiorcę problemem lub efektem."
+      },
+      {
+        "step": 2,
+        "name": "Feature",
+        "purpose": "Przedstaw funkcję produktu."
+      },
+      {
+        "step": 3,
+        "name": "Benefit",
+        "purpose": "Wyjaśnij, jaką wartość daje użytkownikowi."
+      },
+      {
+        "step": 4,
+        "name": "CTA",
+        "purpose": "Zachęć do działania."
+      }
+    ]
+  },
+  {
+    "id": "testimonial",
+    "name": "Testimonial",
+    "format": "video",
+    "goal": "trust",
+    "description": "Autentyczna opinia klienta opisująca doświadczenie z produktem.",
+    "rules": [],
+    "structure": [
+      {
+        "step": 1,
+        "name": "Introduction",
+        "purpose": "Przedstaw klienta lub jego sytuację."
+      },
+      {
+        "step": 2,
+        "name": "Problem",
+        "purpose": "Opisz problem przed użyciem produktu."
+      },
+      {
+        "step": 3,
+        "name": "Experience",
+        "purpose": "Opowiedz o korzystaniu z produktu."
+      },
+      {
+        "step": 4,
+        "name": "Result",
+        "purpose": "Pokaż osiągnięte rezultaty."
+      },
+      {
+        "step": 5,
+        "name": "CTA",
+        "purpose": "Zachęć odbiorcę do wypróbowania produktu."
+      }
+    ]
+  },
+  {
+    "id": "negative_hook",
+    "name": "Negative Hook",
+    "format": "video",
+    "goal": "attention",
+    "description": "Reklama rozpoczynająca się od mocnego pokazania problemu, błędu lub frustracji odbiorcy.",
+    "rules": [],
+    "structure": [
+      {
+        "step": 1,
+        "name": "Negative Hook",
+        "purpose": "Rozpocznij od mocnego problemu lub błędu."
+      },
+      {
+        "step": 2,
+        "name": "Problem",
+        "purpose": "Pokaż konsekwencje problemu."
+      },
+      {
+        "step": 3,
+        "name": "Solution",
+        "purpose": "Przedstaw rozwiązanie."
+      },
+      {
+        "step": 4,
+        "name": "CTA",
+        "purpose": "Wezwij do działania."
+      }
+    ]
+  },
+  {
+    "id": "problem_solution",
+    "name": "Problem Solution",
+    "format": "video",
+    "goal": "conversion",
+    "description": "Klasyczna reklama skupiająca się na problemie klienta i przedstawiająca produkt jako najlepsze rozwiązanie.",
+    "rules": [],
+    "structure": [
+      {
+        "step": 1,
+        "name": "Hook",
+        "purpose": "Zwróć uwagę na problem."
+      },
+      {
+        "step": 2,
+        "name": "Problem",
+        "purpose": "Rozwiń problem użytkownika."
+      },
+      {
+        "step": 3,
+        "name": "Solution",
+        "purpose": "Przedstaw produkt."
+      },
+      {
+        "step": 4,
+        "name": "Benefits",
+        "purpose": "Pokaż korzyści."
+      },
+      {
+        "step": 5,
+        "name": "CTA",
+        "purpose": "Zachęć do działania."
+      }
+    ]
+  },
+  {
+    "id": "comparison",
+    "name": "Comparison",
+    "format": "video",
+    "goal": "conversion",
+    "description": "Porównanie produktu z konkurencją lub tradycyjnym sposobem rozwiązania problemu.",
+    "rules": [],
+    "structure": [
+      {
+        "step": 1,
+        "name": "Comparison Hook",
+        "purpose": "Pokaż dwa rozwiązania obok siebie."
+      },
+      {
+        "step": 2,
+        "name": "Comparison",
+        "purpose": "Porównaj najważniejsze różnice."
+      },
+      {
+        "step": 3,
+        "name": "Winner",
+        "purpose": "Pokaż przewagę produktu."
+      },
+      {
+        "step": 4,
+        "name": "CTA",
+        "purpose": "Zachęć do działania."
       }
     ]
   }
