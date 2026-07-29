@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react'
+import { ChevronDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
+import { EntityViewer } from '@/components/EntityViewer'
 import { useGetOutputPromptQuery, useSaveOutputPromptMutation } from '@/features/settings/settingsApi'
 
 export default function SettingsPage() {
@@ -15,6 +18,18 @@ export default function SettingsPage() {
   return (
     <div className="max-w-3xl space-y-6 p-6">
       <h1 className="text-2xl font-semibold">Ustawienia</h1>
+
+      {data && (
+        <Collapsible>
+          <CollapsibleTrigger className="group flex items-center gap-1.5 text-xs font-medium tracking-wide text-muted-foreground uppercase hover:text-foreground">
+            <ChevronDown className="size-3.5 shrink-0 transition-transform group-data-[panel-open]:rotate-180" />
+            Pokaż surowy JSON
+          </CollapsibleTrigger>
+          <CollapsibleContent className="pt-2">
+            <EntityViewer data={data} />
+          </CollapsibleContent>
+        </Collapsible>
+      )}
 
       <div className="space-y-2">
         <h2 className="text-sm font-medium">Output prompt</h2>

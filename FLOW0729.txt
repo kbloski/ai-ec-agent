@@ -1,0 +1,280 @@
+================================================================================
+FLOW0729.txt
+Mapa przepływu danych aplikacji: od Oferty do gotowej kreacji reklamowej
+Wygenerowano: 2026-07-29
+================================================================================
+
+CEL DOKUMENTU
+--------------------------------------------------------------------------------
+Ten plik opisuje pełną ścieżkę, jaką przechodzi Oferta (Offer) w tej aplikacji,
+aż do wygenerowania finalnej kreacji reklamowej (CreativeExecution) oraz
+finalnej treści strony sprzedażowej (PageCopy). Dla każdego węzła podano:
+  - czym jest encja,
+  - jakim endpointem jest generowana/pobierana,
+  - jaki handler/plik ją implementuje,
+  - jakie dane wejściowe konsumuje generator (LLM).
+
+Źródło prawdy: backend/api/routes/general_routes.py (rejestracja wszystkich
+tras) oraz poszczególne pliki generate_*_handler.py w backend/application/handlers/.
+
+
+DIAGRAM CAŁOŚCIOWY (Z ROZGAŁĘZIENIAMI)
+--------------------------------------------------------------------------------
+
+Offer
+ |
+ |-- OfferItem        (elementy oferty — tworzone ręcznie, nie generowane LLM)
+ |-- OfferInsight      (insighty oferty, mają content_status: approved/suggested/rejected)
+ |
+ `-- Knowledge          (generowane z Offer)
+      |
+      |-- KnowledgeInsight   (insighty wiedzy, content_status)
+      |
+      |-- TargetAudience     (GRUPY ODBIORCÓW — generowane z Knowledge)
+      |                       >>> WAŻNE: patrz sekcja "ROLA TARGET AUDIENCE" poniżej.
+      |                       Mimo że strukturalnie wisi bezpośrednio pod Knowledge,
+      |                       jego dane NIE są ślepym liściem — przepływają dalej
+      |                       do każdego kolejnego kroku łańcucha marketingowego.
+      |
+      |-- Analysis            (osobna gałąź diagnostyczna, niezależna od ścieżki
+      |    `-- Checklist       reklamowej — audyt/ocena wiedzy o ofercie)
+      |
+      `-- BrandMarketing      (generowane z Knowledge; konsumuje CAŁY knowledge_details,
+           |                    czyli też target_audiences — patrz niżej)
+           |
+           `-- MarketingStrategy   (generowane z BrandMarketing)
+                |
+                `-- OfferStrategy    (generowane z MarketingStrategy)
+                     |
+                     `-- MessageStrategy   (generowane z OfferStrategy)
+                          |
+                          |-- UgcCreative        (generowane z MessageStrategy — gałąź UGC,
+                          |                        końcowy liść, nie prowadzi dalej)
+                          |
+                          |-- AdStrategy         (generowane z MessageStrategy)
+                          |    |
+                          |    `-- CreativeStrategy   (generowane z AdStrategy)
+                          |         |
+                          |         `-- AdExecution        (TWORZONE RĘCZNIE pod CreativeStrategy:
+                          |              |                   name, creative_type, platform, format)
+                          |              |
+                          |              `-- CreativeExecution   (generowane z AdExecution —
+                          |                                        *** FINALNA KREACJA REKLAMOWA ***)
+                          |
+                          `-- PageStrategy       (generowane z MessageStrategy — jawnie używa
+                               |                   target_audience jako target_customer)
+                               |
+                               `-- PageBlueprint       (generowane z PageStrategy)
+                                    |
+                                    `-- PageContentPlan     (generowane z PageBlueprint)
+                                         |
+                                         `-- PageCopy            (generowane z PageContentPlan —
+                                                                   *** FINALNA TREŚĆ STRONY SPRZEDAŻOWEJ ***)
+
+
+OPIS KROK PO KROKU
+--------------------------------------------------------------------------------
+
+1. OFFER (Oferta)
+   Endpoint tworzenia: GET /offers/create
+   Handler: backend/application/handlers/offers/create_offer.py
+   Pola: name, buying_price, selling_price, details.
+   To punkt startowy całego łańcucha — reprezentuje pojedynczy produkt/ofertę.
+
+   1a. OfferItem (elementy oferty)
+       Model: backend/domain/models/offers/offer_item.py
+       Pola: name, quantity, details.
+       Tworzone ręcznie przez użytkownika, nie przez LLM.
+
+   1b. OfferInsight (insighty oferty)
+       Ma pole content_status (approved/suggested/rejected).
+
+2. KNOWLEDGE (Baza wiedzy o ofercie)
+   Endpoint generowania: GET /offers/{id}/knowledges/generate
+   Handler: backend/application/handlers/offers/offer_knowledge_generate.py
+   Wejście LLM: dane Offer (name, ceny, details).
+   Wynik: offer_summary, category, value_proposition + content_status.
+   To pierwszy krok analityczny — LLM "rozumie" ofertę i tworzy z niej ustrukturyzowaną wiedzę.
+
+   2a. KnowledgeInsight — dodatkowe insighty przypisane do Knowledge.
+
+   2b. TargetAudience — patrz sekcja specjalna niżej.
+
+   2c. Analysis + Checklist — gałąź diagnostyczna (audyt kompletności wiedzy),
+       NIE bierze udziału w ścieżce generowania reklamy/strony.
+
+3. BRAND MARKETING (Strategia marki)
+   Endpoint generowania: GET /knowledges/{knowledge_id}/brand-marketing/generate
+   Handler: backend/application/handlers/brand_marketing/generate_brand_marketing_handler.py
+   Wejście LLM: knowledge_service.get_knowledge_details_by_id(knowledge_id) —
+                 pełny obiekt Knowledge, który (patrz sekcja TargetAudience)
+                 zawiera już dołączone target_audiences.
+   Wynik: brand_positioning, brand_values, brand_voice, brand_story,
+          target_perception, customer_pains/fears/objections, itd. (32 pola).
+
+4. MARKETING STRATEGY
+   Endpoint generowania: GET /knowledges/{knowledge_id}/brand-marketing/{brand_marketing_id}/marketing-strategy/generate
+   Handler: backend/application/handlers/marketing_strategy/generate_marketing_strategy_handler.py
+   Wejście LLM: BrandMarketing.
+   Wynik: marketing_objective, growth_strategy, acquisition/retention/conversion strategy,
+          marketing_channels, campaign_directions, customer_journey.
+
+5. OFFER STRATEGY
+   Endpoint generowania: GET /marketing-strategy/{marketing_strategy_id}/offer-strategy/generate
+   Handler: backend/application/handlers/offer_strategy/generate_offer_strategy_handler.py
+   Wejście LLM: MarketingStrategy.
+   Wynik: offer_positioning, core_value_proposition, pricing_strategy, offer_structure,
+          value_stack, risk_reversal, conversion_levers.
+
+6. MESSAGE STRATEGY
+   Endpoint generowania: GET /offer-strategy/{offer_strategy_id}/message-strategy/generate
+   Handler: backend/application/handlers/message_strategy/generate_message_strategy_handler.py
+   Wejście LLM: OfferStrategy (+ pełny łańcuch wcześniejszych strategii).
+   To węzeł ROZGAŁĘZIAJĄCY się na TRZY niezależne dalsze ścieżki: UgcCreative,
+   AdStrategy (reklamy) oraz PageStrategy (strona sprzedażowa).
+
+   6a. UGC CREATIVE (gałąź boczna, kończy się tutaj)
+       Endpoint: GET /message-strategy/{message_strategy_id}/ugc-creatives/generate
+       Handler: backend/application/handlers/ugc_creatives/generate_ugc_creatives_handler.py
+
+7. AD STRATEGY (ścieżka reklamowa — gałąź 1 z 2 głównych)
+   Endpoint generowania: GET /message-strategy/{message_strategy_id}/ad-strategy/generate
+   Handler: backend/application/handlers/ad_strategy/generate_ad_strategy_handler.py
+   Wynik: objective, priority_audiences, audience_angles, message_angles,
+          offer_angles, creative_concepts, recommended_formats, testing_hypotheses.
+
+8. CREATIVE STRATEGY
+   Endpoint generowania: GET /ad-strategy/{ad_strategy_id}/creative-strategy/generate
+   Handler: backend/application/handlers/creative_strategy/generate_creative_strategy_handler.py
+   Wynik: name, creative_type (video/image/carousel), hook_strategy, emotion_flow,
+          proof_strategy, recommended_format.
+
+9. AD EXECUTION
+   Endpoint tworzenia: GET /creative-strategy/{creative_strategy_id}/ad-execution/create
+   Handler: backend/application/handlers/ad_execution/create_ad_execution_handler.py
+   Tworzone RĘCZNIE (nie generowane przez LLM) — użytkownik wybiera konkretny
+   wariant wykonawczy: name, creative_type, platform, format.
+
+10. CREATIVE EXECUTION  ***FINALNA KREACJA REKLAMOWA***
+    Endpoint generowania: GET /ad-execution/{ad_execution_id}/creative-execution/generate
+    Handler: backend/application/handlers/creative_execution/generate_creative_execution_handler.py
+    To najbardziej "nasycony kontekstem" generator w całej aplikacji — prompt
+    budowany jest z: AdExecution + CreativeStrategy + BrandMarketing (brand_strategy)
+    + MarketingStrategy + OfferStrategy + MessageStrategy + AdStrategy, a opcjonalnie
+    także z wybranego przez użytkownika:
+      - ad_framework_id  (gotowy framework kreatywny, np. "UGC Problem Solution",
+                           z listy GET /ad-frameworks, plik danych:
+                           backend/infrastructure/ads/ads_frameworks.json)
+      - creative_angle_id (kąt kreatywny, np. "Personal Story", z listy
+                           GET /creative-angels, plik danych:
+                           backend/infrastructure/ads/creative_angels.json)
+      - duration_seconds / number_of_slides (parametry video/carousel).
+    Wynik zależy od creative_type: osobne prompty systemowe dla video/image/carousel
+    (VIDEO_CREATIVE_EXECUTION_PROMPT / IMAGE_CREATIVE_EXECUTION_PROMPT /
+    CAROUSEL_CREATIVE_EXECUTION_PROMPT w tym samym pliku handlera), zwracające
+    m.in. hook_strategy, structure/scenes (video), visual_concept (image) lub
+    slides (carousel).
+    To jest KONIEC ścieżki reklamowej — CreativeExecution.content_json to gotowa
+    specyfikacja produkcyjna kreacji reklamowej.
+
+11. PAGE STRATEGY (ścieżka strony sprzedażowej — gałąź 2 z 2 głównych)
+    Endpoint generowania: GET /message-strategy/{message_strategy_id}/page-strategy/generate
+    Handler: backend/application/handlers/page_strategy/generate_page_strategy_json_handler.py
+    Wejście LLM: Knowledge + MessageStrategy + BrandMarketing + MarketingStrategy
+                 + OfferStrategy (pełny łańcuch, jawnie serializowany do promptu).
+    WAŻNE: wynikowe pole target_audience na PageStrategy pochodzi z sekcji
+    "target_customer" wygenerowanej przez LLM na podstawie tego kontekstu —
+    czyli grupy odbiorców (TargetAudience z kroku 2b, wbudowane w Knowledge)
+    bezpośrednio kształtują tu: target_customer.description, .problem, .desire,
+    .purchase_motivators.
+
+12. PAGE BLUEPRINT
+    Endpoint generowania: GET /page-strategy/{page_strategy_id}/page-blueprint/generate
+    Handler: backend/application/handlers/page_blueprint/generate_page_blueprint_handler.py
+    Wynik: page_type, primary_conversion_goal, sections (lista sekcji strony:
+           hero, problem, solution, proof, offer, cta, itd.).
+
+13. PAGE CONTENT PLAN
+    Endpoint generowania: GET /page-blueprint/{page_blueprint_id}/page-content-plan/generate
+    Handler: backend/application/handlers/page_content_plan/generate_page_content_plan_handler.py
+    Wynik: sections — rozwinięcie blueprintu o plan treści per sekcja.
+
+14. PAGE COPY  ***FINALNA TREŚĆ STRONY SPRZEDAŻOWEJ***
+    Endpoint generowania: GET /page-content-plan/{page_content_plan_id}/page-copy/generate
+    Handler: backend/application/handlers/page_copy/generate_page_copy_handler.py
+    Wynik: sections — gotowe teksty (copy) do wdrożenia na stronie.
+    To KONIEC ścieżki strony sprzedażowej.
+
+
+ROLA TARGET AUDIENCE (GRUP ODBIORCÓW) — SEKCJA SPECJALNA
+--------------------------------------------------------------------------------
+TargetAudience generowane jest bezpośrednio pod Knowledge:
+  Endpoint: GET /knowledges/{knowledge_id}/target-audiences/generate
+  Handler:  backend/application/handlers/target_audience/generate_target_audience_handler.py
+  Pola: name, reason, score, confidence, age_min/max, gender, location,
+        purchasing_power, lifestyles, values, awareness_level, price_sensitivity,
+        research_level, decision_time, pain_points, motivations, buying_triggers,
+        objections, message_angles, marketing_channels, content_status.
+
+W diagramie wygląda jak boczna gałąź Knowledge bez dalszych "dzieci" — ALE to
+mylące, bo w rzeczywistości jego dane są wstrzykiwane do każdego kolejnego kroku
+łańcucha przez mechanizm asemblacji Knowledge:
+
+  backend/application/assemblers/offer_knowledge_assembler.py
+    -> assemble_dto() pobiera target_audiences_repository.find_for_knowledge(...)
+       i DOŁĄCZA je jako pole `target_audiences` do zwracanego Knowledge DTO.
+
+Każdy handler generujący, który woła:
+  knowledge_service.get_knowledge_details_by_id(knowledge_id)
+(np. generate_brand_marketing_handler.py, generate_page_strategy_json_handler.py
+i analogiczne w dalszych krokach, które transitywnie bazują na danych z Knowledge)
+otrzymuje więc PEŁNY obiekt Knowledge łącznie z listą target_audiences.
+
+Efekt: segmentacja odbiorców zdefiniowana raz na poziomie Knowledge realnie
+wpływa na:
+  BrandMarketing -> MarketingStrategy -> OfferStrategy -> MessageStrategy
+  -> (AdStrategy -> CreativeStrategy -> AdExecution -> CreativeExecution)
+  -> (PageStrategy -> PageBlueprint -> PageContentPlan -> PageCopy)
+  -> UgcCreative
+
+Najbardziej bezpośredni, udokumentowany w kodzie ślad tego wpływu to
+PageStrategy.target_audience / customer_problem / customer_desire, które LLM
+wypełnia właśnie na podstawie przekazanego kontekstu Knowledge (a więc i
+target_audiences) — patrz punkt 11 powyżej.
+
+Dodatkowo: przy generowaniu CreativeExecution (punkt 10) użytkownik może ręcznie
+wskazać creative_angle_id (kąt kreatywny) — koncepcyjnie jest to kolejny punkt,
+w którym charakterystyka konkretnej grupy odbiorców (np. "Personal Story" dla
+grupy szukającej autentyczności) wpływa na finalną kreację reklamową.
+
+
+DWIE RÓWNOLEGŁE ŚCIEŻKI KOŃCOWE — PODSUMOWANIE
+--------------------------------------------------------------------------------
+Od MessageStrategy aplikacja rozgałęzia się na trzy niezależne ścieżki:
+
+  (a) ŚCIEŻKA REKLAMOWA:
+      MessageStrategy -> AdStrategy -> CreativeStrategy -> AdExecution
+      -> CreativeExecution  (finalna kreacja reklamowa: wideo/obraz/karuzela)
+
+  (b) ŚCIEŻKA STRONY SPRZEDAŻOWEJ:
+      MessageStrategy -> PageStrategy -> PageBlueprint -> PageContentPlan
+      -> PageCopy  (finalna treść strony sprzedażowej)
+
+  (c) ŚCIEŻKA UGC:
+      MessageStrategy -> UgcCreative  (samodzielny liniowy liść, bez dalszych kroków)
+
+Obie główne ścieżki (a) i (b) są od siebie niezależne (osobne drzewa FK), ale
+obie dziedziczą ten sam kontekst strategiczny wypracowany wcześniej (Knowledge,
+TargetAudience, BrandMarketing, MarketingStrategy, OfferStrategy, MessageStrategy).
+
+
+PLIK ŹRÓDŁOWY TRAS (dla weryfikacji/aktualizacji tego dokumentu)
+--------------------------------------------------------------------------------
+backend/api/routes/general_routes.py — wszystkie endpointy generate/get/delete/update
+dla powyższych encji są tam zarejestrowane w kolejności odpowiadającej diagramowi
+powyżej (offers -> offer-insights -> offer-items -> knowledges -> knowledge-insights
+-> target-audiences -> analysis/checklists -> brand-marketing -> marketing-strategy
+-> offer-strategy -> message-strategy -> ugc-creatives -> ad-strategy
+-> creative-strategy -> ad-execution -> creative-execution -> page-strategy
+-> page-blueprint -> page-content-plan -> page-copy).
+================================================================================

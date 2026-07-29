@@ -2,6 +2,9 @@ import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { EntityFields } from '@/components/EntityFields'
 import { EditableFields } from '@/components/EditableFields'
+import { ChevronDown } from 'lucide-react'
+import { EntityViewer } from '@/components/EntityViewer'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import type { Entity } from '@/types'
 
 interface DetailShellProps {
@@ -60,6 +63,18 @@ export function DetailShell({
         )}
 
         <h1 className="text-2xl font-semibold">{title}</h1>
+
+        {data && (
+          <Collapsible>
+            <CollapsibleTrigger className="group flex items-center gap-1.5 text-xs font-medium tracking-wide text-muted-foreground uppercase hover:text-foreground">
+              <ChevronDown className="size-3.5 shrink-0 transition-transform group-data-[panel-open]:rotate-180" />
+              Pokaż surowy JSON
+            </CollapsibleTrigger>
+            <CollapsibleContent className="pt-2">
+              <EntityViewer data={data} />
+            </CollapsibleContent>
+          </Collapsible>
+        )}
 
         {isLoading && <p className="text-sm text-muted-foreground">Ładowanie…</p>}
         {Boolean(error) && <p className="text-sm text-destructive">Nie udało się pobrać danych.</p>}
