@@ -1,10 +1,11 @@
 import { useParams } from 'react-router-dom'
 import { DetailShell } from '@/components/DetailShell'
-import { useGetPageCopyQuery } from '@/features/pageCopy/pageCopyApi'
+import { useGetPageCopyQuery, useUpdatePageCopyMutation } from '@/features/pageCopy/pageCopyApi'
 
 export default function PageCopyDetailPage() {
   const id = Number(useParams().id)
   const { data, isLoading, error } = useGetPageCopyQuery(id)
+  const [updatePageCopy, updateState] = useUpdatePageCopyMutation()
 
   return (
     <DetailShell
@@ -14,6 +15,10 @@ export default function PageCopyDetailPage() {
       data={data}
       isLoading={isLoading}
       error={error}
+      editable={{
+        onSave: (fields) => updatePageCopy({ id, fields }).unwrap(),
+        isSaving: updateState.isLoading,
+      }}
     />
   )
 }

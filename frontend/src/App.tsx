@@ -6,6 +6,7 @@ import KnowledgeDetailPage from '@/pages/KnowledgeDetailPage'
 import TargetAudienceDetailPage from '@/pages/TargetAudienceDetailPage'
 import TargetAudienceEditPage from '@/pages/TargetAudienceEditPage'
 import OfferInsightEditPage from '@/pages/OfferInsightEditPage'
+import OfferItemEditPage from '@/pages/OfferItemEditPage'
 import KnowledgeInsightEditPage from '@/pages/KnowledgeInsightEditPage'
 import AnalysisDetailPage from '@/pages/AnalysisDetailPage'
 import ChecklistDetailPage from '@/pages/ChecklistDetailPage'
@@ -34,6 +35,7 @@ function App() {
         <Route path="/target-audiences/:id" element={<TargetAudienceDetailPage />} />
         <Route path="/target-audiences/:id/edit" element={<TargetAudienceEditPage />} />
         <Route path="/offer-insights/:id/edit" element={<OfferInsightEditPage />} />
+        <Route path="/offer-items/:id/edit" element={<OfferItemEditPage />} />
         <Route path="/knowledge-insights/:id/edit" element={<KnowledgeInsightEditPage />} />
         <Route path="/knowledges/:knowledgeId/analysis/:analysisId" element={<AnalysisDetailPage />} />
         <Route

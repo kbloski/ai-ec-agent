@@ -23,6 +23,14 @@ export const adExecutionApi = api.injectEndpoints({
       query: (id) => `/ad-execution/${id}`,
       providesTags: (_result, _err, id) => [itemTag('AdExecution', id)],
     }),
+    updateAdExecution: builder.mutation<Entity, { id: number; fields: Record<string, unknown> }>({
+      query: ({ id, fields }) => ({
+        url: `/ad-execution/${id}/update`,
+        method: 'POST',
+        body: { fields },
+      }),
+      invalidatesTags: (_result, _err, { id }) => [itemTag('AdExecution', id)],
+    }),
     createAdExecution: builder.mutation<Entity, CreateAdExecutionArgs>({
       query: ({ creativeStrategyId, ...params }) => ({
         url: `/creative-strategy/${creativeStrategyId}/ad-execution/create`,
@@ -47,4 +55,5 @@ export const {
   useGetAdExecutionQuery,
   useCreateAdExecutionMutation,
   useDeleteAdExecutionMutation,
+  useUpdateAdExecutionMutation,
 } = adExecutionApi

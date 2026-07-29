@@ -1,7 +1,10 @@
 import { useParams } from 'react-router-dom'
 import { DetailShell } from '@/components/DetailShell'
 import { ResourceList } from '@/components/ResourceList'
-import { useGetPageContentPlanQuery } from '@/features/pageContentPlan/pageContentPlanApi'
+import {
+  useGetPageContentPlanQuery,
+  useUpdatePageContentPlanMutation,
+} from '@/features/pageContentPlan/pageContentPlanApi'
 import {
   useDeletePageCopyMutation,
   useGeneratePageCopyMutation,
@@ -15,6 +18,7 @@ export default function PageContentPlanDetailPage() {
   const list = useListPageCopyForPageContentPlanQuery(id)
   const [generate, generateState] = useGeneratePageCopyMutation()
   const [deletePageCopy] = useDeletePageCopyMutation()
+  const [updatePageContentPlan, updateState] = useUpdatePageContentPlanMutation()
 
   return (
     <DetailShell
@@ -24,6 +28,10 @@ export default function PageContentPlanDetailPage() {
       data={pageContentPlan}
       isLoading={isLoading}
       error={error}
+      editable={{
+        onSave: (fields) => updatePageContentPlan({ id, fields }).unwrap(),
+        isSaving: updateState.isLoading,
+      }}
     >
       <ResourceList
         title="Page copy"

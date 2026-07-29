@@ -15,6 +15,17 @@ export const pageContentPlanApi = api.injectEndpoints({
       query: (id) => `/page-content-plan/${id}`,
       providesTags: (_result, _err, id) => [itemTag('PageContentPlan', id)],
     }),
+    updatePageContentPlan: builder.mutation<
+      Entity,
+      { id: number; fields: Record<string, unknown> }
+    >({
+      query: ({ id, fields }) => ({
+        url: `/page-content-plan/${id}/update`,
+        method: 'POST',
+        body: { fields },
+      }),
+      invalidatesTags: (_result, _err, { id }) => [itemTag('PageContentPlan', id)],
+    }),
     generatePageContentPlan: builder.mutation<Entity, number>({
       query: (pageBlueprintId) => `/page-blueprint/${pageBlueprintId}/page-content-plan/generate`,
       invalidatesTags: (_result, _err, pageBlueprintId) => [
@@ -36,4 +47,5 @@ export const {
   useGetPageContentPlanQuery,
   useGeneratePageContentPlanMutation,
   useDeletePageContentPlanMutation,
+  useUpdatePageContentPlanMutation,
 } = pageContentPlanApi

@@ -24,6 +24,21 @@ class OfferItemsRepository:
     def get_by_id(self, id: int) -> Optional[OfferItem]:
         return self.db.query(OfferItem).filter(OfferItem.id == id).first()
 
+    def update(self, item: OfferItem) -> OfferItem:
+        existing_item = self.db.query(OfferItem).filter(OfferItem.id == item.id).first()
+
+        if not existing_item:
+            raise ValueError(f"OfferItem with id {item.id} not found")
+
+        for key, value in item.__dict__.items():
+            if key != "_sa_instance_state":
+                setattr(existing_item, key, value)
+
+        self.db.commit()
+        self.db.refresh(existing_item)
+
+        return existing_item
+
     # ❌ DELETE
     def delete(self, id: int) -> bool:
         offer_item = self.db.query(OfferItem).filter(OfferItem.id == id).first()

@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom'
 import { DetailShell } from '@/components/DetailShell'
 import { ResourceList } from '@/components/ResourceList'
-import { useGetPageStrategyQuery } from '@/features/pageStrategy/pageStrategyApi'
+import { useGetPageStrategyQuery, useUpdatePageStrategyMutation } from '@/features/pageStrategy/pageStrategyApi'
 import {
   useDeletePageBlueprintMutation,
   useGeneratePageBlueprintMutation,
@@ -15,6 +15,7 @@ export default function PageStrategyDetailPage() {
   const list = useListPageBlueprintForPageStrategyQuery(id)
   const [generate, generateState] = useGeneratePageBlueprintMutation()
   const [deletePageBlueprint] = useDeletePageBlueprintMutation()
+  const [updatePageStrategy, updateState] = useUpdatePageStrategyMutation()
 
   return (
     <DetailShell
@@ -24,6 +25,10 @@ export default function PageStrategyDetailPage() {
       data={pageStrategy}
       isLoading={isLoading}
       error={error}
+      editable={{
+        onSave: (fields) => updatePageStrategy({ id, fields }).unwrap(),
+        isSaving: updateState.isLoading,
+      }}
     >
       <ResourceList
         title="Page blueprint"

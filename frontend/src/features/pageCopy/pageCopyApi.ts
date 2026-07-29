@@ -15,6 +15,14 @@ export const pageCopyApi = api.injectEndpoints({
       query: (id) => `/page-copy/${id}`,
       providesTags: (_result, _err, id) => [itemTag('PageCopy', id)],
     }),
+    updatePageCopy: builder.mutation<Entity, { id: number; fields: Record<string, unknown> }>({
+      query: ({ id, fields }) => ({
+        url: `/page-copy/${id}/update`,
+        method: 'POST',
+        body: { fields },
+      }),
+      invalidatesTags: (_result, _err, { id }) => [itemTag('PageCopy', id)],
+    }),
     generatePageCopy: builder.mutation<Entity, number>({
       query: (pageContentPlanId) => `/page-content-plan/${pageContentPlanId}/page-copy/generate`,
       invalidatesTags: (_result, _err, pageContentPlanId) => [
@@ -36,4 +44,5 @@ export const {
   useGetPageCopyQuery,
   useGeneratePageCopyMutation,
   useDeletePageCopyMutation,
+  useUpdatePageCopyMutation,
 } = pageCopyApi

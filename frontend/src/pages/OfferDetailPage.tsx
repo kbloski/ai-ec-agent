@@ -4,6 +4,7 @@ import { ResourceList } from '@/components/ResourceList'
 import { Button } from '@/components/ui/button'
 import {
   useDeleteOfferInsightMutation,
+  useDeleteOfferItemMutation,
   useDeleteOfferMutation,
   useGenerateOfferSuggestionsMutation,
   useGetOfferQuery,
@@ -25,6 +26,7 @@ export default function OfferDetailPage() {
   const [deleteKnowledge] = useDeleteKnowledgeMutation()
   const [deleteOffer] = useDeleteOfferMutation()
   const [deleteOfferInsight] = useDeleteOfferInsightMutation()
+  const [deleteOfferItem] = useDeleteOfferItemMutation()
   const [generateSuggestions, generateSuggestionsState] = useGenerateOfferSuggestionsMutation()
   const [updateOffer, updateOfferState] = useUpdateOfferMutation()
 
@@ -39,9 +41,11 @@ export default function OfferDetailPage() {
       collapsibleFields={['offer_items', 'offer_insights']}
       itemActions={{
         offer_insights: (item) => deleteOfferInsight({ id: item.id as number, offerId }),
+        offer_items: (item) => deleteOfferItem({ id: item.id as number, offerId }),
       }}
       itemLinks={{
         offer_insights: (item) => `/offer-insights/${item.id}/edit`,
+        offer_items: (item) => `/offer-items/${item.id}/edit`,
       }}
       editable={{
         onSave: (fields) => updateOffer({ id: offerId, fields }).unwrap(),

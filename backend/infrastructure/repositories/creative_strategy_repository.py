@@ -30,6 +30,21 @@ class CreativeStrategyRepository:
             .all()
         )
 
+    def update(self, item: CreativeStrategy) -> CreativeStrategy:
+        existing_item = self.db.query(CreativeStrategy).filter(CreativeStrategy.id == item.id).first()
+
+        if not existing_item:
+            raise ValueError(f"CreativeStrategy with id {item.id} not found")
+
+        for key, value in item.__dict__.items():
+            if key != "_sa_instance_state":
+                setattr(existing_item, key, value)
+
+        self.db.commit()
+        self.db.refresh(existing_item)
+
+        return existing_item
+
     # ❌ DELETE
     def delete(self, id: int) -> bool:
         item = self.db.query(CreativeStrategy).filter(CreativeStrategy.id == id).first()

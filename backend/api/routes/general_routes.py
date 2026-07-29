@@ -12,6 +12,8 @@ from application.handlers.offers.seed_full_offer import seed_full_offer
 from application.handlers.offers.get_offer import get_offer_handler
 from application.handlers.offers.delete_offer import delete_offer_handler
 from application.handlers.offers.delete_offer_item import delete_offer_item_handler
+from application.handlers.offers.get_offer_item_handler import get_offer_item_handler
+from application.handlers.offers.update_offer_item_handler import update_offer_item_handler
 from application.handlers.offers.offer_knowledge_generate import offer_knowledge_generate_handler
 from application.handlers.offers.get_offer_knowledge_handler import get_offer_knowledge_handler
 from application.handlers.offers.get_offer_knowledges_handler import get_offer_knowledges_handler
@@ -27,6 +29,14 @@ from application.handlers.offers.update_offer_knowledge_handler import update_of
 from application.handlers.brand_marketing.update_brand_marketing_handler import update_brand_marketing_handler
 from application.handlers.marketing_strategy.update_marketing_strategy_handler import update_marketing_strategy_handler
 from application.handlers.offer_strategy.update_offer_strategy_handler import update_offer_strategy_handler
+from application.handlers.page_strategy.update_page_strategy_handler import update_page_strategy_handler
+from application.handlers.page_blueprint.update_page_blueprint_handler import update_page_blueprint_handler
+from application.handlers.page_content_plan.update_page_content_plan_handler import update_page_content_plan_handler
+from application.handlers.page_copy.update_page_copy_handler import update_page_copy_handler
+from application.handlers.ad_strategy.update_ad_strategy_handler import update_ad_strategy_handler
+from application.handlers.creative_strategy.update_creative_strategy_handler import update_creative_strategy_handler
+from application.handlers.ad_execution.update_ad_execution_handler import update_ad_execution_handler
+from application.handlers.creative_execution.update_creative_execution_handler import update_creative_execution_handler
 from application.handlers.target_audience.generate_target_audience_handler import generate_target_audience_handler
 from application.handlers.target_audience.get_target_audience_handler import get_target_audience_handler
 from application.handlers.target_audience.get_target_audience_preview_handler import get_target_audience_preview_handler
@@ -216,6 +226,14 @@ def register_general_routes(router: APIRouter):
     @router.get("/offer-items/{id}/delete")
     def delete_offer_item_route(id: int):
         return delete_offer_item_handler(id=id)
+
+    @router.get("/offer-items/{id}")
+    def get_offer_item_route(id: int):
+        return get_offer_item_handler(id=id)
+
+    @router.post("/offer-items/{id}/update")
+    def update_offer_item_route(id: int, payload: UpdateFieldsRequest):
+        return update_offer_item_handler(id=id, fields=payload.fields)
 
 
 
@@ -504,6 +522,10 @@ def register_general_routes(router: APIRouter):
     def get_ad_strategy( id: int ):
         return get_ad_strategy_handler( id=id )
 
+    @router.post("/ad-strategy/{id}/update")
+    def update_ad_strategy_route(id: int, payload: UpdateFieldsRequest):
+        return update_ad_strategy_handler(id=id, fields=payload.fields)
+
     # DELETE in future
     @router.get("/ad-strategy/{id}/delete")
     def delete_ad_strategy_route( id: int ):
@@ -527,6 +549,10 @@ def register_general_routes(router: APIRouter):
     @router.get("/creative-strategy/{id}")
     def get_creative_strategy( id: int ):
         return get_creative_strategy_handler( id=id )
+
+    @router.post("/creative-strategy/{id}/update")
+    def update_creative_strategy_route(id: int, payload: UpdateFieldsRequest):
+        return update_creative_strategy_handler(id=id, fields=payload.fields)
 
     # DELETE in future
     @router.get("/creative-strategy/{id}/delete")
@@ -560,6 +586,10 @@ def register_general_routes(router: APIRouter):
     @router.get("/ad-execution/{id}")
     def get_ad_execution( id: int ):
         return get_ad_execution_handler( id=id )
+
+    @router.post("/ad-execution/{id}/update")
+    def update_ad_execution_route(id: int, payload: UpdateFieldsRequest):
+        return update_ad_execution_handler(id=id, fields=payload.fields)
 
     # DELETE in future
     @router.get("/ad-execution/{id}/delete")
@@ -609,6 +639,10 @@ def register_general_routes(router: APIRouter):
     def get_creative_execution( id: int ):
         return get_creative_execution_handler( id=id )
 
+    @router.post("/creative-execution/{id}/update")
+    def update_creative_execution_route(id: int, payload: UpdateFieldsRequest):
+        return update_creative_execution_handler(id=id, fields=payload.fields)
+
     # DELETE in future
     @router.get("/creative-execution/{id}/delete")
     def delete_creative_execution_route( id: int ):
@@ -631,6 +665,10 @@ def register_general_routes(router: APIRouter):
     @router.get("/page-strategy/{id}")
     def get_page_strategy( id: int ):
         return get_page_strategy_handler( id=id )
+
+    @router.post("/page-strategy/{id}/update")
+    def update_page_strategy_route(id: int, payload: UpdateFieldsRequest):
+        return update_page_strategy_handler(id=id, fields=payload.fields)
 
     # DELETE in future
     @router.get("/page-strategy/{id}/delete")
@@ -655,6 +693,10 @@ def register_general_routes(router: APIRouter):
     def get_page_blueprint( id: int ):
         return get_page_blueprint_handler( id=id )
 
+    @router.post("/page-blueprint/{id}/update")
+    def update_page_blueprint_route(id: int, payload: UpdateFieldsRequest):
+        return update_page_blueprint_handler(id=id, fields=payload.fields)
+
     # DELETE in future
     @router.get("/page-blueprint/{id}/delete")
     def delete_page_blueprint_route( id: int ):
@@ -678,6 +720,10 @@ def register_general_routes(router: APIRouter):
     def get_page_content_plan( id: int ):
         return get_page_content_plan_handler( id=id )
 
+    @router.post("/page-content-plan/{id}/update")
+    def update_page_content_plan_route(id: int, payload: UpdateFieldsRequest):
+        return update_page_content_plan_handler(id=id, fields=payload.fields)
+
     # DELETE in future
     @router.get("/page-content-plan/{id}/delete")
     def delete_page_content_plan_route( id: int ):
@@ -700,6 +746,10 @@ def register_general_routes(router: APIRouter):
     @router.get("/page-copy/{id}")
     def get_page_copy( id: int ):
         return get_page_copy_handler( id=id )
+
+    @router.post("/page-copy/{id}/update")
+    def update_page_copy_route(id: int, payload: UpdateFieldsRequest):
+        return update_page_copy_handler(id=id, fields=payload.fields)
 
     # DELETE in future
     @router.get("/page-copy/{id}/delete")

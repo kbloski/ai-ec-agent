@@ -2,7 +2,10 @@ import type { FormEvent } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { DetailShell } from '@/components/DetailShell'
 import { Button } from '@/components/ui/button'
-import { useGetCreativeStrategyQuery } from '@/features/creativeStrategy/creativeStrategyApi'
+import {
+  useGetCreativeStrategyQuery,
+  useUpdateCreativeStrategyMutation,
+} from '@/features/creativeStrategy/creativeStrategyApi'
 import {
   useCreateAdExecutionMutation,
   useDeleteAdExecutionMutation,
@@ -16,6 +19,7 @@ export default function CreativeStrategyDetailPage() {
   const list = useListAdExecutionForCreativeStrategyQuery(id)
   const [createAdExecution, createState] = useCreateAdExecutionMutation()
   const [deleteAdExecution] = useDeleteAdExecutionMutation()
+  const [updateCreativeStrategy, updateState] = useUpdateCreativeStrategyMutation()
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -37,6 +41,10 @@ export default function CreativeStrategyDetailPage() {
       data={creativeStrategy}
       isLoading={isLoading}
       error={error}
+      editable={{
+        onSave: (fields) => updateCreativeStrategy({ id, fields }).unwrap(),
+        isSaving: updateState.isLoading,
+      }}
     >
       <section className="space-y-3 rounded-lg border p-4">
         <h2 className="text-lg font-semibold">Ad execution</h2>

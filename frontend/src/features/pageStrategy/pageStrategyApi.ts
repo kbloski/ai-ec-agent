@@ -15,6 +15,14 @@ export const pageStrategyApi = api.injectEndpoints({
       query: (id) => `/page-strategy/${id}`,
       providesTags: (_result, _err, id) => [itemTag('PageStrategy', id)],
     }),
+    updatePageStrategy: builder.mutation<Entity, { id: number; fields: Record<string, unknown> }>({
+      query: ({ id, fields }) => ({
+        url: `/page-strategy/${id}/update`,
+        method: 'POST',
+        body: { fields },
+      }),
+      invalidatesTags: (_result, _err, { id }) => [itemTag('PageStrategy', id)],
+    }),
     /** ctx: the parent MessageStrategy entity. */
     generatePageStrategy: builder.mutation<Entity, Entity>({
       query: (ms) => `/message-strategy/${ms.id}/page-strategy/generate`,
@@ -35,4 +43,5 @@ export const {
   useGetPageStrategyQuery,
   useGeneratePageStrategyMutation,
   useDeletePageStrategyMutation,
+  useUpdatePageStrategyMutation,
 } = pageStrategyApi

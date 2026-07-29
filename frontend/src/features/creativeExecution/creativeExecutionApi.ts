@@ -15,6 +15,17 @@ export const creativeExecutionApi = api.injectEndpoints({
       query: (id) => `/creative-execution/${id}`,
       providesTags: (_result, _err, id) => [itemTag('CreativeExecution', id)],
     }),
+    updateCreativeExecution: builder.mutation<
+      Entity,
+      { id: number; fields: Record<string, unknown> }
+    >({
+      query: ({ id, fields }) => ({
+        url: `/creative-execution/${id}/update`,
+        method: 'POST',
+        body: { fields },
+      }),
+      invalidatesTags: (_result, _err, { id }) => [itemTag('CreativeExecution', id)],
+    }),
     generateCreativeExecution: builder.mutation<
       Entity,
       {
@@ -48,4 +59,5 @@ export const {
   useGetCreativeExecutionQuery,
   useGenerateCreativeExecutionMutation,
   useDeleteCreativeExecutionMutation,
+  useUpdateCreativeExecutionMutation,
 } = creativeExecutionApi

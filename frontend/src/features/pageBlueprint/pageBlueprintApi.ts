@@ -15,6 +15,14 @@ export const pageBlueprintApi = api.injectEndpoints({
       query: (id) => `/page-blueprint/${id}`,
       providesTags: (_result, _err, id) => [itemTag('PageBlueprint', id)],
     }),
+    updatePageBlueprint: builder.mutation<Entity, { id: number; fields: Record<string, unknown> }>({
+      query: ({ id, fields }) => ({
+        url: `/page-blueprint/${id}/update`,
+        method: 'POST',
+        body: { fields },
+      }),
+      invalidatesTags: (_result, _err, { id }) => [itemTag('PageBlueprint', id)],
+    }),
     generatePageBlueprint: builder.mutation<Entity, number>({
       query: (pageStrategyId) => `/page-strategy/${pageStrategyId}/page-blueprint/generate`,
       invalidatesTags: (_result, _err, pageStrategyId) => [listTag('PageBlueprint', pageStrategyId)],
@@ -34,4 +42,5 @@ export const {
   useGetPageBlueprintQuery,
   useGeneratePageBlueprintMutation,
   useDeletePageBlueprintMutation,
+  useUpdatePageBlueprintMutation,
 } = pageBlueprintApi

@@ -51,6 +51,33 @@ function ObjectArray({
   )
 }
 
+/** Labeled, collapsible list of a relation field's items (each with its own "id"), with optional per-item "Edytuj"/"Usuń" actions. */
+export function RelationList({
+  fieldKey,
+  items,
+  onDelete,
+  onEditLink,
+}: {
+  fieldKey: string
+  items: Record<string, unknown>[]
+  onDelete?: (item: Record<string, unknown>) => void
+  onEditLink?: (item: Record<string, unknown>) => string
+}) {
+  if (items.length === 0) return null
+
+  return (
+    <Collapsible>
+      <CollapsibleTrigger className="group flex items-center gap-1.5 text-xs font-medium tracking-wide text-muted-foreground uppercase hover:text-foreground">
+        <ChevronDown className="size-3.5 shrink-0 transition-transform group-data-[panel-open]:rotate-180" />
+        {label(fieldKey)} ({items.length})
+      </CollapsibleTrigger>
+      <CollapsibleContent className="pt-2">
+        <ObjectArray items={items} onDelete={onDelete} onEditLink={onEditLink} />
+      </CollapsibleContent>
+    </Collapsible>
+  )
+}
+
 function Value({ value }: { value: unknown }) {
   if (value === null || value === undefined || value === '') {
     return <span className="text-muted-foreground italic">—</span>
@@ -116,19 +143,13 @@ export function EntityFields({
 
         if (asCollapsible) {
           return (
-            <Collapsible key={key}>
-              <CollapsibleTrigger className="group flex items-center gap-1.5 text-xs font-medium tracking-wide text-muted-foreground uppercase hover:text-foreground">
-                <ChevronDown className="size-3.5 shrink-0 transition-transform group-data-[panel-open]:rotate-180" />
-                {label(key)} ({(value as unknown[]).length})
-              </CollapsibleTrigger>
-              <CollapsibleContent className="pt-2">
-                <ObjectArray
-                  items={value as Record<string, unknown>[]}
-                  onDelete={itemActions[key]}
-                  onEditLink={itemLinks[key]}
-                />
-              </CollapsibleContent>
-            </Collapsible>
+            <RelationList
+              key={key}
+              fieldKey={key}
+              items={value as Record<string, unknown>[]}
+              onDelete={itemActions[key]}
+              onEditLink={itemLinks[key]}
+            />
           )
         }
 

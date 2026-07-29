@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom'
 import { DetailShell } from '@/components/DetailShell'
 import { ResourceList } from '@/components/ResourceList'
-import { useGetAdStrategyQuery } from '@/features/adStrategy/adStrategyApi'
+import { useGetAdStrategyQuery, useUpdateAdStrategyMutation } from '@/features/adStrategy/adStrategyApi'
 import {
   useDeleteCreativeStrategyMutation,
   useGenerateCreativeStrategyMutation,
@@ -15,6 +15,7 @@ export default function AdStrategyDetailPage() {
   const list = useListCreativeStrategyForAdStrategyQuery(id)
   const [generate, generateState] = useGenerateCreativeStrategyMutation()
   const [deleteCreativeStrategy] = useDeleteCreativeStrategyMutation()
+  const [updateAdStrategy, updateState] = useUpdateAdStrategyMutation()
 
   return (
     <DetailShell
@@ -24,6 +25,10 @@ export default function AdStrategyDetailPage() {
       data={adStrategy}
       isLoading={isLoading}
       error={error}
+      editable={{
+        onSave: (fields) => updateAdStrategy({ id, fields }).unwrap(),
+        isSaving: updateState.isLoading,
+      }}
     >
       <ResourceList
         title="Creative strategy"

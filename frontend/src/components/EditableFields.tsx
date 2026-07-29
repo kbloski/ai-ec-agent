@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { EntityFields } from '@/components/EntityFields'
+import { RelationList } from '@/components/EntityFields'
 import { isPrimitive, isRelationArray, label } from '@/lib/entityFields'
 import { useListContentStatusesQuery } from '@/features/contentStatus/contentStatusApi'
 
@@ -24,20 +24,16 @@ function toFormValue(value: unknown): string {
 interface EditableFieldsProps {
   data: Record<string, unknown>
   onSave: (fields: Record<string, unknown>) => Promise<void>
-  onCancel: () => void
   isSaving?: boolean
-  collapsibleFields?: string[]
   itemActions?: Record<string, (item: Record<string, unknown>) => void>
   itemLinks?: Record<string, (item: Record<string, unknown>) => string>
 }
 
-/** Editable counterpart to EntityFields — same field-type detection, but with inputs instead of read-only text. Relation arrays (child entities with their own `id`) stay read-only and keep using EntityFields. */
+/** Editable counterpart to EntityFields — same field-type detection, but with inputs instead of read-only text. Relation arrays (child entities with their own `id`) stay read-only, rendered via RelationList. */
 export function EditableFields({
   data,
   onSave,
-  onCancel,
   isSaving,
-  collapsibleFields,
   itemActions,
   itemLinks,
 }: EditableFieldsProps) {
@@ -94,8 +90,6 @@ export function EditableFields({
     await onSave(fields)
   }
 
-  const relationData = Object.fromEntries(relationKeys.map((key) => [key, data[key]]))
-
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {error && <p className="text-sm text-destructive">{error}</p>}
@@ -137,20 +131,22 @@ export function EditableFields({
       </div>
 
       {relationKeys.length > 0 && (
-        <EntityFields
-          data={relationData}
-          collapsibleFields={collapsibleFields}
-          itemActions={itemActions}
-          itemLinks={itemLinks}
-        />
+        <div className="space-y-3">
+          {relationKeys.map((key) => (
+            <RelationList
+              key={key}
+              fieldKey={key}
+              items={data[key] as Record<string, unknown>[]}
+              onDelete={itemActions?.[key]}
+              onEditLink={itemLinks?.[key]}
+            />
+          ))}
+        </div>
       )}
 
       <div className="flex gap-2">
         <Button type="submit" disabled={isSaving}>
           {isSaving ? 'Zapisywanie…' : 'Zapisz'}
-        </Button>
-        <Button type="button" variant="black" onClick={onCancel}>
-          Anuluj
         </Button>
       </div>
     </form>

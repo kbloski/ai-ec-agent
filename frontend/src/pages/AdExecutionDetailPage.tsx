@@ -2,7 +2,7 @@ import type { FormEvent } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { DetailShell } from '@/components/DetailShell'
 import { Button } from '@/components/ui/button'
-import { useGetAdExecutionQuery } from '@/features/adExecution/adExecutionApi'
+import { useGetAdExecutionQuery, useUpdateAdExecutionMutation } from '@/features/adExecution/adExecutionApi'
 import {
   useDeleteCreativeExecutionMutation,
   useGenerateCreativeExecutionMutation,
@@ -25,6 +25,7 @@ export default function AdExecutionDetailPage() {
   const [deleteCreativeExecution] = useDeleteCreativeExecutionMutation()
   const adFrameworks = useListAdFrameworksQuery()
   const creativeAngles = useListCreativeAnglesQuery()
+  const [updateAdExecution, updateState] = useUpdateAdExecutionMutation()
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -51,6 +52,10 @@ export default function AdExecutionDetailPage() {
       data={data}
       isLoading={isLoading}
       error={error}
+      editable={{
+        onSave: (fields) => updateAdExecution({ id, fields }).unwrap(),
+        isSaving: updateState.isLoading,
+      }}
     >
       {isGeneratable && (
         <section className="space-y-3 rounded-lg border p-4">
