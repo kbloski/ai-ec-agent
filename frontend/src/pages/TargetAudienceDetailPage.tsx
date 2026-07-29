@@ -1,5 +1,6 @@
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { DetailShell } from '@/components/DetailShell'
+import { Button } from '@/components/ui/button'
 import { useGetTargetAudienceQuery } from '@/features/targetAudiences/targetAudiencesApi'
 
 export default function TargetAudienceDetailPage() {
@@ -14,6 +15,15 @@ export default function TargetAudienceDetailPage() {
       data={data}
       isLoading={isLoading}
       error={error}
-    />
+    >
+      <Button
+        size="sm"
+        variant="black"
+        nativeButton={false}
+        render={<Link to={`/target-audiences/${id}/edit`} />}
+      >
+        Edytuj
+      </Button>
+    </DetailShell>
   )
 }

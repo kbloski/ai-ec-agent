@@ -38,6 +38,9 @@ export default function OfferDetailPage() {
       itemActions={{
         offer_insights: (item) => deleteOfferInsight({ id: item.id as number, offerId }),
       }}
+      itemLinks={{
+        offer_insights: (item) => `/offer-insights/${item.id}/edit`,
+      }}
     >
       <Button
         size="sm"

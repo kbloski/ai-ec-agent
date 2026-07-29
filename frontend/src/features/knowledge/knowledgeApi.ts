@@ -30,6 +30,24 @@ export const knowledgeApi = api.injectEndpoints({
       query: ({ id }) => `/knowledge-insights/${id}/delete`,
       invalidatesTags: (_result, _err, { knowledgeId }) => [itemTag('Knowledge', knowledgeId)],
     }),
+    getKnowledgeInsight: builder.query<Entity, number>({
+      query: (id) => `/knowledge-insights/${id}`,
+      providesTags: (_result, _err, id) => [itemTag('KnowledgeInsight', id)],
+    }),
+    updateKnowledgeInsight: builder.mutation<
+      Entity,
+      { id: number; knowledgeId: number; content_status: string }
+    >({
+      query: ({ id, content_status }) => ({
+        url: `/knowledge-insights/${id}/update`,
+        method: 'POST',
+        body: { content_status },
+      }),
+      invalidatesTags: (_result, _err, { id, knowledgeId }) => [
+        itemTag('Knowledge', knowledgeId),
+        itemTag('KnowledgeInsight', id),
+      ],
+    }),
   }),
 })
 
@@ -39,4 +57,6 @@ export const {
   useGenerateKnowledgeMutation,
   useDeleteKnowledgeMutation,
   useDeleteKnowledgeInsightMutation,
+  useGetKnowledgeInsightQuery,
+  useUpdateKnowledgeInsightMutation,
 } = knowledgeApi

@@ -1,8 +1,11 @@
+from typing import Any, List, Optional
+
 from fastapi import APIRouter
 from pydantic import BaseModel
 
 from application.handlers.ads.list_ad_frameworks_handler import list_ad_frameworks_handler
 from application.handlers.ads.list_creative_angels_handler import list_creative_angels_handler
+from application.handlers.ads.list_content_statuses_handler import list_content_statuses_handler
 from application.handlers.offers.get_offers import get_offers
 from application.handlers.offers.create_offer import create_offer
 from application.handlers.offers.seed_full_offer import seed_full_offer
@@ -15,10 +18,15 @@ from application.handlers.offers.get_offer_knowledges_handler import get_offer_k
 from application.handlers.offers.delete_offer_knowledge_handler import delete_offer_knowledge_handler
 from application.handlers.offers.delete_offer_insight_handler import delete_offer_insight_handler
 from application.handlers.offers.delete_knowledge_insight_handler import delete_knowledge_insight_handler
+from application.handlers.offers.get_offer_insight_handler import get_offer_insight_handler
+from application.handlers.offers.update_offer_insight_handler import update_offer_insight_handler
+from application.handlers.offers.get_knowledge_insight_handler import get_knowledge_insight_handler
+from application.handlers.offers.update_knowledge_insight_handler import update_knowledge_insight_handler
 from application.handlers.target_audience.generate_target_audience_handler import generate_target_audience_handler
 from application.handlers.target_audience.get_target_audience_handler import get_target_audience_handler
 from application.handlers.target_audience.get_target_audience_preview_handler import get_target_audience_preview_handler
 from application.handlers.target_audience.delete_target_audience_handler import delete_target_audience_handler
+from application.handlers.target_audience.update_target_audience_handler import update_target_audience_handler
 from application.handlers.offers.suggest_offer_data_handler import suggets_offer_data_handler
 # from application.handlers.offers.suggest_offer_knowledge_data_handler import suggest_offer_knowledge_data_handler
 from application.handlers.analysis.knowledge_analysis_answers_generate_handler import knowledge_analysis_answers_generate_handler
@@ -94,6 +102,39 @@ class SaveOutputPromptRequest(BaseModel):
     content: str
 
 
+class UpdateOfferInsightRequest(BaseModel):
+    content_status: str
+
+
+class UpdateKnowledgeInsightRequest(BaseModel):
+    content_status: str
+
+
+class UpdateTargetAudienceRequest(BaseModel):
+    content_status: Optional[str] = None
+    name: Optional[str] = None
+    reason: Optional[str] = None
+    score: Optional[float] = None
+    confidence: Optional[float] = None
+    age_min: Optional[int] = None
+    age_max: Optional[int] = None
+    gender: Optional[str] = None
+    location: Optional[str] = None
+    purchasing_power: Optional[str] = None
+    lifestyles: Optional[List[Any]] = None
+    values: Optional[List[Any]] = None
+    awareness_level: Optional[str] = None
+    price_sensitivity: Optional[str] = None
+    research_level: Optional[str] = None
+    decision_time: Optional[str] = None
+    pain_points: Optional[List[Any]] = None
+    motivations: Optional[List[Any]] = None
+    buying_triggers: Optional[List[Any]] = None
+    objections: Optional[List[Any]] = None
+    message_angles: Optional[List[Any]] = None
+    marketing_channels: Optional[List[Any]] = None
+
+
 
 def register_general_routes(router: APIRouter):
 
@@ -144,6 +185,14 @@ def register_general_routes(router: APIRouter):
     def delete_offer_insight_route(id: int):
         return delete_offer_insight_handler(id=id)
 
+    @router.get("/offer-insights/{id}")
+    def get_offer_insight_route(id: int):
+        return get_offer_insight_handler(id=id)
+
+    @router.post("/offer-insights/{id}/update")
+    def update_offer_insight_route(id: int, payload: UpdateOfferInsightRequest):
+        return update_offer_insight_handler(id=id, content_status=payload.content_status)
+
 
 
     # -----------------------------
@@ -191,6 +240,14 @@ def register_general_routes(router: APIRouter):
     def delete_knowledge_insight_route(id: int):
         return delete_knowledge_insight_handler(id=id)
 
+    @router.get("/knowledge-insights/{id}")
+    def get_knowledge_insight_route(id: int):
+        return get_knowledge_insight_handler(id=id)
+
+    @router.post("/knowledge-insights/{id}/update")
+    def update_knowledge_insight_route(id: int, payload: UpdateKnowledgeInsightRequest):
+        return update_knowledge_insight_handler(id=id, content_status=payload.content_status)
+
 
 
     # -----------------------------
@@ -216,6 +273,10 @@ def register_general_routes(router: APIRouter):
     @router.get("/target-audiences/{id}/delete")
     def delete_target_audience_route(id: int):
         return delete_target_audience_handler(id=id)
+
+    @router.post("/target-audiences/{id}/update")
+    def update_target_audience_route(id: int, payload: UpdateTargetAudienceRequest):
+        return update_target_audience_handler(id=id, fields=payload.model_dump(exclude_unset=True))
 
 
 
@@ -487,6 +548,10 @@ def register_general_routes(router: APIRouter):
     @router.get("/creative-angels")
     def creative_angels_list():
         return list_creative_angels_handler()
+
+    @router.get("/content-statuses")
+    def content_statuses_list():
+        return list_content_statuses_handler()
 
     # -----------------------------
     # Creative execution

@@ -1,4 +1,5 @@
 import { ChevronDown } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { Button } from '@/components/ui/button'
 
@@ -26,27 +27,41 @@ function isPrimitive(value: unknown): value is string | number | boolean {
 function ObjectArray({
   items,
   onDelete,
+  onEditLink,
 }: {
   items: Record<string, unknown>[]
   onDelete?: (item: Record<string, unknown>) => void
+  onEditLink?: (item: Record<string, unknown>) => string
 }) {
   return (
     <div className="space-y-2">
       {items.map((item, i) => (
         <div key={i} className="space-y-2 rounded-md border p-3">
-          {onDelete && (
-            <div className="flex justify-end">
-              <Button
-                size="sm"
-                variant="black"
-                onClick={() => {
-                  if (window.confirm('Czy na pewno usunąć ten element?')) {
-                    onDelete(item)
-                  }
-                }}
-              >
-                Usuń
-              </Button>
+          {(onDelete || onEditLink) && (
+            <div className="flex justify-end gap-2">
+              {onEditLink && (
+                <Button
+                  size="sm"
+                  variant="black"
+                  nativeButton={false}
+                  render={<Link to={onEditLink(item)} />}
+                >
+                  Edytuj
+                </Button>
+              )}
+              {onDelete && (
+                <Button
+                  size="sm"
+                  variant="black"
+                  onClick={() => {
+                    if (window.confirm('Czy na pewno usunąć ten element?')) {
+                      onDelete(item)
+                    }
+                  }}
+                >
+                  Usuń
+                </Button>
+              )}
             </div>
           )}
           <EntityFields data={item} />
@@ -100,6 +115,7 @@ export function EntityFields({
   exclude = [],
   collapsibleFields = [],
   itemActions = {},
+  itemLinks = {},
 }: {
   data: Record<string, unknown>
   exclude?: string[]
@@ -107,6 +123,8 @@ export function EntityFields({
   collapsibleFields?: string[]
   /** Per-field delete handler for items of a collapsible array field, keyed by field name. */
   itemActions?: Record<string, (item: Record<string, unknown>) => void>
+  /** Per-field "Edytuj" link target for items of a collapsible array field, keyed by field name. */
+  itemLinks?: Record<string, (item: Record<string, unknown>) => string>
 }) {
   const entries = Object.entries(data).filter(([key]) => key !== 'id' && !exclude.includes(key))
 
@@ -124,7 +142,11 @@ export function EntityFields({
                 {label(key)} ({(value as unknown[]).length})
               </CollapsibleTrigger>
               <CollapsibleContent className="pt-2">
-                <ObjectArray items={value as Record<string, unknown>[]} onDelete={itemActions[key]} />
+                <ObjectArray
+                  items={value as Record<string, unknown>[]}
+                  onDelete={itemActions[key]}
+                  onEditLink={itemLinks[key]}
+                />
               </CollapsibleContent>
             </Collapsible>
           )

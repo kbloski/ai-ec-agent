@@ -47,6 +47,10 @@ export default function KnowledgeDetailPage() {
         offer_insights: (item) => deleteKnowledgeInsight({ id: item.id as number, knowledgeId }),
         target_audiences: (item) => deleteTargetAudience({ id: item.id as number, knowledgeId }),
       }}
+      itemLinks={{
+        offer_insights: (item) => `/knowledge-insights/${item.id}/edit`,
+        target_audiences: (item) => `/target-audiences/${item.id}/edit`,
+      }}
     >
       <ResourceList
         title="Analizy"

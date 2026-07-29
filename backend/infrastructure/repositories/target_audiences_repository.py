@@ -52,6 +52,21 @@ class TargetAudiencesRepository:
             TargetAudience.knowledge_id == knowledge_id
         ).all()
 
+    def update(self, item: TargetAudience) -> TargetAudience:
+        existing_item = self.db.query(TargetAudience).filter(TargetAudience.id == item.id).first()
+
+        if not existing_item:
+            raise ValueError(f"TargetAudience with id {item.id} not found")
+
+        for key, value in item.__dict__.items():
+            if key != "_sa_instance_state":
+                setattr(existing_item, key, value)
+
+        self.db.commit()
+        self.db.refresh(existing_item)
+
+        return existing_item
+
     # ❌ DELETE
     def delete(self, id: int) -> bool:
         item = self.db.query(TargetAudience).filter(TargetAudience.id == id).first()

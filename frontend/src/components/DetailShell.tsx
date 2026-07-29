@@ -14,6 +14,7 @@ interface DetailShellProps {
   exclude?: string[]
   collapsibleFields?: string[]
   itemActions?: Record<string, (item: Record<string, unknown>) => void>
+  itemLinks?: Record<string, (item: Record<string, unknown>) => string>
 }
 
 /** Shared layout for every "detail" page: title, entity fields, optional child sections. */
@@ -28,6 +29,7 @@ export function DetailShell({
   exclude,
   collapsibleFields,
   itemActions,
+  itemLinks,
 }: DetailShellProps) {
   return (
     <div className="grid grid-cols-1 gap-6 p-6 md:grid-cols-[280px_1fr]">
@@ -62,6 +64,7 @@ export function DetailShell({
               exclude={exclude}
               collapsibleFields={collapsibleFields}
               itemActions={itemActions}
+              itemLinks={itemLinks}
             />
           </div>
         )}

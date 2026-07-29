@@ -2,6 +2,32 @@ import { api } from '@/store/api'
 import { listTag, itemTag } from '@/lib/tags'
 import type { Entity } from '@/types'
 
+export interface UpdateTargetAudienceArgs {
+  id: number
+  content_status?: string
+  name?: string
+  reason?: string
+  score?: number
+  confidence?: number
+  age_min?: number
+  age_max?: number
+  gender?: string
+  location?: string
+  purchasing_power?: string
+  lifestyles?: unknown[]
+  values?: unknown[]
+  awareness_level?: string
+  price_sensitivity?: string
+  research_level?: string
+  decision_time?: string
+  pain_points?: unknown[]
+  motivations?: unknown[]
+  buying_triggers?: unknown[]
+  objections?: unknown[]
+  message_angles?: unknown[]
+  marketing_channels?: unknown[]
+}
+
 export const targetAudiencesApi = api.injectEndpoints({
   endpoints: (builder) => ({
     listTargetAudiencesForKnowledge: builder.query<Entity[], number>({
@@ -26,6 +52,14 @@ export const targetAudiencesApi = api.injectEndpoints({
         itemTag('TargetAudience', id),
       ],
     }),
+    updateTargetAudience: builder.mutation<Entity, UpdateTargetAudienceArgs>({
+      query: ({ id, ...body }) => ({
+        url: `/target-audiences/${id}/update`,
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: (_result, _err, { id }) => [itemTag('TargetAudience', id)],
+    }),
   }),
 })
 
@@ -34,4 +68,5 @@ export const {
   useGetTargetAudienceQuery,
   useGenerateTargetAudiencesMutation,
   useDeleteTargetAudienceMutation,
+  useUpdateTargetAudienceMutation,
 } = targetAudiencesApi

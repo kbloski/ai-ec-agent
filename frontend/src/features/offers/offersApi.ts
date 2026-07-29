@@ -48,6 +48,21 @@ export const offersApi = api.injectEndpoints({
       query: ({ id }) => `/offer-insights/${id}/delete`,
       invalidatesTags: (_result, _err, { offerId }) => [itemTag('Offer', offerId)],
     }),
+    getOfferInsight: builder.query<Entity, number>({
+      query: (id) => `/offer-insights/${id}`,
+      providesTags: (_result, _err, id) => [itemTag('OfferInsight', id)],
+    }),
+    updateOfferInsight: builder.mutation<Entity, { id: number; offerId: number; content_status: string }>({
+      query: ({ id, content_status }) => ({
+        url: `/offer-insights/${id}/update`,
+        method: 'POST',
+        body: { content_status },
+      }),
+      invalidatesTags: (_result, _err, { id, offerId }) => [
+        itemTag('Offer', offerId),
+        itemTag('OfferInsight', id),
+      ],
+    }),
     generateOfferSuggestions: builder.mutation<Entity, number>({
       query: (id) => `/offers/${id}/suggestions`,
       invalidatesTags: (_result, _err, id) => [itemTag('Offer', id)],
@@ -63,4 +78,6 @@ export const {
   useDeleteOfferItemMutation,
   useDeleteOfferInsightMutation,
   useGenerateOfferSuggestionsMutation,
+  useGetOfferInsightQuery,
+  useUpdateOfferInsightMutation,
 } = offersApi
