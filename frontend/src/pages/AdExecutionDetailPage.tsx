@@ -8,6 +8,8 @@ import {
   useGenerateCreativeExecutionMutation,
   useListCreativeExecutionForAdExecutionQuery,
 } from '@/features/creativeExecution/creativeExecutionApi'
+import { useListAdFrameworksQuery, type AdFramework } from '@/features/adFrameworks/adFrameworksApi'
+import { useListCreativeAnglesQuery, type CreativeAngle } from '@/features/creativeAngels/creativeAnglesApi'
 
 export default function AdExecutionDetailPage() {
   const id = Number(useParams().id)
@@ -21,17 +23,23 @@ export default function AdExecutionDetailPage() {
   const list = useListCreativeExecutionForAdExecutionQuery(id, { skip: !isGeneratable })
   const [generate, generateState] = useGenerateCreativeExecutionMutation()
   const [deleteCreativeExecution] = useDeleteCreativeExecutionMutation()
+  const adFrameworks = useListAdFrameworksQuery()
+  const creativeAngles = useListCreativeAnglesQuery()
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
     const durationRaw = formData.get('duration_seconds')
     const slidesRaw = formData.get('number_of_slides')
+    const adFrameworkIdRaw = formData.get('ad_framework_id')
+    const creativeAngleIdRaw = formData.get('creative_angle_id')
 
     await generate({
       adExecutionId: id,
       ...(durationRaw ? { duration_seconds: Number(durationRaw) } : {}),
       ...(slidesRaw ? { number_of_slides: Number(slidesRaw) } : {}),
+      ...(adFrameworkIdRaw ? { ad_framework_id: String(adFrameworkIdRaw) } : {}),
+      ...(creativeAngleIdRaw ? { creative_angle_id: String(creativeAngleIdRaw) } : {}),
     }).unwrap()
   }
 
@@ -49,28 +57,68 @@ export default function AdExecutionDetailPage() {
           <h2 className="text-lg font-semibold">Creative execution</h2>
 
           <form onSubmit={handleSubmit} className="flex flex-wrap items-end gap-2">
-            {isVideo && (
+            <div className="space-y-1">
+              <p className="text-xs font-semibold text-muted-foreground">Video</p>
               <label className="text-xs">
                 Czas trwania (s)
                 <input
                   name="duration_seconds"
                   type="number"
                   defaultValue={15}
-                  className="block w-28 rounded-md border px-2 py-1 text-sm"
+                  disabled={!isVideo}
+                  className="block w-28 rounded-md border px-2 py-1 text-sm disabled:opacity-50"
                 />
               </label>
-            )}
-            {isCarousel && (
+            </div>
+            <div className="space-y-1">
+              <p className="text-xs font-semibold text-muted-foreground">Carousel</p>
               <label className="text-xs">
                 Liczba slajdów
                 <input
                   name="number_of_slides"
                   type="number"
                   defaultValue={5}
-                  className="block w-28 rounded-md border px-2 py-1 text-sm"
+                  disabled={!isCarousel}
+                  className="block w-28 rounded-md border px-2 py-1 text-sm disabled:opacity-50"
                 />
               </label>
-            )}
+            </div>
+            <div className="space-y-1">
+              <p className="text-xs font-semibold text-muted-foreground">Ad Framework</p>
+              <label className="text-xs">
+                Framework
+                <select
+                  name="ad_framework_id"
+                  defaultValue=""
+                  className="block w-40 rounded-md border px-2 py-1 text-sm"
+                >
+                  <option value="">—</option>
+                  {adFrameworks.data?.map((framework: AdFramework) => (
+                    <option key={framework.id} value={framework.id}>
+                      {framework.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+            <div className="space-y-1">
+              <p className="text-xs font-semibold text-muted-foreground">Creative Angle</p>
+              <label className="text-xs">
+                Angle
+                <select
+                  name="creative_angle_id"
+                  defaultValue=""
+                  className="block w-40 rounded-md border px-2 py-1 text-sm"
+                >
+                  <option value="">—</option>
+                  {creativeAngles.data?.map((angle: CreativeAngle) => (
+                    <option key={angle.id} value={angle.id}>
+                      {angle.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
             <Button type="submit" size="sm" disabled={generateState.isLoading}>
               {generateState.isLoading ? 'Generowanie…' : 'Generuj creative execution'}
             </Button>

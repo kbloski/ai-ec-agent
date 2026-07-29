@@ -72,7 +72,9 @@ AVAILABLE AD FRAMEWORKS:
 def generate_creative_execution_handler(
     ad_execution_id: int,
     duration_seconds: Optional[int] = None,
-    number_of_slides: Optional[int] = None
+    number_of_slides: Optional[int] = None,
+    ad_framework_id: Optional[str] = None,
+    creative_angle_id: Optional[str] = None
 ):
 
     container = Container()
@@ -118,6 +120,10 @@ def generate_creative_execution_handler(
 
     ad_frameworks_repository = (
         container.ad_frameworks_repository()
+    )
+
+    creative_angels_repository = (
+        container.creative_angels_repository()
     )
 
 
@@ -248,6 +254,32 @@ Number of slides:
 {number_of_slides}
 """
 
+    if ad_framework_id is not None:
+        ad_framework = ad_frameworks_repository.get_by_id(ad_framework_id)
+        if ad_framework is not None:
+            prompt += f"""
+
+
+SELECTED AD FRAMEWORK (mandatory):
+
+{json.dumps(ad_framework, ensure_ascii=False, indent=2, default=str)}
+
+You MUST base the output structure on the "structure" steps above, in the exact same order, instead of any default generic structure. Map every step to a corresponding output section/slide/scene. You MUST follow the framework's "rules".
+"""
+
+    if creative_angle_id is not None:
+        creative_angle = creative_angels_repository.get_by_id(creative_angle_id)
+        if creative_angle is not None:
+            prompt += f"""
+
+
+SELECTED CREATIVE ANGLE (mandatory):
+
+{json.dumps(creative_angle, ensure_ascii=False, indent=2, default=str)}
+
+You MUST use this creative angle as the communication approach of the output (set the "creative_angle" field to it where the schema has one, and reflect it in tone, hook and messaging otherwise). You MUST follow its "rules".
+"""
+
 
     # Generate response from chat 
 
@@ -375,6 +407,15 @@ Every decision should answer:
 - Why will someone keep watching?
 - Why will someone trust the product?
 - Why will someone take action?
+
+
+# Selected Ad Framework & Creative Angle (if provided)
+
+If the user message contains a SELECTED AD FRAMEWORK block, its "structure" steps replace the default `structure` below — use exactly those steps, in that order, and build `scenes` to match them instead of the generic hook/problem/solution/proof/offer/cta list. Follow the framework's "rules".
+
+If the user message contains a SELECTED CREATIVE ANGLE block, it must drive the `hook_strategy` and the overall tone/messaging of the video, and its "rules" must be followed.
+
+If neither block is present, use the default structure described below.
 
 
 # Required Output
@@ -693,6 +734,15 @@ Every decision should answer:
 - What action should the user take?
 
 
+# Selected Ad Framework & Creative Angle (if provided)
+
+If the user message contains a SELECTED AD FRAMEWORK block, its "structure" steps must shape the `visual_concept` and `composition` (e.g. what is shown, in what order of emphasis) instead of a generic approach. Follow the framework's "rules".
+
+If the user message contains a SELECTED CREATIVE ANGLE block, set `visual_concept.creative_angle` to reflect it (use its "name"/"description") instead of choosing one freely, and follow its "rules".
+
+If neither block is present, choose the `creative_angle` freely from the possible values below.
+
+
 # Required Output
 
 
@@ -996,6 +1046,15 @@ Every decision should answer:
 - How does the product solve the problem?
 - Why should the user trust the product?
 - What action should the user take?
+
+
+# Selected Ad Framework & Creative Angle (if provided)
+
+If the user message contains a SELECTED AD FRAMEWORK block, its "structure" steps replace the default `slide_purpose_sequence` — use exactly those steps, in that order, as the carousel's slide purposes, and build `slides` to match them. Follow the framework's "rules".
+
+If the user message contains a SELECTED CREATIVE ANGLE block, set `creative_concept.creative_angle` to reflect it (use its "name"/"description") instead of choosing one freely, and follow its "rules".
+
+If neither block is present, choose the `creative_angle` and `slide_purpose_sequence` freely as described below.
 
 
 # Required Output

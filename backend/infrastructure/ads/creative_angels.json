@@ -1,112 +1,134 @@
 [
   {
-    "id": "personal_story",
-    "name": "Personal Story",
-    "description": "Reklama oparta na osobistej historii użytkownika, który miał konkretny problem i znalazł rozwiązanie.",
-    "purpose": "Budowanie identyfikacji odbiorcy z bohaterem reklamy poprzez pokazanie prawdziwego doświadczenia.",
+    "id": "curiosity_gap",
+    "name": "Curiosity Gap",
+    "description": "Budowanie ciekawości poprzez ujawnienie tylko części informacji i zachęcenie odbiorcy do poznania rozwiązania.",
+    "purpose": "Zwiększenie zatrzymania uwagi i czasu oglądania reklamy.",
     "rules": [
-      "Historia powinna wyglądać jak autentyczne doświadczenie użytkownika.",
-      "Nie zaczynaj od przedstawienia produktu.",
-      "Skup się na problemie, emocjach i zmianie po użyciu produktu."
-    ]
-  },
-  {
-    "id": "problem_solution",
-    "name": "Problem Solution",
-    "description": "Reklama skupiająca się na problemie użytkownika i pokazująca produkt jako rozwiązanie.",
-    "purpose": "Pokazanie odbiorcy, dlaczego produkt jest odpowiedzią na jego konkretną potrzebę.",
-    "rules": [
-      "Problem musi być konkretny i łatwy do utożsamienia.",
-      "Nie skupiaj się tylko na funkcjach produktu.",
-      "Pokaż zmianę, jaką produkt umożliwia."
-    ]
-  },
-  {
-    "id": "before_after",
-    "name": "Before After",
-    "description": "Reklama pokazująca kontrast między sytuacją przed użyciem produktu a rezultatem po jego zastosowaniu.",
-    "purpose": "Szybkie pokazanie wartości produktu poprzez widoczną transformację.",
-    "rules": [
-      "Różnica między przed i po musi być jasna.",
-      "Nie używaj nierealnych lub przesadzonych obietnic.",
-      "Skup się na rezultacie, a nie tylko produkcie."
+      "Nie ujawniaj rozwiązania od razu.",
+      "Unikaj clickbaitu bez pokrycia.",
+      "Rozwiązanie powinno pojawić się w dalszej części reklamy."
     ]
   },
   {
     "id": "social_proof",
     "name": "Social Proof",
-    "description": "Reklama wykorzystująca doświadczenia innych osób, opinie lub dowody skuteczności produktu.",
-    "purpose": "Budowanie zaufania i zmniejszenie obaw przed zakupem.",
+    "description": "Budowanie zaufania poprzez pokazanie opinii, wyników, liczb lub popularności produktu.",
+    "purpose": "Zmniejszenie obaw przed zakupem.",
     "rules": [
-      "Dowody powinny być konkretne i wiarygodne.",
-      "Unikaj ogólnych stwierdzeń bez wartości.",
-      "Pokazuj realne doświadczenia użytkowników."
+      "Pokazuj konkretne liczby lub dowody.",
+      "Wykorzystuj autentyczne opinie i doświadczenia.",
+      "Nie używaj ogólnych stwierdzeń bez potwierdzenia."
     ]
   },
   {
-    "id": "demonstration",
-    "name": "Product Demonstration",
-    "description": "Reklama pokazująca produkt podczas działania zamiast jedynie opisywania jego zalet.",
-    "purpose": "Udowodnienie wartości produktu poprzez pokazanie jego zastosowania.",
+    "id": "authority",
+    "name": "Authority",
+    "description": "Przekaz oparty na wiedzy eksperckiej, badaniach lub doświadczeniu specjalistów.",
+    "purpose": "Budowanie wiarygodności produktu lub marki.",
     "rules": [
-      "Produkt powinien być pokazany w praktycznym użyciu.",
-      "Skup się na korzyściach, nie tylko funkcjach.",
-      "Pokaż konkretny efekt działania."
+      "Opieraj przekaz na faktach.",
+      "Nie nadużywaj specjalistycznego języka.",
+      "Ekspert powinien wnosić realną wartość."
     ]
   },
   {
-    "id": "curiosity_gap",
-    "name": "Curiosity Gap",
-    "description": "Reklama budująca ciekawość poprzez pozostawienie odbiorcy z pytaniem lub niepełną informacją.",
-    "purpose": "Zwiększenie zatrzymania uwagi i zachęcenie do obejrzenia dalszej części reklamy.",
+    "id": "education",
+    "name": "Education",
+    "description": "Najpierw dostarczenie wartościowej wiedzy, a następnie naturalne przedstawienie produktu.",
+    "purpose": "Budowanie zaufania poprzez edukację.",
     "rules": [
-      "Nie ujawniaj całego rozwiązania od początku.",
-      "Stwórz naturalną ciekawość, a nie sztuczny clickbait.",
-      "Rozwiązanie powinno pojawić się po zbudowaniu zainteresowania."
+      "Najpierw rozwiązuj problem odbiorcy.",
+      "Produkt powinien być naturalnym uzupełnieniem treści.",
+      "Nie zamieniaj reklamy w wykład."
     ]
   },
   {
-    "id": "testimonial",
-    "name": "Testimonial",
-    "description": "Reklama oparta na wypowiedzi klienta opisującego swoje doświadczenie z produktem.",
-    "purpose": "Zwiększenie wiarygodności poprzez głos prawdziwego użytkownika.",
+    "id": "emotion",
+    "name": "Emotion",
+    "description": "Budowanie przekazu poprzez emocje, takie jak radość, ulga, wzruszenie lub satysfakcja.",
+    "purpose": "Stworzenie emocjonalnej więzi z odbiorcą.",
     "rules": [
-      "Wypowiedź powinna skupiać się na konkretnym problemie.",
-      "Unikaj przesadnie reklamowego języka.",
-      "Pokazuj osobiste doświadczenie i rezultat."
+      "Pokazuj autentyczne emocje.",
+      "Nie przesadzaj z dramatyzmem.",
+      "Emocje powinny wynikać z historii."
     ]
   },
   {
-    "id": "educational",
-    "name": "Educational",
-    "description": "Reklama dostarczająca wartościową wiedzę przed przedstawieniem produktu.",
-    "purpose": "Budowanie zaufania poprzez edukowanie odbiorcy.",
+    "id": "humor",
+    "name": "Humor",
+    "description": "Przyciąganie uwagi poprzez humor lub zabawną sytuację związaną z problemem.",
+    "purpose": "Zwiększenie zapamiętywalności reklamy.",
     "rules": [
-      "Najpierw dostarcz wartość, potem przedstaw produkt.",
-      "Informacje powinny rozwiązywać realny problem.",
-      "Produkt powinien być naturalnym rozwinięciem tematu."
+      "Humor nie może odwracać uwagi od produktu.",
+      "Żart powinien być zrozumiały dla grupy docelowej.",
+      "Produkt nadal powinien pozostać głównym bohaterem."
     ]
   },
   {
-    "id": "comparison",
-    "name": "Comparison",
-    "description": "Reklama porównująca produkt z innymi sposobami rozwiązania problemu.",
-    "purpose": "Pokazanie przewagi produktu nad alternatywami.",
+    "id": "urgency",
+    "name": "Urgency",
+    "description": "Budowanie poczucia, że decyzję warto podjąć teraz.",
+    "purpose": "Zwiększenie liczby konwersji.",
     "rules": [
-      "Porównanie powinno być uczciwe i konkretne.",
-      "Skup się na różnicach ważnych dla klienta.",
-      "Nie krytykuj konkurencji bez uzasadnienia."
+      "Stosuj prawdziwe ograniczenia.",
+      "Nie twórz fałszywej presji.",
+      "Podkreśl powód, dla którego warto działać od razu."
     ]
   },
   {
-    "id": "founder_story",
-    "name": "Founder Story",
-    "description": "Reklama oparta na historii powstania produktu i problemie, który marka chciała rozwiązać.",
-    "purpose": "Budowanie emocjonalnej więzi i zaufania do marki.",
+    "id": "relatability",
+    "name": "Relatability",
+    "description": "Pokazanie codziennych sytuacji i problemów, z którymi odbiorca może się utożsamić.",
+    "purpose": "Budowanie identyfikacji z reklamą.",
     "rules": [
-      "Pokaż prawdziwy powód stworzenia produktu.",
-      "Skup się na misji i problemie klienta.",
-      "Nie zamieniaj historii w zwykłą prezentację firmy."
+      "Pokazuj realistyczne sytuacje.",
+      "Używaj naturalnego języka.",
+      "Problem powinien być znajomy odbiorcy."
+    ]
+  },
+  {
+    "id": "myth_busting",
+    "name": "Myth Busting",
+    "description": "Obalenie popularnego mitu lub błędnego przekonania dotyczącego problemu lub produktu.",
+    "purpose": "Przyciągnięcie uwagi poprzez zaskoczenie i edukację.",
+    "rules": [
+      "Mit powinien być powszechnie znany.",
+      "Wyjaśnij, dlaczego jest nieprawdziwy.",
+      "Poprzyj przekaz faktami."
+    ]
+  },
+  {
+    "id": "contrarian",
+    "name": "Contrarian Opinion",
+    "description": "Rozpoczęcie reklamy od opinii sprzecznej z powszechnym przekonaniem.",
+    "purpose": "Przyciągnięcie uwagi poprzez zaskoczenie.",
+    "rules": [
+      "Teza powinna być uzasadniona.",
+      "Nie prowokuj wyłącznie dla uwagi.",
+      "Wyjaśnij swoje stanowisko."
+    ]
+  },
+  {
+    "id": "mistake",
+    "name": "Common Mistake",
+    "description": "Pokazanie najczęstszego błędu popełnianego przez odbiorców oraz sposobu jego uniknięcia.",
+    "purpose": "Zwiększenie zainteresowania poprzez wskazanie problemu.",
+    "rules": [
+      "Błąd powinien być powszechny.",
+      "Wyjaśnij jego konsekwencje.",
+      "Produkt powinien naturalnie rozwiązywać problem."
+    ]
+  },
+  {
+    "id": "secret",
+    "name": "Secret",
+    "description": "Przedstawienie produktu jako mało znanego sposobu rozwiązania problemu.",
+    "purpose": "Budowanie ciekawości i poczucia odkrycia czegoś nowego.",
+    "rules": [
+      "Nie używaj przesadzonych obietnic.",
+      "Sekret powinien prowadzić do konkretnej wartości.",
+      "Wyjaśnij, dlaczego rozwiązanie działa."
     ]
   }
 ]

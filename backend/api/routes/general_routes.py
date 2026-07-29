@@ -1,6 +1,8 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
 
+from application.handlers.ads.list_ad_frameworks_handler import list_ad_frameworks_handler
+from application.handlers.ads.list_creative_angels_handler import list_creative_angels_handler
 from application.handlers.offers.get_offers import get_offers
 from application.handlers.offers.create_offer import create_offer
 from application.handlers.offers.seed_full_offer import seed_full_offer
@@ -476,18 +478,33 @@ def register_general_routes(router: APIRouter):
 
 
     # -----------------------------
+    # Ad frameworks / Creative angels
+    # -----------------------------
+    @router.get("/ad-frameworks")
+    def ad_frameworks_list():
+        return list_ad_frameworks_handler()
+
+    @router.get("/creative-angels")
+    def creative_angels_list():
+        return list_creative_angels_handler()
+
+    # -----------------------------
     # Creative execution
     # -----------------------------
     @router.get("/ad-execution/{ad_execution_id}/creative-execution/generate")
     def ad_execution_creative_execution_generate(
         ad_execution_id: int,
         duration_seconds: int | None = None,
-        number_of_slides: int | None = None
+        number_of_slides: int | None = None,
+        ad_framework_id: str | None = None,
+        creative_angle_id: str | None = None
     ):
         return generate_creative_execution_handler(
             ad_execution_id=ad_execution_id,
             duration_seconds=duration_seconds,
-            number_of_slides=number_of_slides
+            number_of_slides=number_of_slides,
+            ad_framework_id=ad_framework_id,
+            creative_angle_id=creative_angle_id
         )
 
     @router.get("/ad-execution/{ad_execution_id}/creative-execution")

@@ -8,6 +8,7 @@ from infrastructure.repositories.offers_repository import OffersRepository
 from infrastructure.repositories.offer_items_repository import OfferItemsRepository
 from infrastructure.services.path_service import PathService
 from infrastructure.repositories.ad_frameworks_repository import AdFrameworksRepository
+from infrastructure.repositories.creative_angels_repository import CreativeAnglesRepository
 from infrastructure.parsers.txt_parser import TxtParser
 from core.settings import Settings
 from infrastructure.database.db import SessionLocal
@@ -369,6 +370,12 @@ class Container(containers.DeclarativeContainer):
 
     ad_frameworks_repository = providers.Singleton(
         AdFrameworksRepository,
+        logger=logger,
+        path_service=path_service,
+    )
+
+    creative_angels_repository = providers.Singleton(
+        CreativeAnglesRepository,
         logger=logger,
         path_service=path_service,
     )
