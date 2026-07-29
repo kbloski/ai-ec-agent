@@ -58,14 +58,6 @@ MESSAGE STRATEGY:
 AD STRATEGY:
 
 {ad_strategy}
-
-
-AVAILABLE AD FRAMEWORKS:
-
-{ad_frameworks}
-
-
-
 """
 
 
@@ -93,6 +85,9 @@ def generate_creative_execution_handler(
         container.ollama_service()
     )
 
+    ad_frameworks_repository = (
+        container.ad_frameworks_repository()
+    )
 
     creative_strategy_service = (
         container.creative_strategy_service()
@@ -118,9 +113,6 @@ def generate_creative_execution_handler(
         container.ad_strategy_service()
     )
 
-    ad_frameworks_repository = (
-        container.ad_frameworks_repository()
-    )
 
     creative_angels_repository = (
         container.creative_angels_repository()
@@ -182,10 +174,6 @@ def generate_creative_execution_handler(
         )
     )
 
-
-    ad_frameworks = ad_frameworks_repository.get_all()
-
-
     def serialize(obj):
 
         return json.dumps(
@@ -226,13 +214,6 @@ def generate_creative_execution_handler(
         ad_strategy=serialize(
             ad_strategy
         ),
-
-        ad_frameworks=json.dumps(
-            ad_frameworks,
-            ensure_ascii=False,
-            indent=2,
-            default=str
-        )
     )
 
 
