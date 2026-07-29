@@ -36,7 +36,7 @@ export function EntityViewer({ data, className }: EntityViewerProps) {
           )}
         </Button>
       </div>
-      <pre className="max-h-[32rem] overflow-auto rounded-md bg-muted p-3 text-xs">{json}</pre>
+      <pre className="max-h-[32rem] overflow-auto rounded-md bg-muted p-3 text-xs whitespace-pre-wrap break-words">{json}</pre>
     </div>
   )
 }
