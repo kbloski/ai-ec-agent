@@ -94,11 +94,9 @@ function Value({ value }: { value: unknown }) {
 
     if (value.every(isPrimitive)) {
       return (
-        <ul className="list-disc space-y-1 pl-5">
-          {value.map((item, i) => (
-            <li key={i}>{String(item)}</li>
-          ))}
-        </ul>
+        <pre className="overflow-x-auto rounded-md border bg-muted/50 p-2 text-xs">
+          {JSON.stringify(value, null, 2)}
+        </pre>
       )
     }
 

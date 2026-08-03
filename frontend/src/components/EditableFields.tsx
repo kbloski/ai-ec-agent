@@ -17,7 +17,6 @@ function isSkipped(key: string): boolean {
 function toFormValue(value: unknown): string {
   if (value === null || value === undefined) return ''
   if (isPrimitive(value)) return String(value)
-  if (Array.isArray(value) && value.every(isPrimitive)) return value.join('\n')
   return JSON.stringify(value, null, 2)
 }
 
@@ -72,11 +71,6 @@ export function EditableFields({
         fields[key] = null
       } else if (isPrimitive(original) || original === null || original === undefined) {
         fields[key] = raw
-      } else if (Array.isArray(original) && original.every(isPrimitive)) {
-        fields[key] = raw
-          .split('\n')
-          .map((line) => line.trim())
-          .filter(Boolean)
       } else {
         try {
           fields[key] = raw.trim() === '' ? null : JSON.parse(raw)
