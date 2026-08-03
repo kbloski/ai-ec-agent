@@ -75,7 +75,7 @@ export function DetailShell({
 
       <div className="space-y-6">
 
-        {/* <h1 className="text-2xl font-semibold">{title}</h1> */}
+        <h1 className="text-2xl font-semibold">{title}</h1>
 
  
 
