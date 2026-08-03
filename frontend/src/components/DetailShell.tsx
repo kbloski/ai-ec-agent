@@ -40,17 +40,6 @@ export function DetailShell({
 }: DetailShellProps) {
   return (
     <div className="max-w-3xl space-y-6 p-6">
-      {data && children && (
-        <Collapsible>
-          <CollapsibleTrigger className="group flex items-center gap-1.5 text-xs font-medium tracking-wide text-muted-foreground uppercase hover:text-foreground">
-            <ChevronDown className="size-3.5 shrink-0 transition-transform group-data-[panel-open]:rotate-180" />
-            Zasoby
-          </CollapsibleTrigger>
-          <CollapsibleContent className="pt-2">
-            <div className="space-y-4">{children}</div>
-          </CollapsibleContent>
-        </Collapsible>
-      )}
 
       <div className="space-y-6">
         {backTo && (
@@ -58,20 +47,41 @@ export function DetailShell({
             {backLabel}
           </Link>
         )}
+      </div>
 
-        <h1 className="text-2xl font-semibold">{title}</h1>
+      <div className="space-y-6">
+        {data && children && (
+          <Collapsible>
+            <CollapsibleTrigger className="group flex items-center gap-1.5 text-xs font-medium tracking-wide text-muted-foreground uppercase hover:text-foreground">
+              <ChevronDown className="size-3.5 shrink-0 transition-transform group-data-[panel-open]:rotate-180" />
+              Powiązane zasoby elementu
+            </CollapsibleTrigger>
+            <CollapsibleContent className="pt-2">
+              <div className="space-y-4">{children}</div>
+            </CollapsibleContent>
+          </Collapsible>
+        )}
+      </div>
 
+      <div className="space-y-6">
         {data && (
           <Collapsible>
             <CollapsibleTrigger className="group flex items-center gap-1.5 text-xs font-medium tracking-wide text-muted-foreground uppercase hover:text-foreground">
               <ChevronDown className="size-3.5 shrink-0 transition-transform group-data-[panel-open]:rotate-180" />
-              Pokaż surowy JSON
+              Pokaż surowy JSON dla tego zasobu
             </CollapsibleTrigger>
             <CollapsibleContent className="pt-2">
               <EntityViewer data={data} />
             </CollapsibleContent>
           </Collapsible>
         )}
+      </div>
+
+      <div className="space-y-6">
+
+        <h1 className="text-2xl font-semibold">{title}</h1>
+
+ 
 
         {isLoading && <p className="text-sm text-muted-foreground">Ładowanie…</p>}
         {Boolean(error) && <p className="text-sm text-destructive">Nie udało się pobrać danych.</p>}
