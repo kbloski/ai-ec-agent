@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
-import { EntityFields } from '@/components/EntityFields'
 import { EditableFields } from '@/components/EditableFields'
 import { ChevronDown } from 'lucide-react'
 import { EntityViewer } from '@/components/EntityViewer'
@@ -16,10 +15,9 @@ interface DetailShellProps {
   error?: unknown
   children?: ReactNode
   exclude?: string[]
-  collapsibleFields?: string[]
   itemActions?: Record<string, (item: Record<string, unknown>) => void>
   itemLinks?: Record<string, (item: Record<string, unknown>) => string>
-  /** When provided, renders an always-on inline edit form instead of the read-only fields panel. */
+  /** When provided, the fields panel becomes an editable form that saves via this handler; otherwise fields render disabled/read-only. */
   editable?: {
     onSave: (fields: Record<string, unknown>) => Promise<void>
     isSaving?: boolean
@@ -36,7 +34,6 @@ export function DetailShell({
   error,
   children,
   exclude,
-  collapsibleFields,
   itemActions,
   itemLinks,
   editable,
@@ -81,23 +78,14 @@ export function DetailShell({
 
         {data && (
           <div className="rounded-lg border p-4">
-            {editable ? (
-              <EditableFields
-                data={data}
-                itemActions={itemActions}
-                itemLinks={itemLinks}
-                isSaving={editable.isSaving}
-                onSave={(fields) => editable.onSave(fields)}
-              />
-            ) : (
-              <EntityFields
-                data={data}
-                exclude={exclude}
-                collapsibleFields={collapsibleFields}
-                itemActions={itemActions}
-                itemLinks={itemLinks}
-              />
-            )}
+            <EditableFields
+              data={data}
+              exclude={exclude}
+              itemActions={itemActions}
+              itemLinks={itemLinks}
+              isSaving={editable?.isSaving}
+              onSave={editable ? (fields) => editable.onSave(fields) : undefined}
+            />
           </div>
         )}
       </div>

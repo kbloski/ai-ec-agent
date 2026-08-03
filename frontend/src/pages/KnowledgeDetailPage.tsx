@@ -48,7 +48,6 @@ export default function KnowledgeDetailPage() {
       data={knowledge}
       isLoading={isLoading}
       error={error}
-      collapsibleFields={['offer_insights', 'target_audiences']}
       itemActions={{
         offer_insights: (item) => deleteKnowledgeInsight({ id: item.id as number, knowledgeId }),
         target_audiences: (item) => deleteTargetAudience({ id: item.id as number, knowledgeId }),

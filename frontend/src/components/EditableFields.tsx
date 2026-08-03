@@ -1,10 +1,12 @@
 import { useState, type FormEvent } from 'react'
+import { ChevronDown } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { RelationList } from '@/components/EntityFields'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { isPrimitive, isRelationArray, label } from '@/lib/entityFields'
 import { useListContentStatusesQuery } from '@/features/contentStatus/contentStatusApi'
 
@@ -20,29 +22,127 @@ function toFormValue(value: unknown): string {
   return JSON.stringify(value, null, 2)
 }
 
+function ObjectArray({
+  items,
+  onDelete,
+  onEditLink,
+}: {
+  items: Record<string, unknown>[]
+  onDelete?: (item: Record<string, unknown>) => void
+  onEditLink?: (item: Record<string, unknown>) => string
+}) {
+  return (
+    <div className="space-y-2">
+      {items.map((item, i) => (
+        <div key={i} className="space-y-2 rounded-md border p-3">
+          {(onDelete || onEditLink) && (
+            <div className="flex justify-end gap-2">
+              {onEditLink && (
+                <Button
+                  size="sm"
+                  variant="black"
+                  nativeButton={false}
+                  render={<Link to={onEditLink(item)} />}
+                >
+                  Edytuj
+                </Button>
+              )}
+              {onDelete && (
+                <Button
+                  size="sm"
+                  variant="black"
+                  onClick={() => {
+                    if (window.confirm('Czy na pewno usunąć ten element?')) {
+                      onDelete(item)
+                    }
+                  }}
+                >
+                  Usuń
+                </Button>
+              )}
+            </div>
+          )}
+          <dl className="space-y-3">
+            {Object.entries(item)
+              .filter(([key]) => key !== 'id')
+              .map(([key, value]) => (
+                <div key={key} className="grid gap-1">
+                  <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                    {label(key)}
+                  </dt>
+                  <dd className="text-sm whitespace-pre-wrap">
+                    {value === null || value === undefined || value === '' ? (
+                      <span className="text-muted-foreground italic">—</span>
+                    ) : isPrimitive(value) ? (
+                      String(value)
+                    ) : (
+                      <pre className="overflow-x-auto rounded-md border bg-muted/50 p-2 text-xs">
+                        {JSON.stringify(value, null, 2)}
+                      </pre>
+                    )}
+                  </dd>
+                </div>
+              ))}
+          </dl>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+/** Labeled, collapsible list of a relation field's items (each with its own "id"), with optional per-item "Edytuj"/"Usuń" actions. */
+export function RelationList({
+  fieldKey,
+  items,
+  onDelete,
+  onEditLink,
+}: {
+  fieldKey: string
+  items: Record<string, unknown>[]
+  onDelete?: (item: Record<string, unknown>) => void
+  onEditLink?: (item: Record<string, unknown>) => string
+}) {
+  if (items.length === 0) return null
+
+  return (
+    <Collapsible>
+      <CollapsibleTrigger className="group flex items-center gap-1.5 text-xs font-medium tracking-wide text-muted-foreground uppercase hover:text-foreground">
+        <ChevronDown className="size-3.5 shrink-0 transition-transform group-data-[panel-open]:rotate-180" />
+        {label(fieldKey)} ({items.length})
+      </CollapsibleTrigger>
+      <CollapsibleContent className="pt-2">
+        <ObjectArray items={items} onDelete={onDelete} onEditLink={onEditLink} />
+      </CollapsibleContent>
+    </Collapsible>
+  )
+}
+
 interface EditableFieldsProps {
   data: Record<string, unknown>
-  onSave: (fields: Record<string, unknown>) => Promise<void>
+  /** When omitted, fields render as disabled/read-only inputs and no save button is shown. */
+  onSave?: (fields: Record<string, unknown>) => Promise<void>
   isSaving?: boolean
+  exclude?: string[]
   itemActions?: Record<string, (item: Record<string, unknown>) => void>
   itemLinks?: Record<string, (item: Record<string, unknown>) => string>
 }
 
-/** Editable counterpart to EntityFields — same field-type detection, but with inputs instead of read-only text. Relation arrays (child entities with their own `id`) stay read-only, rendered via RelationList. */
+/** Generic form for any DTO's fields — same inputs whether or not saving is wired up; falls back to disabled inputs when `onSave` isn't provided. Relation arrays (child entities with their own `id`) stay read-only, rendered via RelationList. */
 export function EditableFields({
   data,
   onSave,
   isSaving,
+  exclude = [],
   itemActions,
   itemLinks,
 }: EditableFieldsProps) {
   const { data: statuses } = useListContentStatusesQuery()
 
   const editableKeys = Object.keys(data).filter(
-    (key) => !isSkipped(key) && !isRelationArray(data[key])
+    (key) => !isSkipped(key) && !exclude.includes(key) && !isRelationArray(data[key])
   )
   const relationKeys = Object.keys(data).filter(
-    (key) => !isSkipped(key) && isRelationArray(data[key])
+    (key) => !isSkipped(key) && !exclude.includes(key) && isRelationArray(data[key])
   )
 
   const [values, setValues] = useState<Record<string, string>>(() =>
@@ -55,6 +155,7 @@ export function EditableFields({
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    if (!onSave) return
     setError(null)
 
     const fields: Record<string, unknown> = {}
@@ -93,7 +194,7 @@ export function EditableFields({
           <div key={key} className="space-y-1">
             <Label htmlFor={key}>{label(key)}</Label>
             {key === 'content_status' ? (
-              <Select value={values[key]} onValueChange={(v) => setField(key, v)}>
+              <Select value={values[key]} onValueChange={(v) => setField(key, v)} disabled={!onSave}>
                 <SelectTrigger id={key}>
                   <SelectValue />
                 </SelectTrigger>
@@ -111,6 +212,7 @@ export function EditableFields({
                 type="number"
                 value={values[key]}
                 onChange={(e) => setField(key, e.target.value)}
+                disabled={!onSave}
               />
             ) : (
               <Textarea
@@ -118,6 +220,7 @@ export function EditableFields({
                 value={values[key]}
                 onChange={(e) => setField(key, e.target.value)}
                 rows={typeof data[key] === 'string' && (data[key] as string).length > 80 ? 4 : 2}
+                disabled={!onSave}
               />
             )}
           </div>
@@ -138,11 +241,13 @@ export function EditableFields({
         </div>
       )}
 
-      <div className="flex gap-2">
-        <Button type="submit" disabled={isSaving}>
-          {isSaving ? 'Zapisywanie…' : 'Zapisz'}
-        </Button>
-      </div>
+      {onSave && (
+        <div className="flex gap-2">
+          <Button type="submit" disabled={isSaving}>
+            {isSaving ? 'Zapisywanie…' : 'Zapisz'}
+          </Button>
+        </div>
+      )}
     </form>
   )
 }

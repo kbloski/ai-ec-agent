@@ -38,7 +38,6 @@ export default function OfferDetailPage() {
       data={offer}
       isLoading={isLoading}
       error={error}
-      collapsibleFields={['offer_items', 'offer_insights']}
       itemActions={{
         offer_insights: (item) => deleteOfferInsight({ id: item.id as number, offerId }),
         offer_items: (item) => deleteOfferItem({ id: item.id as number, offerId }),
