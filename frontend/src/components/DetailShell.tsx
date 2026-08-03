@@ -53,7 +53,7 @@ export function DetailShell({
         <Collapsible>
           <CollapsibleTrigger className="group flex items-center gap-1.5 text-xs font-medium tracking-wide text-muted-foreground uppercase hover:text-foreground">
             <ChevronDown className="size-3.5 shrink-0 transition-transform group-data-[panel-open]:rotate-180" />
-            Powiązane zasoby elementu
+            Generowanie zasobów
           </CollapsibleTrigger>
           <CollapsibleContent>
             <div className="space-y-4">{children}</div>
