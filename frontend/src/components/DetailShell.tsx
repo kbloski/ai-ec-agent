@@ -49,37 +49,33 @@ export function DetailShell({
         )}
       </div>
 
-      <div className="space-y-6">
-        {data && children && (
-          <Collapsible>
-            <CollapsibleTrigger className="group flex items-center gap-1.5 text-xs font-medium tracking-wide text-muted-foreground uppercase hover:text-foreground">
-              <ChevronDown className="size-3.5 shrink-0 transition-transform group-data-[panel-open]:rotate-180" />
-              Powiązane zasoby elementu
-            </CollapsibleTrigger>
-            <CollapsibleContent className="pt-2">
-              <div className="space-y-4">{children}</div>
-            </CollapsibleContent>
-          </Collapsible>
-        )}
-      </div>
+      {data && children && (
+        <Collapsible>
+          <CollapsibleTrigger className="group flex items-center gap-1.5 text-xs font-medium tracking-wide text-muted-foreground uppercase hover:text-foreground">
+            <ChevronDown className="size-3.5 shrink-0 transition-transform group-data-[panel-open]:rotate-180" />
+            Powiązane zasoby elementu
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <div className="space-y-4">{children}</div>
+          </CollapsibleContent>
+        </Collapsible>
+      )}
 
-      <div className="space-y-6">
-        {data && (
-          <Collapsible>
-            <CollapsibleTrigger className="group flex items-center gap-1.5 text-xs font-medium tracking-wide text-muted-foreground uppercase hover:text-foreground">
-              <ChevronDown className="size-3.5 shrink-0 transition-transform group-data-[panel-open]:rotate-180" />
-              Pokaż surowy JSON dla tego zasobu
-            </CollapsibleTrigger>
-            <CollapsibleContent className="pt-2">
-              <EntityViewer data={data} />
-            </CollapsibleContent>
-          </Collapsible>
-        )}
-      </div>
+      {data && (
+        <Collapsible>
+          <CollapsibleTrigger className="group flex items-center gap-1.5 text-xs font-medium tracking-wide text-muted-foreground uppercase hover:text-foreground">
+            <ChevronDown className="size-3.5 shrink-0 transition-transform group-data-[panel-open]:rotate-180" />
+            Pokaż surowy JSON dla tego zasobu
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <EntityViewer data={data} />
+          </CollapsibleContent>
+        </Collapsible>
+      )}
 
       <div className="space-y-6">
 
-        <h1 className="text-2xl font-semibold">{title}</h1>
+        {/* <h1 className="text-2xl font-semibold">{title}</h1> */}
 
  
 
