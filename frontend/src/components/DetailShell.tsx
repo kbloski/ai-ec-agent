@@ -39,20 +39,20 @@ export function DetailShell({
   editable,
 }: DetailShellProps) {
   return (
-    <div className="grid grid-cols-1 gap-6 p-6 md:grid-cols-[280px_1fr]">
-      <aside className="order-2 space-y-4 md:order-1">
-        <h2 className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-          Zasoby
-        </h2>
-        {data &&
-          (children ? (
+    <div className="max-w-3xl space-y-6 p-6">
+      {data && children && (
+        <Collapsible>
+          <CollapsibleTrigger className="group flex items-center gap-1.5 text-xs font-medium tracking-wide text-muted-foreground uppercase hover:text-foreground">
+            <ChevronDown className="size-3.5 shrink-0 transition-transform group-data-[panel-open]:rotate-180" />
+            Zasoby
+          </CollapsibleTrigger>
+          <CollapsibleContent className="pt-2">
             <div className="space-y-4">{children}</div>
-          ) : (
-            <p className="text-sm text-muted-foreground">Brak powiązanych zasobów.</p>
-          ))}
-      </aside>
+          </CollapsibleContent>
+        </Collapsible>
+      )}
 
-      <div className="order-1 max-w-3xl space-y-6 md:order-2">
+      <div className="space-y-6">
         {backTo && (
           <Link to={backTo} className="text-sm text-muted-foreground hover:underline">
             {backLabel}
