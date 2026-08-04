@@ -22,6 +22,7 @@ interface DetailShellProps {
     string,
     (item: Record<string, unknown>, status: string) => void | Promise<unknown>
   >
+  itemAdditions?: Record<string, ReactNode>
   /** When provided, the fields panel becomes an editable form that saves via this handler; otherwise fields render disabled/read-only. */
   editable?: {
     onSave: (fields: Record<string, unknown>) => Promise<void>
@@ -43,6 +44,7 @@ export function DetailShell({
   itemActions,
   itemLinks,
   itemStatusActions,
+  itemAdditions,
   editable,
 }: DetailShellProps) {
   return (
@@ -97,6 +99,7 @@ export function DetailShell({
               itemActions={itemActions}
               itemLinks={itemLinks}
               itemStatusActions={itemStatusActions}
+              itemAdditions={itemAdditions}
               isSaving={editable?.isSaving}
               onSave={editable ? (fields) => editable.onSave(fields) : undefined}
             />

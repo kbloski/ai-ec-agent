@@ -16,6 +16,13 @@ interface CreateOfferArgs {
   details?: string
 }
 
+interface CreateOfferItemArgs {
+  offerId: number
+  name: string
+  quantity: number
+  details?: string
+}
+
 export const offersApi = api.injectEndpoints({
   endpoints: (builder) => ({
     listOffers: builder.query<OffersResponse, { page?: number } | void>({
@@ -50,6 +57,14 @@ export const offersApi = api.injectEndpoints({
     }),
     deleteOfferItem: builder.mutation<void, { id: number; offerId: number }>({
       query: ({ id }) => `/offer-items/${id}/delete`,
+      invalidatesTags: (_result, _err, { offerId }) => [itemTag('Offer', offerId)],
+    }),
+    createOfferItem: builder.mutation<Entity, CreateOfferItemArgs>({
+      query: ({ offerId, ...body }) => ({
+        url: `/offers/${offerId}/items`,
+        method: 'POST',
+        body,
+      }),
       invalidatesTags: (_result, _err, { offerId }) => [itemTag('Offer', offerId)],
     }),
     getOfferItem: builder.query<Entity, number>({
@@ -102,6 +117,7 @@ export const {
   useCreateOfferMutation,
   useDeleteOfferMutation,
   useDeleteOfferItemMutation,
+  useCreateOfferItemMutation,
   useDeleteOfferInsightMutation,
   useGenerateOfferSuggestionsMutation,
   useGetOfferInsightQuery,

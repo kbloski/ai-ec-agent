@@ -14,6 +14,7 @@ from application.handlers.offers.delete_offer import delete_offer_handler
 from application.handlers.offers.delete_offer_item import delete_offer_item_handler
 from application.handlers.offers.get_offer_item_handler import get_offer_item_handler
 from application.handlers.offers.update_offer_item_handler import update_offer_item_handler
+from application.handlers.offers.create_offer_item_handler import create_offer_item_handler
 from application.handlers.offers.offer_knowledge_generate import offer_knowledge_generate_handler
 from application.handlers.offers.get_offer_knowledge_handler import get_offer_knowledge_handler
 from application.handlers.offers.get_offer_knowledges_handler import get_offer_knowledges_handler
@@ -121,6 +122,12 @@ class UpdateFieldsRequest(BaseModel):
     fields: Dict[str, Any]
 
 
+class CreateOfferItemRequest(BaseModel):
+    name: str
+    quantity: int = 1
+    details: Optional[str] = None
+
+
 class UpdateOfferInsightRequest(BaseModel):
     content_status: str
 
@@ -221,6 +228,15 @@ def register_general_routes(router: APIRouter):
     # -----------------------------
     # Offer items
     # -----------------------------
+
+    @router.post("/offers/{offer_id}/items")
+    def create_offer_item_route(offer_id: int, payload: CreateOfferItemRequest):
+        return create_offer_item_handler(
+            offer_id=offer_id,
+            name=payload.name,
+            quantity=payload.quantity,
+            details=payload.details,
+        )
 
     # DELETE in future
     @router.get("/offer-items/{id}/delete")

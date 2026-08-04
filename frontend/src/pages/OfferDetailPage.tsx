@@ -1,8 +1,13 @@
+import { useState, type FormEvent } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { DetailShell } from '@/components/DetailShell'
 import { ResourceList } from '@/components/ResourceList'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
 import {
+  useCreateOfferItemMutation,
   useDeleteOfferInsightMutation,
   useDeleteOfferItemMutation,
   useDeleteOfferMutation,
@@ -29,8 +34,41 @@ export default function OfferDetailPage() {
   const [deleteOfferInsight] = useDeleteOfferInsightMutation()
   const [updateOfferInsight] = useUpdateOfferInsightMutation()
   const [deleteOfferItem] = useDeleteOfferItemMutation()
+  const [createOfferItem, createOfferItemState] = useCreateOfferItemMutation()
+  const [createItemError, setCreateItemError] = useState<string | null>(null)
   const [generateSuggestions, generateSuggestionsState] = useGenerateOfferSuggestionsMutation()
   const [updateOffer, updateOfferState] = useUpdateOfferMutation()
+
+  const handleCreateItem = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setCreateItemError(null)
+
+    const form = event.currentTarget
+    const formData = new FormData(form)
+    const name = String(formData.get('name') ?? '').trim()
+    const quantity = Number(formData.get('quantity') ?? 1)
+
+    if (!name) {
+      setCreateItemError('Nazwa jest wymagana.')
+      return
+    }
+    if (!Number.isInteger(quantity) || quantity < 1) {
+      setCreateItemError('Ilość musi być liczbą całkowitą większą od zera.')
+      return
+    }
+
+    try {
+      await createOfferItem({
+        offerId,
+        name,
+        quantity,
+        details: String(formData.get('details') ?? '').trim() || undefined,
+      }).unwrap()
+      form.reset()
+    } catch {
+      setCreateItemError('Nie udało się dodać elementu oferty.')
+    }
+  }
 
   return (
     <DetailShell
@@ -55,6 +93,37 @@ export default function OfferDetailPage() {
             offerId,
             content_status: contentStatus,
           }).unwrap(),
+      }}
+      itemAdditions={{
+        offer_items: (
+          <form onSubmit={handleCreateItem} className="space-y-3 rounded-md border p-3">
+            <h3 className="text-sm font-semibold">Dodaj element oferty</h3>
+            <div className="space-y-1">
+              <Label htmlFor="new-offer-item-name">Nazwa</Label>
+              <Input id="new-offer-item-name" name="name" required />
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="new-offer-item-quantity">Ilość</Label>
+              <Input
+                id="new-offer-item-quantity"
+                name="quantity"
+                type="number"
+                min="1"
+                step="1"
+                defaultValue="1"
+                required
+              />
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="new-offer-item-details">Szczegóły</Label>
+              <Textarea id="new-offer-item-details" name="details" />
+            </div>
+            {createItemError && <p className="text-sm text-destructive">{createItemError}</p>}
+            <Button type="submit" size="sm" disabled={createOfferItemState.isLoading}>
+              {createOfferItemState.isLoading ? 'Dodawanie…' : 'Dodaj element'}
+            </Button>
+          </form>
+        ),
       }}
       editable={{
         onSave: (fields) => updateOffer({ id: offerId, fields }).unwrap(),

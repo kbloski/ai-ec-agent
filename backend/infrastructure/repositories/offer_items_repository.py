@@ -18,7 +18,12 @@ class OfferItemsRepository:
 
 # 🔍 GET BY OFFER ID
     def get_by_offer_id(self, offer_id: int) -> list[OfferItem]:
-        return self.db.query(OfferItem).filter(OfferItem.offer_id == offer_id).all()
+        return (
+            self.db.query(OfferItem)
+            .filter(OfferItem.offer_id == offer_id)
+            .order_by(OfferItem.created_at.desc(), OfferItem.id.desc())
+            .all()
+        )
 
     # 🔍 GET BY ID
     def get_by_id(self, id: int) -> Optional[OfferItem]:

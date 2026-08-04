@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useState, type FormEvent, type ReactNode } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
@@ -120,6 +120,7 @@ export function RelationList({
   onEditLink,
   onStatusChange,
   statuses,
+  addition,
 }: {
   fieldKey: string
   items: Record<string, unknown>[]
@@ -127,8 +128,9 @@ export function RelationList({
   onEditLink?: (item: Record<string, unknown>) => string
   onStatusChange?: (item: Record<string, unknown>, status: string) => void | Promise<unknown>
   statuses?: { value: string; label: string }[]
+  addition?: ReactNode
 }) {
-  if (items.length === 0) return null
+  if (items.length === 0 && !addition) return null
 
   return (
     <Collapsible>
@@ -137,13 +139,16 @@ export function RelationList({
         {label(fieldKey)} ({items.length})
       </CollapsibleTrigger>
       <CollapsibleContent className="pt-2">
-        <ObjectArray
-          items={items}
-          onDelete={onDelete}
-          onEditLink={onEditLink}
-          onStatusChange={onStatusChange}
-          statuses={statuses}
-        />
+        {addition && <div className="mb-3">{addition}</div>}
+        {items.length > 0 && (
+          <ObjectArray
+            items={items}
+            onDelete={onDelete}
+            onEditLink={onEditLink}
+            onStatusChange={onStatusChange}
+            statuses={statuses}
+          />
+        )}
       </CollapsibleContent>
     </Collapsible>
   )
@@ -161,6 +166,7 @@ interface EditableFieldsProps {
     string,
     (item: Record<string, unknown>, status: string) => void | Promise<unknown>
   >
+  itemAdditions?: Record<string, ReactNode>
 }
 
 /** Generic form for any DTO's fields — same inputs whether or not saving is wired up; falls back to disabled inputs when `onSave` isn't provided. Relation arrays (child entities with their own `id`) stay read-only, rendered via RelationList. */
@@ -172,14 +178,25 @@ export function EditableFields({
   itemActions,
   itemLinks,
   itemStatusActions,
+  itemAdditions,
 }: EditableFieldsProps) {
   const { data: statuses } = useListContentStatusesQuery()
 
+  const isRelationField = (key: string) =>
+    isRelationArray(data[key]) ||
+    (Array.isArray(data[key]) &&
+      Boolean(
+        itemActions?.[key] ||
+          itemLinks?.[key] ||
+          itemStatusActions?.[key] ||
+          itemAdditions?.[key],
+      ))
+
   const editableKeys = Object.keys(data).filter(
-    (key) => !isSkipped(key) && !exclude.includes(key) && !isRelationArray(data[key])
+    (key) => !isSkipped(key) && !exclude.includes(key) && !isRelationField(key)
   )
   const relationKeys = Object.keys(data).filter(
-    (key) => !isSkipped(key) && !exclude.includes(key) && isRelationArray(data[key])
+    (key) => !isSkipped(key) && !exclude.includes(key) && isRelationField(key)
   )
 
   const [values, setValues] = useState<Record<string, string>>(() =>
@@ -281,6 +298,7 @@ export function EditableFields({
               onEditLink={itemLinks?.[key]}
               onStatusChange={itemStatusActions?.[key]}
               statuses={statuses}
+              addition={itemAdditions?.[key]}
             />
           ))}
         </div>
