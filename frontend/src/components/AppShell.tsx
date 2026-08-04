@@ -1,5 +1,6 @@
 import { Link, Outlet } from 'react-router-dom'
 import { AppSidebar } from '@/components/AppSidebar'
+import { Toaster } from '@/components/ui/sonner'
 
 /** Root layout: header, global resource sidebar on the left, routed page content on the right. */
 export function AppShell() {
@@ -17,6 +18,7 @@ export function AppShell() {
           <Outlet />
         </main>
       </div>
+      <Toaster position="bottom-right" richColors closeButton />
     </div>
   )
 }

@@ -67,7 +67,9 @@ export default function KnowledgeInsightEditPage() {
             <Label htmlFor="content_status">Status</Label>
             <Select
               value={contentStatus ?? (data.content_status as string)}
-              onValueChange={setContentStatus}
+              onValueChange={(value) => {
+                if (value !== null) setContentStatus(value)
+              }}
             >
               <SelectTrigger id="content_status">
                 <SelectValue />

@@ -25,7 +25,7 @@ interface DetailShellProps {
   itemAdditions?: Record<string, ReactNode>
   /** When provided, the fields panel becomes an editable form that saves via this handler; otherwise fields render disabled/read-only. */
   editable?: {
-    onSave: (fields: Record<string, unknown>) => Promise<void>
+    onSave: (fields: Record<string, unknown>) => Promise<unknown>
     isSaving?: boolean
   }
 }

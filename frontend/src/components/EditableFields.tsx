@@ -157,7 +157,7 @@ export function RelationList({
 interface EditableFieldsProps {
   data: Record<string, unknown>
   /** When omitted, fields render as disabled/read-only inputs and no save button is shown. */
-  onSave?: (fields: Record<string, unknown>) => Promise<void>
+  onSave?: (fields: Record<string, unknown>) => Promise<unknown>
   isSaving?: boolean
   exclude?: string[]
   itemActions?: Record<string, (item: Record<string, unknown>) => void>
