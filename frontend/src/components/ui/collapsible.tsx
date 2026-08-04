@@ -17,7 +17,6 @@ function CollapsibleContent({ ...props }: CollapsiblePrimitive.Panel.Props) {
     <CollapsiblePrimitive.Panel 
       data-slot="collapsible-content" 
       {...props} 
-      // className="pt-2"
     />
   )
 }

@@ -14,6 +14,7 @@ interface DetailShellProps {
   isLoading: boolean
   error?: unknown
   children?: ReactNode
+  actions?: ReactNode
   exclude?: string[]
   itemActions?: Record<string, (item: Record<string, unknown>) => void>
   itemLinks?: Record<string, (item: Record<string, unknown>) => string>
@@ -33,6 +34,7 @@ export function DetailShell({
   isLoading,
   error,
   children,
+  actions,
   exclude,
   itemActions,
   itemLinks,
@@ -77,7 +79,7 @@ export function DetailShell({
 
         <h1 className="text-2xl font-semibold">{title}</h1>
 
- 
+        {actions && <div className="flex flex-wrap gap-2">{actions}</div>}
 
         {isLoading && <p className="text-sm text-muted-foreground">Ładowanie…</p>}
         {Boolean(error) && <p className="text-sm text-destructive">Nie udało się pobrać danych.</p>}

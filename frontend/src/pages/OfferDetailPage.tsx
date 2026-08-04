@@ -50,27 +50,30 @@ export default function OfferDetailPage() {
         onSave: (fields) => updateOffer({ id: offerId, fields }).unwrap(),
         isSaving: updateOfferState.isLoading,
       }}
+      actions={
+        <>
+          <Button
+            size="sm"
+            variant="black"
+            onClick={() => {
+              if (window.confirm('Czy na pewno usunąć tę ofertę?')) {
+                deleteOffer(offerId).then(() => navigate('/'))
+              }
+            }}
+          >
+            Usuń ofertę
+          </Button>
+
+          <Button
+            size="sm"
+            onClick={() => generateSuggestions(offerId)}
+            disabled={generateSuggestionsState.isLoading}
+          >
+            {generateSuggestionsState.isLoading ? 'Generowanie…' : 'Generuj sugestie'}
+          </Button>
+        </>
+      }
     >
-      <Button
-        size="sm"
-        variant="black"
-        onClick={() => {
-          if (window.confirm('Czy na pewno usunąć tę ofertę?')) {
-            deleteOffer(offerId).then(() => navigate('/'))
-          }
-        }}
-      >
-        Usuń ofertę
-      </Button>
-
-      <Button
-        size="sm"
-        onClick={() => generateSuggestions(offerId)}
-        disabled={generateSuggestionsState.isLoading}
-      >
-        {generateSuggestionsState.isLoading ? 'Generowanie…' : 'Generuj sugestie'}
-      </Button>
-
       <ResourceList
         title="Knowledge"
         items={knowledgeList.data}
