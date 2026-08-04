@@ -92,7 +92,7 @@ export function DetailShell({
         {Boolean(error) && <p className="text-sm text-destructive">Nie udało się pobrać danych.</p>}
 
         {data && (
-          <div className="rounded-lg border p-4">
+          <div>
             <EditableFields
               data={data}
               exclude={exclude}

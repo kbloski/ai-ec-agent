@@ -39,8 +39,8 @@ const TEXT_FIELDS = [
 
 const NUMBER_FIELDS = ['score', 'confidence', 'age_min', 'age_max'] as const
 
-function toLines(value: unknown): string {
-  return Array.isArray(value) ? value.join('\n') : ''
+function toJson(value: unknown): string {
+  return JSON.stringify(Array.isArray(value) ? value : [], null, 2)
 }
 
 function label(key: string): string {
@@ -56,14 +56,16 @@ export default function TargetAudienceEditPage() {
   const [updateTargetAudience, updateState] = useUpdateTargetAudienceMutation()
 
   const [contentStatus, setContentStatus] = useState<string | undefined>(undefined)
+  const [formError, setFormError] = useState<string | null>(null)
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!data) return
+    setFormError(null)
 
     const formData = new FormData(e.currentTarget)
 
-    const payload: Record<string, unknown> = { id }
+    const payload: UpdateTargetAudienceArgs = { id }
 
     if (contentStatus) payload.content_status = contentStatus
 
@@ -81,19 +83,26 @@ export default function TargetAudienceEditPage() {
 
     for (const field of LIST_FIELDS) {
       const raw = String(formData.get(field) ?? '')
-      payload[field] = raw
-        .split('\n')
-        .map((line) => line.trim())
-        .filter(Boolean)
+      try {
+        const parsed: unknown = JSON.parse(raw)
+        if (!Array.isArray(parsed)) {
+          setFormError(`Pole „${label(field)}” musi zawierać tablicę JSON.`)
+          return
+        }
+        payload[field] = parsed
+      } catch {
+        setFormError(`Pole „${label(field)}” zawiera nieprawidłowy JSON.`)
+        return
+      }
     }
 
-    await updateTargetAudience(payload as UpdateTargetAudienceArgs).unwrap()
+    await updateTargetAudience(payload).unwrap()
 
     navigate(`/target-audiences/${id}`)
   }
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6 p-6">
+    <div className="max-w-2xl space-y-6 p-6">
       <h1 className="text-2xl font-semibold">Edytuj grupę docelową</h1>
 
       {data && (
@@ -112,12 +121,14 @@ export default function TargetAudienceEditPage() {
       {Boolean(error) && <p className="text-sm text-destructive">Nie udało się pobrać danych.</p>}
 
       {data && (
-        <form key={id} onSubmit={handleSubmit} className="space-y-4 rounded-lg border p-4">
+        <form key={id} onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1">
             <Label htmlFor="content_status">Status</Label>
             <Select
               value={contentStatus ?? (data.content_status as string)}
-              onValueChange={setContentStatus}
+              onValueChange={(value) => {
+                if (value !== null) setContentStatus(value)
+              }}
             >
               <SelectTrigger id="content_status">
                 <SelectValue />
@@ -160,10 +171,18 @@ export default function TargetAudienceEditPage() {
 
           {LIST_FIELDS.map((field) => (
             <div key={field} className="space-y-1">
-              <Label htmlFor={field}>{label(field)} (jedna wartość na linię)</Label>
-              <Textarea id={field} name={field} defaultValue={toLines(data[field])} rows={3} />
+              <Label htmlFor={field}>{label(field)} (JSON)</Label>
+              <Textarea
+                id={field}
+                name={field}
+                defaultValue={toJson(data[field])}
+                rows={5}
+                className="font-mono"
+              />
             </div>
           ))}
+
+          {formError && <p className="text-sm text-destructive">{formError}</p>}
 
           <div className="flex gap-2">
             <Button type="submit" disabled={updateState.isLoading}>

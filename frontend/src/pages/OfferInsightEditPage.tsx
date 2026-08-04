@@ -33,7 +33,7 @@ export default function OfferInsightEditPage() {
   }
 
   return (
-    <div className="mx-auto max-w-xl space-y-6 p-6">
+    <div className="max-w-xl space-y-6 p-6">
       <h1 className="text-2xl font-semibold">Edytuj insight oferty</h1>
 
       {data && (
@@ -52,7 +52,7 @@ export default function OfferInsightEditPage() {
       {Boolean(error) && <p className="text-sm text-destructive">Nie udało się pobrać danych.</p>}
 
       {data && (
-        <form onSubmit={handleSubmit} className="space-y-4 rounded-lg border p-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1">
             <Label>Typ</Label>
             <p className="text-sm text-muted-foreground">{data.type as string}</p>

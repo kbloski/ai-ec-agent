@@ -82,7 +82,7 @@ function ObjectArray({
                           if (status) void onStatusChange(item, status)
                         }}
                       >
-                        <SelectTrigger aria-label={`Status insightu ${String(item.id)}`}>
+                        <SelectTrigger aria-label={`Status elementu ${String(item.id)}`}>
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>

@@ -4,6 +4,7 @@ import type { Entity } from '@/types'
 
 export interface UpdateTargetAudienceArgs {
   id: number
+  knowledgeId?: number
   content_status?: string
   name?: string
   reason?: string
@@ -43,22 +44,29 @@ export const targetAudiencesApi = api.injectEndpoints({
     }),
     generateTargetAudiences: builder.mutation<Entity[], { knowledgeId: number }>({
       query: ({ knowledgeId }) => `/knowledges/${knowledgeId}/target-audiences/generate`,
-      invalidatesTags: (_result, _err, { knowledgeId }) => [listTag('TargetAudience', knowledgeId)],
+      invalidatesTags: (_result, _err, { knowledgeId }) => [
+        listTag('TargetAudience', knowledgeId),
+        itemTag('Knowledge', knowledgeId),
+      ],
     }),
     deleteTargetAudience: builder.mutation<void, { id: number; knowledgeId: number }>({
       query: ({ id }) => `/target-audiences/${id}/delete`,
       invalidatesTags: (_result, _err, { id, knowledgeId }) => [
         listTag('TargetAudience', knowledgeId),
         itemTag('TargetAudience', id),
+        itemTag('Knowledge', knowledgeId),
       ],
     }),
     updateTargetAudience: builder.mutation<Entity, UpdateTargetAudienceArgs>({
-      query: ({ id, ...body }) => ({
+      query: ({ id, knowledgeId: _knowledgeId, ...body }) => ({
         url: `/target-audiences/${id}/update`,
         method: 'POST',
         body,
       }),
-      invalidatesTags: (_result, _err, { id }) => [itemTag('TargetAudience', id)],
+      invalidatesTags: (_result, _err, { id, knowledgeId }) => [
+        itemTag('TargetAudience', id),
+        ...(knowledgeId === undefined ? [] : [itemTag('Knowledge', knowledgeId)]),
+      ],
     }),
   }),
 })

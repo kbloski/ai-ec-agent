@@ -21,7 +21,7 @@ export function EntityViewer({ data, className }: EntityViewerProps) {
   }
 
   return (
-    <div className={cn('rounded-lg border bg-card text-card-foreground shadow-sm p-4', className)}>
+    <div className={cn('bg-card text-card-foreground shadow-sm', className)}>
       <div className="mb-3 flex items-center justify-between">
         <h3 className="text-sm font-medium text-muted-foreground">JSON</h3>
         <Button variant="outline" size="sm" onClick={handleCopy}>

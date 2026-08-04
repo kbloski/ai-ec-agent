@@ -48,9 +48,12 @@ class TargetAudiencesRepository:
         if knowledge_id is None:
             return []
 
-        return self.db.query(TargetAudience).filter(
-            TargetAudience.knowledge_id == knowledge_id
-        ).all()
+        return (
+            self.db.query(TargetAudience)
+            .filter(TargetAudience.knowledge_id == knowledge_id)
+            .order_by(TargetAudience.created_at.desc(), TargetAudience.id.desc())
+            .all()
+        )
 
     def update(self, item: TargetAudience) -> TargetAudience:
         existing_item = self.db.query(TargetAudience).filter(TargetAudience.id == item.id).first()

@@ -46,7 +46,7 @@ export default function OffersPage() {
     <div className="max-w-3xl space-y-6 p-6">
       <h1 className="text-2xl font-semibold">Oferty</h1>
 
-      <form onSubmit={handleSubmit} className="space-y-2 rounded-lg border p-4">
+      <form onSubmit={handleSubmit} className="space-y-2">
         <h2 className="text-lg font-semibold">Nowa oferta</h2>
         <input
           name="name"

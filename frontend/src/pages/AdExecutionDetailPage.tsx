@@ -58,7 +58,7 @@ export default function AdExecutionDetailPage() {
       }}
     >
       {isGeneratable && (
-        <section className="space-y-3 rounded-lg border p-4">
+        <section className="space-y-3">
           <h2 className="text-lg font-semibold">Creative execution</h2>
 
           <form onSubmit={handleSubmit} className="flex flex-wrap items-end gap-2">

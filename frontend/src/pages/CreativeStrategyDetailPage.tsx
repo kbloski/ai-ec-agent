@@ -46,7 +46,7 @@ export default function CreativeStrategyDetailPage() {
         isSaving: updateState.isLoading,
       }}
     >
-      <section className="space-y-3 rounded-lg border p-4">
+      <section className="space-y-3">
         <h2 className="text-lg font-semibold">Ad execution</h2>
 
         <form onSubmit={handleSubmit} className="flex flex-wrap items-end gap-2">

@@ -36,7 +36,7 @@ export default function OfferItemEditPage() {
   }
 
   return (
-    <div className="mx-auto max-w-xl space-y-6 p-6">
+    <div className="max-w-xl space-y-6 p-6">
       <h1 className="text-2xl font-semibold">Edytuj element oferty</h1>
 
       {data && (
@@ -55,7 +55,7 @@ export default function OfferItemEditPage() {
       {Boolean(error) && <p className="text-sm text-destructive">Nie udało się pobrać danych.</p>}
 
       {data && (
-        <form key={id} onSubmit={handleSubmit} className="space-y-4 rounded-lg border p-4">
+        <form key={id} onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1">
             <Label htmlFor="name">Nazwa</Label>
             <Input id="name" name="name" defaultValue={(data.name as string) ?? ''} />

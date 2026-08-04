@@ -11,6 +11,7 @@ import {
 import {
   useDeleteTargetAudienceMutation,
   useGenerateTargetAudiencesMutation,
+  useUpdateTargetAudienceMutation,
 } from '@/features/targetAudiences/targetAudiencesApi'
 import {
   useCreateAnalysisMutation,
@@ -31,6 +32,7 @@ export default function KnowledgeDetailPage() {
   const [deleteKnowledgeInsight] = useDeleteKnowledgeInsightMutation()
   const [updateKnowledgeInsight] = useUpdateKnowledgeInsightMutation()
   const [deleteTargetAudience] = useDeleteTargetAudienceMutation()
+  const [updateTargetAudience] = useUpdateTargetAudienceMutation()
 
   const analysisList = useListAnalysisForKnowledgeQuery(knowledgeId)
   const [createAnalysis, createAnalysisState] = useCreateAnalysisMutation()
@@ -50,6 +52,15 @@ export default function KnowledgeDetailPage() {
       data={knowledge}
       isLoading={isLoading}
       error={error}
+      actions={
+        <Button
+          size="sm"
+          onClick={() => generateAudiences({ knowledgeId })}
+          disabled={generateAudiencesState.isLoading}
+        >
+          {generateAudiencesState.isLoading ? 'Generowanie…' : 'Generuj grupy docelowe'}
+        </Button>
+      }
       itemActions={{
         offer_insights: (item) => deleteKnowledgeInsight({ id: item.id as number, knowledgeId }),
         target_audiences: (item) => deleteTargetAudience({ id: item.id as number, knowledgeId }),
@@ -61,6 +72,12 @@ export default function KnowledgeDetailPage() {
       itemStatusActions={{
         offer_insights: (item, contentStatus) =>
           updateKnowledgeInsight({
+            id: item.id as number,
+            knowledgeId,
+            content_status: contentStatus,
+          }).unwrap(),
+        target_audiences: (item, contentStatus) =>
+          updateTargetAudience({
             id: item.id as number,
             knowledgeId,
             content_status: contentStatus,
@@ -97,13 +114,6 @@ export default function KnowledgeDetailPage() {
         onDelete={(item) => deleteBrandMarketing({ id: item.id as number, knowledgeId })}
       />
 
-      <Button
-        size="sm"
-        onClick={() => generateAudiences({ knowledgeId })}
-        disabled={generateAudiencesState.isLoading}
-      >
-        {generateAudiencesState.isLoading ? 'Generowanie…' : 'Generuj grupy docelowe'}
-      </Button>
     </DetailShell>
   )
 }
