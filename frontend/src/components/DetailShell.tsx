@@ -18,6 +18,10 @@ interface DetailShellProps {
   exclude?: string[]
   itemActions?: Record<string, (item: Record<string, unknown>) => void>
   itemLinks?: Record<string, (item: Record<string, unknown>) => string>
+  itemStatusActions?: Record<
+    string,
+    (item: Record<string, unknown>, status: string) => void | Promise<unknown>
+  >
   /** When provided, the fields panel becomes an editable form that saves via this handler; otherwise fields render disabled/read-only. */
   editable?: {
     onSave: (fields: Record<string, unknown>) => Promise<void>
@@ -38,6 +42,7 @@ export function DetailShell({
   exclude,
   itemActions,
   itemLinks,
+  itemStatusActions,
   editable,
 }: DetailShellProps) {
   return (
@@ -91,6 +96,7 @@ export function DetailShell({
               exclude={exclude}
               itemActions={itemActions}
               itemLinks={itemLinks}
+              itemStatusActions={itemStatusActions}
               isSaving={editable?.isSaving}
               onSave={editable ? (fields) => editable.onSave(fields) : undefined}
             />

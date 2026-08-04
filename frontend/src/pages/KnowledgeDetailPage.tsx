@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import {
   useDeleteKnowledgeInsightMutation,
   useGetKnowledgeQuery,
+  useUpdateKnowledgeInsightMutation,
   useUpdateKnowledgeMutation,
 } from '@/features/knowledge/knowledgeApi'
 import {
@@ -28,6 +29,7 @@ export default function KnowledgeDetailPage() {
 
   const [generateAudiences, generateAudiencesState] = useGenerateTargetAudiencesMutation()
   const [deleteKnowledgeInsight] = useDeleteKnowledgeInsightMutation()
+  const [updateKnowledgeInsight] = useUpdateKnowledgeInsightMutation()
   const [deleteTargetAudience] = useDeleteTargetAudienceMutation()
 
   const analysisList = useListAnalysisForKnowledgeQuery(knowledgeId)
@@ -55,6 +57,14 @@ export default function KnowledgeDetailPage() {
       itemLinks={{
         offer_insights: (item) => `/knowledge-insights/${item.id}/edit`,
         target_audiences: (item) => `/target-audiences/${item.id}/edit`,
+      }}
+      itemStatusActions={{
+        offer_insights: (item, contentStatus) =>
+          updateKnowledgeInsight({
+            id: item.id as number,
+            knowledgeId,
+            content_status: contentStatus,
+          }).unwrap(),
       }}
       editable={{
         onSave: (fields) => updateKnowledge({ id: knowledgeId, fields }).unwrap(),

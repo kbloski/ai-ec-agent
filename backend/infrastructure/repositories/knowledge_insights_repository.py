@@ -32,9 +32,12 @@ class KnowledgeInsightsRepository:
         knowledge_id: int
     ) -> list[KnowledgeInsight]:
 
-        return self.db.query(KnowledgeInsight).filter(
-            KnowledgeInsight.knowledge_id == knowledge_id
-        ).all()
+        return (
+            self.db.query(KnowledgeInsight)
+            .filter(KnowledgeInsight.knowledge_id == knowledge_id)
+            .order_by(KnowledgeInsight.created_at.desc(), KnowledgeInsight.id.desc())
+            .all()
+        )
 
     # 🔍 GET BY ID
     def get_by_id(self, id: int) -> Optional[KnowledgeInsight]:

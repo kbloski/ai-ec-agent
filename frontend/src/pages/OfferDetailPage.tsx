@@ -8,6 +8,7 @@ import {
   useDeleteOfferMutation,
   useGenerateOfferSuggestionsMutation,
   useGetOfferQuery,
+  useUpdateOfferInsightMutation,
   useUpdateOfferMutation,
 } from '@/features/offers/offersApi'
 import {
@@ -26,6 +27,7 @@ export default function OfferDetailPage() {
   const [deleteKnowledge] = useDeleteKnowledgeMutation()
   const [deleteOffer] = useDeleteOfferMutation()
   const [deleteOfferInsight] = useDeleteOfferInsightMutation()
+  const [updateOfferInsight] = useUpdateOfferInsightMutation()
   const [deleteOfferItem] = useDeleteOfferItemMutation()
   const [generateSuggestions, generateSuggestionsState] = useGenerateOfferSuggestionsMutation()
   const [updateOffer, updateOfferState] = useUpdateOfferMutation()
@@ -45,6 +47,14 @@ export default function OfferDetailPage() {
       itemLinks={{
         offer_insights: (item) => `/offer-insights/${item.id}/edit`,
         offer_items: (item) => `/offer-items/${item.id}/edit`,
+      }}
+      itemStatusActions={{
+        offer_insights: (item, contentStatus) =>
+          updateOfferInsight({
+            id: item.id as number,
+            offerId,
+            content_status: contentStatus,
+          }).unwrap(),
       }}
       editable={{
         onSave: (fields) => updateOffer({ id: offerId, fields }).unwrap(),

@@ -44,9 +44,12 @@ class OfferInsightsRepository:
         if not filters:
             return []
 
-        return self.db.query(OfferInsight).filter(
-            or_(*filters)
-        ).all()
+        return (
+            self.db.query(OfferInsight)
+            .filter(or_(*filters))
+            .order_by(OfferInsight.created_at.desc(), OfferInsight.id.desc())
+            .all()
+        )
 
     # 🔍 GET BY ID
     def get_by_id(self, id: int) -> Optional[OfferInsight]:

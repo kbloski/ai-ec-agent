@@ -26,10 +26,14 @@ function ObjectArray({
   items,
   onDelete,
   onEditLink,
+  onStatusChange,
+  statuses,
 }: {
   items: Record<string, unknown>[]
   onDelete?: (item: Record<string, unknown>) => void
   onEditLink?: (item: Record<string, unknown>) => string
+  onStatusChange?: (item: Record<string, unknown>, status: string) => void | Promise<unknown>
+  statuses?: { value: string; label: string }[]
 }) {
   return (
     <div className="space-y-2">
@@ -71,7 +75,25 @@ function ObjectArray({
                     {label(key)}
                   </dt>
                   <dd className="text-sm whitespace-pre-wrap">
-                    {value === null || value === undefined || value === '' ? (
+                    {key === 'content_status' && onStatusChange ? (
+                      <Select
+                        value={typeof value === 'string' ? value : undefined}
+                        onValueChange={(status) => {
+                          if (status) void onStatusChange(item, status)
+                        }}
+                      >
+                        <SelectTrigger aria-label={`Status insightu ${String(item.id)}`}>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {statuses?.map((status) => (
+                            <SelectItem key={status.value} value={status.value}>
+                              {status.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    ) : value === null || value === undefined || value === '' ? (
                       <span className="text-muted-foreground italic">—</span>
                     ) : isPrimitive(value) ? (
                       String(value)
@@ -96,11 +118,15 @@ export function RelationList({
   items,
   onDelete,
   onEditLink,
+  onStatusChange,
+  statuses,
 }: {
   fieldKey: string
   items: Record<string, unknown>[]
   onDelete?: (item: Record<string, unknown>) => void
   onEditLink?: (item: Record<string, unknown>) => string
+  onStatusChange?: (item: Record<string, unknown>, status: string) => void | Promise<unknown>
+  statuses?: { value: string; label: string }[]
 }) {
   if (items.length === 0) return null
 
@@ -111,7 +137,13 @@ export function RelationList({
         {label(fieldKey)} ({items.length})
       </CollapsibleTrigger>
       <CollapsibleContent className="pt-2">
-        <ObjectArray items={items} onDelete={onDelete} onEditLink={onEditLink} />
+        <ObjectArray
+          items={items}
+          onDelete={onDelete}
+          onEditLink={onEditLink}
+          onStatusChange={onStatusChange}
+          statuses={statuses}
+        />
       </CollapsibleContent>
     </Collapsible>
   )
@@ -125,6 +157,10 @@ interface EditableFieldsProps {
   exclude?: string[]
   itemActions?: Record<string, (item: Record<string, unknown>) => void>
   itemLinks?: Record<string, (item: Record<string, unknown>) => string>
+  itemStatusActions?: Record<
+    string,
+    (item: Record<string, unknown>, status: string) => void | Promise<unknown>
+  >
 }
 
 /** Generic form for any DTO's fields — same inputs whether or not saving is wired up; falls back to disabled inputs when `onSave` isn't provided. Relation arrays (child entities with their own `id`) stay read-only, rendered via RelationList. */
@@ -135,6 +171,7 @@ export function EditableFields({
   exclude = [],
   itemActions,
   itemLinks,
+  itemStatusActions,
 }: EditableFieldsProps) {
   const { data: statuses } = useListContentStatusesQuery()
 
@@ -194,7 +231,13 @@ export function EditableFields({
           <div key={key} className="space-y-1">
             <Label htmlFor={key}>{label(key)}</Label>
             {key === 'content_status' ? (
-              <Select value={values[key]} onValueChange={(v) => setField(key, v)} disabled={!onSave}>
+              <Select
+                value={values[key]}
+                onValueChange={(value) => {
+                  if (value !== null) setField(key, value)
+                }}
+                disabled={!onSave}
+              >
                 <SelectTrigger id={key}>
                   <SelectValue />
                 </SelectTrigger>
@@ -236,6 +279,8 @@ export function EditableFields({
               items={data[key] as Record<string, unknown>[]}
               onDelete={itemActions?.[key]}
               onEditLink={itemLinks?.[key]}
+              onStatusChange={itemStatusActions?.[key]}
+              statuses={statuses}
             />
           ))}
         </div>
