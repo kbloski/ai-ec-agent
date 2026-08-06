@@ -73,7 +73,7 @@ export default function OfferDetailPage() {
   return (
     <DetailShell
       title={offer?.name as string}
-      backTo="/"
+      backTo="/offers"
       backLabel="← Oferty"
       data={offer}
       isLoading={isLoading}
@@ -136,7 +136,7 @@ export default function OfferDetailPage() {
             variant="black"
             onClick={() => {
               if (window.confirm('Czy na pewno usunąć tę ofertę?')) {
-                deleteOffer(offerId).then(() => navigate('/'))
+                deleteOffer(offerId).then(() => navigate('/offers'))
               }
             }}
           >

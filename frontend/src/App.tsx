@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router-dom'
 import { AppShell } from '@/components/AppShell'
+import DashboardPage from '@/pages/DashboardPage'
 import OffersPage from '@/pages/OffersPage'
 import OfferDetailPage from '@/pages/OfferDetailPage'
 import KnowledgeDetailPage from '@/pages/KnowledgeDetailPage'
@@ -29,7 +30,8 @@ function App() {
   return (
     <Routes>
       <Route element={<AppShell />}>
-        <Route path="/" element={<OffersPage />} />
+        <Route path="/" element={<DashboardPage />} />
+        <Route path="/offers" element={<OffersPage />} />
         <Route path="/offers/:offerId" element={<OfferDetailPage />} />
         <Route path="/knowledges/:knowledgeId" element={<KnowledgeDetailPage />} />
         <Route path="/target-audiences/:id" element={<TargetAudienceDetailPage />} />

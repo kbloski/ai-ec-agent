@@ -1,23 +1,17 @@
-import { Link, Outlet } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 import { AppSidebar } from '@/components/AppSidebar'
+import { AppContextSidebar } from '@/components/AppContextSidebar'
 import { Toaster } from '@/components/ui/sonner'
 
-/** Root layout: header, global resource sidebar on the left, routed page content on the right. */
+/** Root layout: primary sidebar, contextual sidebar, routed page content. */
 export function AppShell() {
   return (
-    <div className="flex min-h-svh flex-col">
-      <nav className="border-b p-4">
-        <Link to="/" className="text-sm font-medium">
-          ai-ec-agent
-        </Link>
-      </nav>
-
-      <div className="flex flex-1">
-        <AppSidebar />
-        <main className="min-w-0 flex-1">
-          <Outlet />
-        </main>
-      </div>
+    <div className="flex min-h-svh">
+      <AppSidebar />
+      <AppContextSidebar />
+      <main className="min-w-0 flex-1">
+        <Outlet />
+      </main>
       <Toaster position="bottom-right" richColors closeButton />
     </div>
   )
