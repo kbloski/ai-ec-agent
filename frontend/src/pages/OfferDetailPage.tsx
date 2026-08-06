@@ -1,7 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { DetailShell } from '@/components/DetailShell'
-import { ResourceList } from '@/components/ResourceList'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -16,20 +15,12 @@ import {
   useUpdateOfferInsightMutation,
   useUpdateOfferMutation,
 } from '@/features/offers/offersApi'
-import {
-  useDeleteKnowledgeMutation,
-  useGenerateKnowledgeMutation,
-  useListKnowledgeForOfferQuery,
-} from '@/features/knowledge/knowledgeApi'
 
 export default function OfferDetailPage() {
   const offerId = Number(useParams().offerId)
   const navigate = useNavigate()
   const { data: offer, isLoading, error } = useGetOfferQuery(offerId)
 
-  const knowledgeList = useListKnowledgeForOfferQuery(offerId)
-  const [generateKnowledge, { isLoading: isGenerating }] = useGenerateKnowledgeMutation()
-  const [deleteKnowledge] = useDeleteKnowledgeMutation()
   const [deleteOffer] = useDeleteOfferMutation()
   const [deleteOfferInsight] = useDeleteOfferInsightMutation()
   const [updateOfferInsight] = useUpdateOfferInsightMutation()
@@ -152,19 +143,6 @@ export default function OfferDetailPage() {
           </Button>
         </>
       }
-    >
-      <ResourceList
-        title="Knowledge"
-        items={knowledgeList.data}
-        isLoading={knowledgeList.isLoading}
-        error={knowledgeList.error}
-        linkTo={(item) => `/knowledges/${item.id}`}
-        itemLabel={(item) => (item.offer_summary as string) ?? `#${item.id}`}
-        onGenerate={() => generateKnowledge({ offerId })}
-        isGenerating={isGenerating}
-        generateLabel="Generuj knowledge"
-        onDelete={(item) => deleteKnowledge({ id: item.id as number, offerId })}
-      />
-    </DetailShell>
+    />
   )
 }

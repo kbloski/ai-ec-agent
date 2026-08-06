@@ -3,6 +3,7 @@ import { AppShell } from '@/components/AppShell'
 import DashboardPage from '@/pages/DashboardPage'
 import OffersPage from '@/pages/OffersPage'
 import OfferDetailPage from '@/pages/OfferDetailPage'
+import OfferKnowledgesPage from '@/pages/OfferKnowledgesPage'
 import KnowledgeDetailPage from '@/pages/KnowledgeDetailPage'
 import TargetAudienceDetailPage from '@/pages/TargetAudienceDetailPage'
 import TargetAudienceEditPage from '@/pages/TargetAudienceEditPage'
@@ -33,6 +34,7 @@ function App() {
         <Route path="/" element={<DashboardPage />} />
         <Route path="/offers" element={<OffersPage />} />
         <Route path="/offers/:offerId" element={<OfferDetailPage />} />
+        <Route path="/offers/:offerId/knowledges" element={<OfferKnowledgesPage />} />
         <Route path="/knowledges/:knowledgeId" element={<KnowledgeDetailPage />} />
         <Route path="/target-audiences/:id" element={<TargetAudienceDetailPage />} />
         <Route path="/target-audiences/:id/edit" element={<TargetAudienceEditPage />} />
