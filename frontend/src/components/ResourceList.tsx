@@ -1,6 +1,7 @@
 import { Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { EntityList } from '@/components/EntityList'
+import type { ReactNode } from 'react'
 import type { Entity } from '@/types'
 
 interface ResourceListProps {
@@ -10,6 +11,10 @@ interface ResourceListProps {
   error?: unknown
   linkTo?: (item: Entity) => string
   itemLabel?: (item: Entity) => string
+  eyebrow?: string
+  itemMeta?: (item: Entity) => ReactNode
+  itemDescription?: (item: Entity) => ReactNode
+  itemDetails?: (item: Entity) => ReactNode
   onGenerate?: () => void
   isGenerating?: boolean
   generateLabel?: string
@@ -24,6 +29,10 @@ export function ResourceList({
   error,
   linkTo,
   itemLabel = (item) => (item.name as string) ?? `#${item.id}`,
+  eyebrow,
+  itemMeta,
+  itemDescription,
+  itemDetails,
   onGenerate,
   isGenerating,
   generateLabel = 'Generuj',
@@ -32,11 +41,15 @@ export function ResourceList({
   return (
     <EntityList
       title={title}
+      eyebrow={eyebrow}
       items={items}
       isLoading={isLoading}
       error={error}
       linkTo={linkTo}
       itemLabel={itemLabel}
+      itemMeta={itemMeta}
+      itemDescription={itemDescription}
+      itemDetails={itemDetails}
       onDelete={onDelete}
       emptyDescription="Wygeneruj lub dodaj pierwszy element, aby rozpocząć pracę."
       actions={onGenerate ? (

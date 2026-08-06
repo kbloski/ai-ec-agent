@@ -87,7 +87,22 @@ export function ChecklistItemsPage() {
   const { data, isLoading, error } = useGetChecklistQuery(cid); const [generate, state] = useGenerateChecklistMutation(); const [remove] = useDeleteChecklistItemMutation()
   return <ResourcePage backTo={`/knowledges/${knowledgeId}/analysis/${analysisId}/checklists/${cid}`} backLabel={(data?.name as string) ?? `Checklista #${cid}`} title="Zadania">
     <Button size="sm" onClick={() => generate({ knowledgeId: Number(knowledgeId), analysisId: Number(analysisId), checklistId: cid })} disabled={state.isLoading}>{state.isLoading ? 'Generowanie…' : 'Generuj zadania'}</Button>
-    <ResourceList title="Zadania" items={data?.checklist_items as Entity[] | undefined} isLoading={isLoading} error={error} itemLabel={(item) => (item.title as string) ?? `#${item.id}`} onDelete={(item) => remove({ id: item.id as number, checklistId: cid })} />
+    <ResourceList
+      title="Zadania"
+      eyebrow={(data?.name as string) ?? `Checklista #${cid}`}
+      items={data?.checklist_items as Entity[] | undefined}
+      isLoading={isLoading}
+      error={error}
+      itemLabel={(item) => (item.title as string) ?? `Zadanie #${item.id}`}
+      itemDescription={(item) => item.description as string | undefined}
+      itemDetails={(item) => item.note ? (
+        <div>
+          <span className="mr-2 text-xs font-semibold tracking-wide text-muted-foreground uppercase">Notatka</span>
+          <span className="whitespace-pre-wrap">{String(item.note)}</span>
+        </div>
+      ) : null}
+      onDelete={(item) => remove({ id: item.id as number, checklistId: cid })}
+    />
   </ResourcePage>
 }
 
@@ -106,13 +121,13 @@ export function PageCopiesPage() { const id=Number(useParams().id); const list=u
 export function CreativeAdExecutionsPage() {
   const id = Number(useParams().id); const { data } = useGetCreativeStrategyQuery(id)
   const list = useListAdExecutionForCreativeStrategyQuery(id); const [create, state] = useCreateAdExecutionMutation(); const [remove] = useDeleteAdExecutionMutation()
-  const submit = (event: FormEvent<HTMLFormElement>) => { event.preventDefault(); const form = new FormData(event.currentTarget); void create({ creativeStrategyId: id, name: String(form.get('name') || '') || undefined, creative_type: String(form.get('creative_type') || 'video'), platform: String(form.get('platform') || 'Meta Ads'), format: String(form.get('format') || 'Vertical Video 9:16') }) }
+  const submit = (event: FormEvent<HTMLFormElement>) => { event.preventDefault(); const form = new FormData(event.currentTarget); void create({ creativeStrategyId: id, name: String(form.get('name') || '') || undefined, creative_type: String(form.get('creative_type') || 'video'), platform: String(form.get('platform') || 'Meta Ads'), format: String(form.get('format') || 'Vertical 9:16') }) }
   return <ResourcePage backTo={`/creative-strategy/${id}`} backLabel={(data?.name as string) ?? 'Creative strategy'} title="Ad execution">
     <form onSubmit={submit} className="flex flex-wrap items-end gap-2">
       <label className="text-xs">Nazwa<input name="name" className="block w-40 rounded-md border px-2 py-1 text-sm" /></label>
       <label className="text-xs">Typ kreacji<select name="creative_type" defaultValue="video" className="block w-32 rounded-md border px-2 py-1 text-sm"><option value="video">video</option><option value="image">image</option><option value="carousel">carousel</option></select></label>
       <label className="text-xs">Platforma<input name="platform" defaultValue="Meta Ads" className="block w-40 rounded-md border px-2 py-1 text-sm" /></label>
-      <label className="text-xs">Format<input name="format" defaultValue="Vertical Video 9:16" className="block w-48 rounded-md border px-2 py-1 text-sm" /></label>
+      <label className="text-xs">Format<input name="format" defaultValue="Vertical 9:16" className="block w-48 rounded-md border px-2 py-1 text-sm" /></label>
       <Button type="submit" size="sm" disabled={state.isLoading}>{state.isLoading ? 'Tworzenie…' : 'Utwórz ad execution'}</Button>
     </form>
     <ResourceList title="Ad execution" items={list.data} isLoading={list.isLoading} error={list.error} linkTo={(x) => `/ad-execution/${x.id}`} itemLabel={(x) => `#${x.id} ${(x.name as string) ?? ''}`.trim()} onDelete={(x) => remove({ id: x.id as number, creativeStrategyId: id })} />

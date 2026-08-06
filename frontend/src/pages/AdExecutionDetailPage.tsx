@@ -26,6 +26,15 @@ export default function AdExecutionDetailPage() {
   const adFrameworks = useListAdFrameworksQuery()
   const creativeAngles = useListCreativeAnglesQuery()
   const [updateAdExecution, updateState] = useUpdateAdExecutionMutation()
+  const displayData = data
+    ? {
+        ...data,
+        format:
+          typeof data.format === 'string'
+            ? data.format.replace(/\bvideo\b\s*/i, '').trim()
+            : data.format,
+      }
+    : undefined
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -49,7 +58,7 @@ export default function AdExecutionDetailPage() {
       title={(data?.name as string) ?? 'Ad execution'}
       backTo={data ? `/creative-strategy/${data.creative_strategy_id}` : undefined}
       backLabel="← Creative strategy"
-      data={data}
+      data={displayData}
       isLoading={isLoading}
       error={error}
       editable={{

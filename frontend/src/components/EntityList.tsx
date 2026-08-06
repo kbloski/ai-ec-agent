@@ -15,6 +15,8 @@ interface EntityListProps {
   linkTo?: (item: Entity) => string
   itemLabel?: (item: Entity) => string
   itemMeta?: (item: Entity) => ReactNode
+  itemDescription?: (item: Entity) => ReactNode
+  itemDetails?: (item: Entity) => ReactNode
   onDelete?: (item: Entity) => void
   emptyTitle?: string
   emptyDescription?: string
@@ -32,6 +34,8 @@ export function EntityList({
   linkTo,
   itemLabel = (item) => (item.name as string) ?? `#${item.id}`,
   itemMeta = (item) => `ID ${String(item.id)}`,
+  itemDescription,
+  itemDetails,
   onDelete,
   emptyTitle = 'Brak elementów',
   emptyDescription = 'Dodaj pierwszy element, aby rozpocząć pracę.',
@@ -84,11 +88,31 @@ export function EntityList({
                 <span className="line-clamp-2 text-base font-medium leading-6 group-hover:underline">
                   {itemLabel(item)}
                 </span>
+                {itemDescription?.(item) && (
+                  <p className="mt-2 text-sm leading-6 whitespace-pre-wrap text-muted-foreground">
+                    {itemDescription(item)}
+                  </p>
+                )}
+                {itemDetails?.(item) && (
+                  <div className="mt-3 bg-background/70 px-3 py-2 text-sm leading-6">
+                    {itemDetails(item)}
+                  </div>
+                )}
                 <span className="mt-1 block font-mono text-xs text-muted-foreground">
                   {itemMeta(item)}
                 </span>
               </Link> : <div className="min-w-0 py-1">
                 <span className="line-clamp-2 text-base font-medium leading-6">{itemLabel(item)}</span>
+                {itemDescription?.(item) && (
+                  <p className="mt-2 text-sm leading-6 whitespace-pre-wrap text-muted-foreground">
+                    {itemDescription(item)}
+                  </p>
+                )}
+                {itemDetails?.(item) && (
+                  <div className="mt-3 bg-background/70 px-3 py-2 text-sm leading-6">
+                    {itemDetails(item)}
+                  </div>
+                )}
                 <span className="mt-1 block font-mono text-xs text-muted-foreground">{itemMeta(item)}</span>
               </div>}
               <div className="flex items-center gap-1">

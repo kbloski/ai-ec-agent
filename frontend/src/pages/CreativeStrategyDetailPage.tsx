@@ -29,7 +29,7 @@ export default function CreativeStrategyDetailPage() {
       name: String(formData.get('name') || '') || undefined,
       creative_type: String(formData.get('creative_type') || 'video'),
       platform: String(formData.get('platform') || 'Meta Ads'),
-      format: String(formData.get('format') || 'Vertical Video 9:16'),
+      format: String(formData.get('format') || 'Vertical 9:16'),
     }).unwrap()
   }
 
@@ -78,7 +78,7 @@ export default function CreativeStrategyDetailPage() {
             Format
             <input
               name="format"
-              defaultValue="Vertical Video 9:16"
+              defaultValue="Vertical 9:16"
               className="block w-48 rounded-md border px-2 py-1 text-sm"
             />
           </label>

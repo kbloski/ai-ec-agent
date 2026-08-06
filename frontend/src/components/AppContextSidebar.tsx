@@ -1,5 +1,5 @@
 import { ArrowLeft } from 'lucide-react'
-import { NavLink, matchPath, useLocation, useNavigate } from 'react-router-dom'
+import { Link, NavLink, matchPath, useLocation, useNavigate } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 
 const navLinkClassName = ({ isActive }: { isActive: boolean }) =>
@@ -16,20 +16,27 @@ export function AppContextSidebar() {
   const navigate = useNavigate()
   const showBackButton = pathname !== '/' && pathname !== '/offers'
   const sections = [
-    { pattern: '/offers/:id/*', process: [['knowledges', 'Knowledges']], resources: [['insights', 'Insights'], ['items', 'Elementy oferty']] },
-    { pattern: '/knowledges/:id/*', process: [['brand-marketing', 'Brand marketing']], knowledge: [['analyses', 'Analizy']], resources: [['insights', 'Insights'], ['target-audiences', 'Grupy docelowe']] },
-    { pattern: '/knowledges/:knowledgeId/analysis/:id/*', process: [['checklists', 'Checklisty']], resources: [['questions', 'Pytania']] },
-    { pattern: '/knowledges/:knowledgeId/analysis/:analysisId/checklists/:id/*', process: [], resources: [['items', 'Zadania']] },
-    { pattern: '/brand-marketing/:id/*', process: [['marketing-strategies', 'Marketing strategy']], resources: [] },
-    { pattern: '/marketing-strategy/:id/*', process: [['offer-strategies', 'Offer strategy']], resources: [] },
-    { pattern: '/offer-strategy/:id/*', process: [['message-strategies', 'Message strategy']], resources: [] },
-    { pattern: '/message-strategy/:id/*', process: [['ad-strategies', 'Ad strategy'], ['ugc-creatives', 'UGC creatives'], ['page-strategies', 'Page strategy']], resources: [] },
-    { pattern: '/ad-strategy/:id/*', process: [['creative-strategies', 'Creative strategy']], resources: [] },
-    { pattern: '/creative-strategy/:id/*', process: [['ad-executions', 'Ad execution']], resources: [] },
-    { pattern: '/ad-execution/:id/*', process: [['creative-executions', 'Creative execution']], resources: [] },
-    { pattern: '/page-strategy/:id/*', process: [['page-blueprints', 'Page blueprint']], resources: [] },
-    { pattern: '/page-blueprint/:id/*', process: [['content-plans', 'Content plan']], resources: [] },
-    { pattern: '/page-content-plan/:id/*', process: [['page-copies', 'Page copy']], resources: [] },
+    { pattern: '/offers/:id/*', current: 'Oferta', process: [['knowledges', 'Knowledges']], resources: [['insights', 'Insights'], ['items', 'Elementy oferty']] },
+    { pattern: '/knowledges/:id/*', current: 'Knowledge', process: [['brand-marketing', 'Brand marketing']], knowledge: [['analyses', 'Analizy']], resources: [['insights', 'Insights'], ['target-audiences', 'Grupy docelowe']] },
+    { pattern: '/knowledges/:knowledgeId/analysis/:id/*', current: 'Analiza', process: [['checklists', 'Checklisty']], resources: [['questions', 'Pytania']] },
+    { pattern: '/knowledges/:knowledgeId/analysis/:analysisId/checklists/:id/*', current: 'Checklista', process: [], resources: [['items', 'Zadania']] },
+    { pattern: '/brand-marketing/:id/*', current: 'Brand marketing', process: [['marketing-strategies', 'Marketing strategy']], resources: [] },
+    { pattern: '/marketing-strategy/:id/*', current: 'Marketing strategy', process: [['offer-strategies', 'Offer strategy']], resources: [] },
+    { pattern: '/offer-strategy/:id/*', current: 'Offer strategy', process: [['message-strategies', 'Message strategy']], resources: [] },
+    { pattern: '/message-strategy/:id/*', current: 'Message strategy', process: [['ad-strategies', 'Ad strategy'], ['ugc-creatives', 'UGC creatives'], ['page-strategies', 'Page strategy']], resources: [] },
+    { pattern: '/ad-strategy/:id/*', current: 'Ad strategy', process: [['creative-strategies', 'Creative strategy']], resources: [] },
+    { pattern: '/creative-strategy/:id/*', current: 'Creative strategy', process: [['ad-executions', 'Ad execution']], resources: [] },
+    { pattern: '/ad-execution/:id/*', current: 'Ad execution', process: [['creative-executions', 'Creative execution']], resources: [] },
+    { pattern: '/page-strategy/:id/*', current: 'Page strategy', process: [['page-blueprints', 'Page blueprint']], resources: [] },
+    { pattern: '/page-blueprint/:id/*', current: 'Page blueprint', process: [['content-plans', 'Content plan']], resources: [] },
+    { pattern: '/page-content-plan/:id/*', current: 'Content plan', process: [['page-copies', 'Page copy']], resources: [] },
+    { pattern: '/creative-execution/:id/*', current: 'Creative execution', process: [], resources: [] },
+    { pattern: '/ugc-creatives/:id/*', current: 'UGC creative', process: [], resources: [] },
+    { pattern: '/page-copy/:id/*', current: 'Page copy', process: [], resources: [] },
+    { pattern: '/target-audiences/:id/*', current: 'Grupa docelowa', process: [], resources: [] },
+    { pattern: '/offer-insights/:id/*', current: 'Insight oferty', process: [], resources: [] },
+    { pattern: '/offer-items/:id/*', current: 'Element oferty', process: [], resources: [] },
+    { pattern: '/knowledge-insights/:id/*', current: 'Insight knowledge', process: [], resources: [] },
   ] as const
   // Prefer the most specific route, otherwise an analysis URL would match Knowledge first.
   const section = [...sections].sort((a, b) => b.pattern.length - a.pattern.length)
@@ -38,6 +45,10 @@ export function AppContextSidebar() {
 
   if (section) {
     const detailPath = section.match?.pathnameBase ?? pathname
+    const hasEditOnlyView = ['/offer-insights/', '/offer-items/', '/knowledge-insights/'].some(
+      (prefix) => pathname.startsWith(prefix),
+    )
+    const currentPath = hasEditOnlyView ? pathname : detailPath
 
     return (
       <aside className="hidden w-56 shrink-0 flex-col border-r p-4 lg:flex">
@@ -51,6 +62,16 @@ export function AppContextSidebar() {
             Wstecz
           </button>
         )}
+        <Link
+          to={currentPath}
+          className="mb-6 block bg-muted/35 px-3 py-3 transition-colors hover:bg-muted/65"
+          aria-label={`Przejdź do: ${section.config.current}`}
+        >
+          <p className="text-[0.68rem] font-semibold tracking-[0.14em] text-muted-foreground uppercase">
+            Aktualny etap
+          </p>
+          <p className="mt-1 text-sm font-semibold text-foreground">{section.config.current}</p>
+        </Link>
         {section.config.process.length > 0 && (
           <section>
             <h2 className="mb-2 border-b border-foreground/30 px-2 pb-2 text-xs font-semibold tracking-wide text-foreground uppercase">
