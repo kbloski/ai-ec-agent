@@ -26,6 +26,7 @@ import PageBlueprintDetailPage from '@/pages/PageBlueprintDetailPage'
 import PageContentPlanDetailPage from '@/pages/PageContentPlanDetailPage'
 import PageCopyDetailPage from '@/pages/PageCopyDetailPage'
 import SettingsPage from '@/pages/SettingsPage'
+import { KnowledgeInsightsPage, KnowledgeTargetAudiencesPage, OfferInsightsPage, OfferItemsPage } from '@/pages/EntityRelationPages'
 import {
   AdCreativeExecutionsPage, AdCreativeStrategiesPage, AnalysisChecklistsPage, AnalysisQuestionsPage,
   BrandMarketingStrategiesPage, ChecklistItemsPage, KnowledgeAnalysesPage,
@@ -42,7 +43,11 @@ function App() {
         <Route path="/offers" element={<OffersPage />} />
         <Route path="/offers/:offerId" element={<OfferDetailPage />} />
         <Route path="/offers/:offerId/knowledges" element={<OfferKnowledgesPage />} />
+        <Route path="/offers/:offerId/insights" element={<OfferInsightsPage />} />
+        <Route path="/offers/:offerId/items" element={<OfferItemsPage />} />
         <Route path="/knowledges/:knowledgeId" element={<KnowledgeDetailPage />} />
+        <Route path="/knowledges/:knowledgeId/insights" element={<KnowledgeInsightsPage />} />
+        <Route path="/knowledges/:knowledgeId/target-audiences" element={<KnowledgeTargetAudiencesPage />} />
         <Route path="/knowledges/:knowledgeId/analyses" element={<KnowledgeAnalysesPage />} />
         <Route path="/knowledges/:knowledgeId/brand-marketing" element={<KnowledgeBrandMarketingPage />} />
         <Route path="/target-audiences/:id" element={<TargetAudienceDetailPage />} />

@@ -77,6 +77,10 @@ export default function OfferDetailPage() {
         offer_insights: (item) => `/offer-insights/${item.id}/edit`,
         offer_items: (item) => `/offer-items/${item.id}/edit`,
       }}
+      relationLinks={{
+        offer_insights: `/offers/${offerId}/insights`,
+        offer_items: `/offers/${offerId}/items`,
+      }}
       itemStatusActions={{
         offer_insights: (item, contentStatus) =>
           updateOfferInsight({

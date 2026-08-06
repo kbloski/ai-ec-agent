@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
+import { RelationCards } from '@/components/RelationCards'
 import { isPrimitive, isRelationArray, label } from '@/lib/entityFields'
 import { useListContentStatusesQuery } from '@/features/contentStatus/contentStatusApi'
 
@@ -121,6 +122,7 @@ export function RelationList({
   onStatusChange,
   statuses,
   addition,
+  showHeading = true,
 }: {
   fieldKey: string
   items: Record<string, unknown>[]
@@ -129,8 +131,26 @@ export function RelationList({
   onStatusChange?: (item: Record<string, unknown>, status: string) => void | Promise<unknown>
   statuses?: { value: string; label: string }[]
   addition?: ReactNode
+  showHeading?: boolean
 }) {
   if (items.length === 0 && !addition) return null
+
+  const content = (
+    <>
+      {addition && <div className="mb-3">{addition}</div>}
+      {items.length > 0 && (
+        <ObjectArray
+          items={items}
+          onDelete={onDelete}
+          onEditLink={onEditLink}
+          onStatusChange={onStatusChange}
+          statuses={statuses}
+        />
+      )}
+    </>
+  )
+
+  if (!showHeading) return content
 
   return (
     <Collapsible>
@@ -139,16 +159,7 @@ export function RelationList({
         {label(fieldKey)} ({items.length})
       </CollapsibleTrigger>
       <CollapsibleContent className="pt-2">
-        {addition && <div className="mb-3">{addition}</div>}
-        {items.length > 0 && (
-          <ObjectArray
-            items={items}
-            onDelete={onDelete}
-            onEditLink={onEditLink}
-            onStatusChange={onStatusChange}
-            statuses={statuses}
-          />
-        )}
+        {content}
       </CollapsibleContent>
     </Collapsible>
   )
@@ -167,6 +178,7 @@ interface EditableFieldsProps {
     (item: Record<string, unknown>, status: string) => void | Promise<unknown>
   >
   itemAdditions?: Record<string, ReactNode>
+  relationLinks?: Record<string, string>
 }
 
 /** Generic form for any DTO's fields — same inputs whether or not saving is wired up; falls back to disabled inputs when `onSave` isn't provided. Relation arrays (child entities with their own `id`) stay read-only, rendered via RelationList. */
@@ -179,6 +191,7 @@ export function EditableFields({
   itemLinks,
   itemStatusActions,
   itemAdditions,
+  relationLinks,
 }: EditableFieldsProps) {
   const { data: statuses } = useListContentStatusesQuery()
 
@@ -287,21 +300,18 @@ export function EditableFields({
         ))}
       </div>
 
-      {relationKeys.length > 0 && (
-        <div className="space-y-3">
-          {relationKeys.map((key) => (
-            <RelationList
-              key={key}
-              fieldKey={key}
-              items={data[key] as Record<string, unknown>[]}
-              onDelete={itemActions?.[key]}
-              onEditLink={itemLinks?.[key]}
-              onStatusChange={itemStatusActions?.[key]}
-              statuses={statuses}
-              addition={itemAdditions?.[key]}
-            />
-          ))}
-        </div>
+      {relationKeys.length > 0 && relationLinks && (
+        <RelationCards
+          cards={relationKeys.flatMap((key) => {
+            const to = relationLinks[key]
+            return to ? [{
+              id: key,
+              label: label(key),
+              count: (data[key] as Record<string, unknown>[]).length,
+              to,
+            }] : []
+          })}
+        />
       )}
 
       {onSave && (

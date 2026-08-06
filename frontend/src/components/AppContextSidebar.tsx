@@ -37,9 +37,7 @@ export function AppContextSidebar() {
     .find(({ match }) => match)
 
   if (section) {
-    const base = pathname.split('/').slice(0, -1).join('/')
-    const isResourcePage = section.config.links.some(([slug]) => pathname.endsWith(`/${slug}`))
-    const detailPath = isResourcePage ? base : pathname
+    const detailPath = section.match?.pathnameBase ?? pathname
 
     return (
       <aside className="hidden w-56 shrink-0 flex-col border-r p-4 lg:flex">

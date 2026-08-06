@@ -1,7 +1,6 @@
 import { useParams } from 'react-router-dom'
 import { DetailShell } from '@/components/DetailShell'
 import { ResourceList } from '@/components/ResourceList'
-import { Button } from '@/components/ui/button'
 import {
   useDeleteKnowledgeInsightMutation,
   useGetKnowledgeQuery,
@@ -10,7 +9,6 @@ import {
 } from '@/features/knowledge/knowledgeApi'
 import {
   useDeleteTargetAudienceMutation,
-  useGenerateTargetAudiencesMutation,
   useUpdateTargetAudienceMutation,
 } from '@/features/targetAudiences/targetAudiencesApi'
 import {
@@ -28,7 +26,6 @@ export default function KnowledgeDetailPage() {
   const knowledgeId = Number(useParams().knowledgeId)
   const { data: knowledge, isLoading, error } = useGetKnowledgeQuery(knowledgeId)
 
-  const [generateAudiences, generateAudiencesState] = useGenerateTargetAudiencesMutation()
   const [deleteKnowledgeInsight] = useDeleteKnowledgeInsightMutation()
   const [updateKnowledgeInsight] = useUpdateKnowledgeInsightMutation()
   const [deleteTargetAudience] = useDeleteTargetAudienceMutation()
@@ -52,15 +49,6 @@ export default function KnowledgeDetailPage() {
       data={knowledge}
       isLoading={isLoading}
       error={error}
-      actions={
-        <Button
-          size="sm"
-          onClick={() => generateAudiences({ knowledgeId })}
-          disabled={generateAudiencesState.isLoading}
-        >
-          {generateAudiencesState.isLoading ? 'Generowanie…' : 'Generuj grupy docelowe'}
-        </Button>
-      }
       itemActions={{
         offer_insights: (item) => deleteKnowledgeInsight({ id: item.id as number, knowledgeId }),
         target_audiences: (item) => deleteTargetAudience({ id: item.id as number, knowledgeId }),
@@ -68,6 +56,10 @@ export default function KnowledgeDetailPage() {
       itemLinks={{
         offer_insights: (item) => `/knowledge-insights/${item.id}/edit`,
         target_audiences: (item) => `/target-audiences/${item.id}/edit`,
+      }}
+      relationLinks={{
+        offer_insights: `/knowledges/${knowledgeId}/insights`,
+        target_audiences: `/knowledges/${knowledgeId}/target-audiences`,
       }}
       itemStatusActions={{
         offer_insights: (item, contentStatus) =>
