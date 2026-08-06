@@ -19,9 +19,6 @@ class OfferKnowledge(Base, JSONSerializable):
         nullable=False,
     )
 
-    # Understanding version
-    version = Column(Integer, nullable=False, default=1)
-
     # AI-generated knowledge
     offer_summary = Column(Text, nullable=True)
     category = Column(Text, nullable=True)

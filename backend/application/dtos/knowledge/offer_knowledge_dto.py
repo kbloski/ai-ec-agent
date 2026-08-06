@@ -12,14 +12,12 @@ class OfferKnowledgeDto(JSONSerializable):
         self,
         id: int,
         offer_id: int,
-        version: int,
         offer_summary: Optional[str] = None,
         category: Optional[str] = None,
         value_proposition: Optional[str] = None,
     ):
         self.id = id
         self.offer_id = offer_id
-        self.version = version
         self.offer_summary = offer_summary
         self.category = category
         self.value_proposition = value_proposition
@@ -30,7 +28,6 @@ class OfferKnowledgeDto(JSONSerializable):
         data = {
             "id": self.id,
             "offer_id": self.offer_id,
-            "version": self.version,
             "offer_summary": self.offer_summary,
             "category": self.category,
             "value_proposition": self.value_proposition,

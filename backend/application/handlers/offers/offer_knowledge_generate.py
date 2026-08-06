@@ -235,7 +235,6 @@ TASK:
 
             offer_knowledge = OfferKnowledge(
                 offer_id=offer_id,
-                version=1,
                 offer_summary=json_data.get("offer_summary", ""),
                 category=json_data.get("category", ""),
                 value_proposition=json_data.get("value_proposition", ""),

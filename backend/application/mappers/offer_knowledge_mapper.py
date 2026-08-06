@@ -8,7 +8,6 @@ class OfferKnowledgeMapper:
         return OfferKnowledgeDto(
             id = item.id,
             offer_id = item.offer_id,
-            version = item.version,
             offer_summary = item.offer_summary,
             category = item.category,
             value_proposition = item.value_proposition,
