@@ -10,7 +10,6 @@ import {
   useDeleteOfferInsightMutation,
   useDeleteOfferItemMutation,
   useDeleteOfferMutation,
-  useGenerateOfferSuggestionsMutation,
   useGetOfferQuery,
   useUpdateOfferInsightMutation,
   useUpdateOfferMutation,
@@ -27,7 +26,6 @@ export default function OfferDetailPage() {
   const [deleteOfferItem] = useDeleteOfferItemMutation()
   const [createOfferItem, createOfferItemState] = useCreateOfferItemMutation()
   const [createItemError, setCreateItemError] = useState<string | null>(null)
-  const [generateSuggestions, generateSuggestionsState] = useGenerateOfferSuggestionsMutation()
   const [updateOffer, updateOfferState] = useUpdateOfferMutation()
 
   const handleCreateItem = async (event: FormEvent<HTMLFormElement>) => {
@@ -91,7 +89,7 @@ export default function OfferDetailPage() {
       }}
       itemAdditions={{
         offer_items: (
-          <form onSubmit={handleCreateItem} className="space-y-3 rounded-md border p-3">
+          <form onSubmit={handleCreateItem} className="space-y-3 bg-muted/25 p-3">
             <h3 className="text-sm font-semibold">Dodaj element oferty</h3>
             <div className="space-y-1">
               <Label htmlFor="new-offer-item-name">Nazwa</Label>
@@ -138,13 +136,6 @@ export default function OfferDetailPage() {
             Usuń ofertę
           </Button>
 
-          <Button
-            size="sm"
-            onClick={() => generateSuggestions(offerId)}
-            disabled={generateSuggestionsState.isLoading}
-          >
-            {generateSuggestionsState.isLoading ? 'Generowanie…' : 'Generuj sugestie'}
-          </Button>
         </>
       }
     />

@@ -39,13 +39,14 @@ function ObjectArray({
   return (
     <div className="space-y-2">
       {items.map((item, i) => (
-        <div key={i} className="space-y-2 rounded-md border p-3">
+        <div key={i} className="space-y-2 bg-muted/25 p-4 transition-colors hover:bg-muted/45">
           {(onDelete || onEditLink) && (
             <div className="flex justify-end gap-2">
               {onEditLink && (
                 <Button
                   size="sm"
                   variant="black"
+                  className="rounded-none"
                   nativeButton={false}
                   render={<Link to={onEditLink(item)} />}
                 >
@@ -56,6 +57,7 @@ function ObjectArray({
                 <Button
                   size="sm"
                   variant="black"
+                  className="rounded-none"
                   onClick={() => {
                     if (window.confirm('Czy na pewno usunąć ten element?')) {
                       onDelete(item)
@@ -300,6 +302,14 @@ export function EditableFields({
         ))}
       </div>
 
+      {onSave && (
+        <div className="flex gap-2">
+          <Button type="submit" disabled={isSaving}>
+            {isSaving ? 'Zapisywanie…' : 'Zapisz'}
+          </Button>
+        </div>
+      )}
+
       {relationKeys.length > 0 && relationLinks && (
         <RelationCards
           cards={relationKeys.flatMap((key) => {
@@ -312,14 +322,6 @@ export function EditableFields({
             }] : []
           })}
         />
-      )}
-
-      {onSave && (
-        <div className="flex gap-2">
-          <Button type="submit" disabled={isSaving}>
-            {isSaving ? 'Zapisywanie…' : 'Zapisz'}
-          </Button>
-        </div>
       )}
     </form>
   )

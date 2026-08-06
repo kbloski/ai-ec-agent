@@ -11,6 +11,7 @@ import {
   useDeleteOfferInsightMutation,
   useDeleteOfferItemMutation,
   useGetOfferQuery,
+  useGenerateOfferSuggestionsMutation,
   useUpdateOfferInsightMutation,
 } from '@/features/offers/offersApi'
 import {
@@ -27,7 +28,7 @@ import type { Entity } from '@/types'
 
 function CollectionPage({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <div className="max-w-3xl space-y-6 p-6">
+    <div className="w-full space-y-6 p-6 lg:p-10">
       <h1 className="text-2xl font-semibold">{title}</h1>
       {children}
     </div>
@@ -40,10 +41,14 @@ export function OfferInsightsPage() {
   const { data: statuses } = useListContentStatusesQuery()
   const [remove] = useDeleteOfferInsightMutation()
   const [update] = useUpdateOfferInsightMutation()
+  const [generateInsights, generateState] = useGenerateOfferSuggestionsMutation()
   const items = (data?.offer_insights as Entity[] | undefined) ?? []
 
   return (
     <CollectionPage title="Insights">
+      <Button onClick={() => generateInsights(offerId)} disabled={generateState.isLoading}>
+        {generateState.isLoading ? 'Generowanie…' : 'Generuj insights'}
+      </Button>
       {isLoading && <p className="text-sm text-muted-foreground">Ładowanie…</p>}
       {Boolean(error) && <p className="text-sm text-destructive">Nie udało się pobrać danych.</p>}
       {!isLoading && !error && items.length === 0 && <p className="text-sm text-muted-foreground">Brak elementów.</p>}
@@ -77,7 +82,7 @@ export function OfferItemsPage() {
 
   return (
     <CollectionPage title="Elementy oferty">
-      <form onSubmit={submit} className="space-y-3 rounded-lg border p-4">
+      <form onSubmit={submit} className="space-y-3 bg-muted/25 p-4">
         <h2 className="font-semibold">Dodaj element oferty</h2>
         <div className="space-y-1"><Label htmlFor="item-name">Nazwa</Label><Input id="item-name" name="name" required /></div>
         <div className="space-y-1"><Label htmlFor="item-quantity">Ilość</Label><Input id="item-quantity" name="quantity" type="number" min="1" step="1" defaultValue="1" required /></div>

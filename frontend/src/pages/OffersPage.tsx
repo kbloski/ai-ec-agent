@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { z } from 'zod'
-import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { EntityList } from '@/components/EntityList'
 import {
   useCreateOfferMutation,
   useDeleteOfferMutation,
@@ -20,6 +20,7 @@ export default function OffersPage() {
   const [createOffer, { isLoading: isCreating }] = useCreateOfferMutation()
   const [deleteOffer] = useDeleteOfferMutation()
   const [formError, setFormError] = useState<string | null>(null)
+  const [showCreateForm, setShowCreateForm] = useState(false)
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -40,73 +41,40 @@ export default function OffersPage() {
 
     await createOffer(parsed.data).unwrap()
     e.currentTarget.reset()
+    setShowCreateForm(false)
   }
 
   return (
-    <div className="max-w-3xl space-y-6 p-6">
-      <h1 className="text-2xl font-semibold">Oferty</h1>
-
-      <form onSubmit={handleSubmit} className="space-y-2">
-        <h2 className="text-lg font-semibold">Nowa oferta</h2>
-        <input
-          name="name"
-          placeholder="Nazwa"
-          className="w-full rounded-md border px-3 py-2 text-sm"
-        />
-        <input
-          name="buying_price"
-          type="number"
-          step="0.01"
-          placeholder="Cena zakupu"
-          className="w-full rounded-md border px-3 py-2 text-sm"
-        />
-        <input
-          name="selling_price"
-          type="number"
-          step="0.01"
-          placeholder="Cena sprzedaży (opcjonalnie)"
-          className="w-full rounded-md border px-3 py-2 text-sm"
-        />
-        <textarea
-          name="details"
-          placeholder="Szczegóły (opcjonalnie)"
-          className="w-full rounded-md border px-3 py-2 text-sm"
-        />
-        {formError && <p className="text-sm text-destructive">{formError}</p>}
-        <Button type="submit" disabled={isCreating}>
-          {isCreating ? 'Tworzenie…' : 'Utwórz ofertę'}
-        </Button>
-      </form>
-
-      <section className="overflow-hidden rounded-lg border">
-        {isLoading && <p className="px-4 py-3 text-sm text-muted-foreground">Ładowanie…</p>}
-        {Boolean(error) && (
-          <p className="px-4 py-3 text-sm text-destructive">Nie udało się pobrać ofert.</p>
-        )}
-        {!isLoading && !error && (data?.items.length ?? 0) === 0 && (
-          <p className="px-4 py-3 text-sm text-muted-foreground">Brak ofert — utwórz pierwszą.</p>
-        )}
-        <ul className="divide-y">
-          {data?.items.map((offer) => (
-            <li key={offer.id} className="flex items-center gap-2 px-4 py-2.5 hover:bg-accent/50">
-              <Link to={`/offers/${offer.id}`} className="flex-1 truncate text-sm hover:underline">
-                {(offer.name as string) ?? `#${offer.id}`}
-              </Link>
-              <Button
-                size="sm"
-                variant="black"
-                onClick={() => {
-                  if (window.confirm('Czy na pewno usunąć tę ofertę?')) {
-                    deleteOffer(offer.id as number)
-                  }
-                }}
-              >
-                Usuń
-              </Button>
-            </li>
-          ))}
-        </ul>
-      </section>
+    <div className="w-full space-y-8 p-6 lg:p-10">
+      <EntityList
+        title="Oferty"
+        items={data?.items}
+        isLoading={isLoading}
+        error={error}
+        linkTo={(offer) => `/offers/${offer.id}`}
+        itemLabel={(offer) => (offer.name as string) ?? `Oferta #${offer.id}`}
+        emptyTitle="Brak ofert"
+        emptyDescription="Utwórz pierwszą ofertę, aby rozpocząć pracę."
+        onDelete={(offer) => deleteOffer(offer.id as number)}
+        actions={
+          <Button className="h-10 rounded-none px-4" onClick={() => setShowCreateForm((value) => !value)}>
+            {showCreateForm ? 'Anuluj' : 'Nowa oferta'}
+          </Button>
+        }
+        contentBeforeList={showCreateForm ? (
+          <form onSubmit={handleSubmit} className="w-full space-y-2 p-4">
+            <h2 className="text-lg font-semibold">Nowa oferta</h2>
+            <input name="name" placeholder="Nazwa" className="w-full rounded-none border px-3 py-2 text-sm" />
+            <input name="buying_price" type="number" step="0.01" placeholder="Cena zakupu" className="w-full rounded-none border px-3 py-2 text-sm" />
+            <input name="selling_price" type="number" step="0.01" placeholder="Cena sprzedaży (opcjonalnie)" className="w-full rounded-none border px-3 py-2 text-sm" />
+            <textarea name="details" placeholder="Szczegóły (opcjonalnie)" className="w-full rounded-none border px-3 py-2 text-sm" />
+            {formError && <p className="text-sm text-destructive">{formError}</p>}
+            <Button type="submit" disabled={isCreating} className="rounded-none">
+              {isCreating ? 'Tworzenie…' : 'Utwórz ofertę'}
+            </Button>
+          </form>
+        ) : undefined}
+      />
     </div>
   )
 }

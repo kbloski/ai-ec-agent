@@ -33,7 +33,7 @@ export default function KnowledgeInsightEditPage() {
   }
 
   return (
-    <div className="max-w-xl space-y-6 p-6">
+    <div className="w-full space-y-6 p-6 lg:p-10">
       <h1 className="text-2xl font-semibold">Edytuj insight wiedzy</h1>
 
       {data && (

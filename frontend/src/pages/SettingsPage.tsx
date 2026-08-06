@@ -16,7 +16,7 @@ export default function SettingsPage() {
   }, [data])
 
   return (
-    <div className="max-w-3xl space-y-6 p-6">
+    <div className="w-full space-y-6 p-6 lg:p-10">
       <h1 className="text-2xl font-semibold">Ustawienia</h1>
 
       {data && (

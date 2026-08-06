@@ -11,7 +11,8 @@ interface EntityListProps {
   isLoading?: boolean
   error?: unknown
   actions?: ReactNode
-  linkTo: (item: Entity) => string
+  contentBeforeList?: ReactNode
+  linkTo?: (item: Entity) => string
   itemLabel?: (item: Entity) => string
   itemMeta?: (item: Entity) => ReactNode
   onDelete?: (item: Entity) => void
@@ -27,6 +28,7 @@ export function EntityList({
   isLoading,
   error,
   actions,
+  contentBeforeList,
   linkTo,
   itemLabel = (item) => (item.name as string) ?? `#${item.id}`,
   itemMeta = (item) => `ID ${String(item.id)}`,
@@ -53,6 +55,8 @@ export function EntityList({
         {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
       </header>
 
+      {contentBeforeList}
+
       {isLoading && <p className="bg-muted/30 px-4 py-6 text-sm text-muted-foreground">Ładowanie…</p>}
       {Boolean(error) && (
         <p className="bg-destructive/5 px-4 py-6 text-sm text-destructive">
@@ -76,18 +80,23 @@ export function EntityList({
               <span className="font-mono text-xs text-muted-foreground">
                 {String(index + 1).padStart(2, '0')}
               </span>
-              <Link to={linkTo(item)} className="min-w-0 py-1">
+              {linkTo ? <Link to={linkTo(item)} className="min-w-0 py-1">
                 <span className="line-clamp-2 text-base font-medium leading-6 group-hover:underline">
                   {itemLabel(item)}
                 </span>
                 <span className="mt-1 block font-mono text-xs text-muted-foreground">
                   {itemMeta(item)}
                 </span>
-              </Link>
+              </Link> : <div className="min-w-0 py-1">
+                <span className="line-clamp-2 text-base font-medium leading-6">{itemLabel(item)}</span>
+                <span className="mt-1 block font-mono text-xs text-muted-foreground">{itemMeta(item)}</span>
+              </div>}
               <div className="flex items-center gap-1">
-                <Button nativeButton={false} render={<Link to={linkTo(item)} aria-label={`Otwórz ${title}`} />} variant="ghost" size="icon" className="rounded-none">
-                  <ArrowUpRight />
-                </Button>
+                {linkTo && (
+                  <Button nativeButton={false} render={<Link to={linkTo(item)} aria-label={`Otwórz ${title}`} />} variant="ghost" size="icon" className="rounded-none">
+                    <ArrowUpRight />
+                  </Button>
+                )}
                 {onDelete && (
                   <Button
                     variant="ghost"

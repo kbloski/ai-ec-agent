@@ -34,8 +34,8 @@ import { useListAdFrameworksQuery, type AdFramework } from '@/features/adFramewo
 import { useListCreativeAnglesQuery, type CreativeAngle } from '@/features/creativeAngels/creativeAnglesApi'
 
 function ResourcePage({ title, children }: { backTo: string; backLabel: string; title: string; children: ReactNode }) {
-  return <div className="max-w-3xl space-y-6 p-6">
-    <h1 className="text-2xl font-semibold">{title}</h1>
+  return <div className="w-full space-y-6 p-6 lg:p-10">
+    {title === 'Pytania' && <h1 className="text-3xl font-semibold tracking-tight">{title}</h1>}
     {children}
   </div>
 }
