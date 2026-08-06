@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import { AppShell } from '@/components/AppShell'
 import DashboardPage from '@/pages/DashboardPage'
 import OffersPage from '@/pages/OffersPage'
@@ -88,7 +88,8 @@ function App() {
         <Route path="/page-content-plan/:id" element={<PageContentPlanDetailPage />} />
         <Route path="/page-content-plan/:id/page-copies" element={<PageCopiesPage />} />
         <Route path="/page-copy/:id" element={<PageCopyDetailPage />} />
-        <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/settings" element={<Navigate to="/settings/general" replace />} />
+        <Route path="/settings/general" element={<SettingsPage />} />
       </Route>
     </Routes>
   )

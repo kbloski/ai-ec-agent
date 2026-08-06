@@ -43,6 +43,21 @@ export function AppContextSidebar() {
     .map((config) => ({ config, match: matchPath(config.pattern, pathname) }))
     .find(({ match }) => match)
 
+  if (pathname.startsWith('/settings')) {
+    return (
+      <aside className="hidden w-56 shrink-0 flex-col border-r p-4 lg:flex">
+        <h2 className="mb-2 border-b border-foreground/30 px-2 pb-2 text-xs font-semibold tracking-wide text-foreground uppercase">
+          Ustawienia
+        </h2>
+        <nav className="ml-2 space-y-1 border-l pl-2">
+          <NavLink to="/settings/general" className={navLinkClassName}>
+            General
+          </NavLink>
+        </nav>
+      </aside>
+    )
+  }
+
   if (section) {
     const detailPath = section.match?.pathnameBase ?? pathname
     const hasEditOnlyView = ['/offer-insights/', '/offer-items/', '/knowledge-insights/'].some(
