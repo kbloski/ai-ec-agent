@@ -1,5 +1,7 @@
+import { Plus } from 'lucide-react'
 import { useParams } from 'react-router-dom'
-import { ResourceList } from '@/components/ResourceList'
+import { Button } from '@/components/ui/button'
+import { EntityList } from '@/components/EntityList'
 import {
   useDeleteKnowledgeMutation,
   useGenerateKnowledgeMutation,
@@ -13,20 +15,28 @@ export default function OfferKnowledgesPage() {
   const [deleteKnowledge] = useDeleteKnowledgeMutation()
 
   return (
-    <div className="max-w-3xl space-y-6 p-6">
-      <h1 className="text-2xl font-semibold">Knowledge</h1>
-
-      <ResourceList
-        title="Knowledge"
+    <div className="w-full p-6 lg:p-10">
+      <EntityList
+        title="Knowledges"
+        eyebrow="Baza wiedzy"
         items={knowledgeList.data}
         isLoading={knowledgeList.isLoading}
         error={knowledgeList.error}
         linkTo={(item) => `/knowledges/${item.id}`}
-        itemLabel={(item) => (item.offer_summary as string) ?? `#${item.id}`}
-        onGenerate={() => generateKnowledge({ offerId })}
-        isGenerating={isGenerating}
-        generateLabel="Generuj knowledge"
+        itemLabel={(item) => (item.offer_summary as string) ?? `Knowledge #${item.id}`}
+        emptyTitle="Brak bazy wiedzy"
+        emptyDescription="Wygeneruj pierwszy element, aby rozpocząć pracę."
         onDelete={(item) => deleteKnowledge({ id: item.id as number, offerId })}
+        actions={
+          <Button
+            onClick={() => generateKnowledge({ offerId })}
+            disabled={isGenerating}
+            className="h-10 rounded-none px-4"
+          >
+            <Plus className="size-4" />
+            {isGenerating ? 'Generowanie…' : 'Generuj knowledge'}
+          </Button>
+        }
       />
     </div>
   )
