@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils'
 
 const navLinkClassName = ({ isActive }: { isActive: boolean }) =>
   cn(
-    'flex items-center gap-2 rounded-md px-2 py-2 text-sm',
+    'flex items-center gap-2 rounded-md px-3 py-2 text-sm',
     isActive
       ? 'bg-accent text-accent-foreground'
       : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground',
@@ -16,20 +16,20 @@ export function AppContextSidebar() {
   const navigate = useNavigate()
   const showBackButton = pathname !== '/' && pathname !== '/offers'
   const sections = [
-    { pattern: '/offers/:id/*', links: [['knowledges', 'Knowledges']] },
-    { pattern: '/knowledges/:id/*', links: [['analyses', 'Analizy'], ['brand-marketing', 'Brand marketing']] },
-    { pattern: '/knowledges/:knowledgeId/analysis/:id/*', links: [['checklists', 'Checklisty'], ['questions', 'Pytania']] },
-    { pattern: '/knowledges/:knowledgeId/analysis/:analysisId/checklists/:id/*', links: [['items', 'Zadania']] },
-    { pattern: '/brand-marketing/:id/*', links: [['marketing-strategies', 'Marketing strategy']] },
-    { pattern: '/marketing-strategy/:id/*', links: [['offer-strategies', 'Offer strategy']] },
-    { pattern: '/offer-strategy/:id/*', links: [['message-strategies', 'Message strategy']] },
-    { pattern: '/message-strategy/:id/*', links: [['ad-strategies', 'Ad strategy'], ['ugc-creatives', 'UGC creatives'], ['page-strategies', 'Page strategy']] },
-    { pattern: '/ad-strategy/:id/*', links: [['creative-strategies', 'Creative strategy']] },
-    { pattern: '/creative-strategy/:id/*', links: [['ad-executions', 'Ad execution']] },
-    { pattern: '/ad-execution/:id/*', links: [['creative-executions', 'Creative execution']] },
-    { pattern: '/page-strategy/:id/*', links: [['page-blueprints', 'Page blueprint']] },
-    { pattern: '/page-blueprint/:id/*', links: [['content-plans', 'Content plan']] },
-    { pattern: '/page-content-plan/:id/*', links: [['page-copies', 'Page copy']] },
+    { pattern: '/offers/:id/*', process: [['knowledges', 'Knowledges']], resources: [['insights', 'Insights'], ['items', 'Elementy oferty']] },
+    { pattern: '/knowledges/:id/*', process: [['brand-marketing', 'Brand marketing']], knowledge: [['analyses', 'Analizy']], resources: [['insights', 'Insights'], ['target-audiences', 'Grupy docelowe']] },
+    { pattern: '/knowledges/:knowledgeId/analysis/:id/*', process: [['checklists', 'Checklisty']], resources: [['questions', 'Pytania']] },
+    { pattern: '/knowledges/:knowledgeId/analysis/:analysisId/checklists/:id/*', process: [], resources: [['items', 'Zadania']] },
+    { pattern: '/brand-marketing/:id/*', process: [['marketing-strategies', 'Marketing strategy']], resources: [] },
+    { pattern: '/marketing-strategy/:id/*', process: [['offer-strategies', 'Offer strategy']], resources: [] },
+    { pattern: '/offer-strategy/:id/*', process: [['message-strategies', 'Message strategy']], resources: [] },
+    { pattern: '/message-strategy/:id/*', process: [['ad-strategies', 'Ad strategy'], ['ugc-creatives', 'UGC creatives'], ['page-strategies', 'Page strategy']], resources: [] },
+    { pattern: '/ad-strategy/:id/*', process: [['creative-strategies', 'Creative strategy']], resources: [] },
+    { pattern: '/creative-strategy/:id/*', process: [['ad-executions', 'Ad execution']], resources: [] },
+    { pattern: '/ad-execution/:id/*', process: [['creative-executions', 'Creative execution']], resources: [] },
+    { pattern: '/page-strategy/:id/*', process: [['page-blueprints', 'Page blueprint']], resources: [] },
+    { pattern: '/page-blueprint/:id/*', process: [['content-plans', 'Content plan']], resources: [] },
+    { pattern: '/page-content-plan/:id/*', process: [['page-copies', 'Page copy']], resources: [] },
   ] as const
   // Prefer the most specific route, otherwise an analysis URL would match Knowledge first.
   const section = [...sections].sort((a, b) => b.pattern.length - a.pattern.length)
@@ -51,14 +51,44 @@ export function AppContextSidebar() {
             Wstecz
           </button>
         )}
-        <h2 className="mb-2 px-2 text-xs font-medium tracking-wide text-muted-foreground uppercase">
-          Zasoby
-        </h2>
-        <nav className="space-y-1">
-          {section.config.links.map(([slug, label]) => (
-            <NavLink key={slug} to={`${detailPath}/${slug}`} className={navLinkClassName}>{label}</NavLink>
-          ))}
-        </nav>
+        {section.config.process.length > 0 && (
+          <section>
+            <h2 className="mb-2 border-b border-foreground/30 px-2 pb-2 text-xs font-semibold tracking-wide text-foreground uppercase">
+              Proces
+            </h2>
+            <nav className="ml-2 space-y-1 border-l pl-2">
+              {section.config.process.map(([slug, label]) => (
+                <NavLink key={slug} to={`${detailPath}/${slug}`} className={navLinkClassName}>{label}</NavLink>
+              ))}
+            </nav>
+          </section>
+        )}
+
+        {'knowledge' in section.config && section.config.knowledge.length > 0 && (
+          <section className={section.config.process.length > 0 ? 'mt-6' : undefined}>
+            <h2 className="mb-2 border-b border-foreground/30 px-2 pb-2 text-xs font-semibold tracking-wide text-foreground uppercase">
+              Wiedza
+            </h2>
+            <nav className="ml-2 space-y-1 border-l pl-2">
+              {section.config.knowledge.map(([slug, label]) => (
+                <NavLink key={slug} to={`${detailPath}/${slug}`} className={navLinkClassName}>{label}</NavLink>
+              ))}
+            </nav>
+          </section>
+        )}
+
+        {section.config.resources.length > 0 && (
+          <section className={section.config.process.length > 0 || 'knowledge' in section.config ? 'mt-6' : undefined}>
+            <h2 className="mb-2 border-b border-foreground/30 px-2 pb-2 text-xs font-semibold tracking-wide text-foreground uppercase">
+              Zasoby
+            </h2>
+            <nav className="ml-2 space-y-1 border-l pl-2">
+              {section.config.resources.map(([slug, label]) => (
+                <NavLink key={slug} to={`${detailPath}/${slug}`} className={navLinkClassName}>{label}</NavLink>
+              ))}
+            </nav>
+          </section>
+        )}
       </aside>
     )
   }

@@ -14,6 +14,7 @@ interface DetailShellProps {
   error?: unknown
   children?: ReactNode
   actions?: ReactNode
+  overview?: ReactNode
   exclude?: string[]
   itemActions?: Record<string, (item: Record<string, unknown>) => void>
   itemLinks?: Record<string, (item: Record<string, unknown>) => string>
@@ -37,6 +38,7 @@ export function DetailShell({
   isLoading,
   error,
   actions,
+  overview,
   exclude,
   itemActions,
   itemLinks,
@@ -84,6 +86,8 @@ export function DetailShell({
             />
           </div>
         )}
+
+        {data && overview}
       </div>
     </div>
   )

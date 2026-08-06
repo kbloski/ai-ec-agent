@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom'
 import { DetailShell } from '@/components/DetailShell'
 import { ResourceList } from '@/components/ResourceList'
 import { Button } from '@/components/ui/button'
+import { RelationCards } from '@/components/RelationCards'
 import {
   useDeleteChecklistItemMutation,
   useGenerateChecklistMutation,
@@ -29,6 +30,18 @@ export default function ChecklistDetailPage() {
       isLoading={isLoading}
       error={error}
       exclude={['checklist_items']}
+      overview={
+        <RelationCards
+          cards={[
+            {
+              id: 'items',
+              label: 'Zadania',
+              count: (data?.checklist_items as Entity[] | undefined)?.length ?? 0,
+              to: `/knowledges/${knowledgeId}/analysis/${analysisId}/checklists/${checklistId}/items`,
+            },
+          ]}
+        />
+      }
     >
       <Button
         size="sm"

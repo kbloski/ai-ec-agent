@@ -1,6 +1,7 @@
 import type { FormEvent, ReactNode } from 'react'
 import { useParams } from 'react-router-dom'
 import { ResourceList } from '@/components/ResourceList'
+import { RelationList } from '@/components/EditableFields'
 import { Button } from '@/components/ui/button'
 import type { Entity } from '@/types'
 import { useGetKnowledgeQuery } from '@/features/knowledge/knowledgeApi'
@@ -71,9 +72,13 @@ export function AnalysisChecklistsPage() {
 export function AnalysisQuestionsPage() {
   const { knowledgeId, analysisId } = useParams(); const aid = Number(analysisId)
   const { data, isLoading, error } = useGetAnalysisQuery(aid); const [generate, state] = useGenerateAnalysisAnswersMutation(); const [remove] = useDeleteAnalysisQuestionMutation()
+  const questions = (data?.analysis_questions as Entity[] | undefined) ?? []
   return <ResourcePage backTo={`/knowledges/${knowledgeId}/analysis/${aid}`} backLabel={`Analiza #${aid}`} title="Pytania">
     <Button size="sm" onClick={() => generate({ knowledgeId: Number(knowledgeId), analysisId: aid })} disabled={state.isLoading}>{state.isLoading ? 'Generowanie…' : 'Generuj odpowiedzi'}</Button>
-    <ResourceList title="Pytania" items={data?.analysis_questions as Entity[] | undefined} isLoading={isLoading} error={error} itemLabel={(item) => (item.question as string) ?? `#${item.id}`} onDelete={(item) => remove({ id: item.id as number, analysisId: aid })} />
+    {isLoading && <p className="text-sm text-muted-foreground">Ładowanie…</p>}
+    {Boolean(error) && <p className="text-sm text-destructive">Nie udało się pobrać pytań.</p>}
+    {!isLoading && !error && questions.length === 0 && <p className="text-sm text-muted-foreground">Brak pytań — wygeneruj odpowiedzi.</p>}
+    <RelationList fieldKey="analysis_questions" items={questions} onDelete={(item) => remove({ id: item.id as number, analysisId: aid })} showHeading={false} />
   </ResourcePage>
 }
 

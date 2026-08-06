@@ -4,6 +4,10 @@ const LABEL_OVERRIDES: Record<string, string> = {
   offer_items: 'Elementy oferty',
   offer_insights: 'Insights',
   target_audiences: 'Grupy docelowe',
+  question: 'Pytanie',
+  answer: 'Odpowiedź',
+  score: 'Ocena',
+  confidence: 'Pewność',
 }
 
 export function label(key: string): string {

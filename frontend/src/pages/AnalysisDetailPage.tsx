@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom'
 import { DetailShell } from '@/components/DetailShell'
 import { ResourceList } from '@/components/ResourceList'
 import { Button } from '@/components/ui/button'
+import { RelationCards } from '@/components/RelationCards'
 import type { Entity } from '@/types'
 import {
   useDeleteAnalysisQuestionMutation,
@@ -36,6 +37,24 @@ export default function AnalysisDetailPage() {
       isLoading={isLoading}
       error={error}
       exclude={['analysis_questions']}
+      overview={
+        <RelationCards
+          cards={[
+            {
+              id: 'checklists',
+              label: 'Checklisty',
+              count: checklists.data?.length ?? 0,
+              to: `/knowledges/${knowledgeId}/analysis/${analysisId}/checklists`,
+            },
+            {
+              id: 'resources',
+              label: 'Zasoby',
+              count: (analysis?.analysis_questions as Entity[] | undefined)?.length ?? 0,
+              to: `/knowledges/${knowledgeId}/analysis/${analysisId}/questions`,
+            },
+          ]}
+        />
+      }
     >
       <div>
         <Button
