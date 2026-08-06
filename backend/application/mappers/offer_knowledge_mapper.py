@@ -9,7 +9,6 @@ class OfferKnowledgeMapper:
             id = item.id,
             offer_id = item.offer_id,
             version = item.version,
-            content_status= item.content_status,
             offer_summary = item.offer_summary,
             category = item.category,
             value_proposition = item.value_proposition,

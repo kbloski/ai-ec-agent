@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, JSON
+from sqlalchemy import Column, Integer, Text, DateTime, ForeignKey
 from sqlalchemy.sql import func
 
 from infrastructure.database.db import Base
@@ -21,9 +21,6 @@ class OfferKnowledge(Base, JSONSerializable):
 
     # Understanding version
     version = Column(Integer, nullable=False, default=1)
-
-    # pending | processing | completed | failed
-    content_status = Column(String(20), nullable=False)
 
     # AI-generated knowledge
     offer_summary = Column(Text, nullable=True)
