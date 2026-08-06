@@ -1,6 +1,5 @@
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { ResourceList } from '@/components/ResourceList'
-import { useGetOfferQuery } from '@/features/offers/offersApi'
 import {
   useDeleteKnowledgeMutation,
   useGenerateKnowledgeMutation,
@@ -9,17 +8,12 @@ import {
 
 export default function OfferKnowledgesPage() {
   const offerId = Number(useParams().offerId)
-  const { data: offer } = useGetOfferQuery(offerId)
   const knowledgeList = useListKnowledgeForOfferQuery(offerId)
   const [generateKnowledge, { isLoading: isGenerating }] = useGenerateKnowledgeMutation()
   const [deleteKnowledge] = useDeleteKnowledgeMutation()
 
   return (
     <div className="max-w-3xl space-y-6 p-6">
-      <Link to={`/offers/${offerId}`} className="text-sm text-muted-foreground hover:underline">
-        ← {(offer?.name as string) ?? 'Oferta'}
-      </Link>
-
       <h1 className="text-2xl font-semibold">Knowledge</h1>
 
       <ResourceList

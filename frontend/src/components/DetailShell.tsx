@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react'
-import { Link } from 'react-router-dom'
 import { EditableFields } from '@/components/EditableFields'
 import { ChevronDown } from 'lucide-react'
 import { EntityViewer } from '@/components/EntityViewer'
@@ -33,12 +32,9 @@ interface DetailShellProps {
 /** Shared layout for every "detail" page: title, entity fields, optional child sections. */
 export function DetailShell({
   title,
-  backTo,
-  backLabel = '← Wstecz',
   data,
   isLoading,
   error,
-  children,
   actions,
   exclude,
   itemActions,
@@ -49,26 +45,6 @@ export function DetailShell({
 }: DetailShellProps) {
   return (
     <div className="max-w-3xl space-y-6 p-6">
-
-      <div className="space-y-6">
-        {backTo && (
-          <Link to={backTo} className="text-sm text-muted-foreground hover:underline">
-            {backLabel}
-          </Link>
-        )}
-      </div>
-
-      {data && children && (
-        <Collapsible>
-          <CollapsibleTrigger className="group flex items-center gap-1.5 text-xs font-medium tracking-wide text-muted-foreground uppercase hover:text-foreground">
-            <ChevronDown className="size-3.5 shrink-0 transition-transform group-data-[panel-open]:rotate-180" />
-            Generowanie zasobów
-          </CollapsibleTrigger>
-          <CollapsibleContent>
-            <div className="space-y-4">{children}</div>
-          </CollapsibleContent>
-        </Collapsible>
-      )}
 
       {data && (
         <Collapsible>
