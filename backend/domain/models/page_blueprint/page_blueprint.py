@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, JSON
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, JSON, Boolean
 from sqlalchemy.sql import func
 
 from infrastructure.database.db import Base
@@ -23,6 +23,8 @@ class PageBlueprint(Base, JSONSerializable):
     primary_conversion_goal = Column(String, nullable=True)
 
     sections = Column(JSON, nullable=True)
+
+    is_favorite = Column(Boolean, nullable=False, default=False, server_default="0")
 
     # timestamps
     created_at = Column(

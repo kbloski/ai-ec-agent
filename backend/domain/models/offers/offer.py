@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Numeric, JSON, DateTime
+from sqlalchemy import Column, Integer, String, Numeric, JSON, DateTime, Boolean
 from sqlalchemy.sql import func
 from infrastructure.database.db import Base
 from common.mixins.json_serializable import JSONSerializable
@@ -19,6 +19,8 @@ class Offer(Base, JSONSerializable):
 
     # (user-provided fact)
     details = Column(String, nullable=True)
+
+    is_favorite = Column(Boolean, nullable=False, default=False, server_default="0")
 
     # timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now())

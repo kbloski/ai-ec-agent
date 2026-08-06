@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, JSON
+from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, JSON, Boolean
 from sqlalchemy.sql import func
 
 from infrastructure.database.db import Base
@@ -45,6 +45,8 @@ class OfferStrategy(Base, JSONSerializable):
     competitive_difference = Column(Text, nullable=True)
 
     conversion_levers = Column(JSON, nullable=True)
+
+    is_favorite = Column(Boolean, nullable=False, default=False, server_default="0")
 
     # timestamps
     created_at = Column(

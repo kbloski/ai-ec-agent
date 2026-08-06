@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, Text, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, Text, DateTime, ForeignKey, Boolean
 from sqlalchemy.sql import func
 
 from infrastructure.database.db import Base
@@ -27,6 +27,8 @@ class OfferKnowledge(Base, JSONSerializable):
 
     #TODO - prompt 
     #TODO - object used to prompt 
+
+    is_favorite = Column(Boolean, nullable=False, default=False, server_default="0")
 
     # Timestamps
     created_at = Column(

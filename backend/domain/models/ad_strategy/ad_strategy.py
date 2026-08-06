@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, JSON
+from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, JSON, Boolean
 from sqlalchemy.sql import func
 
 from infrastructure.database.db import Base
@@ -30,6 +30,8 @@ class AdStrategy(Base, JSONSerializable):
     creative_concepts = Column(JSON, nullable=True)
     recommended_formats = Column(JSON, nullable=True)
     testing_hypotheses = Column(JSON, nullable=True)
+
+    is_favorite = Column(Boolean, nullable=False, default=False, server_default="0")
 
     # timestamps
     created_at = Column(

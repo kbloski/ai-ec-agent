@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Float, Index, JSON
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Float, Index, JSON, Boolean
 from sqlalchemy.sql import func
 
 from infrastructure.database.db import Base
@@ -57,6 +57,8 @@ class TargetAudience(Base, JSONSerializable):
     # Marketing
     message_angles = Column(JSON, nullable=True)
     marketing_channels = Column(JSON, nullable=True)
+
+    is_favorite = Column(Boolean, nullable=False, default=False, server_default="0")
 
     # Timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now())

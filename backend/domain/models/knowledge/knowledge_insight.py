@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Float, Index
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Float, Index, Boolean
 from sqlalchemy.sql import func
 
 from infrastructure.database.db import Base
@@ -31,6 +31,8 @@ class KnowledgeInsight(Base, JSONSerializable):
 
     #uzasadnienie 
     # evidence = Column(String, nullable=True)
+
+    is_favorite = Column(Boolean, nullable=False, default=False, server_default="0")
 
     # timestamps
     created_at = Column(

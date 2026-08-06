@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Boolean
 from sqlalchemy.sql import func
 
 from infrastructure.database.db import Base
@@ -25,6 +25,8 @@ class AdExecution(Base, JSONSerializable):
     creative_type = Column(String, nullable=False)
     platform = Column(String, nullable=True)
     format = Column(String, nullable=True)
+
+    is_favorite = Column(Boolean, nullable=False, default=False, server_default="0")
 
     # timestamps
     created_at = Column(

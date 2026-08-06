@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, JSON
+from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, JSON, Boolean
 from sqlalchemy.sql import func
 
 from infrastructure.database.db import Base
@@ -44,6 +44,8 @@ class MessageStrategy(Base, JSONSerializable):
     advertising_angles = Column(JSON, nullable=True)
     content_angles = Column(JSON, nullable=True)
     ugc_angles = Column(JSON, nullable=True)
+
+    is_favorite = Column(Boolean, nullable=False, default=False, server_default="0")
 
     # timestamps
     created_at = Column(

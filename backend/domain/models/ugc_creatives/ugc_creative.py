@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, JSON
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, JSON, Boolean
 from sqlalchemy.sql import func
 
 from infrastructure.database.db import Base
@@ -30,6 +30,8 @@ class UgcCreative(Base, JSONSerializable):
     platform_fit = Column(JSON, nullable=True)
     cta = Column(String, nullable=True)
     why_it_should_work = Column(String, nullable=True)
+
+    is_favorite = Column(Boolean, nullable=False, default=False, server_default="0")
 
     # timestamps
     created_at = Column(
