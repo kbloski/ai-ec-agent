@@ -11,7 +11,12 @@ const navLinkClassName = ({ isActive }: { isActive: boolean }) =>
   )
 
 /** Secondary, contextual navigation shown next to the primary sidebar. Its content depends on which section of the app is active. */
-export function AppContextSidebar() {
+export function AppContextSidebar({ variant = 'sidebar' }: { variant?: 'sidebar' | 'mobile' }) {
+  const asideClassName = cn(
+    variant === 'sidebar'
+      ? 'hidden w-56 shrink-0 flex-col border-r p-4 lg:flex'
+      : 'flex w-full flex-col p-2',
+  )
   const { pathname } = useLocation()
   const navigate = useNavigate()
   const showBackButton = pathname !== '/' && pathname !== '/offers'
@@ -45,7 +50,7 @@ export function AppContextSidebar() {
 
   if (pathname.startsWith('/settings')) {
     return (
-      <aside className="hidden w-56 shrink-0 flex-col border-r p-4 lg:flex">
+      <aside className={asideClassName}>
         <h2 className="mb-2 border-b border-foreground/30 px-2 pb-2 text-xs font-semibold tracking-wide text-foreground uppercase">
           Ustawienia
         </h2>
@@ -66,7 +71,7 @@ export function AppContextSidebar() {
     const currentPath = hasEditOnlyView ? pathname : detailPath
 
     return (
-      <aside className="hidden w-56 shrink-0 flex-col border-r p-4 lg:flex">
+      <aside className={asideClassName}>
         {showBackButton && (
           <button
             type="button"

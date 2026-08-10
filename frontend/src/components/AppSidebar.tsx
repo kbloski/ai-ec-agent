@@ -23,9 +23,15 @@ const navLinkClassName = ({ isActive }: { isActive: boolean }) =>
   )
 
 /** Primary left-hand navigation, persistent across the whole app. */
-export function AppSidebar() {
+export function AppSidebar({ variant = 'sidebar' }: { variant?: 'sidebar' | 'mobile' }) {
   return (
-    <aside className="hidden w-56 shrink-0 flex-col border-r p-4 md:flex">
+    <aside
+      className={cn(
+        variant === 'sidebar'
+          ? 'hidden w-56 shrink-0 flex-col border-r p-4 md:flex'
+          : 'flex w-full flex-col p-2',
+      )}
+    >
       <div className="mb-4 px-2 text-sm font-semibold">AIEC SASS</div>
       <nav className="space-y-1">
         {SECTIONS.map(({ label, to, icon: Icon }) => (
