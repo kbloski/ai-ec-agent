@@ -34,6 +34,7 @@ export const creativeExecutionApi = api.injectEndpoints({
         number_of_slides?: number
         ad_framework_id?: string
         creative_angle_id?: string
+        execution_style_id?: string
       }
     >({
       query: ({ adExecutionId, ...params }) => ({

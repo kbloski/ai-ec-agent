@@ -66,7 +66,8 @@ def generate_creative_execution_handler(
     duration_seconds: Optional[int] = None,
     number_of_slides: Optional[int] = None,
     ad_framework_id: Optional[str] = None,
-    creative_angle_id: Optional[str] = None
+    creative_angle_id: Optional[str] = None,
+    execution_style_id: Optional[str] = None
 ):
 
     container = Container()
@@ -116,6 +117,10 @@ def generate_creative_execution_handler(
 
     creative_angels_repository = (
         container.creative_angels_repository()
+    )
+
+    execution_styles_repository = (
+        container.execution_styles_repository()
     )
 
 
@@ -262,6 +267,52 @@ You MUST use this creative angle as the communication approach of the output (se
 """
 
 
+    if execution_style_id is not None:
+        execution_style = execution_styles_repository.get_by_id(
+            execution_style_id
+        )
+
+        if execution_style is None:
+            raise ValueError(
+                f"Execution style not found: {execution_style_id}"
+            )
+
+        prompt += f"""
+
+
+SELECTED EXECUTION STYLE (mandatory):
+
+{json.dumps(execution_style, ensure_ascii=False, indent=2, default=str)}
+
+The selected execution style defines HOW the advertisement should be
+visually and creatively executed.
+
+The execution style is MEDIUM-AGNOSTIC.
+Interpret it according to the current creative type using the
+medium-specific instructions from the system prompt.
+
+It does NOT change:
+- the target audience,
+- positioning,
+- offer,
+- message strategy,
+- selected creative angle,
+- selected ad framework,
+- or the order/purpose of framework steps.
+
+Apply its description and rules only to the execution and presentation
+of the creative.
+
+Do not treat the execution style as:
+- an ad framework,
+- a creative angle,
+- a new strategy,
+- or a source of new claims, benefits, proof or offer details.
+
+Follow all execution style "rules".
+"""
+
+
     # Generate response from chat 
 
     if (ad_execution.creative_type == CreativeTypes.VIDEO.value):
@@ -390,7 +441,7 @@ Every decision should answer:
 - Why will someone take action?
 
 
-# Selected Ad Framework & Creative Angle (if provided)
+# Selected Ad Framework, Creative Angle & Execution Style (if provided)
 
 If the user message contains a SELECTED AD FRAMEWORK block, its "structure" steps replace the default narrative structure below. Use exactly those framework steps as `structure` sections, preserve their order, and follow the framework's "rules".
 
@@ -398,7 +449,13 @@ The framework defines the NARRATIVE STRUCTURE of the video. It does NOT define t
 
 If the user message contains a SELECTED CREATIVE ANGLE block, it must drive the `hook_strategy` and the overall tone/messaging of the video, and its "rules" must be followed.
 
-If neither block is present, use the default structure described below.
+If the user message contains a SELECTED EXECUTION STYLE block, it defines HOW the video is produced and presented. Apply it to the scene visuals, subjects, environment, camera direction, dialogue delivery, voiceover style, editing notes, asset requirements and production notes.
+
+The execution style MUST NOT change the selected framework structure, creative angle, audience, positioning, offer or message.
+
+Interpret the execution style specifically for VIDEO. Translate its general visual and creative rules into appropriate scene direction, camera language, performance style, environments, product presentation, editing and production notes. Do not assume the execution style defines scene types or narrative structure.
+
+If no SELECTED AD FRAMEWORK is present, use the default narrative structure described below. If no SELECTED CREATIVE ANGLE or SELECTED EXECUTION STYLE is present, choose an appropriate approach based only on the supplied strategy and Ad Execution.
 
 
 # Required Output
@@ -551,22 +608,33 @@ Each scene:
 "editing_notes":""
 }
 
-Possible `scene_type` values include:
+Common `scene_type` values include:
 
 - ugc
+- talking_head
 - problem_demonstration
 - product_reveal
 - product_demo
 - product_closeup
 - lifestyle
+- lifestyle_b_roll
 - testimonial
 - social_proof
 - before_after
 - screen_recording
 - graphic
+- motion_graphics
 - b_roll
+- reaction
+- result
 - offer
 - cta
+
+`scene_type` is a descriptive production label, not a closed enum.
+
+Choose `scene_type` from what is actually happening in the scene.
+The selected execution style may influence HOW the scene looks or feels,
+but it does not prescribe the scene type.
 
 Use the most appropriate value; do not force a type that does not fit.
 
@@ -768,13 +836,19 @@ Every decision should answer:
 - What action should the user take?
 
 
-# Selected Ad Framework & Creative Angle (if provided)
+# Selected Ad Framework, Creative Angle & Execution Style (if provided)
 
 If the user message contains a SELECTED AD FRAMEWORK block, its "structure" steps must shape the `visual_concept` and `composition` (e.g. what is shown, in what order of emphasis) instead of a generic approach. Follow the framework's "rules".
 
 If the user message contains a SELECTED CREATIVE ANGLE block, set `visual_concept.creative_angle` to reflect it (use its "name"/"description") instead of choosing one freely, and follow its "rules".
 
-If neither block is present, choose the `creative_angle` freely from the possible values below.
+If the user message contains a SELECTED EXECUTION STYLE block, it defines HOW the static creative should look and be produced. Apply it to composition, subject presentation, product presentation, photography direction, visual elements and overall visual treatment.
+
+The execution style MUST NOT change the selected framework, creative angle, target audience, positioning, offer or message.
+
+Interpret the execution style specifically for IMAGE. Translate its general visual and creative rules into composition, subject treatment, product presentation, visual hierarchy, photography/image-generation direction and design treatment. Do not interpret video-specific techniques unless they have a meaningful static-image equivalent.
+
+If no SELECTED CREATIVE ANGLE is present, choose the `creative_angle` freely from the possible values below. If no SELECTED EXECUTION STYLE is present, choose an appropriate production treatment based on the supplied strategy and Ad Execution.
 
 
 # Required Output
@@ -1082,13 +1156,19 @@ Every decision should answer:
 - What action should the user take?
 
 
-# Selected Ad Framework & Creative Angle (if provided)
+# Selected Ad Framework, Creative Angle & Execution Style (if provided)
 
 If the user message contains a SELECTED AD FRAMEWORK block, its "structure" steps replace the default `slide_purpose_sequence` — use exactly those steps, in that order, as the carousel's slide purposes, and build `slides` to match them. Follow the framework's "rules".
 
 If the user message contains a SELECTED CREATIVE ANGLE block, set `creative_concept.creative_angle` to reflect it (use its "name"/"description") instead of choosing one freely, and follow its "rules".
 
-If neither block is present, choose the `creative_angle` and `slide_purpose_sequence` freely as described below.
+If the user message contains a SELECTED EXECUTION STYLE block, it defines HOW the carousel should be visually executed. Apply it to slide visuals, product presentation, design direction, image style and consistency rules.
+
+The execution style MUST NOT change the selected framework sequence, creative angle, target audience, positioning, offer or message.
+
+Interpret the execution style specifically for CAROUSEL. Translate its general visual and creative rules into slide visuals, composition, product presentation, design direction, image treatment and consistency across slides. Do not interpret video-specific techniques unless they have a meaningful carousel equivalent.
+
+If no SELECTED CREATIVE ANGLE is present, choose the `creative_angle` freely. If no SELECTED AD FRAMEWORK is present, choose the `slide_purpose_sequence` freely as described below. If no SELECTED EXECUTION STYLE is present, choose an appropriate visual production treatment from the supplied strategy and Ad Execution.
 
 
 # Required Output

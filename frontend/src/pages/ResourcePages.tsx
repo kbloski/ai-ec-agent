@@ -30,6 +30,7 @@ import { useCreateAdExecutionMutation, useDeleteAdExecutionMutation, useListAdEx
 import { useGetCreativeStrategyQuery } from '@/features/creativeStrategy/creativeStrategyApi'
 import { useGetAdExecutionQuery } from '@/features/adExecution/adExecutionApi'
 import { useDeleteCreativeExecutionMutation, useGenerateCreativeExecutionMutation, useListCreativeExecutionForAdExecutionQuery } from '@/features/creativeExecution/creativeExecutionApi'
+import { useListExecutionStylesQuery, type ExecutionStyle } from '@/features/executionStyles/executionStylesApi'
 import { useListAdFrameworksQuery, type AdFramework } from '@/features/adFrameworks/adFrameworksApi'
 import { useListCreativeAnglesQuery, type CreativeAngle } from '@/features/creativeAngels/creativeAnglesApi'
 
@@ -136,14 +137,15 @@ export function CreativeAdExecutionsPage() {
 
 export function AdCreativeExecutionsPage() {
   const id = Number(useParams().id); const { data } = useGetAdExecutionQuery(id); const isGeneratable = ['video', 'image', 'carousel'].includes(String(data?.creative_type))
-  const list = useListCreativeExecutionForAdExecutionQuery(id, { skip: !isGeneratable }); const [generate, state] = useGenerateCreativeExecutionMutation(); const [remove] = useDeleteCreativeExecutionMutation(); const frameworks = useListAdFrameworksQuery(); const angles = useListCreativeAnglesQuery()
-  const submit = (event: FormEvent<HTMLFormElement>) => { event.preventDefault(); const form = new FormData(event.currentTarget); const duration = form.get('duration_seconds'); const slides = form.get('number_of_slides'); const framework = form.get('ad_framework_id'); const angle = form.get('creative_angle_id'); void generate({ adExecutionId: id, ...(duration ? { duration_seconds: Number(duration) } : {}), ...(slides ? { number_of_slides: Number(slides) } : {}), ...(framework ? { ad_framework_id: String(framework) } : {}), ...(angle ? { creative_angle_id: String(angle) } : {}) }) }
+  const list = useListCreativeExecutionForAdExecutionQuery(id, { skip: !isGeneratable }); const [generate, state] = useGenerateCreativeExecutionMutation(); const [remove] = useDeleteCreativeExecutionMutation(); const frameworks = useListAdFrameworksQuery(); const angles = useListCreativeAnglesQuery(); const styles = useListExecutionStylesQuery()
+  const submit = (event: FormEvent<HTMLFormElement>) => { event.preventDefault(); const form = new FormData(event.currentTarget); const duration = form.get('duration_seconds'); const slides = form.get('number_of_slides'); const framework = form.get('ad_framework_id'); const angle = form.get('creative_angle_id'); const style = form.get('execution_style_id'); void generate({ adExecutionId: id, ...(duration ? { duration_seconds: Number(duration) } : {}), ...(slides ? { number_of_slides: Number(slides) } : {}), ...(framework ? { ad_framework_id: String(framework) } : {}), ...(angle ? { creative_angle_id: String(angle) } : {}), ...(style ? { execution_style_id: String(style) } : {}) }) }
   return <ResourcePage backTo={`/ad-execution/${id}`} backLabel={(data?.name as string) ?? 'Ad execution'} title="Creative execution">
     {isGeneratable && <form onSubmit={submit} className="flex flex-wrap items-end gap-2">
       <label className="text-xs">Czas trwania (s)<input name="duration_seconds" type="number" defaultValue={15} disabled={data?.creative_type !== 'video'} className="block w-28 rounded-md border px-2 py-1 text-sm disabled:opacity-50" /></label>
       <label className="text-xs">Liczba slajdów<input name="number_of_slides" type="number" defaultValue={5} disabled={data?.creative_type !== 'carousel'} className="block w-28 rounded-md border px-2 py-1 text-sm disabled:opacity-50" /></label>
       <label className="text-xs">Framework<select name="ad_framework_id" defaultValue="" className="block w-40 rounded-md border px-2 py-1 text-sm"><option value="">—</option>{frameworks.data?.map((x: AdFramework) => <option key={x.id} value={x.id}>{x.name}</option>)}</select></label>
       <label className="text-xs">Creative angle<select name="creative_angle_id" defaultValue="" className="block w-40 rounded-md border px-2 py-1 text-sm"><option value="">—</option>{angles.data?.map((x: CreativeAngle) => <option key={x.id} value={x.id}>{x.name}</option>)}</select></label>
+      <label className="text-xs">Execution style<select name="execution_style_id" defaultValue="" className="block w-40 rounded-md border px-2 py-1 text-sm"><option value="">—</option>{styles.data?.map((x: ExecutionStyle) => <option key={x.id} value={x.id}>{x.name}</option>)}</select></label>
       <Button type="submit" size="sm" disabled={state.isLoading}>{state.isLoading ? 'Generowanie…' : 'Generuj creative execution'}</Button>
     </form>}
     <ResourceList title="Creative execution" items={list.data} isLoading={list.isLoading} error={list.error} linkTo={(x) => `/creative-execution/${x.id}`} itemLabel={(x) => `#${x.id}`} onDelete={(x) => remove({ id: x.id as number, adExecutionId: id })} />

@@ -1,66 +1,31 @@
 [
   {
-    "id": "ugc_problem_solution",
-    "name": "UGC Problem Solution",
-    "format": "video",
-    "goal": "conversion",
-    "description": "Naturalne nagranie użytkownika pokazujące problem, odkrycie produktu i efekt po jego użyciu.",
-    "rules": [],
-    "structure": [
-      {
-        "step": 1,
-        "name": "Hook",
-        "purpose": "Przyciągnij uwagę w pierwszych sekundach."
-      },
-      {
-        "step": 2,
-        "name": "Problem",
-        "purpose": "Pokaż problem lub frustrację użytkownika."
-      },
-      {
-        "step": 3,
-        "name": "Product Introduction",
-        "purpose": "Naturalnie przedstaw produkt jako rozwiązanie."
-      },
-      {
-        "step": 4,
-        "name": "Result",
-        "purpose": "Pokaż efekt oraz najważniejszą korzyść."
-      },
-      {
-        "step": 5,
-        "name": "Call To Action",
-        "purpose": "Zachęć do działania."
-      }
-    ]
-  },
-  {
     "id": "product_demo",
     "name": "Product Demonstration",
     "format": "video",
     "goal": "conversion",
-    "description": "Krótka demonstracja produktu pokazująca jego działanie w praktyce i sposób rozwiązania problemu.",
+    "description": "A short product demonstration showing how it works in practice and how it solves a problem.",
     "rules": [],
     "structure": [
       {
         "step": 1,
         "name": "Hook",
-        "purpose": "Pokaż efekt lub problem już na początku."
+        "purpose": "Show the result, problem, or an interesting moment related to the product right at the beginning."
       },
       {
         "step": 2,
         "name": "Demonstration",
-        "purpose": "Zaprezentuj produkt podczas rzeczywistego użycia."
+        "purpose": "Present the product during real-world use."
       },
       {
         "step": 3,
         "name": "Benefits",
-        "purpose": "Pokaż najważniejsze korzyści wynikające z działania produktu."
+        "purpose": "Show the key benefits resulting from how the product works."
       },
       {
         "step": 4,
         "name": "CTA",
-        "purpose": "Wezwij odbiorcę do działania."
+        "purpose": "Encourage the viewer to take action."
       }
     ]
   },
@@ -69,32 +34,32 @@
     "name": "Before & After",
     "format": "video",
     "goal": "conversion",
-    "description": "Pokazanie realistycznej przemiany przed i po użyciu produktu z wykorzystaniem prawdziwych rezultatów.",
+    "description": "Showing a realistic transformation before and after using the product, based on real results.",
     "rules": [
-      "Pokazuj realistyczne efekty.",
-      "Używaj prawdziwych zdjęć lub nagrań.",
-      "Podawaj liczby i czas transformacji."
+      "Show realistic results.",
+      "Do not invent results, numbers, or transformation timelines.",
+      "Use only results and evidence available in the input data."
     ],
     "structure": [
       {
         "step": 1,
         "name": "Before",
-        "purpose": "Pokaż sytuację przed użyciem produktu."
+        "purpose": "Show the situation before using the product."
       },
       {
         "step": 2,
         "name": "Transformation",
-        "purpose": "Pokaż proces zmiany."
+        "purpose": "Show the transformation process or how the product is used."
       },
       {
         "step": 3,
         "name": "After",
-        "purpose": "Zaprezentuj rezultat wraz z liczbami lub dowodami."
+        "purpose": "Present the result and the most important benefit."
       },
       {
         "step": 4,
         "name": "CTA",
-        "purpose": "Zachęć do działania."
+        "purpose": "Encourage the viewer to take action."
       }
     ]
   },
@@ -103,28 +68,28 @@
     "name": "Features & Benefits",
     "format": "video",
     "goal": "conversion",
-    "description": "Przedstawienie najważniejszych funkcji produktu oraz korzyści, jakie przynoszą użytkownikowi.",
+    "description": "Presenting the product's most important features or characteristics and the benefits they provide to the user.",
     "rules": [],
     "structure": [
       {
         "step": 1,
         "name": "Hook",
-        "purpose": "Zainteresuj odbiorcę problemem lub efektem."
+        "purpose": "Capture the viewer's attention with a problem, result, or the product's most important value."
       },
       {
         "step": 2,
         "name": "Feature",
-        "purpose": "Przedstaw funkcję produktu."
+        "purpose": "Present an important product feature or characteristic."
       },
       {
         "step": 3,
         "name": "Benefit",
-        "purpose": "Wyjaśnij, jaką wartość daje użytkownikowi."
+        "purpose": "Explain what specific value this feature or characteristic provides to the user."
       },
       {
         "step": 4,
         "name": "CTA",
-        "purpose": "Zachęć do działania."
+        "purpose": "Encourage the viewer to take action."
       }
     ]
   },
@@ -133,33 +98,36 @@
     "name": "Testimonial",
     "format": "video",
     "goal": "trust",
-    "description": "Autentyczna opinia klienta opisująca doświadczenie z produktem.",
-    "rules": [],
+    "description": "An ad based on an authentic customer or user experience with the product.",
+    "rules": [
+      "Do not invent customer opinions, results, or experiences.",
+      "Use only testimonials or facts available in the input data."
+    ],
     "structure": [
       {
         "step": 1,
         "name": "Introduction",
-        "purpose": "Przedstaw klienta lub jego sytuację."
+        "purpose": "Introduce the customer, user, or context of their situation."
       },
       {
         "step": 2,
         "name": "Problem",
-        "purpose": "Opisz problem przed użyciem produktu."
+        "purpose": "Show the problem or need before using the product."
       },
       {
         "step": 3,
         "name": "Experience",
-        "purpose": "Opowiedz o korzystaniu z produktu."
+        "purpose": "Show the experience of using the product."
       },
       {
         "step": 4,
         "name": "Result",
-        "purpose": "Pokaż osiągnięte rezultaty."
+        "purpose": "Show the result or the most important change resulting from the experience."
       },
       {
         "step": 5,
         "name": "CTA",
-        "purpose": "Zachęć odbiorcę do wypróbowania produktu."
+        "purpose": "Encourage the viewer to take action."
       }
     ]
   },
@@ -168,28 +136,28 @@
     "name": "Negative Hook",
     "format": "video",
     "goal": "attention",
-    "description": "Reklama rozpoczynająca się od mocnego pokazania problemu, błędu lub frustracji odbiorcy.",
+    "description": "An ad that begins by strongly highlighting a problem, mistake, frustration, or undesirable outcome.",
     "rules": [],
     "structure": [
       {
         "step": 1,
         "name": "Negative Hook",
-        "purpose": "Rozpocznij od mocnego problemu lub błędu."
+        "purpose": "Start with a strong problem, mistake, or undesirable outcome."
       },
       {
         "step": 2,
         "name": "Problem",
-        "purpose": "Pokaż konsekwencje problemu."
+        "purpose": "Expand on the problem and show why it matters to the viewer."
       },
       {
         "step": 3,
         "name": "Solution",
-        "purpose": "Przedstaw rozwiązanie."
+        "purpose": "Introduce the product or solution."
       },
       {
         "step": 4,
         "name": "CTA",
-        "purpose": "Wezwij do działania."
+        "purpose": "Encourage the viewer to take action."
       }
     ]
   },
@@ -198,33 +166,33 @@
     "name": "Problem Solution",
     "format": "video",
     "goal": "conversion",
-    "description": "Klasyczna reklama skupiająca się na problemie klienta i przedstawiająca produkt jako najlepsze rozwiązanie.",
+    "description": "A classic ad structure that presents the viewer's problem and positions the product as the solution.",
     "rules": [],
     "structure": [
       {
         "step": 1,
         "name": "Hook",
-        "purpose": "Zwróć uwagę na problem."
+        "purpose": "Draw attention to a problem, need, or situation relevant to the viewer."
       },
       {
         "step": 2,
         "name": "Problem",
-        "purpose": "Rozwiń problem użytkownika."
+        "purpose": "Expand on the problem and show its consequences or the user's frustration."
       },
       {
         "step": 3,
         "name": "Solution",
-        "purpose": "Przedstaw produkt."
+        "purpose": "Present the product as the solution to the problem."
       },
       {
         "step": 4,
         "name": "Benefits",
-        "purpose": "Pokaż korzyści."
+        "purpose": "Show the key benefits resulting from the solution."
       },
       {
         "step": 5,
         "name": "CTA",
-        "purpose": "Zachęć do działania."
+        "purpose": "Encourage the viewer to take action."
       }
     ]
   },
@@ -233,28 +201,31 @@
     "name": "Comparison",
     "format": "video",
     "goal": "conversion",
-    "description": "Porównanie produktu z konkurencją lub tradycyjnym sposobem rozwiązania problemu.",
-    "rules": [],
+    "description": "A comparison between the product and an alternative way of solving the problem or another category of solution.",
+    "rules": [
+      "Do not invent advantages, data, or competitor features.",
+      "Base the comparison only on information available in the input data."
+    ],
     "structure": [
       {
         "step": 1,
         "name": "Comparison Hook",
-        "purpose": "Pokaż dwa rozwiązania obok siebie."
+        "purpose": "Show two approaches or solutions in a way that immediately communicates the difference."
       },
       {
         "step": 2,
         "name": "Comparison",
-        "purpose": "Porównaj najważniejsze różnice."
+        "purpose": "Compare the most important differences relevant to the viewer."
       },
       {
         "step": 3,
-        "name": "Winner",
-        "purpose": "Pokaż przewagę produktu."
+        "name": "Advantage",
+        "purpose": "Show the product's advantage based on the available data and strategy."
       },
       {
         "step": 4,
         "name": "CTA",
-        "purpose": "Zachęć do działania."
+        "purpose": "Encourage the viewer to take action."
       }
     ]
   }

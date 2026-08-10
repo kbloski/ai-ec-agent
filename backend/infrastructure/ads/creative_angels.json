@@ -2,133 +2,133 @@
   {
     "id": "curiosity_gap",
     "name": "Curiosity Gap",
-    "description": "Budowanie ciekawości poprzez ujawnienie tylko części informacji i zachęcenie odbiorcy do poznania rozwiązania.",
-    "purpose": "Zwiększenie zatrzymania uwagi i czasu oglądania reklamy.",
+    "description": "Building curiosity by revealing only part of the information and encouraging the audience to discover the solution.",
+    "purpose": "Increasing attention retention and ad watch time.",
     "rules": [
-      "Nie ujawniaj rozwiązania od razu.",
-      "Unikaj clickbaitu bez pokrycia.",
-      "Rozwiązanie powinno pojawić się w dalszej części reklamy."
+      "Do not reveal the solution immediately.",
+      "Avoid clickbait that does not deliver on its promise.",
+      "The solution should be revealed later in the ad."
     ]
   },
   {
     "id": "social_proof",
     "name": "Social Proof",
-    "description": "Budowanie zaufania poprzez pokazanie opinii, wyników, liczb lub popularności produktu.",
-    "purpose": "Zmniejszenie obaw przed zakupem.",
+    "description": "Building trust by showcasing reviews, results, numbers, or the product’s popularity.",
+    "purpose": "Reducing concerns about making a purchase.",
     "rules": [
-      "Pokazuj konkretne liczby lub dowody.",
-      "Wykorzystuj autentyczne opinie i doświadczenia.",
-      "Nie używaj ogólnych stwierdzeń bez potwierdzenia."
+      "Show specific numbers or evidence.",
+      "Use authentic reviews and experiences.",
+      "Do not make broad claims without supporting evidence."
     ]
   },
   {
     "id": "authority",
     "name": "Authority",
-    "description": "Przekaz oparty na wiedzy eksperckiej, badaniach lub doświadczeniu specjalistów.",
-    "purpose": "Budowanie wiarygodności produktu lub marki.",
+    "description": "Messaging based on expert knowledge, research, or the experience of specialists.",
+    "purpose": "Building credibility for the product or brand.",
     "rules": [
-      "Opieraj przekaz na faktach.",
-      "Nie nadużywaj specjalistycznego języka.",
-      "Ekspert powinien wnosić realną wartość."
+      "Base the message on facts.",
+      "Do not overuse technical language.",
+      "The expert should provide genuine value."
     ]
   },
   {
     "id": "education",
     "name": "Education",
-    "description": "Najpierw dostarczenie wartościowej wiedzy, a następnie naturalne przedstawienie produktu.",
-    "purpose": "Budowanie zaufania poprzez edukację.",
+    "description": "Providing valuable knowledge first and then introducing the product naturally.",
+    "purpose": "Building trust through education.",
     "rules": [
-      "Najpierw rozwiązuj problem odbiorcy.",
-      "Produkt powinien być naturalnym uzupełnieniem treści.",
-      "Nie zamieniaj reklamy w wykład."
+      "Address the audience’s problem first.",
+      "The product should be a natural extension of the content.",
+      "Do not turn the ad into a lecture."
     ]
   },
   {
     "id": "emotion",
     "name": "Emotion",
-    "description": "Budowanie przekazu poprzez emocje, takie jak radość, ulga, wzruszenie lub satysfakcja.",
-    "purpose": "Stworzenie emocjonalnej więzi z odbiorcą.",
+    "description": "Building the message around emotions such as joy, relief, sentiment, or satisfaction.",
+    "purpose": "Creating an emotional connection with the audience.",
     "rules": [
-      "Pokazuj autentyczne emocje.",
-      "Nie przesadzaj z dramatyzmem.",
-      "Emocje powinny wynikać z historii."
+      "Show authentic emotions.",
+      "Do not overdo the drama.",
+      "The emotions should arise naturally from the story."
     ]
   },
   {
     "id": "humor",
     "name": "Humor",
-    "description": "Przyciąganie uwagi poprzez humor lub zabawną sytuację związaną z problemem.",
-    "purpose": "Zwiększenie zapamiętywalności reklamy.",
+    "description": "Capturing attention through humor or an amusing situation related to the problem.",
+    "purpose": "Making the ad more memorable.",
     "rules": [
-      "Humor nie może odwracać uwagi od produktu.",
-      "Żart powinien być zrozumiały dla grupy docelowej.",
-      "Produkt nadal powinien pozostać głównym bohaterem."
+      "Humor must not distract from the product.",
+      "The joke should be understandable to the target audience.",
+      "The product should remain the main focus."
     ]
   },
   {
     "id": "urgency",
     "name": "Urgency",
-    "description": "Budowanie poczucia, że decyzję warto podjąć teraz.",
-    "purpose": "Zwiększenie liczby konwersji.",
+    "description": "Creating a sense that taking action now is worthwhile.",
+    "purpose": "Increasing conversions.",
     "rules": [
-      "Stosuj prawdziwe ograniczenia.",
-      "Nie twórz fałszywej presji.",
-      "Podkreśl powód, dla którego warto działać od razu."
+      "Use genuine limitations.",
+      "Do not create false pressure.",
+      "Emphasize why the audience should act immediately."
     ]
   },
   {
     "id": "relatability",
     "name": "Relatability",
-    "description": "Pokazanie codziennych sytuacji i problemów, z którymi odbiorca może się utożsamić.",
-    "purpose": "Budowanie identyfikacji z reklamą.",
+    "description": "Showing everyday situations and problems that the audience can identify with.",
+    "purpose": "Helping the audience identify with the ad.",
     "rules": [
-      "Pokazuj realistyczne sytuacje.",
-      "Używaj naturalnego języka.",
-      "Problem powinien być znajomy odbiorcy."
+      "Show realistic situations.",
+      "Use natural language.",
+      "The problem should feel familiar to the audience."
     ]
   },
   {
     "id": "myth_busting",
     "name": "Myth Busting",
-    "description": "Obalenie popularnego mitu lub błędnego przekonania dotyczącego problemu lub produktu.",
-    "purpose": "Przyciągnięcie uwagi poprzez zaskoczenie i edukację.",
+    "description": "Debunking a popular myth or misconception related to the problem or product.",
+    "purpose": "Capturing attention through surprise and education.",
     "rules": [
-      "Mit powinien być powszechnie znany.",
-      "Wyjaśnij, dlaczego jest nieprawdziwy.",
-      "Poprzyj przekaz faktami."
+      "The myth should be widely recognized.",
+      "Explain why it is false.",
+      "Support the message with facts."
     ]
   },
   {
     "id": "contrarian",
     "name": "Contrarian Opinion",
-    "description": "Rozpoczęcie reklamy od opinii sprzecznej z powszechnym przekonaniem.",
-    "purpose": "Przyciągnięcie uwagi poprzez zaskoczenie.",
+    "description": "Opening the ad with an opinion that challenges a commonly held belief.",
+    "purpose": "Capturing attention through surprise.",
     "rules": [
-      "Teza powinna być uzasadniona.",
-      "Nie prowokuj wyłącznie dla uwagi.",
-      "Wyjaśnij swoje stanowisko."
+      "The claim should be well-supported.",
+      "Do not be provocative solely to attract attention.",
+      "Explain your position."
     ]
   },
   {
     "id": "mistake",
     "name": "Common Mistake",
-    "description": "Pokazanie najczęstszego błędu popełnianego przez odbiorców oraz sposobu jego uniknięcia.",
-    "purpose": "Zwiększenie zainteresowania poprzez wskazanie problemu.",
+    "description": "Highlighting a common mistake made by the audience and showing how to avoid it.",
+    "purpose": "Increasing interest by drawing attention to a problem.",
     "rules": [
-      "Błąd powinien być powszechny.",
-      "Wyjaśnij jego konsekwencje.",
-      "Produkt powinien naturalnie rozwiązywać problem."
+      "The mistake should be common.",
+      "Explain its consequences.",
+      "The product should naturally solve the problem."
     ]
   },
   {
     "id": "secret",
     "name": "Secret",
-    "description": "Przedstawienie produktu jako mało znanego sposobu rozwiązania problemu.",
-    "purpose": "Budowanie ciekawości i poczucia odkrycia czegoś nowego.",
+    "description": "Presenting the product as a little-known way to solve a problem.",
+    "purpose": "Building curiosity and creating a sense of discovering something new.",
     "rules": [
-      "Nie używaj przesadzonych obietnic.",
-      "Sekret powinien prowadzić do konkretnej wartości.",
-      "Wyjaśnij, dlaczego rozwiązanie działa."
+      "Do not make exaggerated promises.",
+      "The secret should lead to specific value.",
+      "Explain why the solution works."
     ]
   }
 ]

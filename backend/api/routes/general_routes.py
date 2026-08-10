@@ -5,6 +5,7 @@ from pydantic import BaseModel
 
 from application.handlers.ads.list_ad_frameworks_handler import list_ad_frameworks_handler
 from application.handlers.ads.list_creative_angels_handler import list_creative_angels_handler
+from application.handlers.ads.list_execution_styles_handler import list_execution_styles_handler
 from application.handlers.ads.list_content_statuses_handler import list_content_statuses_handler
 from application.handlers.offers.get_offers import get_offers
 from application.handlers.offers.create_offer import create_offer
@@ -624,6 +625,10 @@ def register_general_routes(router: APIRouter):
     def creative_angels_list():
         return list_creative_angels_handler()
 
+    @router.get("/execution-styles")
+    def execution_styles_list():
+        return list_execution_styles_handler()
+
     @router.get("/content-statuses")
     def content_statuses_list():
         return list_content_statuses_handler()
@@ -637,14 +642,16 @@ def register_general_routes(router: APIRouter):
         duration_seconds: int | None = None,
         number_of_slides: int | None = None,
         ad_framework_id: str | None = None,
-        creative_angle_id: str | None = None
+        creative_angle_id: str | None = None,
+        execution_style_id: str | None = None
     ):
         return generate_creative_execution_handler(
             ad_execution_id=ad_execution_id,
             duration_seconds=duration_seconds,
             number_of_slides=number_of_slides,
             ad_framework_id=ad_framework_id,
-            creative_angle_id=creative_angle_id
+            creative_angle_id=creative_angle_id,
+            execution_style_id=execution_style_id
         )
 
     @router.get("/ad-execution/{ad_execution_id}/creative-execution")

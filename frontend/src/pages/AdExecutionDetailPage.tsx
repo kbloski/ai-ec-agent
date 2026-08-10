@@ -10,6 +10,7 @@ import {
 } from '@/features/creativeExecution/creativeExecutionApi'
 import { useListAdFrameworksQuery, type AdFramework } from '@/features/adFrameworks/adFrameworksApi'
 import { useListCreativeAnglesQuery, type CreativeAngle } from '@/features/creativeAngels/creativeAnglesApi'
+import { useListExecutionStylesQuery, type ExecutionStyle } from '@/features/executionStyles/executionStylesApi'
 
 export default function AdExecutionDetailPage() {
   const id = Number(useParams().id)
@@ -25,6 +26,7 @@ export default function AdExecutionDetailPage() {
   const [deleteCreativeExecution] = useDeleteCreativeExecutionMutation()
   const adFrameworks = useListAdFrameworksQuery()
   const creativeAngles = useListCreativeAnglesQuery()
+  const executionStyles = useListExecutionStylesQuery()
   const [updateAdExecution, updateState] = useUpdateAdExecutionMutation()
   const displayData = data
     ? {
@@ -43,6 +45,7 @@ export default function AdExecutionDetailPage() {
     const slidesRaw = formData.get('number_of_slides')
     const adFrameworkIdRaw = formData.get('ad_framework_id')
     const creativeAngleIdRaw = formData.get('creative_angle_id')
+    const executionStyleIdRaw = formData.get('execution_style_id')
 
     await generate({
       adExecutionId: id,
@@ -50,6 +53,7 @@ export default function AdExecutionDetailPage() {
       ...(slidesRaw ? { number_of_slides: Number(slidesRaw) } : {}),
       ...(adFrameworkIdRaw ? { ad_framework_id: String(adFrameworkIdRaw) } : {}),
       ...(creativeAngleIdRaw ? { creative_angle_id: String(creativeAngleIdRaw) } : {}),
+      ...(executionStyleIdRaw ? { execution_style_id: String(executionStyleIdRaw) } : {}),
     }).unwrap()
   }
 
@@ -129,6 +133,18 @@ export default function AdExecutionDetailPage() {
                     <option key={angle.id} value={angle.id}>
                       {angle.name}
                     </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+            <div className="space-y-1">
+              <p className="text-xs font-semibold text-muted-foreground">Execution Style</p>
+              <label className="text-xs">
+                Style
+                <select name="execution_style_id" defaultValue="" className="block w-40 rounded-md border px-2 py-1 text-sm">
+                  <option value="">—</option>
+                  {executionStyles.data?.map((style: ExecutionStyle) => (
+                    <option key={style.id} value={style.id}>{style.name}</option>
                   ))}
                 </select>
               </label>
