@@ -245,7 +245,7 @@ SELECTED AD FRAMEWORK (mandatory):
 
 {json.dumps(ad_framework, ensure_ascii=False, indent=2, default=str)}
 
-You MUST base the output structure on the "structure" steps above, in the exact same order, instead of any default generic structure. Map every step to a corresponding output section/slide/scene. You MUST follow the framework's "rules".
+The selected framework is mandatory. Use its "structure" and "rules" according to the medium-specific instructions in the system prompt. Preserve the framework step order and do not rename or ignore its steps.
 """
 
     if creative_angle_id is not None:
@@ -392,7 +392,9 @@ Every decision should answer:
 
 # Selected Ad Framework & Creative Angle (if provided)
 
-If the user message contains a SELECTED AD FRAMEWORK block, its "structure" steps replace the default `structure` below — use exactly those steps, in that order, and build `scenes` to match them instead of the generic hook/problem/solution/proof/offer/cta list. Follow the framework's "rules".
+If the user message contains a SELECTED AD FRAMEWORK block, its "structure" steps replace the default narrative structure below. Use exactly those framework steps as `structure` sections, preserve their order, and follow the framework's "rules".
+
+The framework defines the NARRATIVE STRUCTURE of the video. It does NOT define the number of scenes. Each framework step must have at least one corresponding scene, and may contain multiple scenes when needed.
 
 If the user message contains a SELECTED CREATIVE ANGLE block, it must drive the `hook_strategy` and the overall tone/messaging of the video, and its "rules" must be followed.
 
@@ -457,9 +459,17 @@ Bad:
 ## structure
 
 
-Create the complete video structure.
+Create the complete narrative structure of the video.
 
-Required sections:
+If a SELECTED AD FRAMEWORK is provided:
+
+- Use exactly the framework's `structure` steps.
+- Preserve their exact order.
+- Use each framework step as one structure section.
+- Do not rename framework steps.
+- Do not add the default sections below.
+
+If no SELECTED AD FRAMEWORK is provided, use exactly:
 
 1. hook
 2. problem
@@ -496,9 +506,11 @@ Example:
 
 Rules:
 
-- Follow exact order.
-- Match total duration.
-- No additional sections.
+- Preserve the required order.
+- Structure sections must cover the full video timeline without gaps or overlaps.
+- Match the total requested duration.
+- If a framework is selected, use only its structure sections.
+- If no framework is selected, use only the default sections listed above.
 
 
 ---
@@ -507,15 +519,28 @@ Rules:
 ## scenes
 
 
-Create scenes matching every structure section.
+Break the complete video into concrete visual scenes.
 
+A scene represents one distinct visual moment that the viewer actually sees and hears.
+
+IMPORTANT:
+
+- Every structure section MUST have at least one corresponding scene.
+- A structure section MAY contain multiple scenes.
+- Do NOT assume that one structure section equals one scene.
+- Create a new scene whenever the visual moment meaningfully changes, for example when the action, subject, environment, camera setup, product interaction, or visual emphasis changes.
+- The `section` field connects a scene to its parent narrative structure section.
+- Structure defines WHY a part of the ad exists. Scenes define WHAT THE VIEWER ACTUALLY SEES AND HEARS.
 
 Each scene:
 
 {
 "order":1,
 "section":"",
+"start_second":0,
+"end_second":0,
 "duration_seconds":0,
+"scene_type":"",
 "purpose":"",
 "visual":"",
 "camera_direction":"",
@@ -526,8 +551,31 @@ Each scene:
 "editing_notes":""
 }
 
+Possible `scene_type` values include:
+
+- ugc
+- problem_demonstration
+- product_reveal
+- product_demo
+- product_closeup
+- lifestyle
+- testimonial
+- social_proof
+- before_after
+- screen_recording
+- graphic
+- b_roll
+- offer
+- cta
+
+Use the most appropriate value; do not force a type that does not fit.
 
 Rules:
+
+- Scene timings must be continuous and must fit inside the timing of their parent structure section.
+- The sum of all scene durations must equal the requested total video duration.
+- Multiple scenes may belong to the same section.
+- Scene order must follow chronological playback order.
 
 Visuals must be specific.
 
@@ -638,10 +686,15 @@ Do not write aggressive sales copy.
 
 Before returning:
 
-- Scene durations must equal the total video duration.
+- The structure must cover the full requested video duration without gaps or overlaps.
+- Scene timings must cover the full requested video duration without gaps or overlaps.
+- The sum of all scene durations must equal the total requested video duration.
 - Every structure section must have at least one corresponding scene.
-- No empty fields.
-- No null values.
+- A structure section may have multiple scenes.
+- Every scene's `section` must match an existing structure section name.
+- Every scene must contain a specific visual and production direction.
+- `dialogue` and `voiceover` may be empty strings when intentionally not used. Do not invent spoken copy only to fill a field.
+- Do not use null values.
 - Return valid JSON only.
 - Return the production specification inside the `content` object.
 
