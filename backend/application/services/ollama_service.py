@@ -32,15 +32,12 @@ class OllamaService:
             payload_messages = [msg.to_dict() for msg in messages]
 
             if self.output_rules_prompt:
-                # Wstawiamy zaraz po głównym system prompcie (indeks 0), a nie na końcu,
-                # żeby reguły formatowania nie były ostatnią (najbardziej "świeżą")
-                # instrukcją po całym zrzucie danych użytkownika.
                 output_rules_message = LlmOllamaMessage(
                     role=OllamaMessageRole.SYSTEM,
                     content=self.output_rules_prompt
                 ).to_dict()
-                insert_index = 1 if payload_messages else 0
-                payload_messages.insert(insert_index, output_rules_message)
+
+                payload_messages.append(output_rules_message)
 
             response = self.client.chat(
                 model=self.llm_model,
