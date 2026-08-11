@@ -4,129 +4,153 @@
     "name": "UGC Creator",
     "description": "A natural execution resembling organic content created by a user or creator, built around authenticity, directness, and an everyday product-use context.",
     "rules": [
-      "The execution should feel authentic and unscripted.",
+      "The execution should feel authentic and natural rather than overly scripted.",
       "Avoid an overly promotional, corporate, or excessively polished feel.",
-      "Communication should be direct, natural, and relatable.",
-      "Prioritize realistic situations, people, and environments connected to the audience’s everyday life.",
-      "The product should appear naturally in a real-life usage context.",
-      "Minor visual imperfections are acceptable if they increase credibility and authenticity."
+      "Communication should be direct, conversational, and relatable.",
+      "Prioritize realistic situations, people, and environments connected to the audience's everyday life.",
+      "Show the product naturally within a meaningful usage context.",
+      "Minor visual imperfections are acceptable when they increase credibility.",
+      "Do not use random lifestyle B-roll that does not support the main message."
     ]
   },
   {
-    "id": "faceless",
-    "name": "Faceless",
-    "description": "An execution that does not rely on a visible person addressing the audience directly, but instead uses the product, hands, the user’s point of view, surroundings, interface, graphics, or text.",
+    "id": "talking_head",
+    "name": "Talking Head",
+    "description": "An execution in which a creator, customer, expert, founder, or representative speaks directly to the camera and the spoken message serves as the primary communication driver.",
     "rules": [
-      "Do not base the ad on a traditional presenter or talking head.",
-      "Build the communication around the product, hands, the user’s point of view, surroundings, graphics, interface, or text.",
-      "Every element of the ad should be understandable without showing the presenter’s face.",
-      "The product, its functionality, or its outcome should remain a regular focal point.",
-      "Maintain a clear visual flow that guides the audience through the message.",
-      "Do not show faces merely to fill space—the presence of people should serve a communication purpose."
-    ]
-  },
-  {
-    "id": "lifestyle",
-    "name": "Lifestyle",
-    "description": "An execution that presents the product as a natural part of the audience’s lifestyle, set within an everyday, aspirational, or relatable context.",
-    "rules": [
-      "Show the product in situations connected to the audience’s real life and needs.",
-      "The environment, people, and situations should align with the target audience and the brand’s positioning.",
-      "The product does not need to dominate every element, but its role in the story must be clear.",
-      "Prioritize natural interactions and usage contexts over isolated product presentations.",
-      "Build emotion through the situation, people, environment, and outcome.",
-      "Avoid random lifestyle elements that do not support the ad’s main message."
-    ]
-  },
-  {
-    "id": "documentary",
-    "name": "Documentary",
-    "description": "An authentic, observational execution resembling a record of a real experience, story, process, or situation involving the product and its user.",
-    "rules": [
-      "The execution should feel like observing a real situation rather than watching a staged advertisement.",
-      "Prioritize realistic people, places, behaviors, and contexts.",
-      "Avoid an overly staged, polished, and typically commercial aesthetic.",
-      "Show real experiences, processes, reactions, or outcomes.",
-      "Minor imperfections are acceptable if they increase the sense of authenticity.",
-      "The product should be part of a genuine story rather than an element artificially added to the message."
+      "The speaker should remain the main communication anchor of the execution.",
+      "The opening statement should deliver immediate relevance rather than beginning with a generic introduction.",
+      "Delivery should feel natural, confident, and appropriate to the speaker's role.",
+      "Use product shots, cutaways, graphics, or captions only when they improve clarity, proof, or retention.",
+      "Avoid excessive B-roll that disconnects the viewer from the speaker.",
+      "Keep the product visually relevant whenever it strengthens the message.",
+      "Do not make the speaker sound like they are reading polished brand copy."
     ]
   },
   {
     "id": "product_focused",
     "name": "Product Focused",
-    "description": "An execution in which the product is the main focus of the ad, with its appearance, functionality, features, and usage serving as the most important visual elements.",
+    "description": "An execution in which the product, its mechanism, appearance, usage, details, or observable outcomes serve as the main visual communication.",
     "rules": [
       "The product should be one of the most important and visible elements of the ad.",
-      "Highlight details, usage, functions, or properties that are relevant to the main message.",
-      "Every visual element should help the audience understand the product, how it works, or the value it provides.",
+      "Prioritize meaningful product actions, mechanisms, usage, or details over passive beauty shots.",
+      "Every visual element should help the audience understand what the product is, how it works, or why it matters.",
+      "Show cause and effect whenever the product creates an observable outcome.",
       "Limit elements that distract attention from the product.",
-      "Show the product in use when doing so helps explain its benefits.",
-      "The product’s visual presentation should support its positioning and perceived value."
+      "Use close-ups or detail shots only when they communicate meaningful information or perceived value.",
+      "Do not rely on aesthetic product footage without a clear persuasive purpose."
     ]
   },
   {
-    "id": "studio_commercial",
-    "name": "Studio Commercial",
-    "description": "A polished, controlled commercial execution featuring high visual quality, precise composition, and a professional presentation of the product or brand.",
+    "id": "customer_led",
+    "name": "Customer Led",
+    "description": "An execution centered on a real customer's perspective, experience, language, and interaction with the product.",
     "rules": [
-      "Use clean, controlled, and intentionally designed compositions.",
-      "The execution should look premium, professional, and cohesive.",
-      "Every visual element should have a clearly defined purpose.",
-      "The product or main message should be presented without unnecessary visual clutter.",
-      "Avoid the accidental rawness and unfinished elements associated with organic UGC.",
-      "Maintain consistent colors, styling, and composition throughout the ad."
-    ]
-  },
-  {
-    "id": "founder_led",
-    "name": "Founder Led",
-    "description": "An execution centered on the brand’s founder, their story, experience, motivation, and personal credibility.",
-    "rules": [
-      "The founder should be the primary source of credibility and narration.",
-      "Communication should feel personal and direct.",
-      "Emphasize the authentic story behind the creation of the product, brand, or solution.",
-      "Show the founder’s real experiences, observations, or motivations.",
-      "Avoid a corporate, anonymous, or overly staged tone.",
-      "Present the product as a response to a genuine need, problem, or experience encountered by the founder."
-    ]
-  },
-  {
-    "id": "graphic_led",
-    "name": "Graphic Led",
-    "description": "An execution driven primarily by typography, graphics, icons, diagrams, data, and visual communication of information.",
-    "rules": [
-      "Graphics and typography should be the main carriers of the message.",
-      "Text should be concise, legible, and easy to scan.",
-      "Every graphic element should serve a specific communication purpose.",
-      "Maintain a consistent system of typography, icons, composition, and information hierarchy.",
-      "The product or its visual representation should appear at key moments.",
-      "Avoid decorative graphic elements that do not help the audience understand the message."
+      "Use only authentic customer experiences, statements, and outcomes supported by the input data.",
+      "The customer's perspective should remain the primary source of credibility.",
+      "Preserve natural language and delivery instead of turning the experience into polished brand copy.",
+      "Show the product, usage context, or observable evidence when it helps substantiate the customer's experience.",
+      "Do not fabricate reactions, quotes, personal history, or results.",
+      "Avoid making the customer sound like a brand spokesperson.",
+      "Use the most specific and credible part of the customer experience early."
     ]
   },
   {
     "id": "interface_first",
     "name": "Interface First",
-    "description": "An execution in which the product’s interface, screen, dashboard, website, or digital user experience is the primary means of demonstrating its value.",
+    "description": "An execution in which the product's interface, screen, dashboard, website, application, or digital user experience is the primary means of demonstrating its value.",
     "rules": [
-      "The product interface should be one of the ad’s main visual elements.",
-      "Show specific functions, actions, and outcomes instead of random screens.",
-      "Direct the audience’s attention to one clear action, function, or benefit at a time.",
-      "The most important interface elements must be easy to notice and understand.",
-      "Additional text or graphics should support the audience’s understanding of the product rather than duplicate the interface.",
-      "Avoid overwhelming the audience with too many elements, functions, or pieces of information at once."
+      "The product interface should be one of the ad's main visual elements.",
+      "Show specific actions, functions, workflows, and outcomes instead of random screens.",
+      "Direct the audience's attention to one clear action, function, or benefit at a time.",
+      "Make the most important interface elements easy to notice and understand on mobile.",
+      "Use zooms, highlights, cursor movement, captions, or graphics only when they improve comprehension.",
+      "Avoid overwhelming the audience with too many features or interface elements at once.",
+      "Connect interface actions directly to meaningful user value."
     ]
   },
   {
-    "id": "hybrid",
-    "name": "Hybrid",
-    "description": "A flexible execution combining several presentation styles, such as UGC, lifestyle, product-focused, graphics, interface-based, or more polished commercial content.",
+    "id": "expert_led",
+    "name": "Expert Led",
+    "description": "An execution led by a qualified or relevant expert who explains, demonstrates, evaluates, or contextualizes the product using genuine expertise.",
     "rules": [
-      "Combine different styles only when each serves a specific purpose within the ad.",
-      "Maintain consistency in tone, branding, and the main message despite mixing different presentation styles.",
-      "Do not change the presentation style without a clear narrative or communication reason.",
-      "Use different styles for different purposes, such as authenticity, demonstration, explanation, proof, or product presentation.",
-      "Each presentation style should support the structure of the selected ad framework.",
-      "Avoid randomly mixing techniques solely to make the ad more dynamic."
+      "Use only expertise, credentials, affiliations, research, and claims supported by the input data.",
+      "The expert should provide specific and useful information rather than a generic endorsement.",
+      "Keep explanations accessible and avoid unnecessary technical complexity.",
+      "Connect expert knowledge directly to the product's relevant mechanism, benefit, use case, or evidence.",
+      "Do not imply medical, scientific, professional, or institutional authority that has not been provided.",
+      "The product should remain meaningfully connected to the expert's explanation.",
+      "Avoid making the expert sound like a scripted brand spokesperson."
+    ]
+  },
+  {
+    "id": "founder_led",
+    "name": "Founder Led",
+    "description": "An execution centered on the brand's founder, their perspective, story, motivation, experience, and personal connection to the product.",
+    "rules": [
+      "The founder should be the primary source of narration or credibility.",
+      "Communication should feel personal, specific, and direct.",
+      "Use only founder experiences, motivations, observations, and facts supported by the input.",
+      "Show why the product exists and what genuine problem, observation, or need led to its creation when relevant.",
+      "Avoid generic corporate storytelling or overly polished brand language.",
+      "Connect the founder's story directly to the product's value.",
+      "Do not invent founder experiences, struggles, motivations, or credentials."
+    ]
+  },
+  {
+    "id": "lifestyle",
+    "name": "Lifestyle",
+    "description": "An execution that presents the product as a meaningful part of the audience's everyday life, routine, aspiration, or recognizable usage situation.",
+    "rules": [
+      "Show situations that are directly relevant to the target audience and product.",
+      "The environment, people, behavior, and context should support the main persuasive idea.",
+      "The product does not need to dominate every frame, but its role in the situation must remain clear.",
+      "Prioritize natural interactions and meaningful usage moments over decorative lifestyle footage.",
+      "Use emotion only when it arises naturally from the situation or product outcome.",
+      "Avoid generic scenes such as smiling, walking, relaxing, or socializing when they do not communicate product value.",
+      "Make the lifestyle context specific enough that it could not easily be reused for an unrelated product."
+    ]
+  },
+  {
+    "id": "studio_commercial",
+    "name": "Studio Commercial",
+    "description": "A polished, controlled commercial execution featuring intentional art direction, precise composition, and professional presentation of the product or message.",
+    "rules": [
+      "Use clean, controlled, and deliberately designed compositions.",
+      "The execution should feel premium, professional, and cohesive.",
+      "Every visual element should have a clear communication or positioning purpose.",
+      "Keep the product or primary message visually dominant.",
+      "Use lighting, styling, motion, and composition to increase clarity and perceived value rather than for decoration alone.",
+      "Avoid generic premium imagery that does not communicate a specific product truth.",
+      "Do not allow aesthetic polish to replace demonstration, clarity, or persuasion."
+    ]
+  },
+  {
+    "id": "graphic_led",
+    "name": "Graphic Led",
+    "description": "An execution driven primarily by typography, graphics, diagrams, icons, data visualization, animation, or structured visual communication.",
+    "rules": [
+      "Graphics and typography should carry a meaningful part of the communication.",
+      "Text should be concise, mobile-readable, and easy to scan.",
+      "Use clear visual hierarchy so the viewer understands one idea at a time.",
+      "Every graphic element should serve a specific communication purpose.",
+      "Use diagrams or visual explanations when they simplify mechanisms, comparisons, data, or abstract concepts.",
+      "Show the product or its visual representation at relevant moments.",
+      "Avoid decorative motion graphics that increase complexity without improving understanding."
+    ]
+  },
+  {
+    "id": "documentary",
+    "name": "Documentary",
+    "description": "An observational execution resembling a record of a genuine experience, process, environment, story, or situation involving the product and its user.",
+    "rules": [
+      "The execution should feel observed rather than conventionally staged.",
+      "Prioritize real or realistically supported people, places, behaviors, processes, and contexts.",
+      "Use authentic actions, interactions, reactions, or outcomes supported by the input.",
+      "Avoid an overly polished or traditionally commercial aesthetic when it reduces credibility.",
+      "Minor imperfections are acceptable when they strengthen authenticity.",
+      "The product should be naturally connected to the documented situation or story.",
+      "Do not fabricate documentary evidence, real-world events, customer experiences, or outcomes."
     ]
   }
 ]

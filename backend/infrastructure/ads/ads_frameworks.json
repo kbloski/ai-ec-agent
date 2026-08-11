@@ -94,6 +94,41 @@
     ]
   },
   {
+    "id": "problem_solution",
+    "name": "Problem Solution",
+    "format": "video",
+    "goal": "conversion",
+    "description": "A classic ad structure that presents the viewer's problem and positions the product as the solution.",
+    "rules": [],
+    "structure": [
+      {
+        "step": 1,
+        "name": "Hook",
+        "purpose": "Draw attention to a problem, need, or situation relevant to the viewer."
+      },
+      {
+        "step": 2,
+        "name": "Problem",
+        "purpose": "Expand on the problem and show its consequences or the user's frustration."
+      },
+      {
+        "step": 3,
+        "name": "Solution",
+        "purpose": "Present the product as the solution to the problem."
+      },
+      {
+        "step": 4,
+        "name": "Benefits",
+        "purpose": "Show the key benefits resulting from the solution."
+      },
+      {
+        "step": 5,
+        "name": "CTA",
+        "purpose": "Encourage the viewer to take action."
+      }
+    ]
+  },
+  {
     "id": "testimonial",
     "name": "Testimonial",
     "format": "video",
@@ -162,37 +197,38 @@
     ]
   },
   {
-    "id": "problem_solution",
-    "name": "Problem Solution",
+    "id": "how_it_works",
+    "name": "How It Works",
     "format": "video",
     "goal": "conversion",
-    "description": "A classic ad structure that presents the viewer's problem and positions the product as the solution.",
-    "rules": [],
+    "description": "An ad that explains or demonstrates the product's mechanism, process, or distinctive way of creating value for the user.",
+    "rules": [
+      "Focus on the mechanism, process, or reason the product creates value rather than simply listing features.",
+      "Show the mechanism visually whenever possible.",
+      "Prefer a clear cause-and-effect relationship between the product action or mechanism and the resulting benefit.",
+      "Do not invent scientific explanations, mechanisms, performance claims, or causal relationships that are not supported by the input data.",
+      "Keep the explanation as simple as possible while preserving the product's meaningful difference."
+    ],
     "structure": [
       {
-        "step": 1,
-        "name": "Hook",
-        "purpose": "Draw attention to a problem, need, or situation relevant to the viewer."
+      "step": 1,
+      "name": "Mechanism Hook",
+      "purpose": "Open with an interesting product action, result, question, or unusual mechanism that creates curiosity about how the product works."
       },
       {
-        "step": 2,
-        "name": "Problem",
-        "purpose": "Expand on the problem and show its consequences or the user's frustration."
+      "step": 2,
+      "name": "How It Works",
+      "purpose": "Show or explain the key mechanism, process, interaction, or sequence that creates the product's value."
       },
       {
-        "step": 3,
-        "name": "Solution",
-        "purpose": "Present the product as the solution to the problem."
+      "step": 3,
+      "name": "Why It Matters",
+      "purpose": "Connect the mechanism directly to the most important practical benefit or outcome for the user."
       },
       {
-        "step": 4,
-        "name": "Benefits",
-        "purpose": "Show the key benefits resulting from the solution."
-      },
-      {
-        "step": 5,
-        "name": "CTA",
-        "purpose": "Encourage the viewer to take action."
+      "step": 4,
+      "name": "CTA",
+      "purpose": "Encourage the viewer to take action based on the value they now understand."
       }
     ]
   },
