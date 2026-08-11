@@ -11,6 +11,7 @@ import {
   useDeleteAdExecutionMutation,
   useListAdExecutionForCreativeStrategyQuery,
 } from '@/features/adExecution/adExecutionApi'
+import { useListPlatformsQuery, type Platform } from '@/features/platforms/platformsApi'
 
 export default function CreativeStrategyDetailPage() {
   const id = Number(useParams().id)
@@ -20,6 +21,7 @@ export default function CreativeStrategyDetailPage() {
   const [createAdExecution, createState] = useCreateAdExecutionMutation()
   const [deleteAdExecution] = useDeleteAdExecutionMutation()
   const [updateCreativeStrategy, updateState] = useUpdateCreativeStrategyMutation()
+  const platforms = useListPlatformsQuery()
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -28,7 +30,7 @@ export default function CreativeStrategyDetailPage() {
       creativeStrategyId: id,
       name: String(formData.get('name') || '') || undefined,
       creative_type: String(formData.get('creative_type') || 'video'),
-      platform: String(formData.get('platform') || 'Meta Ads'),
+      platform: String(formData.get('platform') || 'tiktok'),
       format: String(formData.get('format') || 'Vertical 9:16'),
     }).unwrap()
   }
@@ -68,11 +70,17 @@ export default function CreativeStrategyDetailPage() {
           </label>
           <label className="text-xs">
             Platforma
-            <input
+            <select
               name="platform"
-              defaultValue="Meta Ads"
+              defaultValue="tiktok"
               className="block w-40 rounded-md border px-2 py-1 text-sm"
-            />
+            >
+              {platforms.data?.map((platform: Platform) => (
+                <option key={platform.id} value={platform.id}>
+                  {platform.name}
+                </option>
+              ))}
+            </select>
           </label>
           <label className="text-xs">
             Format

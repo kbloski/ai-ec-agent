@@ -20,6 +20,7 @@ class PathService:
         self.AD_FRAMEWORKS_FILE = self.ADS_DIR / "ads_frameworks.json"
         self.CREATIVE_ANGELS_FILE = self.ADS_DIR / "creative_angels.json"
         self.EXECUTION_STYLES_FILE = self.ADS_DIR / "execution_styles.json"
+        self.PLATFORMS_FILE = self.ADS_DIR / "platforms.json"
 
         # self.DATA_DIR = self.BASE_DIR / "data"
         # self.RAW_ECOMMERCE_KNOWLEDGE = self.DATA_DIR / "raw" / "ecommerce_knowledge"

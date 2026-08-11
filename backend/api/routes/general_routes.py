@@ -6,6 +6,7 @@ from pydantic import BaseModel
 from application.handlers.ads.list_ad_frameworks_handler import list_ad_frameworks_handler
 from application.handlers.ads.list_creative_angels_handler import list_creative_angels_handler
 from application.handlers.ads.list_execution_styles_handler import list_execution_styles_handler
+from application.handlers.ads.list_platforms_handler import list_platforms_handler
 from application.handlers.ads.list_content_statuses_handler import list_content_statuses_handler
 from application.handlers.offers.get_offers import get_offers
 from application.handlers.offers.create_offer import create_offer
@@ -628,6 +629,10 @@ def register_general_routes(router: APIRouter):
     @router.get("/execution-styles")
     def execution_styles_list():
         return list_execution_styles_handler()
+
+    @router.get("/platforms")
+    def platforms_list():
+        return list_platforms_handler()
 
     @router.get("/content-statuses")
     def content_statuses_list():

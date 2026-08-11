@@ -132,6 +132,10 @@ def generate_creative_execution_handler(
         container.execution_styles_repository()
     )
 
+    platforms_repository = (
+        container.platforms_repository()
+    )
+
 
     ad_execution = (
         ad_execution_service
@@ -332,7 +336,31 @@ Follow all execution style "rules".
 """
 
 
-    # Generate response from chat 
+    if ad_execution.platform:
+        platform_data = platforms_repository.get_by_id(ad_execution.platform)
+        if platform_data is not None:
+            prompt += f"""
+
+
+PLATFORM:
+
+{json.dumps(platform_data, ensure_ascii=False, indent=2, default=str)}
+
+Platforma jest niezależna od medium (video/image/carousel) — zinterpretuj jej "rules"
+zgodnie z instrukcjami dla bieżącego typu kreacji w prompcie systemowym (kadr,
+proporcje, poziom wypolerowania, styl napisów).
+"""
+        else:
+            prompt += f"""
+
+
+Platform:
+
+{ad_execution.platform}
+"""
+
+
+    # Generate response from chat
 
     if (ad_execution.creative_type == CreativeTypes.VIDEO.value):
         system_prompt = VIDEO_CREATIVE_EXECUTION_PROMPT
@@ -410,6 +438,10 @@ Follow all execution style "rules".
 
 
 
+# TODO(creative-execution): w sekcji "ŹRÓDŁO PRAWDY" rozważyć instrukcję każącą
+# traktować pozycje knowledge.offer_insights oznaczone type="assumption" jako mniej
+# pewne niż potwierdzone fakty (dziś prompt nie rozróżnia assumption od faktu).
+# Odłożone celowo — patrz plan "Naprawa generowania kreacji reklamowych".
 VIDEO_CREATIVE_EXECUTION_PROMPT = r"""
 Jesteś Głównym Dyrektorem Kreatywnym ds. Efektywności (Senior Performance Creative Director) tworzącym gotowe do produkcji krótkie reklamy wideo (short-form) do płatnych kampanii społecznościowych.
 
@@ -460,6 +492,15 @@ Nigdy nie wymyślaj ani nie zakładaj:
 - doświadczeń klientów,
 - znaczenia kolorów, wariantów lub kategorii,
 - dokładnych treści reklamowych ani przekazów o produkcie.
+
+Przykład: jeśli dane wejściowe nie precyzują polityki gwarancji/zwrotów, nie wymyślaj
+"30 dni gwarancji", "zwrotu pieniędzy" ani żadnej innej konkretnej obietnicy handlowej
+— to pusta obietnica, której firma może nie być w stanie dotrzymać. Ogranicz się wtedy
+do wartości faktycznie popartej danymi.
+
+Te ograniczenia dotyczą wyłącznie faktów i obietnic handlowych — NIE ograniczają
+kreatywności wykonawczej. Koncept wizualny, scenerię, dynamikę, charakter bohatera i
+sposób pokazania produktu możesz i powinieneś kształtować kreatywnie.
 
 MOŻESZ kreatywnie określić szczegóły wykonawcze, takie jak:
 - koncept wizualny,
@@ -521,6 +562,27 @@ użyj go do określenia, JAK wideo jest nagrywane, prezentowane i montowane.
 - pozycjonowania,
 - oferty,
 - faktów o produkcie.
+
+
+# NATYWNOŚĆ I PLATFORMA
+
+Domyślnie zakładaj, że najlepiej konwertująca reklama krótkoformatowa dziś wygląda jak
+natywny, organiczny content danej platformy — nie jak wyprodukowana reklama korporacyjna.
+Wysoka jakość produkcji nie może odbywać się kosztem wiarygodności i naturalności.
+
+Jeśli NIE podano WYBRANEGO STYLU EGZEKUCJI (SELECTED EXECUTION STYLE), domyślnie
+wykonaj reklamę w duchu natywnym/autentycznym (zbliżonym do stylów "ugc_creator" lub
+"documentary"): kamera z ręki lub jej imitacja, montaż mniej wygładzony, realistyczne
+otoczenie, brak nadmiernie wypolerowanej stylistyki studyjnej — chyba że dostarczona
+strategia/branding jednoznacznie wymaga stylu premium/studyjnego.
+
+Jeśli podano blok PLATFORM poniżej, jego "rules" są wiążące dla kadru, proporcji,
+tempa, stylu napisów i poziomu "wypolerowania" produkcji. Jeśli nie podano żadnej
+platformy, przyjmij domyślnie konwencje zbliżone do TikTok/Instagram Reels: pionowy
+kadr, napisy na ekranie jako główny nośnik informacji, natywny, mniej wygładzony montaż.
+
+Nie pozwól, aby dążenie do "wysokiej produkcji" wypchnęło reklamę w stronę generycznej,
+wypolerowanej estetyki korporacyjnej, której unikamy w sekcji "UNIKAJ GENERYCZNEJ REKLAMY".
 
 
 # ZASADY EFEKTYWNOŚCI (PERFORMANCE RULES)
@@ -808,6 +870,11 @@ Bez miejsc na uzupełnienie (placeholders).
 Nie generuj niepotwierdzonych informacji tylko po to, by wypełnić pole.
 Używaj "" tylko wtedy, gdy wymaganego pola tekstowego naprawdę nie da się bezpiecznie określić.
 
+`asset_requirements` musi wymieniać konkretne, realne zasoby produkcyjne wynikające
+wprost ze scen powyżej (np. konkretny wariant/egzemplarz produktu, konkretna
+lokalizacja/rekwizyt jeśli scena tego wymaga, konkretne nagranie ekranu/UI jeśli
+użyte) — nie zwracaj generycznej listy niepowiązanej z faktyczną treścią scen.
+
 Zwróć dokładnie:
 
 {
@@ -897,6 +964,10 @@ Zwróć dokładnie:
 # ---------------------------------------
 
 
+# TODO(creative-execution): in "Trust Rules" consider an instruction to treat
+# knowledge.offer_insights items marked type="assumption" as weaker than confirmed
+# facts (today the prompt does not distinguish assumption from fact).
+# Deliberately deferred — see plan "Naprawa generowania kreacji reklamowych".
 IMAGE_CREATIVE_EXECUTION_PROMPT = """
 You are a senior Performance Creative Director responsible for static paid-social creatives that communicate value instantly and convert, not merely look attractive.
 
@@ -978,6 +1049,13 @@ Use only supported proof.
 If real proof is provided, prioritize the strongest useful evidence.
 If no external proof exists, do not invent it; build trust through real usage, product detail, transparent demonstration, packaging, materials, process or credible context.
 
+Example: if the supplied input does not specify a concrete guarantee/return policy, do
+not invent "30-day money-back guarantee" or similar — an empty commercial promise the
+business may not actually offer. Use only what is actually supported by the data.
+
+This restriction applies only to commercial facts and promises — it does NOT limit
+creative freedom over visual concept, composition, mood, styling, or setting.
+
 
 # Headline Rules
 
@@ -1011,6 +1089,22 @@ Execution style MUST NOT change strategy, audience, positioning, offer, framewor
 If no selected creative angle or execution style is present, choose the strongest option using only supplied strategy data.
 
 
+# Platform & Nativeness
+
+Default assumption: the best-performing ads today look like native platform content
+(a real feed post), not a studio-produced advertisement — high production value must
+not come at the cost of believability.
+
+If no SELECTED EXECUTION STYLE is provided, default toward an authentic/native
+treatment (in the spirit of "ugc_creator" or "product_focused" real-usage photography)
+rather than a generic premium studio shot, unless the supplied brand/strategy data
+clearly calls for a premium/studio treatment.
+
+If a PLATFORM block is provided below, its "rules" are binding for composition, aspect
+ratio, and level of visual "polish". If no platform is provided, default to mobile
+Feed/Reels-style conventions.
+
+
 # Internal Creative Selection
 
 Before returning JSON, silently consider at least 3 valid static concepts and select the one with the best combination of:
@@ -1038,16 +1132,20 @@ Format:
 "viewer_emotion":""
 }
 
-Possible creative-angle values when not explicitly selected:
-- problem_solution
-- before_after
-- product_benefit
+Possible creative-angle values when not explicitly selected (use these exact IDs,
+matching the app's creative angle taxonomy):
+- curiosity_gap
 - social_proof
-- demonstration
-- comparison
-- lifestyle
-- founder_story
-- testimonial
+- authority
+- education
+- emotion
+- humor
+- urgency
+- relatability
+- myth_busting
+- contrarian
+- mistake
+- secret
 
 `main_message` must be a concrete persuasive idea, not a slogan.
 
@@ -1249,8 +1347,12 @@ Before returning, verify silently:
 
 
 # ---------------------------------------
-# Carousel prompt 
+# Carousel prompt
 # ---------------------------------------
+# TODO(creative-execution): in "Trust Rules" consider an instruction to treat
+# knowledge.offer_insights items marked type="assumption" as weaker than confirmed
+# facts (today the prompt does not distinguish assumption from fact).
+# Deliberately deferred — see plan "Naprawa generowania kreacji reklamowych".
 CAROUSEL_CREATIVE_EXECUTION_PROMPT = """
 You are a senior Performance Creative Director responsible for paid-social carousels that stop the scroll, earn every swipe and convert.
 
@@ -1354,6 +1456,13 @@ Use only supported trust elements.
 Never invent ratings, review counts, quotes, numbers, certifications, awards or results.
 If no external proof exists, use product demonstration, real usage, process detail, packaging/material detail or honest observable evidence.
 
+Example: if the supplied input does not specify a concrete guarantee/return policy, do
+not invent "30-day money-back guarantee" or similar — an empty commercial promise the
+business may not actually offer. Use only what is actually supported by the data.
+
+This restriction applies only to commercial facts and promises — it does NOT limit
+creative freedom over visual concept, composition, mood, styling, or setting.
+
 
 # Selected Ad Framework, Creative Angle & Execution Style (if provided)
 
@@ -1366,6 +1475,22 @@ If a SELECTED EXECUTION STYLE block is present, it defines HOW the carousel is v
 Execution style MUST NOT change framework sequence, creative angle, audience, positioning, offer or message.
 
 If no selected creative angle/framework/style exists, choose the strongest execution using only supplied strategy inputs.
+
+
+# Platform & Nativeness
+
+Default assumption: the best-performing ads today look like native platform content
+(a real feed post), not a studio-produced advertisement — high production value must
+not come at the cost of believability.
+
+If no SELECTED EXECUTION STYLE is provided, default toward an authentic/native
+treatment (in the spirit of "ugc_creator" or "product_focused" real-usage photography)
+rather than a generic premium studio shot, unless the supplied brand/strategy data
+clearly calls for a premium/studio treatment.
+
+If a PLATFORM block is provided below, its "rules" are binding for composition, aspect
+ratio, and level of visual "polish". If no platform is provided, default to mobile
+Feed/Reels-style conventions.
 
 
 # Internal Creative Selection
@@ -1394,17 +1519,20 @@ Format:
 "viewer_journey":""
 }
 
-Possible values when angle is not explicitly selected:
-- problem_solution
-- educational
-- product_benefits
-- before_after
-- comparison
-- myth_busting
+Possible values when angle is not explicitly selected (use these exact IDs, matching
+the app's creative angle taxonomy):
+- curiosity_gap
 - social_proof
-- testimonial
-- step_by_step
-- product_demo
+- authority
+- education
+- emotion
+- humor
+- urgency
+- relatability
+- myth_busting
+- contrarian
+- mistake
+- secret
 
 `main_message` must be one concrete persuasive idea.
 `viewer_journey` must explain the evolving thought process from slide 1 to CTA.

@@ -33,6 +33,7 @@ import { useDeleteCreativeExecutionMutation, useGenerateCreativeExecutionMutatio
 import { useListExecutionStylesQuery, type ExecutionStyle } from '@/features/executionStyles/executionStylesApi'
 import { useListAdFrameworksQuery, type AdFramework } from '@/features/adFrameworks/adFrameworksApi'
 import { useListCreativeAnglesQuery, type CreativeAngle } from '@/features/creativeAngels/creativeAnglesApi'
+import { useListPlatformsQuery, type Platform } from '@/features/platforms/platformsApi'
 
 function ResourcePage({ title, children }: { backTo: string; backLabel: string; title: string; children: ReactNode }) {
   return <div className="w-full space-y-6 p-6 lg:p-10">
@@ -121,13 +122,13 @@ export function PageCopiesPage() { const id=Number(useParams().id); const list=u
 
 export function CreativeAdExecutionsPage() {
   const id = Number(useParams().id); const { data } = useGetCreativeStrategyQuery(id)
-  const list = useListAdExecutionForCreativeStrategyQuery(id); const [create, state] = useCreateAdExecutionMutation(); const [remove] = useDeleteAdExecutionMutation()
-  const submit = (event: FormEvent<HTMLFormElement>) => { event.preventDefault(); const form = new FormData(event.currentTarget); void create({ creativeStrategyId: id, name: String(form.get('name') || '') || undefined, creative_type: String(form.get('creative_type') || 'video'), platform: String(form.get('platform') || 'Meta Ads'), format: String(form.get('format') || 'Vertical 9:16') }) }
+  const list = useListAdExecutionForCreativeStrategyQuery(id); const [create, state] = useCreateAdExecutionMutation(); const [remove] = useDeleteAdExecutionMutation(); const platforms = useListPlatformsQuery()
+  const submit = (event: FormEvent<HTMLFormElement>) => { event.preventDefault(); const form = new FormData(event.currentTarget); void create({ creativeStrategyId: id, name: String(form.get('name') || '') || undefined, creative_type: String(form.get('creative_type') || 'video'), platform: String(form.get('platform') || 'tiktok'), format: String(form.get('format') || 'Vertical 9:16') }) }
   return <ResourcePage backTo={`/creative-strategy/${id}`} backLabel={(data?.name as string) ?? 'Creative strategy'} title="Ad execution">
     <form onSubmit={submit} className="flex flex-wrap items-end gap-2">
       <label className="text-xs">Nazwa<input name="name" className="block w-40 rounded-md border px-2 py-1 text-sm" /></label>
       <label className="text-xs">Typ kreacji<select name="creative_type" defaultValue="video" className="block w-32 rounded-md border px-2 py-1 text-sm"><option value="video">video</option><option value="image">image</option><option value="carousel">carousel</option></select></label>
-      <label className="text-xs">Platforma<input name="platform" defaultValue="Meta Ads" className="block w-40 rounded-md border px-2 py-1 text-sm" /></label>
+      <label className="text-xs">Platforma<select name="platform" defaultValue="tiktok" className="block w-40 rounded-md border px-2 py-1 text-sm">{platforms.data?.map((x: Platform) => <option key={x.id} value={x.id}>{x.name}</option>)}</select></label>
       <label className="text-xs">Format<input name="format" defaultValue="Vertical 9:16" className="block w-48 rounded-md border px-2 py-1 text-sm" /></label>
       <Button type="submit" size="sm" disabled={state.isLoading}>{state.isLoading ? 'Tworzenie…' : 'Utwórz ad execution'}</Button>
     </form>

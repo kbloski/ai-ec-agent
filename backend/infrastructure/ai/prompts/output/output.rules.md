@@ -26,8 +26,12 @@ Apply these rules only when the required output format is JSON:
 - Keep JSON keys unchanged.
 - Do not rename, remove, or translate fields.
 - Do not use null values.
-- Do not leave required fields empty.
-- All required fields must contain meaningful values.
+- Leave a field as an empty string ONLY when the task-specific system prompt
+  explicitly allows/requires it (for example, when information is genuinely
+  unverified or unavailable). Otherwise, provide a meaningful value.
+- Never invent specific facts, numbers, names, or claims solely to avoid leaving
+  a field empty — a task-specific "do not invent" instruction always takes
+  priority over filling a field.
 - Arrays must always be returned as arrays.
 - Objects must keep the structure defined by the schema.
 - Do not replace objects with strings or arrays.

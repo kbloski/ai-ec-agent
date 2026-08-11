@@ -5,7 +5,11 @@
     "format": "video",
     "goal": "conversion",
     "description": "A short product demonstration showing how it works in practice and how it solves a problem.",
-    "rules": [],
+    "rules": [
+      "Demonstrate the product performing its real function; do not replace the demonstration with generic lifestyle footage.",
+      "Do not invent performance results, speed, quantities, or outcomes not present in the input data.",
+      "The 'Benefits' step must follow directly from what was demonstrated, not from a generic emotional payoff."
+    ],
     "structure": [
       {
         "step": 1,
@@ -69,7 +73,11 @@
     "format": "video",
     "goal": "conversion",
     "description": "Presenting the product's most important features or characteristics and the benefits they provide to the user.",
-    "rules": [],
+    "rules": [
+      "Use only features explicitly present in the input data — do not invent specifications, materials, or capabilities.",
+      "Each benefit must be a direct, explainable consequence of the paired feature, not a generic emotional claim.",
+      "Prefer the single most persuasive feature-benefit pair over listing many minor ones."
+    ],
     "structure": [
       {
         "step": 1,
@@ -99,7 +107,11 @@
     "format": "video",
     "goal": "conversion",
     "description": "A classic ad structure that presents the viewer's problem and positions the product as the solution.",
-    "rules": [],
+    "rules": [
+      "The problem must be specific and recognizable to the target audience, not a generic frustration.",
+      "Do not invent statistics, prevalence claims, or consequences about the problem that are not supported by input data.",
+      "The solution step must connect to the product's actual mechanism, not just its category."
+    ],
     "structure": [
       {
         "step": 1,
@@ -172,7 +184,11 @@
     "format": "video",
     "goal": "attention",
     "description": "An ad that begins by strongly highlighting a problem, mistake, frustration, or undesirable outcome.",
-    "rules": [],
+    "rules": [
+      "The negative hook must reference a real, recognizable mistake or problem — do not invent a strawman scenario unrelated to the actual product context.",
+      "Avoid fear-based exaggeration not supported by the input data.",
+      "Transition from the negative hook to the solution quickly — do not dwell on negativity longer than needed to create recognition."
+    ],
     "structure": [
       {
         "step": 1,
