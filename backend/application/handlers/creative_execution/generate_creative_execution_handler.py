@@ -1225,7 +1225,7 @@ CTA rules:
 Before returning the result, silently check:
 - If Duration is not provided, default to 15 seconds.
 - The execution is appropriately compressed for the requested duration.
-- A ~15-second ad usually contains around 4-6 meaningful scenes unless the concept justifies otherwise.
+- A ~15-second ad usually contains around 5-6 meaningful scenes unless the concept justifies otherwise.
 - The opening is specific enough to stop the target audience.
 - The first frame contains a persuasive event, not an introduction.
 - The creative would NOT work unchanged for a random different product.
