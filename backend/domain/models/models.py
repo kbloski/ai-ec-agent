@@ -2,6 +2,7 @@
 # Other models  
 # --------------------
 from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
+from domain.models.llm.llm_message import LlmMessage
 
 # --------------------
 # Database models 

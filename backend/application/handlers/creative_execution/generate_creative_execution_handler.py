@@ -4,12 +4,12 @@ from typing import Optional
 
 from di.container import Container
 
-from domain.models.ollama.llm_ollama_message import (
-    LlmOllamaMessage
+from domain.models.llm.llm_message import (
+    LlmMessage
 )
 
 from domain.enums.enums import (
-    OllamaMessageRole,
+    LlmMessageRole,
     CreativeTypes
 )
 
@@ -359,12 +359,12 @@ Platform:
         )
 
     messages = [
-        LlmOllamaMessage(
-            role=OllamaMessageRole.SYSTEM,
+        LlmMessage(
+            role=LlmMessageRole.SYSTEM,
             content=system_prompt
         ),
-        LlmOllamaMessage(
-            role=OllamaMessageRole.USER,
+        LlmMessage(
+            role=LlmMessageRole.USER,
             content=prompt
         )
     ]

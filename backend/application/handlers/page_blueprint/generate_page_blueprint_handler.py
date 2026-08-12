@@ -1,8 +1,8 @@
 import json
 
 from di.container import Container
-from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
-from domain.enums.ollama_message_role import OllamaMessageRole
+from domain.models.llm.llm_message import LlmMessage
+from domain.enums.llm_message_role import LlmMessageRole
 from domain.models.page_blueprint.page_blueprint import PageBlueprint
 
 
@@ -576,13 +576,13 @@ def generate_page_blueprint_handler(
 
         messages=[
 
-            LlmOllamaMessage(
-                role=OllamaMessageRole.SYSTEM,
+            LlmMessage(
+                role=LlmMessageRole.SYSTEM,
                 content=SYSTEM_PROMPT
             ),
 
-            LlmOllamaMessage(
-                role=OllamaMessageRole.USER,
+            LlmMessage(
+                role=LlmMessageRole.USER,
                 content=user_prompt
             )
 

@@ -7,8 +7,8 @@ from application.mappers.knowledge_mapper import KnowledgeMapper
 from application.mappers.knowledge_insight_mapper import KnowledgeInsightMapper
 
 from di.container import Container
-from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
-from domain.enums.ollama_message_role import OllamaMessageRole
+from domain.models.llm.llm_message import LlmMessage
+from domain.enums.llm_message_role import LlmMessageRole
 
 from domain.models.knowledge.knowledge import Knowledge
 from domain.models.knowledge.knowledge_insight import KnowledgeInsight
@@ -142,12 +142,12 @@ Use this structure as a foundation, but extend it when necessary:
 def call_llm(ai_service, prompt):
 
     chat = [
-        LlmOllamaMessage(
-            role=OllamaMessageRole.SYSTEM,
+        LlmMessage(
+            role=LlmMessageRole.SYSTEM,
             content=BASE_SYSTEM_PROMPT
         ),
-        LlmOllamaMessage(
-            role=OllamaMessageRole.USER,
+        LlmMessage(
+            role=LlmMessageRole.USER,
             content=prompt
         ),
     ]

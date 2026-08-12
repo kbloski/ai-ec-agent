@@ -1,19 +1,18 @@
-from ollama import Client
 from infrastructure.logging.logger import Logger
 from infrastructure.services.path_service import PathService
-from core.settings import Settings
+from application.services.ollama_service import OllamaService
+
+from domain.models.llm.llm_message import LlmMessage
+from domain.enums.llm_message_role import LlmMessageRole
 
 from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
 from domain.enums.ollama_message_role import OllamaMessageRole
 
 class AiService:
-    def __init__(self, logger: Logger, settings: Settings, path_service: PathService):
+    def __init__(self, logger: Logger, path_service: PathService, ollama_service: OllamaService):
         self.logger = logger
         self.path_service = path_service
-        self.llm_model = settings.get_ollama_llm_model()
-        self.num_ctx = settings.get_ollama_num_ctx()
-        self.temperature = settings.get_ollama_temperature()
-        self.client = Client(  host=settings.get_ollama_url() )
+        self.ollama_service = ollama_service
         self.output_rules_prompt = self._load_prompt(self.path_service.OUTPUT_RULES_PROMPT)
 
     def _load_prompt(self, path) -> str:
@@ -23,37 +22,27 @@ class AiService:
             self.logger.error(f"Nie udało się wczytać promptu {path}: {e}")
             return ""
 
-    def chat_llm(self, messages: list[LlmOllamaMessage]) -> LlmOllamaMessage:
+    def chat_llm(self, messages: list[LlmMessage]) -> LlmMessage:
         self.output_rules_prompt = self._load_prompt(self.path_service.OUTPUT_RULES_PROMPT)
 
-        """Obsługuje standardowe modele tekstowe (LLM)"""
-        try:
-            # ✅ Naprawione: Konwertujemy obiekty domenowe na słowniki akceptowane przez Ollamę
-            payload_messages = [msg.to_dict() for msg in messages]
+        payload_messages = list(messages)
 
-            if self.output_rules_prompt:
-                output_rules_message = LlmOllamaMessage(
-                    role=OllamaMessageRole.SYSTEM,
+        if self.output_rules_prompt:
+            payload_messages.append(
+                LlmMessage(
+                    role=LlmMessageRole.SYSTEM,
                     content=self.output_rules_prompt
-                ).to_dict()
-
-                payload_messages.append(output_rules_message)
-
-            response = self.client.chat(
-                model=self.llm_model,
-                messages=payload_messages,
-                options={
-                    "num_ctx": self.num_ctx,
-                    "temperature": self.temperature,
-                },
+                )
             )
 
-            return LlmOllamaMessage(
-                role=OllamaMessageRole.ASSISTANT,
-                content=response["message"]["content"]
-            )
+        ollama_messages = [
+            LlmOllamaMessage(role=OllamaMessageRole(message.role.value), content=message.content)
+            for message in payload_messages
+        ]
 
-        except Exception as e:
-            self.logger.error(f"Ollama llm chat error: {e}")
-            raise
+        response = self.ollama_service.chat_llm(ollama_messages)
 
+        return LlmMessage(
+            role=LlmMessageRole(response.role.value),
+            content=response.content
+        )

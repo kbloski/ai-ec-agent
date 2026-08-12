@@ -1,7 +1,7 @@
 import base64
 from di.container import Container
-from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
-from domain.enums.ollama_message_role import OllamaMessageRole
+from domain.models.llm.llm_message import LlmMessage
+from domain.enums.llm_message_role import LlmMessageRole
 
 
 def encode_image(image_path):
@@ -34,7 +34,7 @@ def test():
     for pl_name, eng_name in items_to_check.items():
         vlm_messages = [
             VlmOllamaMessage(
-                role=OllamaMessageRole.USER,
+                role=LlmMessageRole.USER,
                 content=(
                     f"Look at the image. Is there a {eng_name} visible? "
                     f"If yes, describe its visual appearance (color, quantity, location) in ONE short sentence. "
@@ -56,8 +56,8 @@ def test():
 
     # 2. Przekazujemy zebrany tekst do LLM wyłącznie w celu dokładnego tłumaczenia na język polski
     llm_messages = [
-        LlmOllamaMessage(
-            role=OllamaMessageRole.USER,
+        LlmMessage(
+            role=LlmMessageRole.USER,
             content=(
                 "Przetłumacz poniższe angielskie na język polski: "
                 f"{english_facts}\n\n"

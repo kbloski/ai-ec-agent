@@ -10,8 +10,8 @@ from application.mappers.analysis_question_mapper import AnalysisQuestionMapper
 
 from domain.models.analysis.analysis_questions import AnalysisQuestion
 from domain.models.analysis.question_answer import QuestionAnswer
-from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
-from domain.enums.ollama_message_role import OllamaMessageRole
+from domain.models.llm.llm_message import LlmMessage
+from domain.enums.llm_message_role import LlmMessageRole
 from domain.analysis.knowledge_analysis_questions import KNOWLEDGE_ANALYSIS_QUESTIONS
 
 BASE_SYSTEM_PROMPT = """
@@ -130,18 +130,18 @@ def knowledge_analysis_answers_generate_handler(
         logger.info(f"Processing batch {batch_index}/{len(question_batches)} ({len(batch)} questions)")
 
         messages = [
-            LlmOllamaMessage(
-                role=OllamaMessageRole.SYSTEM,
+            LlmMessage(
+                role=LlmMessageRole.SYSTEM,
                 content=BASE_SYSTEM_PROMPT
             ),
-            LlmOllamaMessage(
-                role=OllamaMessageRole.USER,
+            LlmMessage(
+                role=LlmMessageRole.USER,
                 content=build_product_context_prompt(
                     knowledge_json
                 )
             ),
-            LlmOllamaMessage(
-                role=OllamaMessageRole.USER,
+            LlmMessage(
+                role=LlmMessageRole.USER,
                 content=build_questions_prompt(
                     questions=batch
                 )

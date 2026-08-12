@@ -3,8 +3,8 @@ from infrastructure.repositories.offers_repository import OffersRepository
 from infrastructure.services.path_service import PathService
 from .ai_service import AiService
 import json
-from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
-from domain.enums.ollama_message_role import OllamaMessageRole
+from domain.models.llm.llm_message import LlmMessage
+from domain.enums.llm_message_role import LlmMessageRole
 
 
 class ProductService:
@@ -47,22 +47,22 @@ class ProductService:
 
         # --- build chat ---
         chat = [
-            LlmOllamaMessage(
-                role=OllamaMessageRole.SYSTEM,
+            LlmMessage(
+                role=LlmMessageRole.SYSTEM,
                 content=workflow_config.get("system_prompt", "")
             ),
-            LlmOllamaMessage(
-                role=OllamaMessageRole.USER,
+            LlmMessage(
+                role=LlmMessageRole.USER,
                 content="product_data: " + json.dumps(product.to_dict(), default=str)
             ),
-            LlmOllamaMessage(
-                role=OllamaMessageRole.USER,
+            LlmMessage(
+                role=LlmMessageRole.USER,
                 content=input_prompt
             )
         ]
 
         # --- call model ---
-        message = self.ai_service.chat(messages=chat)
+        message = self.ai_service.chat_llm(messages=chat)
 
         chat.append(message)
 

@@ -1,6 +1,7 @@
 from dependency_injector import containers, providers
 from application.services.knowledge_service import KnowledgeService
 from application.services.ai_service import AiService
+from application.services.ollama_service import OllamaService
 from application.services.product_service import ProductService
 from application.services.offer_service import OfferService
 from infrastructure.logging.logger import Logger
@@ -395,11 +396,17 @@ class Container(containers.DeclarativeContainer):
         path_service=path_service,
     )
 
+    ollama_service = providers.Singleton(
+        OllamaService,
+        logger=logger,
+        settings=settings,
+    )
+
     ai_service =  providers.Singleton(
         AiService,
         logger=logger,
-        settings=settings,
         path_service=path_service,
+        ollama_service=ollama_service,
     )
 
     knowledge_service = providers.Singleton(

@@ -1,8 +1,8 @@
 import json
 from di.container import Container
 from application.mappers.offer_mapper import OfferMapper
-from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
-from domain.enums.ollama_message_role import OllamaMessageRole
+from domain.models.llm.llm_message import LlmMessage
+from domain.enums.llm_message_role import LlmMessageRole
 from infrastructure.ai.prompts.constraints.uniqueness_prompt import build_uniqueness_constraint_prompt  
 from domain.enums.offer_insight_type import OfferInsightType
 from domain.models.offers.offer_insight import OfferInsight
@@ -105,16 +105,16 @@ def suggets_offer_data_handler(offer_id : int):
     # PAIN POINTS
     # ---------------------------------------
     messages = [
-        LlmOllamaMessage(
-            role = OllamaMessageRole.SYSTEM,
+        LlmMessage(
+            role = LlmMessageRole.SYSTEM,
             content = get_system_prompt(json.dumps(offer_assembled.to_dict()))
         ),
-        LlmOllamaMessage(
-            role=OllamaMessageRole.USER,
+        LlmMessage(
+            role=LlmMessageRole.USER,
             content=build_uniqueness_constraint_prompt( json.dumps(offer_pain_points))
         ),
-        LlmOllamaMessage(
-            role=OllamaMessageRole.USER,
+        LlmMessage(
+            role=LlmMessageRole.USER,
             content=PAIN_POINTS_PROMPT
         )
     ]
@@ -136,16 +136,16 @@ def suggets_offer_data_handler(offer_id : int):
     # Target audience
     # ---------------------------------------
     messages = [
-        LlmOllamaMessage(
-            role = OllamaMessageRole.SYSTEM,
+        LlmMessage(
+            role = LlmMessageRole.SYSTEM,
             content = get_system_prompt(json.dumps(offer_assembled.to_dict()))
         ),
-        LlmOllamaMessage(
-            role=OllamaMessageRole.USER,
+        LlmMessage(
+            role=LlmMessageRole.USER,
             content=build_uniqueness_constraint_prompt( json.dumps(offer_target_audience))
         ),
-        LlmOllamaMessage(
-            role=OllamaMessageRole.USER,
+        LlmMessage(
+            role=LlmMessageRole.USER,
             content=TARGET_AUDIENCE_PROMPT
         )
     ]

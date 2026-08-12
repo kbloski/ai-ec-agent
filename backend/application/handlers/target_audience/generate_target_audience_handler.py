@@ -6,10 +6,10 @@ from di.container import Container
 from application.mappers.knowledge_mapper import KnowledgeMapper
 from application.mappers.target_audience_mapper import TargetAudienceMapper
 
-from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
+from domain.models.llm.llm_message import LlmMessage
 from domain.models.audience.target_audience import TargetAudience
 
-from domain.enums.ollama_message_role import OllamaMessageRole
+from domain.enums.llm_message_role import LlmMessageRole
 from domain.enums.audience_gender import AudienceGender
 from domain.enums.decision_time import DecisionTime
 from domain.enums.awareness_level import AwarenessLevel
@@ -190,18 +190,18 @@ Requirements:
     response = ai_service.chat_llm(
         messages=[
 
-            LlmOllamaMessage(
-                role=OllamaMessageRole.SYSTEM,
+            LlmMessage(
+                role=LlmMessageRole.SYSTEM,
                 content=BASE_SYSTEM_PROMPT
             ),
-            LlmOllamaMessage(
-                role=OllamaMessageRole.USER,
+            LlmMessage(
+                role=LlmMessageRole.USER,
                 content=build_uniqueness_constraint_prompt(
                     existing_data= json.dumps( [t.to_dict() for t in target_audiences_db_dtos])
                 )
             ),
-            LlmOllamaMessage(
-                role=OllamaMessageRole.USER,
+            LlmMessage(
+                role=LlmMessageRole.USER,
                 content=user_prompt
             )
         ]
