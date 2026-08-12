@@ -4,7 +4,7 @@ from infrastructure.services.path_service import PathService
 from infrastructure.logging.logger import Logger
 from infrastructure.parsers.docx_parser import DocxParser
 from infrastructure.parsers.txt_parser import TxtParser
-from application.services.ollama_service import OllamaService
+from application.services.ai_service import AiService
 from application.dtos.knowledge.knowledge_dto import KnowledgeDto
 from infrastructure.repositories.knowledge_repository import KnowledgeRepository
 from application.mappers.knowledge_mapper import KnowledgeMapper
@@ -18,7 +18,7 @@ class KnowledgeService:
         logger: Logger,
         docx_parser: DocxParser,
         txt_parser: TxtParser,
-        ollama_service: OllamaService,
+        ai_service: AiService,
         path_service: PathService,
         knowledge_repository : KnowledgeRepository,
         knowledge_assembler : KnowledgeAssembler
@@ -27,7 +27,7 @@ class KnowledgeService:
         self.docx_parser = docx_parser
         self.path_service = path_service
         self.txt_parser = txt_parser
-        self.ollama_service = ollama_service
+        self.ai_service = ai_service
         self.knowledge_repository = knowledge_repository
         self.knowledge_assembler = knowledge_assembler
 

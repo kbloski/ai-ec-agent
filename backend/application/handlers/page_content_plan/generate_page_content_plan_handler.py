@@ -263,7 +263,7 @@ def generate_page_content_plan_handler(
     page_content_plan_repository = container.page_content_plan_repository()
     page_content_plan_service = container.page_content_plan_service()
 
-    ollama_service = container.ollama_service()
+    ai_service = container.ai_service()
 
 
     page_blueprint = (
@@ -341,7 +341,7 @@ def generate_page_content_plan_handler(
     )
 
 
-    response = ollama_service.chat_llm(
+    response = ai_service.chat_llm(
 
         messages=[
 

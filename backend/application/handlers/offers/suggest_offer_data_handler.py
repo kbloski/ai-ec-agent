@@ -90,7 +90,7 @@ def suggets_offer_data_handler(offer_id : int):
     offer_repository = container.offers_repository()
     offer_insights_repository = container.offer_insights_repository()
     offer_assembler = container.offer_assembler()
-    ollama_service  = container.ollama_service()
+    ai_service  = container.ai_service()
 
     offer_db = offer_repository.get_by_id(id=offer_id)
     offer_dto = OfferMapper.to_dto(item=offer_db)
@@ -119,7 +119,7 @@ def suggets_offer_data_handler(offer_id : int):
         )
     ]
 
-    response_pain_points = ollama_service.chat_llm(messages=messages)
+    response_pain_points = ai_service.chat_llm(messages=messages)
     new_pain_points_arr = json.loads(response_pain_points.content)
     for p in new_pain_points_arr:
         new_insights = OfferInsight(
@@ -150,7 +150,7 @@ def suggets_offer_data_handler(offer_id : int):
         )
     ]
 
-    response_target_audience = ollama_service.chat_llm(messages=messages)
+    response_target_audience = ai_service.chat_llm(messages=messages)
     new_target_audience = json.loads(response_target_audience.content)
     for p in new_target_audience:
         new_insights =OfferInsight(

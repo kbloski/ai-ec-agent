@@ -6,7 +6,7 @@ from core.settings import Settings
 from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
 from domain.enums.ollama_message_role import OllamaMessageRole
 
-class OllamaService:
+class AiService:
     def __init__(self, logger: Logger, settings: Settings, path_service: PathService):
         self.logger = logger
         self.path_service = path_service

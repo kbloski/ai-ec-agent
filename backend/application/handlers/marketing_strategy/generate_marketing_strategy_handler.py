@@ -130,7 +130,7 @@ def generate_marketing_strategy_handler(
 
     knowledge_service = container.knowledge_service()
     brand_marketing_service = container.brand_marketing_service()
-    ollama_service = container.ollama_service()
+    ai_service = container.ai_service()
     marketing_strategy_repository = container.marketing_strategy_repository()
     marketing_strategy_service = container.marketing_strategy_service()
 
@@ -148,7 +148,7 @@ def generate_marketing_strategy_handler(
     )
 
 
-    response = ollama_service.chat_llm(
+    response = ai_service.chat_llm(
         messages=[
             LlmOllamaMessage(
                 role=OllamaMessageRole.SYSTEM,

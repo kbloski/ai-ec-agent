@@ -162,7 +162,7 @@ def generate_brand_marketing_handler(
     container = Container()
 
     knowledge_service = container.knowledge_service()
-    ollama_service = container.ollama_service()
+    ai_service = container.ai_service()
     brand_marketing_repository = container.brand_marketing_repository()
     brand_marketing_service = container.brand_marketing_service()
 
@@ -172,7 +172,7 @@ def generate_brand_marketing_handler(
         knowledge_json=knowledge_json
     )
 
-    response = ollama_service.chat_llm(
+    response = ai_service.chat_llm(
         messages=[
             LlmOllamaMessage(
                 role=OllamaMessageRole.SYSTEM,

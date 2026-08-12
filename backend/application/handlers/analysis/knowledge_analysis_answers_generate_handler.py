@@ -105,7 +105,7 @@ def knowledge_analysis_answers_generate_handler(
     container = Container()
     logger = container.logger()
     knowledge_service = container.knowledge_service()
-    ollama_service = container.ollama_service()
+    ai_service = container.ai_service()
     knowledge_analysis_repository = container.knowledge_analysis_repository()
     analysis_repository = container.analysis_repository()
     analysis_questions_repository = container.analysis_questions_repository()
@@ -149,7 +149,7 @@ def knowledge_analysis_answers_generate_handler(
         ]
 
 
-        response = ollama_service.chat_llm( messages=messages )
+        response = ai_service.chat_llm( messages=messages )
         batch_result = json.loads( response.content )
 
 

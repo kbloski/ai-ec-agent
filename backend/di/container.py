@@ -1,6 +1,6 @@
 from dependency_injector import containers, providers
 from application.services.knowledge_service import KnowledgeService
-from application.services.ollama_service import OllamaService
+from application.services.ai_service import AiService
 from application.services.product_service import ProductService
 from application.services.offer_service import OfferService
 from infrastructure.logging.logger import Logger
@@ -395,8 +395,8 @@ class Container(containers.DeclarativeContainer):
         path_service=path_service,
     )
 
-    ollama_service =  providers.Singleton(
-        OllamaService,
+    ai_service =  providers.Singleton(
+        AiService,
         logger=logger,
         settings=settings,
         path_service=path_service,
@@ -408,7 +408,7 @@ class Container(containers.DeclarativeContainer):
         docx_parser=docx_parser,
         txt_parser=txt_parser,
         path_service=path_service,
-        ollama_service=ollama_service,
+        ai_service=ai_service,
         knowledge_repository=knowledge_repository,
         knowledge_assembler=knowledge_assembler
     )
@@ -417,7 +417,7 @@ class Container(containers.DeclarativeContainer):
         ProductService,
         logger=logger,
         offers_repository=offers_repository,
-        ollama_service=ollama_service,
+        ai_service=ai_service,
         path_service=path_service
     )
 

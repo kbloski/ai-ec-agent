@@ -139,7 +139,7 @@ Use this structure as a foundation, but extend it when necessary:
 # LLM CALL
 # =====================================================
 
-def call_llm(ollama_service, prompt):
+def call_llm(ai_service, prompt):
 
     chat = [
         LlmOllamaMessage(
@@ -152,7 +152,7 @@ def call_llm(ollama_service, prompt):
         ),
     ]
 
-    response = ollama_service.chat_llm(chat)
+    response = ai_service.chat_llm(chat)
 
     return response.content
 
@@ -188,7 +188,7 @@ def knowledge_generate_handler(offer_id: int):
     container = Container()
 
     offer_service = container.offer_service()
-    ollama_service = container.ollama_service()
+    ai_service = container.ai_service()
 
 
     # ----------------------------
@@ -202,7 +202,7 @@ def knowledge_generate_handler(offer_id: int):
     # ----------------------------
 
     response = call_llm(
-        ollama_service,
+        ai_service,
 
         f"""
 OFFER DATA:

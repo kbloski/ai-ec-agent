@@ -11,7 +11,7 @@ def encode_image(image_path):
 
 def test():
     container = Container()
-    ollama_service = container.ollama_service()
+    ai_service = container.ai_service()
     path_service = container.path_service()
 
     image_path = path_service.UPLOADS_DEV / "products" / "mini_pila_lancuchowa" / "images" / "Screenshot 2026-07-02 225353.png"
@@ -45,7 +45,7 @@ def test():
         ]
         
         try:
-            response = ollama_service.chat_vlm(vlm_messages)
+            response = ai_service.chat_vlm(vlm_messages)
             # Zapisujemy polską nazwę i angielski opis z modelu VLM
             vlm_raw_results.append(f"- {pl_name}: {response.content.strip()}")
         except Exception as e:
@@ -65,7 +65,7 @@ def test():
         ),
     ]
 
-    translated = ollama_service.chat_llm(llm_messages)
+    translated = ai_service.chat_llm(llm_messages)
 
     return {
         "status": "ok",

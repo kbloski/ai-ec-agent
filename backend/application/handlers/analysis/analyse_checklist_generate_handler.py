@@ -317,7 +317,7 @@ def analyse_checklist_generate_handler(
     container = Container()
 
     logger = container.logger()
-    ollama_service = container.ollama_service()
+    ai_service = container.ai_service()
     knowledge_service = container.knowledge_service()
     checklist_items_repository = container.checklist_items_repository()
 
@@ -371,7 +371,7 @@ def analyse_checklist_generate_handler(
 
     logger.info("Sending request to LLM")
 
-    response = ollama_service.chat_llm(
+    response = ai_service.chat_llm(
         messages=[
             LlmOllamaMessage(
                 role=OllamaMessageRole.SYSTEM,

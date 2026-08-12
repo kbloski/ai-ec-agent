@@ -91,8 +91,8 @@ def generate_creative_execution_handler(
     )
 
 
-    ollama_service = (
-        container.ollama_service()
+    ai_service = (
+        container.ai_service()
     )
 
     ad_frameworks_repository = (
@@ -373,7 +373,7 @@ Platform:
 
 
 
-    response = ollama_service.chat_llm(
+    response = ai_service.chat_llm(
         messages=messages
     )
 

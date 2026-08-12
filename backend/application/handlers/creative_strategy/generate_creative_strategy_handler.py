@@ -244,7 +244,7 @@ def generate_creative_strategy_handler(
     creative_strategy_repository = container.creative_strategy_repository()
     creative_strategy_service = container.creative_strategy_service()
 
-    ollama_service = container.ollama_service()
+    ai_service = container.ai_service()
 
 
 
@@ -313,7 +313,7 @@ def generate_creative_strategy_handler(
 
 
 
-    response = ollama_service.chat_llm(
+    response = ai_service.chat_llm(
 
         messages=[
 

@@ -268,7 +268,7 @@ def generate_ugc_creatives_handler(
     ugc_creative_repository = container.ugc_creative_repository()
     ugc_creative_service = container.ugc_creative_service()
 
-    ollama_service = container.ollama_service()
+    ai_service = container.ai_service()
 
     ugc_creatives_db =  ugc_creative_repository.get_by_message_strategy_id(message_strategy_id=message_strategy_id)
     existed_ugc_creatives_str = json.dumps([UgcCreativeMapper.to_dto(i).to_dict() for i in ugc_creatives_db])
@@ -328,7 +328,7 @@ def generate_ugc_creatives_handler(
 
 
 
-    response = ollama_service.chat_llm(
+    response = ai_service.chat_llm(
 
         messages=[
 

@@ -314,7 +314,7 @@ def generate_ad_strategy_handler(
     ad_strategy_repository = container.ad_strategy_repository()
     ad_strategy_service = container.ad_strategy_service()
 
-    ollama_service = container.ollama_service()
+    ai_service = container.ai_service()
 
 
 
@@ -388,7 +388,7 @@ def generate_ad_strategy_handler(
 
 
 
-    response = ollama_service.chat_llm(
+    response = ai_service.chat_llm(
 
         messages=[
 

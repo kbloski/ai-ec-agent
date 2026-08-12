@@ -299,14 +299,14 @@ def knowledge_advertisement_generate_handler(
     knowledge_service = container.knowledge_service()
 
 
-    ollama_service = container.ollama_service()
+    ai_service = container.ai_service()
 
     product_json = knowledge_service.build_llm_context(knowledge_id=knowledge_id)
 
     user_prompt = USER_PROMPT_TEMPLATE.format(count=count,product_json=product_json)
 
     response = (
-        ollama_service.chat_llm(
+        ai_service.chat_llm(
             messages=[
 
                 LlmOllamaMessage(

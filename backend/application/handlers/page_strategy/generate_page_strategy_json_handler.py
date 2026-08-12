@@ -204,7 +204,7 @@ def generate_page_strategy_json_handler(
     page_strategy_repository = container.page_strategy_repository()
     page_strategy_service = container.page_strategy_service()
 
-    ollama_service = container.ollama_service()
+    ai_service = container.ai_service()
 
 
 
@@ -262,7 +262,7 @@ def generate_page_strategy_json_handler(
 
 
 
-    response = ollama_service.chat_llm(
+    response = ai_service.chat_llm(
 
         messages=[
 

@@ -239,7 +239,7 @@ def generate_message_strategy_handler(
     message_strategy_repository = container.message_strategy_repository()
     message_strategy_service = container.message_strategy_service()
 
-    ollama_service = container.ollama_service()
+    ai_service = container.ai_service()
 
 
     offer_strategy = offer_strategy_service.get_offer_strategy_by_id(
@@ -279,7 +279,7 @@ def generate_message_strategy_handler(
     )
 
 
-    response = ollama_service.chat_llm(
+    response = ai_service.chat_llm(
         messages=[
             LlmOllamaMessage(
                 role=OllamaMessageRole.SYSTEM,

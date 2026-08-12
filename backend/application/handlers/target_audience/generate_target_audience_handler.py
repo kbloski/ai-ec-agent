@@ -148,7 +148,7 @@ def generate_target_audience_handler(
     container = Container()
 
     target_audience_repo = container.target_audiences_repository()
-    ollama_service = container.ollama_service()
+    ai_service = container.ai_service()
     knowledge_service = container.knowledge_service()
 
     target_audiences_db = target_audience_repo.find_for_knowledge(knowledge_id=knowledge_id)
@@ -187,7 +187,7 @@ Requirements:
 """
 
 
-    response = ollama_service.chat_llm(
+    response = ai_service.chat_llm(
         messages=[
 
             LlmOllamaMessage(

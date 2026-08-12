@@ -496,8 +496,8 @@ def generate_page_blueprint_handler(
         container.page_blueprint_service()
     )
 
-    ollama_service = (
-        container.ollama_service()
+    ai_service = (
+        container.ai_service()
     )
 
 
@@ -572,7 +572,7 @@ def generate_page_blueprint_handler(
 
 
 
-    response = ollama_service.chat_llm(
+    response = ai_service.chat_llm(
 
         messages=[
 

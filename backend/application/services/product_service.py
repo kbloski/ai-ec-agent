@@ -1,7 +1,7 @@
 from infrastructure.logging.logger import Logger
 from infrastructure.repositories.offers_repository import OffersRepository
 from infrastructure.services.path_service import PathService
-from .ollama_service import OllamaService
+from .ai_service import AiService
 import json
 from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
 from domain.enums.ollama_message_role import OllamaMessageRole
@@ -13,12 +13,12 @@ class ProductService:
         logger: Logger,
         path_service: PathService,
         offers_repository: OffersRepository,
-        ollama_service: OllamaService,
+        ai_service: AiService,
     ):
         self.logger = logger
         self.path_service = path_service
         self.offers_repo = offers_repository
-        self.ollama_service = ollama_service
+        self.ai_service = ai_service
 
         self.ai_workflows_path = self.path_service.BASE_DIR / "infrastructure/ai/workflows"
 
@@ -62,7 +62,7 @@ class ProductService:
         ]
 
         # --- call model ---
-        message = self.ollama_service.chat(messages=chat)
+        message = self.ai_service.chat(messages=chat)
 
         chat.append(message)
 
