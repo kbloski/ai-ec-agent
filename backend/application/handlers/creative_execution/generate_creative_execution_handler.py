@@ -369,7 +369,7 @@ Platform:
         )
     ]
 
-    return messages
+    # return messages
 
     response = ai_service.chat_llm(
         messages=messages
