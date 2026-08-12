@@ -10,6 +10,7 @@ from infrastructure.repositories.knowledge_repository import KnowledgeRepository
 from application.mappers.knowledge_mapper import KnowledgeMapper
 from application.assemblers.knowledge_assembler import KnowledgeAssembler
 from application.services.llm_context_builder import build_llm_section
+from domain.enums.context_section_purpose import ContextSectionPurpose
 
 class KnowledgeService:
 
@@ -51,7 +52,7 @@ class KnowledgeService:
             default=str
         )
 
-        return build_llm_section("Knowledge", knowledge_json)
+        return build_llm_section("knowledge", knowledge_json, purpose=ContextSectionPurpose.KNOWLEDGE.value)
 
 
 

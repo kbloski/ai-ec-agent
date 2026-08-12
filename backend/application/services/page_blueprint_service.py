@@ -49,4 +49,4 @@ class PageBlueprintService:
             default=str
         )
 
-        return build_llm_section("PageBlueprint", page_blueprint_json)
+        return build_llm_section("page-blueprint", page_blueprint_json)

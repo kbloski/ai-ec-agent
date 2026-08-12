@@ -9,6 +9,7 @@ from infrastructure.repositories.marketing_strategy_repository import MarketingS
 from application.mappers.marketing_strategy_mapper import MarketingStrategyMapper
 from application.assemblers.marketing_strategy_assembler import MarketingStrategyAssembler
 from application.services.llm_context_builder import build_llm_section
+from domain.enums.context_section_purpose import ContextSectionPurpose
 
 
 class MarketingStrategyService:
@@ -49,4 +50,4 @@ class MarketingStrategyService:
             default=str
         )
 
-        return build_llm_section("MarketingStrategy", marketing_strategy_json)
+        return build_llm_section("marketing-strategy", marketing_strategy_json, purpose=ContextSectionPurpose.MARKETING_STRATEGY.value)

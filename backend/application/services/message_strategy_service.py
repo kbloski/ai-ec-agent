@@ -49,4 +49,4 @@ class MessageStrategyService:
             default=str
         )
 
-        return build_llm_section("MessageStrategy", message_strategy_json)
+        return build_llm_section("message-strategy", message_strategy_json)

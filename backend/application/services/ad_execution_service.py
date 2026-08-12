@@ -49,4 +49,4 @@ class AdExecutionService:
             default=str
         )
 
-        return build_llm_section("AdExecution", ad_execution_json)
+        return build_llm_section("ad-execution", ad_execution_json)

@@ -9,6 +9,7 @@ from infrastructure.repositories.offer_strategy_repository import OfferStrategyR
 from application.mappers.offer_strategy_mapper import OfferStrategyMapper
 from application.assemblers.offer_strategy_assembler import OfferStrategyAssembler
 from application.services.llm_context_builder import build_llm_section
+from domain.enums.context_section_purpose import ContextSectionPurpose
 
 
 class OfferStrategyService:
@@ -49,4 +50,4 @@ class OfferStrategyService:
             default=str
         )
 
-        return build_llm_section("OfferStrategy", offer_strategy_json)
+        return build_llm_section("offer-strategy", offer_strategy_json, purpose=ContextSectionPurpose.OFFER_STRATEGY.value)

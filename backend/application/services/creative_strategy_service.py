@@ -9,6 +9,7 @@ from infrastructure.repositories.creative_strategy_repository import CreativeStr
 from application.mappers.creative_strategy_mapper import CreativeStrategyMapper
 from application.assemblers.creative_strategy_assembler import CreativeStrategyAssembler
 from application.services.llm_context_builder import build_llm_section
+from domain.enums.context_section_purpose import ContextSectionPurpose
 
 
 class CreativeStrategyService:
@@ -49,4 +50,4 @@ class CreativeStrategyService:
             default=str
         )
 
-        return build_llm_section("CreativeStrategy", creative_strategy_json)
+        return build_llm_section("creative-strategy", creative_strategy_json, purpose=ContextSectionPurpose.CREATIVE_STRATEGY.value)

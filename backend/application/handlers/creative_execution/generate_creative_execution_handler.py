@@ -30,16 +30,6 @@ KNOWLEDGE:
 {knowledge}
 
 
-AD EXECUTION:
-
-{ad_execution}
-
-
-CREATIVE STRATEGY:
-
-{creative_strategy}
-
-
 BRAND STRATEGY:
 
 {brand_strategy}
@@ -63,6 +53,16 @@ MESSAGE STRATEGY:
 AD STRATEGY:
 
 {ad_strategy}
+
+
+CREATIVE STRATEGY:
+
+{creative_strategy}
+
+
+AD EXECUTION:
+
+{ad_execution}
 """
 
 
@@ -200,14 +200,6 @@ def generate_creative_execution_handler(
             knowledge_id=brand_strategy.knowledge_id
         ),
 
-        ad_execution=ad_execution_service.build_llm_context(
-            ad_execution_id=ad_execution_id
-        ),
-
-        creative_strategy=creative_strategy_service.build_llm_context(
-            creative_strategy_id=ad_execution.creative_strategy_id
-        ),
-
         brand_strategy=brand_marketing_service.build_llm_context(
             brand_marketing_id=marketing_strategy.brand_marketing_id
         ),
@@ -226,6 +218,14 @@ def generate_creative_execution_handler(
 
         ad_strategy=ad_strategy_service.build_llm_context(
             ad_strategy_id=creative_strategy.ad_strategy_id
+        ),
+
+        creative_strategy=creative_strategy_service.build_llm_context(
+            creative_strategy_id=ad_execution.creative_strategy_id
+        ),
+
+        ad_execution=ad_execution_service.build_llm_context(
+            ad_execution_id=ad_execution_id
         ),
     )
 
@@ -369,11 +369,11 @@ Platform:
         )
     ]
 
+    return messages
 
     response = ai_service.chat_llm(
         messages=messages
     )
-
 
     content = response.content.strip()
 

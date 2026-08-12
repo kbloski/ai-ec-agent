@@ -26,4 +26,4 @@ class OfferService:
 
         offer_json = json.dumps(offer_assembled.to_dict())
 
-        return build_llm_section("Offer", offer_json)
+        return build_llm_section("offer", offer_json)

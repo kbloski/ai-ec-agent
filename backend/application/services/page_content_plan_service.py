@@ -49,4 +49,4 @@ class PageContentPlanService:
             default=str
         )
 
-        return build_llm_section("PageContentPlan", page_content_plan_json)
+        return build_llm_section("page-content-plan", page_content_plan_json)

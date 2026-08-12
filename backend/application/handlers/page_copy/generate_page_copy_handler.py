@@ -284,24 +284,24 @@ MARKETING STRATEGY:
 {marketing_strategy_json}
 
 
-PAGE BLUEPRINT:
-{page_blueprint_json}
-
-
-PAGE CONTENT PLAN:
-{page_content_plan_json}
-
-
-PAGE STRATEGY:
-{page_strategy_json}
+OFFER STRATEGY:
+{offer_strategy_json}
 
 
 MESSAGE STRATEGY:
 {message_strategy_json}
 
 
-OFFER STRATEGY:
-{offer_strategy_json}
+PAGE STRATEGY:
+{page_strategy_json}
+
+
+PAGE BLUEPRINT:
+{page_blueprint_json}
+
+
+PAGE CONTENT PLAN:
+{page_content_plan_json}
 """
 
 
@@ -444,24 +444,24 @@ def generate_page_copy_handler(
             marketing_strategy_id=offer_strategy.marketing_strategy_id
         ),
 
-        page_blueprint_json=page_blueprint_service.build_llm_context(
-            page_blueprint_id=page_content_plan.page_blueprint_id
-        ),
-
-        page_content_plan_json=page_content_plan_service.build_llm_context(
-            page_content_plan_id=page_content_plan_id
-        ),
-
-        page_strategy_json=page_strategy_service.build_llm_context(
-            page_strategy_id=page_blueprint.page_strategy_id
+        offer_strategy_json=offer_strategy_service.build_llm_context(
+            offer_strategy_id=message_strategy.offer_strategy_id
         ),
 
         message_strategy_json=message_strategy_service.build_llm_context(
             message_strategy_id=page_strategy.message_strategy_id
         ),
 
-        offer_strategy_json=offer_strategy_service.build_llm_context(
-            offer_strategy_id=message_strategy.offer_strategy_id
+        page_strategy_json=page_strategy_service.build_llm_context(
+            page_strategy_id=page_blueprint.page_strategy_id
+        ),
+
+        page_blueprint_json=page_blueprint_service.build_llm_context(
+            page_blueprint_id=page_content_plan.page_blueprint_id
+        ),
+
+        page_content_plan_json=page_content_plan_service.build_llm_context(
+            page_content_plan_id=page_content_plan_id
         )
 
     )

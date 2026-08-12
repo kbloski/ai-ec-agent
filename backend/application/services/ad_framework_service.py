@@ -3,6 +3,7 @@ import json
 from infrastructure.logging.logger import Logger
 from infrastructure.repositories.ad_frameworks_repository import AdFrameworksRepository
 from application.services.llm_context_builder import build_llm_section
+from domain.enums.context_section_purpose import ContextSectionPurpose
 
 
 class AdFrameworkService:
@@ -19,4 +20,4 @@ class AdFrameworkService:
 
         ad_framework_json = json.dumps(ad_framework, ensure_ascii=False, indent=2, default=str)
 
-        return build_llm_section("AdFramework", ad_framework_json)
+        return build_llm_section("ad-framework", ad_framework_json, purpose=ContextSectionPurpose.AD_FRAMEWORK.value)

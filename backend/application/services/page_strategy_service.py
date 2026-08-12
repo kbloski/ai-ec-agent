@@ -49,4 +49,4 @@ class PageStrategyService:
             default=str
         )
 
-        return build_llm_section("PageStrategy", page_strategy_json)
+        return build_llm_section("page-strategy", page_strategy_json)

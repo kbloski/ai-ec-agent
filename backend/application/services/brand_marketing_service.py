@@ -9,6 +9,7 @@ from infrastructure.repositories.brand_marketing_repository import BrandMarketin
 from application.mappers.brand_marketing_mapper import BrandMarketingMapper
 from application.assemblers.brand_marketing_assembler import BrandMarketingAssembler
 from application.services.llm_context_builder import build_llm_section
+from domain.enums.context_section_purpose import ContextSectionPurpose
 
 
 class BrandMarketingService:
@@ -49,4 +50,4 @@ class BrandMarketingService:
             default=str
         )
 
-        return build_llm_section("BrandMarketing", brand_marketing_json)
+        return build_llm_section("brand-marketing", brand_marketing_json, purpose=ContextSectionPurpose.BRAND_MARKETING.value)

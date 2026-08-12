@@ -9,6 +9,7 @@ from domain.enums.knowledge_insight_type import KnowledgeInsightType
 from domain.enums.offer_insight_type import OfferInsightType
 from domain.enums.ollama_message_role import OllamaMessageRole
 from domain.enums.llm_message_role import LlmMessageRole
+from domain.enums.context_section_purpose import ContextSectionPurpose
 from domain.enums.purchasing_power import PurchasingPower
 from domain.enums.salses_asset_type import SalsesAssetType
 from domain.enums.table_name import TableName

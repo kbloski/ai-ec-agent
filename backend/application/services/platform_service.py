@@ -3,6 +3,7 @@ import json
 from infrastructure.logging.logger import Logger
 from infrastructure.repositories.platforms_repository import PlatformsRepository
 from application.services.llm_context_builder import build_llm_section
+from domain.enums.context_section_purpose import ContextSectionPurpose
 
 
 class PlatformService:
@@ -19,4 +20,4 @@ class PlatformService:
 
         platform_json = json.dumps(platform, ensure_ascii=False, indent=2, default=str)
 
-        return build_llm_section("Platform", platform_json)
+        return build_llm_section("platform", platform_json, purpose=ContextSectionPurpose.PLATFORM.value)

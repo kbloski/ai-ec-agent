@@ -403,14 +403,6 @@ KNOWLEDGE BASE:
 {knowledge_json}
 
 
-PAGE STRATEGY:
-{page_strategy_json}
-
-
-MESSAGE STRATEGY:
-{message_strategy_json}
-
-
 BRAND STRATEGY:
 {brand_strategy_json}
 
@@ -421,6 +413,14 @@ MARKETING STRATEGY:
 
 OFFER STRATEGY:
 {offer_strategy_json}
+
+
+MESSAGE STRATEGY:
+{message_strategy_json}
+
+
+PAGE STRATEGY:
+{page_strategy_json}
 """
 
 
@@ -548,14 +548,6 @@ def generate_page_blueprint_handler(
             knowledge_id=brand_strategy.knowledge_id
         ),
 
-        page_strategy_json=page_strategy_service.build_llm_context(
-            page_strategy_id=page_strategy_id
-        ),
-
-        message_strategy_json=message_strategy_service.build_llm_context(
-            message_strategy_id=page_strategy.message_strategy_id
-        ),
-
         brand_strategy_json=brand_marketing_service.build_llm_context(
             brand_marketing_id=marketing_strategy.brand_marketing_id
         ),
@@ -566,6 +558,14 @@ def generate_page_blueprint_handler(
 
         offer_strategy_json=offer_strategy_service.build_llm_context(
             offer_strategy_id=message_strategy.offer_strategy_id
+        ),
+
+        message_strategy_json=message_strategy_service.build_llm_context(
+            message_strategy_id=page_strategy.message_strategy_id
+        ),
+
+        page_strategy_json=page_strategy_service.build_llm_context(
+            page_strategy_id=page_strategy_id
         )
 
     )

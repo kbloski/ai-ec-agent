@@ -3,6 +3,7 @@ import json
 from infrastructure.logging.logger import Logger
 from infrastructure.repositories.creative_angels_repository import CreativeAnglesRepository
 from application.services.llm_context_builder import build_llm_section
+from domain.enums.context_section_purpose import ContextSectionPurpose
 
 
 class CreativeAngleService:
@@ -19,4 +20,4 @@ class CreativeAngleService:
 
         creative_angle_json = json.dumps(creative_angle, ensure_ascii=False, indent=2, default=str)
 
-        return build_llm_section("CreativeAngle", creative_angle_json)
+        return build_llm_section("creative-angle", creative_angle_json, purpose=ContextSectionPurpose.CREATIVE_ANGLE.value)

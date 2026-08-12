@@ -49,4 +49,4 @@ class AdStrategyService:
             default=str
         )
 
-        return build_llm_section("AdStrategy", ad_strategy_json)
+        return build_llm_section("ad-strategy", ad_strategy_json)
