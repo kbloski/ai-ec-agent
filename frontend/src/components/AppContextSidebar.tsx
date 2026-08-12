@@ -14,7 +14,7 @@ const navLinkClassName = ({ isActive }: { isActive: boolean }) =>
 export function AppContextSidebar({ variant = 'sidebar' }: { variant?: 'sidebar' | 'mobile' }) {
   const asideClassName = cn(
     variant === 'sidebar'
-      ? 'hidden w-56 shrink-0 flex-col border-r p-4 lg:flex'
+      ? 'hidden w-56 shrink-0 flex-col border-r p-4 md:flex'
       : 'flex w-full flex-col p-2',
   )
   const { pathname } = useLocation()
@@ -134,7 +134,7 @@ export function AppContextSidebar({ variant = 'sidebar' }: { variant?: 'sidebar'
     )
   }
 
-  return <aside className="hidden w-56 shrink-0 flex-col border-r p-4 lg:flex">
+  return <aside className="hidden w-56 shrink-0 flex-col border-r p-4 md:flex">
     {showBackButton && (
       <button
         type="button"

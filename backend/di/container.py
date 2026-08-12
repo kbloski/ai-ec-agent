@@ -13,6 +13,10 @@ from infrastructure.repositories.ad_frameworks_repository import AdFrameworksRep
 from infrastructure.repositories.creative_angels_repository import CreativeAnglesRepository
 from infrastructure.repositories.execution_styles_repository import ExecutionStylesRepository
 from infrastructure.repositories.platforms_repository import PlatformsRepository
+from application.services.ad_framework_service import AdFrameworkService
+from application.services.creative_angle_service import CreativeAngleService
+from application.services.execution_style_service import ExecutionStyleService
+from application.services.platform_service import PlatformService
 from infrastructure.parsers.txt_parser import TxtParser
 from core.settings import Settings
 from infrastructure.database.db import SessionLocal
@@ -394,6 +398,30 @@ class Container(containers.DeclarativeContainer):
         PlatformsRepository,
         logger=logger,
         path_service=path_service,
+    )
+
+    ad_framework_service = providers.Singleton(
+        AdFrameworkService,
+        logger=logger,
+        ad_frameworks_repository=ad_frameworks_repository,
+    )
+
+    creative_angle_service = providers.Singleton(
+        CreativeAngleService,
+        logger=logger,
+        creative_angels_repository=creative_angels_repository,
+    )
+
+    execution_style_service = providers.Singleton(
+        ExecutionStyleService,
+        logger=logger,
+        execution_styles_repository=execution_styles_repository,
+    )
+
+    platform_service = providers.Singleton(
+        PlatformService,
+        logger=logger,
+        platforms_repository=platforms_repository,
     )
 
     ollama_service = providers.Singleton(

@@ -95,8 +95,8 @@ def generate_creative_execution_handler(
         container.ai_service()
     )
 
-    ad_frameworks_repository = (
-        container.ad_frameworks_repository()
+    ad_framework_service = (
+        container.ad_framework_service()
     )
 
     creative_strategy_service = (
@@ -124,16 +124,16 @@ def generate_creative_execution_handler(
     )
 
 
-    creative_angels_repository = (
-        container.creative_angels_repository()
+    creative_angle_service = (
+        container.creative_angle_service()
     )
 
-    execution_styles_repository = (
-        container.execution_styles_repository()
+    execution_style_service = (
+        container.execution_style_service()
     )
 
-    platforms_repository = (
-        container.platforms_repository()
+    platform_service = (
+        container.platform_service()
     )
 
 
@@ -249,38 +249,38 @@ Number of slides:
 """
 
     if ad_framework_id is not None:
-        ad_framework = ad_frameworks_repository.get_by_id(ad_framework_id)
-        if ad_framework is not None:
+        ad_framework_context = ad_framework_service.build_llm_context(ad_framework_id)
+        if ad_framework_context is not None:
             prompt += f"""
 
 
 SELECTED AD FRAMEWORK (mandatory):
 
-{json.dumps(ad_framework, ensure_ascii=False, indent=2, default=str)}
+{ad_framework_context}
 
 The selected framework is mandatory. Use its "structure" and "rules" according to the medium-specific instructions in the system prompt. Preserve the framework step order and do not rename or ignore its steps.
 """
 
     if creative_angle_id is not None:
-        creative_angle = creative_angels_repository.get_by_id(creative_angle_id)
-        if creative_angle is not None:
+        creative_angle_context = creative_angle_service.build_llm_context(creative_angle_id)
+        if creative_angle_context is not None:
             prompt += f"""
 
 
 SELECTED CREATIVE ANGLE (mandatory):
 
-{json.dumps(creative_angle, ensure_ascii=False, indent=2, default=str)}
+{creative_angle_context}
 
 You MUST use this creative angle as the communication approach of the output (set the "creative_angle" field to it where the schema has one, and reflect it in tone, hook and messaging otherwise). You MUST follow its "rules".
 """
 
 
     if execution_style_id is not None:
-        execution_style = execution_styles_repository.get_by_id(
+        execution_style_context = execution_style_service.build_llm_context(
             execution_style_id
         )
 
-        if execution_style is None:
+        if execution_style_context is None:
             raise ValueError(
                 f"Execution style not found: {execution_style_id}"
             )
@@ -290,7 +290,7 @@ You MUST use this creative angle as the communication approach of the output (se
 
 SELECTED EXECUTION STYLE (mandatory):
 
-{json.dumps(execution_style, ensure_ascii=False, indent=2, default=str)}
+{execution_style_context}
 
 The selected execution style defines HOW the advertisement should be
 visually and creatively executed.
@@ -322,14 +322,14 @@ Follow all execution style "rules".
 
 
     if ad_execution.platform:
-        platform_data = platforms_repository.get_by_id(ad_execution.platform)
-        if platform_data is not None:
+        platform_context = platform_service.build_llm_context(ad_execution.platform)
+        if platform_context is not None:
             prompt += f"""
 
 
 PLATFORM:
 
-{json.dumps(platform_data, ensure_ascii=False, indent=2, default=str)}
+{platform_context}
 
 Platforma jest niezależna od medium (video/image/carousel) — zinterpretuj jej "rules"
 zgodnie z instrukcjami dla bieżącego typu kreacji w prompcie systemowym (kadr,
