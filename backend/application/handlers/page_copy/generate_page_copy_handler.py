@@ -430,56 +430,38 @@ def generate_page_copy_handler(
     )
 
 
-    knowledge = (
-        knowledge_service
-        .get_knowledge_details_by_id(
-            knowledge_id=brand_marketing.knowledge_id
-        )
-    )
-
-
-
-    def serialize(obj):
-
-        return json.dumps(
-            obj.to_dict(),
-            ensure_ascii=False,
-            indent=2,
-            default=str
-        )
-
-
-
     user_prompt = USER_PROMPT_TEMPLATE.format(
 
-        knowledge_json=serialize(knowledge),
-
-        brand_marketing_json=serialize(
-            brand_marketing
+        knowledge_json=knowledge_service.build_llm_context(
+            knowledge_id=brand_marketing.knowledge_id
         ),
 
-        marketing_strategy_json=serialize(
-            marketing_strategy
+        brand_marketing_json=brand_marketing_service.build_llm_context(
+            brand_marketing_id=marketing_strategy.brand_marketing_id
         ),
 
-        page_blueprint_json=serialize(
-            page_blueprint
+        marketing_strategy_json=marketing_strategy_service.build_llm_context(
+            marketing_strategy_id=offer_strategy.marketing_strategy_id
         ),
 
-        page_content_plan_json=serialize(
-            page_content_plan
+        page_blueprint_json=page_blueprint_service.build_llm_context(
+            page_blueprint_id=page_content_plan.page_blueprint_id
         ),
 
-        page_strategy_json=serialize(
-            page_strategy
+        page_content_plan_json=page_content_plan_service.build_llm_context(
+            page_content_plan_id=page_content_plan_id
         ),
 
-        message_strategy_json=serialize(
-            message_strategy
+        page_strategy_json=page_strategy_service.build_llm_context(
+            page_strategy_id=page_blueprint.page_strategy_id
         ),
 
-        offer_strategy_json=serialize(
-            offer_strategy
+        message_strategy_json=message_strategy_service.build_llm_context(
+            message_strategy_id=page_strategy.message_strategy_id
+        ),
+
+        offer_strategy_json=offer_strategy_service.build_llm_context(
+            offer_strategy_id=message_strategy.offer_strategy_id
         )
 
     )

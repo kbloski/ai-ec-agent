@@ -301,14 +301,7 @@ def knowledge_advertisement_generate_handler(
 
     ollama_service = container.ollama_service()
 
-    knowledge_details =  knowledge_service .get_knowledge_details_by_id(knowledge_id=knowledge_id)
-    
-    product_json = json.dumps(
-        knowledge_details.to_dict(),
-        ensure_ascii=False,
-        indent=2,
-        default=str
-    )
+    product_json = knowledge_service.build_llm_context(knowledge_id=knowledge_id)
 
     user_prompt = USER_PROMPT_TEMPLATE.format(count=count,product_json=product_json)
 

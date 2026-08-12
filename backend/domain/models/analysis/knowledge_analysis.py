@@ -11,7 +11,7 @@ class KnowledgeAnalysis(Base, JSONSerializable):
 
     knowledge_id = Column(
         Integer,
-        ForeignKey(TableName.OFFER_KNOWLEDGE + ".id", ondelete="CASCADE"),
+        ForeignKey(TableName.KNOWLEDGE + ".id", ondelete="CASCADE"),
         nullable=False,
         primary_key=True
     )

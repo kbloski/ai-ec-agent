@@ -222,36 +222,21 @@ def generate_offer_strategy_handler(
     marketing_strategy = marketing_strategy_service.get_marketing_strategy_by_id(
         id=marketing_strategy_id
     )
-    
+
     brand_strategy = brand_marketing_service.get_brand_marketing_by_id(
         id=marketing_strategy.brand_marketing_id
     )
 
-    knowledge = knowledge_service.get_knowledge_details_by_id(
+    knowledge_json = knowledge_service.build_llm_context(
         knowledge_id=brand_strategy.knowledge_id
     )
 
-    knowledge_json = json.dumps(
-        knowledge.to_dict(),
-        ensure_ascii=False,
-        indent=2,
-        default=str
+    brand_strategy_json = brand_marketing_service.build_llm_context(
+        brand_marketing_id=marketing_strategy.brand_marketing_id
     )
 
-
-    brand_strategy_json = json.dumps(
-        brand_strategy.to_dict(),
-        ensure_ascii=False,
-        indent=2,
-        default=str
-    )
-
-
-    marketing_strategy_json = json.dumps(
-        marketing_strategy.to_dict(),
-        ensure_ascii=False,
-        indent=2,
-        default=str
+    marketing_strategy_json = marketing_strategy_service.build_llm_context(
+        marketing_strategy_id=marketing_strategy_id
     )
 
 

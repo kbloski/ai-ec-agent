@@ -5,7 +5,7 @@ from domain.enums.table_name import TableName
 from domain.models.offers.offer import Offer
 from domain.models.offers.offer_item import OfferItem
 from domain.models.offers.offer_insight import OfferInsight
-from domain.models.knowledge.offer_knowledge import OfferKnowledge
+from domain.models.knowledge.knowledge import Knowledge
 from domain.models.knowledge.knowledge_insight import KnowledgeInsight
 from domain.models.audience.target_audience import TargetAudience
 from domain.models.analysis.analysis import Analysis
@@ -30,7 +30,7 @@ FAVORITABLE_MODELS: Dict[str, Type[Base]] = {
     TableName.OFFERS.value: Offer,
     TableName.OFFER_ITEMS.value: OfferItem,
     TableName.OFFER_INSIGHTS.value: OfferInsight,
-    TableName.OFFER_KNOWLEDGE.value: OfferKnowledge,
+    TableName.KNOWLEDGE.value: Knowledge,
     TableName.KNOWLEDGE_INSIGHTS.value: KnowledgeInsight,
     TableName.TARGET_AUDIENCES.value: TargetAudience,
     TableName.ANALYSIS.value: Analysis,

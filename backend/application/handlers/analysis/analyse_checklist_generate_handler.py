@@ -3,7 +3,7 @@ import json
 from di.container import Container
 from domain.enums.ollama_message_role import OllamaMessageRole
 from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
-from application.mappers.offer_knowledge_mapper import OfferKnowledgeMapper
+from application.mappers.knowledge_mapper import KnowledgeMapper
 from domain.models.checklist.checklist_item import ChecklistItem
 from application.mappers.checklist_item_mapper import ChecklistItemMapper
 

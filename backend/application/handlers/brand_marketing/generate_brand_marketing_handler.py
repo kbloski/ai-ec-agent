@@ -166,16 +166,7 @@ def generate_brand_marketing_handler(
     brand_marketing_repository = container.brand_marketing_repository()
     brand_marketing_service = container.brand_marketing_service()
 
-    knowledge_details = knowledge_service.get_knowledge_details_by_id(
-        knowledge_id=knowledge_id
-    )
-
-    knowledge_json = json.dumps(
-        knowledge_details.to_dict(),
-        ensure_ascii=False,
-        indent=2,
-        default=str
-    )
+    knowledge_json = knowledge_service.build_llm_context(knowledge_id=knowledge_id)
 
     user_prompt = USER_PROMPT_TEMPLATE.format(
         knowledge_json=knowledge_json

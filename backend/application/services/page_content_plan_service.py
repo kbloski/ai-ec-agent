@@ -1,3 +1,5 @@
+import json
+
 from typing import List
 
 from infrastructure.logging.logger import Logger
@@ -37,3 +39,11 @@ class PageContentPlanService:
         items = self.page_content_plan_repository.get_by_page_blueprint_id(page_blueprint_id)
         dtos = [PageContentPlanMapper.to_dto(item) for item in items]
         return [self.page_content_plan_assembler.assemble_dto(dto) for dto in dtos]
+
+    def build_llm_context(self, page_content_plan_id: int) -> str:
+        return json.dumps(
+            self.get_page_content_plan_by_id(id=page_content_plan_id).to_dict(),
+            ensure_ascii=False,
+            indent=2,
+            default=str
+        )

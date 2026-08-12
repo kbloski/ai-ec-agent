@@ -1,3 +1,5 @@
+import json
+
 from typing import List
 
 from infrastructure.logging.logger import Logger
@@ -37,3 +39,11 @@ class AdExecutionService:
         items = self.ad_execution_repository.get_by_creative_strategy_id(creative_strategy_id)
         dtos = [AdExecutionMapper.to_dto(item) for item in items]
         return [self.ad_execution_assembler.assemble_dto(dto) for dto in dtos]
+
+    def build_llm_context(self, ad_execution_id: int) -> str:
+        return json.dumps(
+            self.get_ad_execution_by_id(id=ad_execution_id).to_dict(),
+            ensure_ascii=False,
+            indent=2,
+            default=str
+        )

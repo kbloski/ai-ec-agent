@@ -1,3 +1,5 @@
+import json
+
 from typing import List
 
 from infrastructure.logging.logger import Logger
@@ -37,3 +39,11 @@ class AdStrategyService:
         items = self.ad_strategy_repository.get_by_message_strategy_id(message_strategy_id)
         dtos = [AdStrategyMapper.to_dto(item) for item in items]
         return [self.ad_strategy_assembler.assemble_dto(dto) for dto in dtos]
+
+    def build_llm_context(self, ad_strategy_id: int) -> str:
+        return json.dumps(
+            self.get_ad_strategy_by_id(id=ad_strategy_id).to_dict(),
+            ensure_ascii=False,
+            indent=2,
+            default=str
+        )

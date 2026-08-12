@@ -542,50 +542,30 @@ def generate_page_blueprint_handler(
     )
 
 
-    knowledge = (
-        knowledge_service
-        .get_knowledge_details_by_id(
-            knowledge_id=brand_strategy.knowledge_id
-        )
-    )
-
-
-
-    def serialize(obj):
-
-        return json.dumps(
-            obj.to_dict(),
-            ensure_ascii=False,
-            indent=2,
-            default=str
-        )
-
-
-
     user_prompt = USER_PROMPT_TEMPLATE.format(
 
-        knowledge_json=serialize(
-            knowledge
+        knowledge_json=knowledge_service.build_llm_context(
+            knowledge_id=brand_strategy.knowledge_id
         ),
 
-        page_strategy_json=serialize(
-            page_strategy
+        page_strategy_json=page_strategy_service.build_llm_context(
+            page_strategy_id=page_strategy_id
         ),
 
-        message_strategy_json=serialize(
-            message_strategy
+        message_strategy_json=message_strategy_service.build_llm_context(
+            message_strategy_id=page_strategy.message_strategy_id
         ),
 
-        brand_strategy_json=serialize(
-            brand_strategy
+        brand_strategy_json=brand_marketing_service.build_llm_context(
+            brand_marketing_id=marketing_strategy.brand_marketing_id
         ),
 
-        marketing_strategy_json=serialize(
-            marketing_strategy
+        marketing_strategy_json=marketing_strategy_service.build_llm_context(
+            marketing_strategy_id=offer_strategy.marketing_strategy_id
         ),
 
-        offer_strategy_json=serialize(
-            offer_strategy
+        offer_strategy_json=offer_strategy_service.build_llm_context(
+            offer_strategy_id=message_strategy.offer_strategy_id
         )
 
     )

@@ -55,7 +55,7 @@ Punkt wejścia — dane produktu/oferty. Bez LLM, czysty CRUD/lista.
 
 ## 2. Knowledge (z Offer)
 
-**Co generuje:** ustrukturyzowaną wiedzę o ofercie — `OfferKnowledge`
+**Co generuje:** ustrukturyzowaną wiedzę o ofercie — `Knowledge`
 (`offer_summary`, `category`, `value_proposition`) oraz zestaw `KnowledgeInsight`
 (po jednym wierszu na insight, typy: `problem_solved`, `solution`, `transformation`,
 `offer_component`, `feature`, `functional_benefit`, `emotional_benefit`,
@@ -74,7 +74,7 @@ ads, strony) — nic dalej nie powstaje bez przejścia przez ten krok.
 | Wygeneruj knowledge dla oferty | `GET /offers/{id}/knowledges/generate` |
 | Lista knowledge dla oferty | `GET /offers/{offer_id}/knowledges` |
 | Szczegóły knowledge | `GET /knowledges/{knowledge_id}` |
-| Sugestie uzupełnień knowledge | `GET /knowledges/{knowledge_id}/suggestions` *(obecnie wyłączone w routingu — handler `suggest_offer_knowledge_data_handler` istnieje i działa)*. Trzy pogrupowane wywołania LLM (features/benefits, positioning, additional_insights), każde z uniqueness-constraint względem istniejących insightów danego typu — dopisuje nowe `KnowledgeInsight` ze statusem `suggested`. Po co: pozwala douzupełnić wiedzę o produkcie bez ręcznego wymyślania kolejnych cech/różnicowników. |
+| Sugestie uzupełnień knowledge | `GET /knowledges/{knowledge_id}/suggestions` *(obecnie wyłączone w routingu — handler `suggest_knowledge_data_handler` istnieje i działa)*. Trzy pogrupowane wywołania LLM (features/benefits, positioning, additional_insights), każde z uniqueness-constraint względem istniejących insightów danego typu — dopisuje nowe `KnowledgeInsight` ze statusem `suggested`. Po co: pozwala douzupełnić wiedzę o produkcie bez ręcznego wymyślania kolejnych cech/różnicowników. |
 
 ## 3. Target audience (opcjonalna gałąź od Knowledge)
 

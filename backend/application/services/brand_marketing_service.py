@@ -1,3 +1,5 @@
+import json
+
 from typing import List
 
 from infrastructure.logging.logger import Logger
@@ -37,3 +39,11 @@ class BrandMarketingService:
         items = self.brand_marketing_repository.get_by_knowledge_id(knowledge_id)
         dtos = [BrandMarketingMapper.to_dto(item) for item in items]
         return [self.brand_marketing_assembler.assemble_dto(dto) for dto in dtos]
+
+    def build_llm_context(self, brand_marketing_id: int) -> str:
+        return json.dumps(
+            self.get_brand_marketing_by_id(id=brand_marketing_id).to_dict(),
+            ensure_ascii=False,
+            indent=2,
+            default=str
+        )

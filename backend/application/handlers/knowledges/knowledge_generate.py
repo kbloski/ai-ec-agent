@@ -3,15 +3,14 @@
 # ----------------------------
 import json
 
-from application.mappers.offer_knowledge_mapper import OfferKnowledgeMapper
+from application.mappers.knowledge_mapper import KnowledgeMapper
 from application.mappers.knowledge_insight_mapper import KnowledgeInsightMapper
-from application.mappers.offer_mapper import OfferMapper
 
 from di.container import Container
 from domain.models.ollama.llm_ollama_message import LlmOllamaMessage
 from domain.enums.ollama_message_role import OllamaMessageRole
 
-from domain.models.knowledge.offer_knowledge import OfferKnowledge
+from domain.models.knowledge.knowledge import Knowledge
 from domain.models.knowledge.knowledge_insight import KnowledgeInsight
 
 from domain.enums.knowledge_insight_type import KnowledgeInsightType
@@ -50,9 +49,9 @@ Do not use markdown.
 
 
 # =====================================================
-# OFFER KNOWLEDGE PROMPT
+# KNOWLEDGE PROMPT
 # =====================================================
-OFFER_KNOWLEDGE_PROMPT = """
+KNOWLEDGE_PROMPT = """
 Analyze the offer information and create a deep understanding of this offer.
 
 Your goal is to build a structured knowledge base that explains:
@@ -184,26 +183,19 @@ INSIGHT_MAPPING = {
 # MAIN HANDLER
 # =====================================================
 
-def offer_knowledge_generate_handler(offer_id: int):
+def knowledge_generate_handler(offer_id: int):
 
     container = Container()
 
-    offer_assembler = container.offer_assembler()
-    offers_repository = container.offers_repository()
-    offer_items_repository = container.offer_items_repository()
+    offer_service = container.offer_service()
     ollama_service = container.ollama_service()
 
 
     # ----------------------------
     # LOAD OFFER
     # ----------------------------
-    offer = offers_repository.get_by_id( offer_id )
-    offer_dto = OfferMapper.to_dto( item=offer)
-    offer_assembled = offer_assembler.assemble_dto(item=offer_dto)
+    offer_json_str = offer_service.build_llm_context(offer_id)
 
-    offer_json = offer_assembled.to_dict()
-    offer_json_str = json.dumps(offer_json)
-    
 
     # ----------------------------
     # GENERATE KNOWLEDGE
@@ -219,7 +211,7 @@ OFFER DATA:
 
 TASK:
 
-{OFFER_KNOWLEDGE_PROMPT}
+{KNOWLEDGE_PROMPT}
 
 """
     )
@@ -233,14 +225,14 @@ TASK:
     with SessionLocal() as session:
         with session.begin():
 
-            offer_knowledge = OfferKnowledge(
+            knowledge = Knowledge(
                 offer_id=offer_id,
                 offer_summary=json_data.get("offer_summary", ""),
                 category=json_data.get("category", ""),
                 value_proposition=json_data.get("value_proposition", ""),
             )
 
-            session.add(offer_knowledge)
+            session.add(knowledge)
             session.flush()
 
             insight_items = []
@@ -258,7 +250,7 @@ TASK:
                         continue
 
                     insight = KnowledgeInsight(
-                        knowledge_id=offer_knowledge.id,
+                        knowledge_id=knowledge.id,
                         type=insight_type,
                         value=str(item),
                         content_status=ContentStatus.APPROVED.value,
@@ -272,7 +264,7 @@ TASK:
             for insight in insight_items:
                 session.refresh(insight)
 
-            session.refresh(offer_knowledge)
+            session.refresh(knowledge)
 
             saved_insights = list(insight_items)
 
@@ -281,8 +273,8 @@ TASK:
     # PREPARE DTO RESULT
     # ----------------------------
 
-    result = OfferKnowledgeMapper.to_dto(
-        offer_knowledge
+    result = KnowledgeMapper.to_dto(
+        knowledge
     )
 
     result.offer_insights = [

@@ -8,7 +8,7 @@ import {
   useListKnowledgeForOfferQuery,
 } from '@/features/knowledge/knowledgeApi'
 
-export default function OfferKnowledgesPage() {
+export default function KnowledgesPage() {
   const offerId = Number(useParams().offerId)
   const knowledgeList = useListKnowledgeForOfferQuery(offerId)
   const [generateKnowledge, { isLoading: isGenerating }] = useGenerateKnowledgeMutation()

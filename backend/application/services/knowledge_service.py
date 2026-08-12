@@ -1,12 +1,14 @@
+import json
+
 from infrastructure.services.path_service import PathService
 from infrastructure.logging.logger import Logger
 from infrastructure.parsers.docx_parser import DocxParser
 from infrastructure.parsers.txt_parser import TxtParser
 from application.services.ollama_service import OllamaService
-from application.dtos.knowledge.offer_knowledge_dto import OfferKnowledgeDto
-from infrastructure.repositories.offers_knowledge_repository import OfferKnowledgeRepository
-from application.mappers.offer_knowledge_mapper import OfferKnowledgeMapper
-from application.assemblers.offer_knowledge_assembler import OfferKnowledgeAssembler
+from application.dtos.knowledge.knowledge_dto import KnowledgeDto
+from infrastructure.repositories.knowledge_repository import KnowledgeRepository
+from application.mappers.knowledge_mapper import KnowledgeMapper
+from application.assemblers.knowledge_assembler import KnowledgeAssembler
 
 class KnowledgeService:
 
@@ -17,27 +19,37 @@ class KnowledgeService:
         txt_parser: TxtParser,
         ollama_service: OllamaService,
         path_service: PathService,
-        offer_knowledge_repository : OfferKnowledgeRepository,
-        offer_knowledge_assembler : OfferKnowledgeAssembler
+        knowledge_repository : KnowledgeRepository,
+        knowledge_assembler : KnowledgeAssembler
     ):
         self.logger = logger
         self.docx_parser = docx_parser
         self.path_service = path_service
         self.txt_parser = txt_parser
         self.ollama_service = ollama_service
-        self.offer_knowledge_repository = offer_knowledge_repository
-        self.offer_knowledge_assembler = offer_knowledge_assembler
-        
-        
-        
-    def get_knowledge_details_by_id(self, knowledge_id : int ) -> OfferKnowledgeDto : 
-        knowledge_db = self.offer_knowledge_repository.get_by_id( id=knowledge_id)
-        knowledge_dto = OfferKnowledgeMapper.to_dto(item=knowledge_db)
-        assembled_knowledge = self.offer_knowledge_assembler.assemble_dto(item=knowledge_dto)
+        self.knowledge_repository = knowledge_repository
+        self.knowledge_assembler = knowledge_assembler
+
+
+
+    def get_knowledge_details_by_id(self, knowledge_id : int ) -> KnowledgeDto :
+        knowledge_db = self.knowledge_repository.get_by_id( id=knowledge_id)
+        knowledge_dto = KnowledgeMapper.to_dto(item=knowledge_db)
+        assembled_knowledge = self.knowledge_assembler.assemble_dto(item=knowledge_dto)
         return assembled_knowledge
-    
-    
-    
+
+
+
+    def build_llm_context(self, knowledge_id: int) -> str:
+        return json.dumps(
+            self.get_knowledge_details_by_id(knowledge_id=knowledge_id).to_dict(),
+            ensure_ascii=False,
+            indent=2,
+            default=str
+        )
+
+
+
     def build_knowledge_from_materials_raw(self):
         self.logger.info("Build knowledge from materials raw start")
 

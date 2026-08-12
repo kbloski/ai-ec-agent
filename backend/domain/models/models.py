@@ -11,8 +11,8 @@ from domain.models.offers.offer import Offer
 from domain.models.offers.offer_item import OfferItem
 from domain.models.offers.offer_insight import OfferInsight
 
-# Knowledge 
-from domain.models.knowledge.offer_knowledge import OfferKnowledge
+# Knowledge
+from domain.models.knowledge.knowledge import Knowledge
 from domain.models.knowledge.knowledge_insight import KnowledgeInsight
 
 # Target Audience

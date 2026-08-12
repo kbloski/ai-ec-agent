@@ -1,3 +1,5 @@
+import json
+
 from typing import List
 
 from infrastructure.logging.logger import Logger
@@ -37,3 +39,11 @@ class CreativeStrategyService:
         items = self.creative_strategy_repository.get_by_ad_strategy_id(ad_strategy_id)
         dtos = [CreativeStrategyMapper.to_dto(item) for item in items]
         return [self.creative_strategy_assembler.assemble_dto(dto) for dto in dtos]
+
+    def build_llm_context(self, creative_strategy_id: int) -> str:
+        return json.dumps(
+            self.get_creative_strategy_by_id(id=creative_strategy_id).to_dict(),
+            ensure_ascii=False,
+            indent=2,
+            default=str
+        )

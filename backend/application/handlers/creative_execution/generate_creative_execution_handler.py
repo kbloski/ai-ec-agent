@@ -192,55 +192,40 @@ def generate_creative_execution_handler(
         )
     )
 
-    knowledge = (
-        knowledge_service.get_knowledge_details_by_id(
-            knowledge_id=brand_strategy.knowledge_id
-        )
-    )
-
-    def serialize(obj):
-
-        return json.dumps(
-            obj.to_dict(),
-            ensure_ascii=False,
-            indent=2,
-            default=str
-        )
-
     # Create user prompt
 
     prompt = USER_PROMPT.format(
 
-        knowledge=serialize(
-            knowledge
+        knowledge=knowledge_service.build_llm_context(
+            knowledge_id=brand_strategy.knowledge_id
         ),
 
-        ad_execution=serialize(
-            ad_execution
+        ad_execution=ad_execution_service.build_llm_context(
+            ad_execution_id=ad_execution_id
         ),
 
-        creative_strategy=serialize(
-            creative_strategy
+        creative_strategy=creative_strategy_service.build_llm_context(
+            creative_strategy_id=ad_execution.creative_strategy_id
         ),
 
-        brand_strategy=serialize(
-            brand_strategy
+        brand_strategy=brand_marketing_service.build_llm_context(
+            brand_marketing_id=marketing_strategy.brand_marketing_id
         ),
 
-        marketing_strategy=serialize(
-            marketing_strategy
+        marketing_strategy=marketing_strategy_service.build_llm_context(
+            marketing_strategy_id=offer_strategy.marketing_strategy_id
         ),
 
-        offer_strategy=serialize(
-            offer_strategy
+        offer_strategy=offer_strategy_service.build_llm_context(
+            offer_strategy_id=message_strategy.offer_strategy_id
         ),
 
-        message_strategy=serialize(
-            message_strategy
+        message_strategy=message_strategy_service.build_llm_context(
+            message_strategy_id=ad_strategy.message_strategy_id
         ),
 
-        ad_strategy=serialize(
-            ad_strategy
+        ad_strategy=ad_strategy_service.build_llm_context(
+            ad_strategy_id=creative_strategy.ad_strategy_id
         ),
     )
 

@@ -3,7 +3,7 @@ import re
 from typing import Dict, Any
 
 from di.container import Container
-from application.mappers.offer_knowledge_mapper import OfferKnowledgeMapper
+from application.mappers.knowledge_mapper import KnowledgeMapper
 from application.mappers.target_audience_mapper import TargetAudienceMapper
 
 from domain.models.ollama.llm_ollama_message import LlmOllamaMessage

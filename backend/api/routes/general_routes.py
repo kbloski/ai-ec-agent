@@ -17,18 +17,18 @@ from application.handlers.offers.delete_offer_item import delete_offer_item_hand
 from application.handlers.offers.get_offer_item_handler import get_offer_item_handler
 from application.handlers.offers.update_offer_item_handler import update_offer_item_handler
 from application.handlers.offers.create_offer_item_handler import create_offer_item_handler
-from application.handlers.offers.offer_knowledge_generate import offer_knowledge_generate_handler
-from application.handlers.offers.get_offer_knowledge_handler import get_offer_knowledge_handler
-from application.handlers.offers.get_offer_knowledges_handler import get_offer_knowledges_handler
-from application.handlers.offers.delete_offer_knowledge_handler import delete_offer_knowledge_handler
+from application.handlers.knowledges.knowledge_generate import knowledge_generate_handler
+from application.handlers.knowledges.get_knowledge_handler import get_knowledge_handler
+from application.handlers.knowledges.get_knowledges_handler import get_knowledges_handler
+from application.handlers.knowledges.delete_knowledge_handler import delete_knowledge_handler
 from application.handlers.offers.delete_offer_insight_handler import delete_offer_insight_handler
-from application.handlers.offers.delete_knowledge_insight_handler import delete_knowledge_insight_handler
+from application.handlers.knowledges.delete_knowledge_insight_handler import delete_knowledge_insight_handler
 from application.handlers.offers.get_offer_insight_handler import get_offer_insight_handler
 from application.handlers.offers.update_offer_insight_handler import update_offer_insight_handler
-from application.handlers.offers.get_knowledge_insight_handler import get_knowledge_insight_handler
-from application.handlers.offers.update_knowledge_insight_handler import update_knowledge_insight_handler
+from application.handlers.knowledges.get_knowledge_insight_handler import get_knowledge_insight_handler
+from application.handlers.knowledges.update_knowledge_insight_handler import update_knowledge_insight_handler
 from application.handlers.offers.update_offer_handler import update_offer_handler
-from application.handlers.offers.update_offer_knowledge_handler import update_offer_knowledge_handler
+from application.handlers.knowledges.update_knowledge_handler import update_knowledge_handler
 from application.handlers.brand_marketing.update_brand_marketing_handler import update_brand_marketing_handler
 from application.handlers.marketing_strategy.update_marketing_strategy_handler import update_marketing_strategy_handler
 from application.handlers.offer_strategy.update_offer_strategy_handler import update_offer_strategy_handler
@@ -46,7 +46,7 @@ from application.handlers.target_audience.get_target_audience_preview_handler im
 from application.handlers.target_audience.delete_target_audience_handler import delete_target_audience_handler
 from application.handlers.target_audience.update_target_audience_handler import update_target_audience_handler
 from application.handlers.offers.suggest_offer_data_handler import suggets_offer_data_handler
-# from application.handlers.offers.suggest_offer_knowledge_data_handler import suggest_offer_knowledge_data_handler
+# from application.handlers.offers.suggest_knowledge_data_handler import suggest_knowledge_data_handler
 from application.handlers.analysis.knowledge_analysis_answers_generate_handler import knowledge_analysis_answers_generate_handler
 from application.handlers.analysis.create_analysis_for_knowledge_handler import create_analysis_for_knowledge_handler
 from application.handlers.analysis.get_analysis_by_id_hanlder import get_analysis_by_id_handler
@@ -261,32 +261,32 @@ def register_general_routes(router: APIRouter):
 
     # POST in future
     @router.get("/offers/{id}/knowledges/generate")
-    def offer_knowledge_generate(id: int):
-        return offer_knowledge_generate_handler(offer_id=id)
+    def knowledge_generate(id: int):
+        return knowledge_generate_handler(offer_id=id)
 
     #  POST in future
     @router.get("/offers/{offer_id}/knowledges")
-    def get_offer_knowledges(offer_id: int):
-        return get_offer_knowledges_handler(offer_id=offer_id)
+    def get_knowledges(offer_id: int):
+        return get_knowledges_handler(offer_id=offer_id)
 
 
     #  POST in future
     @router.get("/knowledges/{knowledge_id}")
-    def get_offer_knowledge( knowledge_id : int):
-        return get_offer_knowledge_handler( knowledge_id=knowledge_id)
+    def get_knowledge( knowledge_id : int):
+        return get_knowledge_handler( knowledge_id=knowledge_id)
 
     @router.post("/knowledges/{id}/update")
-    def update_offer_knowledge_route(id: int, payload: UpdateFieldsRequest):
-        return update_offer_knowledge_handler(id=id, fields=payload.fields)
+    def update_knowledge_route(id: int, payload: UpdateFieldsRequest):
+        return update_knowledge_handler(id=id, fields=payload.fields)
 
     # @router.get("/knowledges/{knowledge_id}/suggestions")
-    # def suggest_offer_knowledge_data(knowledge_id: int):
-    #     return suggest_offer_knowledge_data_handler(knowledge_id=knowledge_id)
+    # def suggest_knowledge_data(knowledge_id: int):
+    #     return suggest_knowledge_data_handler(knowledge_id=knowledge_id)
 
     # DELETE in future
     @router.get("/knowledges/{id}/delete")
-    def delete_offer_knowledge_route(id: int):
-        return delete_offer_knowledge_handler(id=id)
+    def delete_knowledge_route(id: int):
+        return delete_knowledge_handler(id=id)
 
     # DELETE in future
     @router.get("/knowledge-insights/{id}/delete")

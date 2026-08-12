@@ -135,27 +135,10 @@ def generate_marketing_strategy_handler(
     marketing_strategy_service = container.marketing_strategy_service()
 
 
-    knowledge = knowledge_service.get_knowledge_details_by_id(
-        knowledge_id=knowledge_id
-    )
+    knowledge_json = knowledge_service.build_llm_context(knowledge_id=knowledge_id)
 
-    brand_strategy = brand_marketing_service.get_brand_marketing_by_id(
-        id=brand_markeging_id
-    )
-
-
-    knowledge_json = json.dumps(
-        knowledge.to_dict(),
-        ensure_ascii=False,
-        indent=2,
-        default=str
-    )
-
-    brand_strategy_json = json.dumps(
-        brand_strategy.to_dict(),
-        ensure_ascii=False,
-        indent=2,
-        default=str
+    brand_strategy_json = brand_marketing_service.build_llm_context(
+        brand_marketing_id=brand_markeging_id
     )
 
 

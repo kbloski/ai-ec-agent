@@ -91,7 +91,7 @@ OPIS KROK PO KROKU
 
 2. KNOWLEDGE (Baza wiedzy o ofercie)
    Endpoint generowania: GET /offers/{id}/knowledges/generate
-   Handler: backend/application/handlers/offers/offer_knowledge_generate.py
+   Handler: backend/application/handlers/offers/knowledge_generate.py
    Wejście LLM: dane Offer (name, ceny, details).
    Wynik: offer_summary, category, value_proposition + content_status.
    To pierwszy krok analityczny — LLM "rozumie" ofertę i tworzy z niej ustrukturyzowaną wiedzę.
@@ -220,7 +220,7 @@ W diagramie wygląda jak boczna gałąź Knowledge bez dalszych "dzieci" — ALE
 mylące, bo w rzeczywistości jego dane są wstrzykiwane do każdego kolejnego kroku
 łańcucha przez mechanizm asemblacji Knowledge:
 
-  backend/application/assemblers/offer_knowledge_assembler.py
+  backend/application/assemblers/knowledge_assembler.py
     -> assemble_dto() pobiera target_audiences_repository.find_for_knowledge(...)
        i DOŁĄCZA je jako pole `target_audiences` do zwracanego Knowledge DTO.
 

@@ -5,7 +5,7 @@ from typing import Dict, Any, List
 
 from di.container import Container
 
-from application.mappers.offer_knowledge_mapper import OfferKnowledgeMapper
+from application.mappers.knowledge_mapper import KnowledgeMapper
 from application.mappers.analysis_question_mapper import AnalysisQuestionMapper
 
 from domain.models.analysis.analysis_questions import AnalysisQuestion
