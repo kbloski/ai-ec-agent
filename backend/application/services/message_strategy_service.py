@@ -8,6 +8,7 @@ from application.dtos.message_strategy.message_strategy_response_dto import Mess
 from infrastructure.repositories.message_strategy_repository import MessageStrategyRepository
 from application.mappers.message_strategy_mapper import MessageStrategyMapper
 from application.assemblers.message_strategy_assembler import MessageStrategyAssembler
+from application.services.llm_context_builder import build_llm_section
 
 
 class MessageStrategyService:
@@ -41,9 +42,11 @@ class MessageStrategyService:
         return [self.message_strategy_assembler.assemble_dto(dto) for dto in dtos]
 
     def build_llm_context(self, message_strategy_id: int) -> str:
-        return json.dumps(
+        message_strategy_json = json.dumps(
             self.get_message_strategy_by_id(id=message_strategy_id).to_dict(),
             ensure_ascii=False,
             indent=2,
             default=str
         )
+
+        return build_llm_section("MessageStrategy", message_strategy_json)

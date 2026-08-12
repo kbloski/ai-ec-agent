@@ -8,6 +8,7 @@ from application.dtos.page_blueprint.page_blueprint_response_dto import PageBlue
 from infrastructure.repositories.page_blueprint_repository import PageBlueprintRepository
 from application.mappers.page_blueprint_mapper import PageBlueprintMapper
 from application.assemblers.page_blueprint_assembler import PageBlueprintAssembler
+from application.services.llm_context_builder import build_llm_section
 
 
 class PageBlueprintService:
@@ -41,9 +42,11 @@ class PageBlueprintService:
         return [self.page_blueprint_assembler.assemble_dto(dto) for dto in dtos]
 
     def build_llm_context(self, page_blueprint_id: int) -> str:
-        return json.dumps(
+        page_blueprint_json = json.dumps(
             self.get_page_blueprint_by_id(id=page_blueprint_id).to_dict(),
             ensure_ascii=False,
             indent=2,
             default=str
         )
+
+        return build_llm_section("PageBlueprint", page_blueprint_json)

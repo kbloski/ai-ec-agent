@@ -8,6 +8,7 @@ from application.dtos.marketing_strategy.marketing_strategy_response_dto import 
 from infrastructure.repositories.marketing_strategy_repository import MarketingStrategyRepository
 from application.mappers.marketing_strategy_mapper import MarketingStrategyMapper
 from application.assemblers.marketing_strategy_assembler import MarketingStrategyAssembler
+from application.services.llm_context_builder import build_llm_section
 
 
 class MarketingStrategyService:
@@ -41,9 +42,11 @@ class MarketingStrategyService:
         return [self.marketing_strategy_assembler.assemble_dto(dto) for dto in dtos]
 
     def build_llm_context(self, marketing_strategy_id: int) -> str:
-        return json.dumps(
+        marketing_strategy_json = json.dumps(
             self.get_marketing_strategy_by_id(id=marketing_strategy_id).to_dict(),
             ensure_ascii=False,
             indent=2,
             default=str
         )
+
+        return build_llm_section("MarketingStrategy", marketing_strategy_json)

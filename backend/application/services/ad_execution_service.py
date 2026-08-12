@@ -8,6 +8,7 @@ from application.dtos.ad_execution.ad_execution_response_dto import AdExecutionD
 from infrastructure.repositories.ad_execution_repository import AdExecutionRepository
 from application.mappers.ad_execution_mapper import AdExecutionMapper
 from application.assemblers.ad_execution_assembler import AdExecutionAssembler
+from application.services.llm_context_builder import build_llm_section
 
 
 class AdExecutionService:
@@ -41,9 +42,11 @@ class AdExecutionService:
         return [self.ad_execution_assembler.assemble_dto(dto) for dto in dtos]
 
     def build_llm_context(self, ad_execution_id: int) -> str:
-        return json.dumps(
+        ad_execution_json = json.dumps(
             self.get_ad_execution_by_id(id=ad_execution_id).to_dict(),
             ensure_ascii=False,
             indent=2,
             default=str
         )
+
+        return build_llm_section("AdExecution", ad_execution_json)

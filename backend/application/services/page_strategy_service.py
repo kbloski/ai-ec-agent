@@ -8,6 +8,7 @@ from application.dtos.page_strategy.page_strategy_response_dto import PageStrate
 from infrastructure.repositories.page_strategy_repository import PageStrategyRepository
 from application.mappers.page_strategy_mapper import PageStrategyMapper
 from application.assemblers.page_strategy_assembler import PageStrategyAssembler
+from application.services.llm_context_builder import build_llm_section
 
 
 class PageStrategyService:
@@ -41,9 +42,11 @@ class PageStrategyService:
         return [self.page_strategy_assembler.assemble_dto(dto) for dto in dtos]
 
     def build_llm_context(self, page_strategy_id: int) -> str:
-        return json.dumps(
+        page_strategy_json = json.dumps(
             self.get_page_strategy_by_id(id=page_strategy_id).to_dict(),
             ensure_ascii=False,
             indent=2,
             default=str
         )
+
+        return build_llm_section("PageStrategy", page_strategy_json)

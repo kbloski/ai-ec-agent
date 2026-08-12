@@ -8,6 +8,7 @@ from application.dtos.ad_strategy.ad_strategy_response_dto import AdStrategyDto
 from infrastructure.repositories.ad_strategy_repository import AdStrategyRepository
 from application.mappers.ad_strategy_mapper import AdStrategyMapper
 from application.assemblers.ad_strategy_assembler import AdStrategyAssembler
+from application.services.llm_context_builder import build_llm_section
 
 
 class AdStrategyService:
@@ -41,9 +42,11 @@ class AdStrategyService:
         return [self.ad_strategy_assembler.assemble_dto(dto) for dto in dtos]
 
     def build_llm_context(self, ad_strategy_id: int) -> str:
-        return json.dumps(
+        ad_strategy_json = json.dumps(
             self.get_ad_strategy_by_id(id=ad_strategy_id).to_dict(),
             ensure_ascii=False,
             indent=2,
             default=str
         )
+
+        return build_llm_section("AdStrategy", ad_strategy_json)

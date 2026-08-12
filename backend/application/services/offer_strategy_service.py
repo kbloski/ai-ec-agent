@@ -8,6 +8,7 @@ from application.dtos.offer_strategy.offer_strategy_response_dto import OfferStr
 from infrastructure.repositories.offer_strategy_repository import OfferStrategyRepository
 from application.mappers.offer_strategy_mapper import OfferStrategyMapper
 from application.assemblers.offer_strategy_assembler import OfferStrategyAssembler
+from application.services.llm_context_builder import build_llm_section
 
 
 class OfferStrategyService:
@@ -41,9 +42,11 @@ class OfferStrategyService:
         return [self.offer_strategy_assembler.assemble_dto(dto) for dto in dtos]
 
     def build_llm_context(self, offer_strategy_id: int) -> str:
-        return json.dumps(
+        offer_strategy_json = json.dumps(
             self.get_offer_strategy_by_id(id=offer_strategy_id).to_dict(),
             ensure_ascii=False,
             indent=2,
             default=str
         )
+
+        return build_llm_section("OfferStrategy", offer_strategy_json)

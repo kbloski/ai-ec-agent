@@ -4,6 +4,7 @@ from infrastructure.logging.logger import Logger
 from infrastructure.repositories.offers_repository import OffersRepository
 from application.mappers.offer_mapper import OfferMapper
 from application.assemblers.offer_assembler import OfferAssembler
+from application.services.llm_context_builder import build_llm_section
 
 
 class OfferService:
@@ -22,7 +23,7 @@ class OfferService:
         offer = self.offers_repository.get_by_id(offer_id)
         offer_dto = OfferMapper.to_dto(item=offer)
         offer_assembled = self.offer_assembler.assemble_dto(item=offer_dto)
-        
-        offer_assembled_dict = offer_assembled.to_dict()
 
-        return json.dumps(offer_assembled.to_dict())
+        offer_json = json.dumps(offer_assembled.to_dict())
+
+        return build_llm_section("Offer", offer_json)

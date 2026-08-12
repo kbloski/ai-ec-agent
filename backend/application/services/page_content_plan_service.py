@@ -8,6 +8,7 @@ from application.dtos.page_content_plan.page_content_plan_response_dto import Pa
 from infrastructure.repositories.page_content_plan_repository import PageContentPlanRepository
 from application.mappers.page_content_plan_mapper import PageContentPlanMapper
 from application.assemblers.page_content_plan_assembler import PageContentPlanAssembler
+from application.services.llm_context_builder import build_llm_section
 
 
 class PageContentPlanService:
@@ -41,9 +42,11 @@ class PageContentPlanService:
         return [self.page_content_plan_assembler.assemble_dto(dto) for dto in dtos]
 
     def build_llm_context(self, page_content_plan_id: int) -> str:
-        return json.dumps(
+        page_content_plan_json = json.dumps(
             self.get_page_content_plan_by_id(id=page_content_plan_id).to_dict(),
             ensure_ascii=False,
             indent=2,
             default=str
         )
+
+        return build_llm_section("PageContentPlan", page_content_plan_json)

@@ -8,6 +8,7 @@ from application.dtos.creative_strategy.creative_strategy_response_dto import Cr
 from infrastructure.repositories.creative_strategy_repository import CreativeStrategyRepository
 from application.mappers.creative_strategy_mapper import CreativeStrategyMapper
 from application.assemblers.creative_strategy_assembler import CreativeStrategyAssembler
+from application.services.llm_context_builder import build_llm_section
 
 
 class CreativeStrategyService:
@@ -41,9 +42,11 @@ class CreativeStrategyService:
         return [self.creative_strategy_assembler.assemble_dto(dto) for dto in dtos]
 
     def build_llm_context(self, creative_strategy_id: int) -> str:
-        return json.dumps(
+        creative_strategy_json = json.dumps(
             self.get_creative_strategy_by_id(id=creative_strategy_id).to_dict(),
             ensure_ascii=False,
             indent=2,
             default=str
         )
+
+        return build_llm_section("CreativeStrategy", creative_strategy_json)

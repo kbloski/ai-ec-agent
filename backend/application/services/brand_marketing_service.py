@@ -8,6 +8,7 @@ from application.dtos.brand_marketing.brand_marketing_response_dto import BrandM
 from infrastructure.repositories.brand_marketing_repository import BrandMarketingRepository
 from application.mappers.brand_marketing_mapper import BrandMarketingMapper
 from application.assemblers.brand_marketing_assembler import BrandMarketingAssembler
+from application.services.llm_context_builder import build_llm_section
 
 
 class BrandMarketingService:
@@ -41,9 +42,11 @@ class BrandMarketingService:
         return [self.brand_marketing_assembler.assemble_dto(dto) for dto in dtos]
 
     def build_llm_context(self, brand_marketing_id: int) -> str:
-        return json.dumps(
+        brand_marketing_json = json.dumps(
             self.get_brand_marketing_by_id(id=brand_marketing_id).to_dict(),
             ensure_ascii=False,
             indent=2,
             default=str
         )
+
+        return build_llm_section("BrandMarketing", brand_marketing_json)

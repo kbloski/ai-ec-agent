@@ -9,6 +9,7 @@ from application.dtos.knowledge.knowledge_dto import KnowledgeDto
 from infrastructure.repositories.knowledge_repository import KnowledgeRepository
 from application.mappers.knowledge_mapper import KnowledgeMapper
 from application.assemblers.knowledge_assembler import KnowledgeAssembler
+from application.services.llm_context_builder import build_llm_section
 
 class KnowledgeService:
 
@@ -41,12 +42,16 @@ class KnowledgeService:
 
 
     def build_llm_context(self, knowledge_id: int) -> str:
-        return json.dumps(
-            self.get_knowledge_details_by_id(knowledge_id=knowledge_id).to_dict(),
+        assembled_knowledge = self.get_knowledge_details_by_id(knowledge_id=knowledge_id)
+
+        knowledge_json = json.dumps(
+            assembled_knowledge.to_dict(),
             ensure_ascii=False,
             indent=2,
             default=str
         )
+
+        return build_llm_section("Knowledge", knowledge_json)
 
 
 
