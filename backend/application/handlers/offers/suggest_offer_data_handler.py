@@ -9,7 +9,7 @@ from domain.models.offers.offer_insight import OfferInsight
 from domain.enums.fact_status import FactStatus
 
 
-def get_system_prompt(offer_data: str):
+def get_system_prompt(offer_data: str) -> str: 
     SYSTEM_PROMPT = f"""
 You are an expert in e-commerce strategy, product marketing, and consumer psychology.
 You specialize in product analysis, customer behavior, buying motivations, and creating effective sales arguments.
@@ -22,6 +22,7 @@ Currently analyzed product:
 
 ```json
 {offer_data}"""
+    return SYSTEM_PROMPT
 
 
 PAIN_POINTS_PROMPT = """
