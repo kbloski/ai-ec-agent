@@ -10,6 +10,7 @@ class TargetAudienceMapper:
             id=item.id,
             knowledge_id=item.knowledge_id,
             fact_status=item.fact_status,
+            review_status=item.review_status,
 
             name=item.name,
             reason=item.reason,

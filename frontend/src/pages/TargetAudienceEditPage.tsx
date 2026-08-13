@@ -14,6 +14,7 @@ import {
   type UpdateTargetAudienceArgs,
 } from '@/features/targetAudiences/targetAudiencesApi'
 import { useListFactStatusesQuery } from '@/features/factStatus/factStatusApi'
+import { useListReviewStatusesQuery } from '@/features/reviewStatus/reviewStatusApi'
 
 const LIST_FIELDS = [
   'lifestyles',
@@ -53,9 +54,11 @@ export default function TargetAudienceEditPage() {
 
   const { data, isLoading, error } = useGetTargetAudienceQuery(id)
   const { data: statuses } = useListFactStatusesQuery()
+  const { data: reviewStatuses } = useListReviewStatusesQuery()
   const [updateTargetAudience, updateState] = useUpdateTargetAudienceMutation()
 
   const [factStatus, setFactStatus] = useState<string | undefined>(undefined)
+  const [reviewStatus, setReviewStatus] = useState<string | undefined>(undefined)
   const [formError, setFormError] = useState<string | null>(null)
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -68,6 +71,7 @@ export default function TargetAudienceEditPage() {
     const payload: UpdateTargetAudienceArgs = { id }
 
     if (factStatus) payload.fact_status = factStatus
+    if (reviewStatus) payload.review_status = reviewStatus
 
     for (const field of TEXT_FIELDS) {
       const raw = formData.get(field)
@@ -135,6 +139,27 @@ export default function TargetAudienceEditPage() {
               </SelectTrigger>
               <SelectContent>
                 {statuses?.map((status) => (
+                  <SelectItem key={status.value} value={status.value}>
+                    {status.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-1">
+            <Label htmlFor="review_status">Status weryfikacji</Label>
+            <Select
+              value={reviewStatus ?? (data.review_status as string)}
+              onValueChange={(value) => {
+                if (value !== null) setReviewStatus(value)
+              }}
+            >
+              <SelectTrigger id="review_status">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {reviewStatuses?.map((status) => (
                   <SelectItem key={status.value} value={status.value}>
                     {status.label}
                   </SelectItem>

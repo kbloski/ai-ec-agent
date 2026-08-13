@@ -93,11 +93,11 @@ export const offersApi = api.injectEndpoints({
       query: (id) => `/offer-insights/${id}`,
       providesTags: (_result, _err, id) => [itemTag('OfferInsight', id)],
     }),
-    updateOfferInsight: builder.mutation<Entity, { id: number; offerId: number; fact_status: string }>({
-      query: ({ id, fact_status }) => ({
+    updateOfferInsight: builder.mutation<Entity, { id: number; offerId: number; fact_status?: string; review_status?: string }>({
+      query: ({ id, offerId: _offerId, ...body }) => ({
         url: `/offer-insights/${id}/update`,
         method: 'POST',
-        body: { fact_status },
+        body,
       }),
       invalidatesTags: (_result, _err, { id, offerId }) => [
         itemTag('Offer', offerId),

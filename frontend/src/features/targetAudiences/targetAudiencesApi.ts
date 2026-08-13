@@ -6,6 +6,7 @@ export interface UpdateTargetAudienceArgs {
   id: number
   knowledgeId?: number
   fact_status?: string
+  review_status?: string
   name?: string
   reason?: string
   score?: number

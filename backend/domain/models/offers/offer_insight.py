@@ -23,6 +23,7 @@ class OfferInsight(Base, JSONSerializable):
     type = Column(String(50), nullable=False, index=True)
 
     fact_status = Column(String(20), nullable=False, index=True)
+    review_status = Column(String(20), nullable=False, default="pending", server_default="pending", index=True)
 
     # optional scoring (AI confidence / business importance)
     # score = Column(Float, nullable=True)

@@ -1,4 +1,4 @@
-from sqlalchemy import func
+from sqlalchemy import case, func
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from domain.models.knowledge.knowledge_insight import KnowledgeInsight
@@ -35,7 +35,11 @@ class KnowledgeInsightsRepository:
         return (
             self.db.query(KnowledgeInsight)
             .filter(KnowledgeInsight.knowledge_id == knowledge_id)
-            .order_by(KnowledgeInsight.created_at.desc(), KnowledgeInsight.id.desc())
+            .order_by(
+                case((KnowledgeInsight.review_status == "pending", 0), else_=1),
+                KnowledgeInsight.created_at.desc(),
+                KnowledgeInsight.id.desc(),
+            )
             .all()
         )
 

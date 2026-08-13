@@ -10,6 +10,7 @@ class TargetAudienceDto(JSONSerializable):
         id: int,
         knowledge_id: int | None,
         fact_status: str,
+        review_status: str,
         name: str,
         reason: str | None,
         score: float | None,
@@ -35,6 +36,7 @@ class TargetAudienceDto(JSONSerializable):
         self.id = id
         self.knowledge_id = knowledge_id
         self.fact_status = fact_status
+        self.review_status = review_status
 
         self.name = name
         self.reason = reason
@@ -72,6 +74,7 @@ class TargetAudienceDto(JSONSerializable):
             "id": self.id,
             "knowledge_id": self.knowledge_id,
             "fact_status": self.fact_status,
+            "review_status": self.review_status,
 
             "name": self.name,
             "reason": self.reason,

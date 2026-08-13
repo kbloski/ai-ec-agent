@@ -8,12 +8,14 @@ class KnowledgeInsightDto:
         knowledge_id: int,
         type: str,
         fact_status: str,
+        review_status: str,
         value: str,
     ):
         self.id = id
         self.knowledge_id = knowledge_id
         self.type = type
         self.fact_status = fact_status
+        self.review_status = review_status
         self.value = value
 
     def to_dict(self, exclude=None):
@@ -24,6 +26,7 @@ class KnowledgeInsightDto:
             "knowledge_id" : self.knowledge_id,
             "type": self.type,
             "fact_status": self.fact_status,
+            "review_status": self.review_status,
             "value": self.value,
         }
 

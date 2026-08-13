@@ -10,6 +10,7 @@ class OfferInsightMapper:
             offer_id = item.offer_id,
             type = item.type,
             fact_status = item.fact_status,
+            review_status = item.review_status,
             value = item.value,
         )
 

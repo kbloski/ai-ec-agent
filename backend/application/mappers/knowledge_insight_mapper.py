@@ -10,6 +10,7 @@ class KnowledgeInsightMapper:
             knowledge_id = item.knowledge_id,
             type = item.type,
             fact_status = item.fact_status,
+            review_status = item.review_status,
             value = item.value,
         )
 

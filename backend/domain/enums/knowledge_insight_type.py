@@ -18,6 +18,4 @@ class KnowledgeInsightType(str, Enum):
     STRENGTH = "strength"
     LIMITATION = "limitation"
 
-    ASSUMPTION = "assumption"
-
     ADDITIONAL_INSIGHT = "additional_insight"

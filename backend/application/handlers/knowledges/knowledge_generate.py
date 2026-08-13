@@ -123,7 +123,6 @@ Use this structure as a foundation, but extend it when necessary:
     "differentiators": [],
     "strengths": [],
     "limitations": [],
-    "assumptions": [],
     "additional_insights": []
 }
 """
@@ -173,7 +172,6 @@ INSIGHT_MAPPING = {
     "differentiators":KnowledgeInsightType.DIFFERENTIATOR,
     "strengths":KnowledgeInsightType.STRENGTH,
     "limitations":KnowledgeInsightType.LIMITATION,
-    "assumptions":KnowledgeInsightType.ASSUMPTION,
     "additional_insights":KnowledgeInsightType.ADDITIONAL_INSIGHT,
 }
 

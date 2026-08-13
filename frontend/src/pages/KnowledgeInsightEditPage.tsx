@@ -8,6 +8,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { EntityViewer } from '@/components/EntityViewer'
 import { useGetKnowledgeInsightQuery, useUpdateKnowledgeInsightMutation } from '@/features/knowledge/knowledgeApi'
 import { useListFactStatusesQuery } from '@/features/factStatus/factStatusApi'
+import { useListReviewStatusesQuery } from '@/features/reviewStatus/reviewStatusApi'
 
 export default function KnowledgeInsightEditPage() {
   const id = Number(useParams().id)
@@ -15,18 +16,21 @@ export default function KnowledgeInsightEditPage() {
 
   const { data, isLoading, error } = useGetKnowledgeInsightQuery(id)
   const { data: statuses } = useListFactStatusesQuery()
+  const { data: reviewStatuses } = useListReviewStatusesQuery()
   const [updateKnowledgeInsight, updateState] = useUpdateKnowledgeInsightMutation()
 
   const [factStatus, setFactStatus] = useState<string | undefined>(undefined)
+  const [reviewStatus, setReviewStatus] = useState<string | undefined>(undefined)
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!data || !factStatus) return
+    if (!data) return
 
     await updateKnowledgeInsight({
       id,
       knowledgeId: data.knowledge_id as number,
       fact_status: factStatus,
+      review_status: reviewStatus,
     }).unwrap()
 
     navigate(`/knowledges/${data.knowledge_id}`)
@@ -56,6 +60,27 @@ export default function KnowledgeInsightEditPage() {
           <div className="space-y-1">
             <Label>Typ</Label>
             <p className="text-sm text-muted-foreground">{data.type as string}</p>
+          </div>
+
+          <div className="space-y-1">
+            <Label htmlFor="review_status">Status weryfikacji</Label>
+            <Select
+              value={reviewStatus ?? (data.review_status as string)}
+              onValueChange={(value) => {
+                if (value !== null) setReviewStatus(value)
+              }}
+            >
+              <SelectTrigger id="review_status">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {reviewStatuses?.map((status) => (
+                  <SelectItem key={status.value} value={status.value}>
+                    {status.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="space-y-1">

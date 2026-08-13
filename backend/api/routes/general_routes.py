@@ -2,12 +2,15 @@ from typing import Any, Dict, List, Optional
 
 from fastapi import APIRouter
 from pydantic import BaseModel
+from domain.enums.fact_status import FactStatus
+from domain.enums.review_status import ReviewStatus
 
 from application.handlers.ads.list_ad_frameworks_handler import list_ad_frameworks_handler
 from application.handlers.ads.list_creative_angels_handler import list_creative_angels_handler
 from application.handlers.ads.list_execution_styles_handler import list_execution_styles_handler
 from application.handlers.ads.list_platforms_handler import list_platforms_handler
 from application.handlers.ads.list_fact_statuses_handler import list_fact_statuses_handler
+from application.handlers.ads.list_review_statuses_handler import list_review_statuses_handler
 from application.handlers.offers.get_offers import get_offers
 from application.handlers.offers.create_offer import create_offer
 from application.handlers.offers.seed_full_offer import seed_full_offer
@@ -131,15 +134,18 @@ class CreateOfferItemRequest(BaseModel):
 
 
 class UpdateOfferInsightRequest(BaseModel):
-    fact_status: str
+    fact_status: Optional[FactStatus] = None
+    review_status: Optional[ReviewStatus] = None
 
 
 class UpdateKnowledgeInsightRequest(BaseModel):
-    fact_status: str
+    fact_status: Optional[FactStatus] = None
+    review_status: Optional[ReviewStatus] = None
 
 
 class UpdateTargetAudienceRequest(BaseModel):
-    fact_status: Optional[str] = None
+    fact_status: Optional[FactStatus] = None
+    review_status: Optional[ReviewStatus] = None
     name: Optional[str] = None
     reason: Optional[str] = None
     score: Optional[float] = None
@@ -223,7 +229,11 @@ def register_general_routes(router: APIRouter):
 
     @router.post("/offer-insights/{id}/update")
     def update_offer_insight_route(id: int, payload: UpdateOfferInsightRequest):
-        return update_offer_insight_handler(id=id, fact_status=payload.fact_status)
+        return update_offer_insight_handler(
+            id=id,
+            fact_status=payload.fact_status,
+            review_status=payload.review_status,
+        )
 
 
 
@@ -299,7 +309,11 @@ def register_general_routes(router: APIRouter):
 
     @router.post("/knowledge-insights/{id}/update")
     def update_knowledge_insight_route(id: int, payload: UpdateKnowledgeInsightRequest):
-        return update_knowledge_insight_handler(id=id, fact_status=payload.fact_status)
+        return update_knowledge_insight_handler(
+            id=id,
+            fact_status=payload.fact_status,
+            review_status=payload.review_status,
+        )
 
 
 
@@ -329,7 +343,10 @@ def register_general_routes(router: APIRouter):
 
     @router.post("/target-audiences/{id}/update")
     def update_target_audience_route(id: int, payload: UpdateTargetAudienceRequest):
-        return update_target_audience_handler(id=id, fields=payload.model_dump(exclude_unset=True))
+        return update_target_audience_handler(
+            id=id,
+            fields=payload.model_dump(exclude_unset=True, mode="json"),
+        )
 
 
 
@@ -637,6 +654,10 @@ def register_general_routes(router: APIRouter):
     @router.get("/fact-statuses")
     def fact_statuses_list():
         return list_fact_statuses_handler()
+
+    @router.get("/review-statuses")
+    def review_statuses_list():
+        return list_review_statuses_handler()
 
     # -----------------------------
     # Creative execution

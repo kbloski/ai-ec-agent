@@ -1,4 +1,4 @@
-from sqlalchemy import func
+from sqlalchemy import case, func
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
 from typing import List, Optional
@@ -47,7 +47,11 @@ class OfferInsightsRepository:
         return (
             self.db.query(OfferInsight)
             .filter(or_(*filters))
-            .order_by(OfferInsight.created_at.desc(), OfferInsight.id.desc())
+            .order_by(
+                case((OfferInsight.review_status == "pending", 0), else_=1),
+                OfferInsight.created_at.desc(),
+                OfferInsight.id.desc(),
+            )
             .all()
         )
 
