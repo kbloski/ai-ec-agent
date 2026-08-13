@@ -44,7 +44,7 @@ class MarketingStrategyService:
 
     def build_llm_context(self, marketing_strategy_id: int) -> str:
         marketing_strategy_json = json.dumps(
-            self.get_marketing_strategy_by_id(id=marketing_strategy_id).to_dict(),
+            self.get_marketing_strategy_by_id(id=marketing_strategy_id).to_content_dict(),
             ensure_ascii=False,
             indent=2,
             default=str

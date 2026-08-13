@@ -43,7 +43,7 @@ class MessageStrategyService:
 
     def build_llm_context(self, message_strategy_id: int) -> str:
         message_strategy_json = json.dumps(
-            self.get_message_strategy_by_id(id=message_strategy_id).to_dict(),
+            self.get_message_strategy_by_id(id=message_strategy_id).to_content_dict(),
             ensure_ascii=False,
             indent=2,
             default=str

@@ -43,7 +43,7 @@ class AdExecutionService:
 
     def build_llm_context(self, ad_execution_id: int) -> str:
         ad_execution_json = json.dumps(
-            self.get_ad_execution_by_id(id=ad_execution_id).to_dict(),
+            self.get_ad_execution_by_id(id=ad_execution_id).to_content_dict(),
             ensure_ascii=False,
             indent=2,
             default=str

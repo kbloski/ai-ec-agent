@@ -43,7 +43,7 @@ class AdStrategyService:
 
     def build_llm_context(self, ad_strategy_id: int) -> str:
         ad_strategy_json = json.dumps(
-            self.get_ad_strategy_by_id(id=ad_strategy_id).to_dict(),
+            self.get_ad_strategy_by_id(id=ad_strategy_id).to_content_dict(),
             ensure_ascii=False,
             indent=2,
             default=str

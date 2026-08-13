@@ -43,7 +43,7 @@ class PageStrategyService:
 
     def build_llm_context(self, page_strategy_id: int) -> str:
         page_strategy_json = json.dumps(
-            self.get_page_strategy_by_id(id=page_strategy_id).to_dict(),
+            self.get_page_strategy_by_id(id=page_strategy_id).to_content_dict(),
             ensure_ascii=False,
             indent=2,
             default=str

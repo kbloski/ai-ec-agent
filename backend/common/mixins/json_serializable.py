@@ -44,3 +44,12 @@ class JSONSerializable:
 
         return data
 
+    def to_content_dict(self):
+        """Return business content suitable for LLM context, without persistence identifiers."""
+        data = self.to_dict()
+        return {
+            key: value
+            for key, value in data.items()
+            if key != "id" and not key.endswith("_id")
+        }
+

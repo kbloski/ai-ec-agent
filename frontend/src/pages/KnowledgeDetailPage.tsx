@@ -50,19 +50,19 @@ export default function KnowledgeDetailPage() {
       isLoading={isLoading}
       error={error}
       itemActions={{
-        offer_insights: (item) => deleteKnowledgeInsight({ id: item.id as number, knowledgeId }),
+        knowledge_insights: (item) => deleteKnowledgeInsight({ id: item.id as number, knowledgeId }),
         target_audiences: (item) => deleteTargetAudience({ id: item.id as number, knowledgeId }),
       }}
       itemLinks={{
-        offer_insights: (item) => `/knowledge-insights/${item.id}/edit`,
+        knowledge_insights: (item) => `/knowledge-insights/${item.id}/edit`,
         target_audiences: (item) => `/target-audiences/${item.id}/edit`,
       }}
       relationLinks={{
-        offer_insights: `/knowledges/${knowledgeId}/insights`,
+        knowledge_insights: `/knowledges/${knowledgeId}/insights`,
         target_audiences: `/knowledges/${knowledgeId}/target-audiences`,
       }}
       itemStatusActions={{
-        offer_insights: (item, contentStatus) =>
+        knowledge_insights: (item, contentStatus) =>
           updateKnowledgeInsight({
             id: item.id as number,
             knowledgeId,

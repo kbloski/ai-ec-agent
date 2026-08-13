@@ -277,7 +277,7 @@ TASK:
         knowledge
     )
 
-    result.offer_insights = [
+    result.knowledge_insights = [
         KnowledgeInsightMapper.to_dto(item)
         for item in saved_insights
     ]

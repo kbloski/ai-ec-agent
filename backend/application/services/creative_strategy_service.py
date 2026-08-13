@@ -44,7 +44,7 @@ class CreativeStrategyService:
 
     def build_llm_context(self, creative_strategy_id: int) -> str:
         creative_strategy_json = json.dumps(
-            self.get_creative_strategy_by_id(id=creative_strategy_id).to_dict(),
+            self.get_creative_strategy_by_id(id=creative_strategy_id).to_content_dict(),
             ensure_ascii=False,
             indent=2,
             default=str

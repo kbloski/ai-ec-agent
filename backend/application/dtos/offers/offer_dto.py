@@ -38,3 +38,9 @@ class OfferDto(JSONSerializable):
         }
 
         return {k: v for k, v in data.items() if k not in exclude}
+
+    def to_content_dict(self):
+        data = self.to_dict(exclude=["id"])
+        data["offer_items"] = [item.to_content_dict() for item in self.offer_items]
+        data["offer_insights"] = [item.to_content_dict() for item in self.offer_insights]
+        return data

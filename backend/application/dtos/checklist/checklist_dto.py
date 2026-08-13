@@ -23,3 +23,12 @@ class ChecklistDto(JSONSerializable):
         }
 
         return {k: v for k, v in data.items() if k not in exclude}
+
+    def to_content_dict(self):
+        return {
+            "name": self.name,
+            "checklist_items": [
+                item.to_content_dict()
+                for item in self.checklist_items
+            ],
+        }

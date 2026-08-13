@@ -20,3 +20,11 @@ class AnalysisDto(JSONSerializable):
         }
 
         return {k: v for k, v in data.items() if k not in exclude}
+
+    def to_content_dict(self):
+        return {
+            "analysis_questions": [
+                question.to_content_dict()
+                for question in self.analysis_questions
+            ]
+        }

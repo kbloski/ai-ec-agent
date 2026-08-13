@@ -3,6 +3,7 @@ const LABEL_OVERRIDES: Record<string, string> = {
   cta: 'CTA',
   offer_items: 'Elementy oferty',
   offer_insights: 'Insights',
+  knowledge_insights: 'Insights',
   target_audiences: 'Grupy docelowe',
   question: 'Pytanie',
   answer: 'Odpowiedź',

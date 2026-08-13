@@ -44,7 +44,7 @@ class OfferStrategyService:
 
     def build_llm_context(self, offer_strategy_id: int) -> str:
         offer_strategy_json = json.dumps(
-            self.get_offer_strategy_by_id(id=offer_strategy_id).to_dict(),
+            self.get_offer_strategy_by_id(id=offer_strategy_id).to_content_dict(),
             ensure_ascii=False,
             indent=2,
             default=str

@@ -43,7 +43,7 @@ class PageBlueprintService:
 
     def build_llm_context(self, page_blueprint_id: int) -> str:
         page_blueprint_json = json.dumps(
-            self.get_page_blueprint_by_id(id=page_blueprint_id).to_dict(),
+            self.get_page_blueprint_by_id(id=page_blueprint_id).to_content_dict(),
             ensure_ascii=False,
             indent=2,
             default=str

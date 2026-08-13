@@ -24,6 +24,11 @@ class OfferService:
         offer_dto = OfferMapper.to_dto(item=offer)
         offer_assembled = self.offer_assembler.assemble_dto(item=offer_dto)
 
-        offer_json = json.dumps(offer_assembled.to_dict())
+        offer_json = json.dumps(
+            offer_assembled.to_content_dict(),
+            ensure_ascii=False,
+            indent=2,
+            default=str,
+        )
 
         return build_llm_section("offer", offer_json)

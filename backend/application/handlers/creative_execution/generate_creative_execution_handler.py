@@ -419,7 +419,7 @@ Platform:
 
 
 # TODO(creative-execution): w sekcji "ŹRÓDŁO PRAWDY" rozważyć instrukcję każącą
-# traktować pozycje knowledge.offer_insights oznaczone type="assumption" jako mniej
+# traktować pozycje knowledge.knowledge_insights oznaczone type="assumption" jako mniej
 # pewne niż potwierdzone fakty (dziś prompt nie rozróżnia assumption od faktu).
 # Odłożone celowo — patrz plan "Naprawa generowania kreacji reklamowych".
 VIDEO_CREATIVE_EXECUTION_PROMPT = r"""
@@ -1022,7 +1022,7 @@ Zwróć dokładnie tę minimalną strukturę:
 
 
 # TODO(creative-execution): in "Trust Rules" consider an instruction to treat
-# knowledge.offer_insights items marked type="assumption" as weaker than confirmed
+# knowledge.knowledge_insights items marked type="assumption" as weaker than confirmed
 # facts (today the prompt does not distinguish assumption from fact).
 # Deliberately deferred — see plan "Naprawa generowania kreacji reklamowych".
 IMAGE_CREATIVE_EXECUTION_PROMPT = """
@@ -1407,7 +1407,7 @@ Before returning, verify silently:
 # Carousel prompt
 # ---------------------------------------
 # TODO(creative-execution): in "Trust Rules" consider an instruction to treat
-# knowledge.offer_insights items marked type="assumption" as weaker than confirmed
+# knowledge.knowledge_insights items marked type="assumption" as weaker than confirmed
 # facts (today the prompt does not distinguish assumption from fact).
 # Deliberately deferred — see plan "Naprawa generowania kreacji reklamowych".
 CAROUSEL_CREATIVE_EXECUTION_PROMPT = """

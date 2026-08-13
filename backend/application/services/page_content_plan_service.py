@@ -43,7 +43,7 @@ class PageContentPlanService:
 
     def build_llm_context(self, page_content_plan_id: int) -> str:
         page_content_plan_json = json.dumps(
-            self.get_page_content_plan_by_id(id=page_content_plan_id).to_dict(),
+            self.get_page_content_plan_by_id(id=page_content_plan_id).to_content_dict(),
             ensure_ascii=False,
             indent=2,
             default=str
