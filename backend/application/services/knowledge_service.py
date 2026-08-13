@@ -46,7 +46,7 @@ class KnowledgeService:
         assembled_knowledge = self.get_knowledge_details_by_id(knowledge_id=knowledge_id)
 
         knowledge_json = json.dumps(
-            assembled_knowledge.to_dict(),
+            assembled_knowledge.to_content_dict(),
             ensure_ascii=False,
             indent=2,
             default=str

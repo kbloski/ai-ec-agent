@@ -36,3 +36,9 @@ class KnowledgeDto(JSONSerializable):
         }
 
         return {k: v for k, v in data.items() if k not in exclude}
+
+    def to_content_dict(self):
+        data = self.to_dict(exclude=["id", "offer_id"])
+        data["offer_insights"] = [i.to_content_dict() for i in self.offer_insights]
+        data["target_audiences"] = [t.to_content_dict() for t in self.target_audiences]
+        return data

@@ -107,3 +107,7 @@ class TargetAudienceDto(JSONSerializable):
             for k, v in data.items()
             if k not in exclude
         }
+        
+    def to_content_dict(self):
+        data = self.to_dict(exclude=["id", "knowledge_id"])
+        return data

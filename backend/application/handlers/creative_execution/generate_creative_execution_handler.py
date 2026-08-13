@@ -30,14 +30,14 @@ KNOWLEDGE:
 {knowledge}
 
 
-# BRAND STRATEGY:
+BRAND STRATEGY:
 
-# {brand_strategy}
+{brand_strategy}
 
 
-# MARKETING STRATEGY:
+MARKETING STRATEGY:
 
-# {marketing_strategy}
+{marketing_strategy}
 
 
 OFFER STRATEGY:
