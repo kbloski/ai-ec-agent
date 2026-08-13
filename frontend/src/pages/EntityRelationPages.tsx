@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { useListFactStatusesQuery } from '@/features/factStatus/factStatusApi'
+import { useListReviewStatusesQuery } from '@/features/reviewStatus/reviewStatusApi'
 import {
   useCreateOfferItemMutation,
   useDeleteOfferInsightMutation,
@@ -39,6 +40,7 @@ export function OfferInsightsPage() {
   const offerId = Number(useParams().offerId)
   const { data, isLoading, error } = useGetOfferQuery(offerId)
   const { data: statuses } = useListFactStatusesQuery()
+  const { data: reviewStatuses } = useListReviewStatusesQuery()
   const [remove] = useDeleteOfferInsightMutation()
   const [update] = useUpdateOfferInsightMutation()
   const [generateInsights, generateState] = useGenerateOfferSuggestionsMutation()
@@ -52,7 +54,7 @@ export function OfferInsightsPage() {
       {isLoading && <p className="text-sm text-muted-foreground">Ładowanie…</p>}
       {Boolean(error) && <p className="text-sm text-destructive">Nie udało się pobrać danych.</p>}
       {!isLoading && !error && items.length === 0 && <p className="text-sm text-muted-foreground">Brak elementów.</p>}
-      <RelationList fieldKey="offer_insights" items={items} onEditLink={(item) => `/offer-insights/${item.id}/edit`} onDelete={(item) => remove({ id: item.id as number, offerId })} onStatusChange={(item, fact_status) => update({ id: item.id as number, offerId, fact_status }).unwrap()} statuses={statuses} showHeading={false} />
+      <RelationList fieldKey="offer_insights" items={items} onEditLink={(item) => `/offer-insights/${item.id}/edit`} onDelete={(item) => remove({ id: item.id as number, offerId })} onStatusChange={(item, fact_status) => update({ id: item.id as number, offerId, fact_status }).unwrap()} onReviewStatusChange={(item, review_status) => update({ id: item.id as number, offerId, review_status }).unwrap()} statuses={statuses} reviewStatuses={reviewStatuses} showHeading={false} />
     </CollectionPage>
   )
 }
@@ -102,6 +104,7 @@ export function KnowledgeInsightsPage() {
   const knowledgeId = Number(useParams().knowledgeId)
   const { data, isLoading, error } = useGetKnowledgeQuery(knowledgeId)
   const { data: statuses } = useListFactStatusesQuery()
+  const { data: reviewStatuses } = useListReviewStatusesQuery()
   const [remove] = useDeleteKnowledgeInsightMutation()
   const [update] = useUpdateKnowledgeInsightMutation()
   const items = (data?.knowledge_insights as Entity[] | undefined) ?? []
@@ -110,7 +113,7 @@ export function KnowledgeInsightsPage() {
     {isLoading && <p className="text-sm text-muted-foreground">Ładowanie…</p>}
     {Boolean(error) && <p className="text-sm text-destructive">Nie udało się pobrać danych.</p>}
     {!isLoading && !error && items.length === 0 && <p className="text-sm text-muted-foreground">Brak elementów.</p>}
-    <RelationList fieldKey="knowledge_insights" items={items} onEditLink={(item) => `/knowledge-insights/${item.id}/edit`} onDelete={(item) => remove({ id: item.id as number, knowledgeId })} onStatusChange={(item, fact_status) => update({ id: item.id as number, knowledgeId, fact_status }).unwrap()} statuses={statuses} showHeading={false} />
+    <RelationList fieldKey="knowledge_insights" items={items} onEditLink={(item) => `/knowledge-insights/${item.id}/edit`} onDelete={(item) => remove({ id: item.id as number, knowledgeId })} onStatusChange={(item, fact_status) => update({ id: item.id as number, knowledgeId, fact_status }).unwrap()} onReviewStatusChange={(item, review_status) => update({ id: item.id as number, knowledgeId, review_status }).unwrap()} statuses={statuses} reviewStatuses={reviewStatuses} showHeading={false} />
   </CollectionPage>
 }
 
@@ -118,6 +121,7 @@ export function KnowledgeTargetAudiencesPage() {
   const knowledgeId = Number(useParams().knowledgeId)
   const { data, isLoading, error } = useGetKnowledgeQuery(knowledgeId)
   const { data: statuses } = useListFactStatusesQuery()
+  const { data: reviewStatuses } = useListReviewStatusesQuery()
   const [generate, generateState] = useGenerateTargetAudiencesMutation()
   const [remove] = useDeleteTargetAudienceMutation()
   const [update] = useUpdateTargetAudienceMutation()
@@ -128,6 +132,6 @@ export function KnowledgeTargetAudiencesPage() {
     {isLoading && <p className="text-sm text-muted-foreground">Ładowanie…</p>}
     {Boolean(error) && <p className="text-sm text-destructive">Nie udało się pobrać danych.</p>}
     {!isLoading && !error && items.length === 0 && <p className="text-sm text-muted-foreground">Brak elementów.</p>}
-    <RelationList fieldKey="target_audiences" items={items} onEditLink={(item) => `/target-audiences/${item.id}/edit`} onDelete={(item) => remove({ id: item.id as number, knowledgeId })} onStatusChange={(item, fact_status) => update({ id: item.id as number, knowledgeId, fact_status }).unwrap()} statuses={statuses} showHeading={false} />
+    <RelationList fieldKey="target_audiences" items={items} onEditLink={(item) => `/target-audiences/${item.id}/edit`} onDelete={(item) => remove({ id: item.id as number, knowledgeId })} onStatusChange={(item, fact_status) => update({ id: item.id as number, knowledgeId, fact_status }).unwrap()} onReviewStatusChange={(item, review_status) => update({ id: item.id as number, knowledgeId, review_status }).unwrap()} statuses={statuses} reviewStatuses={reviewStatuses} showHeading={false} />
   </CollectionPage>
 }
