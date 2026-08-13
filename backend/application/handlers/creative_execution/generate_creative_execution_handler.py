@@ -22,7 +22,7 @@ from domain.models.creative_execution.creative_execution import (
 
 
 
-USER_PROMPT = """
+USER_PROMPT = r"""
 Generate creative execution.
 
 KNOWLEDGE:
@@ -30,14 +30,14 @@ KNOWLEDGE:
 {knowledge}
 
 
-BRAND STRATEGY:
+# BRAND STRATEGY:
 
-{brand_strategy}
+# {brand_strategy}
 
 
-MARKETING STRATEGY:
+# MARKETING STRATEGY:
 
-{marketing_strategy}
+# {marketing_strategy}
 
 
 OFFER STRATEGY:
