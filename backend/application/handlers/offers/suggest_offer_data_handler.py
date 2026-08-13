@@ -6,7 +6,7 @@ from domain.enums.llm_message_role import LlmMessageRole
 from infrastructure.ai.prompts.constraints.uniqueness_prompt import build_uniqueness_constraint_prompt  
 from domain.enums.offer_insight_type import OfferInsightType
 from domain.models.offers.offer_insight import OfferInsight
-from domain.enums.content_status import ContentStatus
+from domain.enums.fact_status import FactStatus
 
 
 def get_system_prompt(offer_data: str):
@@ -125,7 +125,7 @@ def suggets_offer_data_handler(offer_id : int):
         new_insights = OfferInsight(
             offer_id = offer_id,
             type = OfferInsightType.PAIN_POINTS.value,
-            content_status = ContentStatus.SUGGESTED.value,
+            fact_status = FactStatus.UNVERIFIED.value,
             value=p
         )
         generated_offer_insights.append(new_insights)
@@ -156,7 +156,7 @@ def suggets_offer_data_handler(offer_id : int):
         new_insights =OfferInsight(
             offer_id = offer_id,
             type = OfferInsightType.TARGET_AUDIENCE.value,
-            content_status = ContentStatus.SUGGESTED.value,
+            fact_status = FactStatus.UNVERIFIED.value,
             value=p
         )
         generated_offer_insights.append(new_insights)

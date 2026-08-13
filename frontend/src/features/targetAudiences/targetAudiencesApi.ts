@@ -5,7 +5,7 @@ import type { Entity } from '@/types'
 export interface UpdateTargetAudienceArgs {
   id: number
   knowledgeId?: number
-  content_status?: string
+  fact_status?: string
   name?: string
   reason?: string
   score?: number

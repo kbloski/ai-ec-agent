@@ -44,12 +44,12 @@ export const knowledgeApi = api.injectEndpoints({
     }),
     updateKnowledgeInsight: builder.mutation<
       Entity,
-      { id: number; knowledgeId: number; content_status: string }
+      { id: number; knowledgeId: number; fact_status: string }
     >({
-      query: ({ id, content_status }) => ({
+      query: ({ id, fact_status }) => ({
         url: `/knowledge-insights/${id}/update`,
         method: 'POST',
-        body: { content_status },
+        body: { fact_status },
       }),
       invalidatesTags: (_result, _err, { id, knowledgeId }) => [
         itemTag('Knowledge', knowledgeId),

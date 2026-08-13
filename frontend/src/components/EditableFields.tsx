@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { RelationCards } from '@/components/RelationCards'
 import { isPrimitive, isRelationArray, label } from '@/lib/entityFields'
-import { useListContentStatusesQuery } from '@/features/contentStatus/contentStatusApi'
+import { useListFactStatusesQuery } from '@/features/factStatus/factStatusApi'
 
 const SKIP_KEYS = new Set(['id', 'created_at', 'updated_at'])
 
@@ -78,7 +78,7 @@ function ObjectArray({
                     {label(key)}
                   </dt>
                   <dd className="text-sm whitespace-pre-wrap">
-                    {key === 'content_status' && onStatusChange ? (
+                    {key === 'fact_status' && onStatusChange ? (
                       <Select
                         value={typeof value === 'string' ? value : undefined}
                         onValueChange={(status) => {
@@ -195,7 +195,7 @@ export function EditableFields({
   itemAdditions,
   relationLinks,
 }: EditableFieldsProps) {
-  const { data: statuses } = useListContentStatusesQuery()
+  const { data: statuses } = useListFactStatusesQuery()
 
   const isRelationField = (key: string) =>
     isRelationArray(data[key]) ||
@@ -233,7 +233,7 @@ export function EditableFields({
       const original = data[key]
       const raw = values[key]
 
-      if (key === 'content_status') {
+      if (key === 'fact_status') {
         fields[key] = raw
       } else if (typeof original === 'number') {
         fields[key] = raw === '' ? null : Number(raw)
@@ -262,7 +262,7 @@ export function EditableFields({
         {editableKeys.map((key) => (
           <div key={key} className="space-y-1">
             <Label htmlFor={key}>{label(key)}</Label>
-            {key === 'content_status' ? (
+            {key === 'fact_status' ? (
               <Select
                 value={values[key]}
                 onValueChange={(value) => {

@@ -7,7 +7,7 @@ from application.handlers.ads.list_ad_frameworks_handler import list_ad_framewor
 from application.handlers.ads.list_creative_angels_handler import list_creative_angels_handler
 from application.handlers.ads.list_execution_styles_handler import list_execution_styles_handler
 from application.handlers.ads.list_platforms_handler import list_platforms_handler
-from application.handlers.ads.list_content_statuses_handler import list_content_statuses_handler
+from application.handlers.ads.list_fact_statuses_handler import list_fact_statuses_handler
 from application.handlers.offers.get_offers import get_offers
 from application.handlers.offers.create_offer import create_offer
 from application.handlers.offers.seed_full_offer import seed_full_offer
@@ -131,15 +131,15 @@ class CreateOfferItemRequest(BaseModel):
 
 
 class UpdateOfferInsightRequest(BaseModel):
-    content_status: str
+    fact_status: str
 
 
 class UpdateKnowledgeInsightRequest(BaseModel):
-    content_status: str
+    fact_status: str
 
 
 class UpdateTargetAudienceRequest(BaseModel):
-    content_status: Optional[str] = None
+    fact_status: Optional[str] = None
     name: Optional[str] = None
     reason: Optional[str] = None
     score: Optional[float] = None
@@ -223,7 +223,7 @@ def register_general_routes(router: APIRouter):
 
     @router.post("/offer-insights/{id}/update")
     def update_offer_insight_route(id: int, payload: UpdateOfferInsightRequest):
-        return update_offer_insight_handler(id=id, content_status=payload.content_status)
+        return update_offer_insight_handler(id=id, fact_status=payload.fact_status)
 
 
 
@@ -299,7 +299,7 @@ def register_general_routes(router: APIRouter):
 
     @router.post("/knowledge-insights/{id}/update")
     def update_knowledge_insight_route(id: int, payload: UpdateKnowledgeInsightRequest):
-        return update_knowledge_insight_handler(id=id, content_status=payload.content_status)
+        return update_knowledge_insight_handler(id=id, fact_status=payload.fact_status)
 
 
 
@@ -634,9 +634,9 @@ def register_general_routes(router: APIRouter):
     def platforms_list():
         return list_platforms_handler()
 
-    @router.get("/content-statuses")
-    def content_statuses_list():
-        return list_content_statuses_handler()
+    @router.get("/fact-statuses")
+    def fact_statuses_list():
+        return list_fact_statuses_handler()
 
     # -----------------------------
     # Creative execution

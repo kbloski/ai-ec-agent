@@ -15,7 +15,7 @@ from domain.enums.decision_time import DecisionTime
 from domain.enums.awareness_level import AwarenessLevel
 from domain.enums.intensity_level import IntensityLevel
 from domain.enums.purchasing_power import PurchasingPower
-from domain.enums.content_status import ContentStatus
+from domain.enums.fact_status import FactStatus
 
 from infrastructure.ai.prompts.constraints.uniqueness_prompt import build_uniqueness_constraint_prompt
 
@@ -216,7 +216,7 @@ Requirements:
         new_target_audiences.append(
             TargetAudience(
                 knowledge_id=knowledge_id,
-                content_status=ContentStatus.SUGGESTED.value,
+                fact_status=FactStatus.UNVERIFIED.value,
                 name=t["name"],
                 reason=t["reason"],
                 score=t['score'],

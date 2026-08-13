@@ -13,7 +13,7 @@ import {
   useUpdateTargetAudienceMutation,
   type UpdateTargetAudienceArgs,
 } from '@/features/targetAudiences/targetAudiencesApi'
-import { useListContentStatusesQuery } from '@/features/contentStatus/contentStatusApi'
+import { useListFactStatusesQuery } from '@/features/factStatus/factStatusApi'
 
 const LIST_FIELDS = [
   'lifestyles',
@@ -52,10 +52,10 @@ export default function TargetAudienceEditPage() {
   const navigate = useNavigate()
 
   const { data, isLoading, error } = useGetTargetAudienceQuery(id)
-  const { data: statuses } = useListContentStatusesQuery()
+  const { data: statuses } = useListFactStatusesQuery()
   const [updateTargetAudience, updateState] = useUpdateTargetAudienceMutation()
 
-  const [contentStatus, setContentStatus] = useState<string | undefined>(undefined)
+  const [factStatus, setFactStatus] = useState<string | undefined>(undefined)
   const [formError, setFormError] = useState<string | null>(null)
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -67,7 +67,7 @@ export default function TargetAudienceEditPage() {
 
     const payload: UpdateTargetAudienceArgs = { id }
 
-    if (contentStatus) payload.content_status = contentStatus
+    if (factStatus) payload.fact_status = factStatus
 
     for (const field of TEXT_FIELDS) {
       const raw = formData.get(field)
@@ -123,14 +123,14 @@ export default function TargetAudienceEditPage() {
       {data && (
         <form key={id} onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1">
-            <Label htmlFor="content_status">Status</Label>
+            <Label htmlFor="fact_status">Status faktu</Label>
             <Select
-              value={contentStatus ?? (data.content_status as string)}
+              value={factStatus ?? (data.fact_status as string)}
               onValueChange={(value) => {
-                if (value !== null) setContentStatus(value)
+                if (value !== null) setFactStatus(value)
               }}
             >
-              <SelectTrigger id="content_status">
+              <SelectTrigger id="fact_status">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>

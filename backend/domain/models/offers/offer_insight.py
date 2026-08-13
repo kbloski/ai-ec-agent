@@ -22,7 +22,7 @@ class OfferInsight(Base, JSONSerializable):
 
     type = Column(String(50), nullable=False, index=True)
 
-    content_status = Column(String(20), nullable=False, index=True)
+    fact_status = Column(String(20), nullable=False, index=True)
 
     # optional scoring (AI confidence / business importance)
     # score = Column(Float, nullable=True)
@@ -49,5 +49,5 @@ class OfferInsight(Base, JSONSerializable):
 
     # useful composite index for queries
     __table_args__ = (
-        Index("ix_offer_insight_offer_type_status", "offer_id", "type", "content_status"),
+        Index("ix_offer_insight_offer_type_fact_status", "offer_id", "type", "fact_status"),
     )

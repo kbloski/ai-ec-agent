@@ -9,7 +9,7 @@ class TargetAudienceDto(JSONSerializable):
         self,
         id: int,
         knowledge_id: int | None,
-        content_status: str,
+        fact_status: str,
         name: str,
         reason: str | None,
         score: float | None,
@@ -34,7 +34,7 @@ class TargetAudienceDto(JSONSerializable):
     ):
         self.id = id
         self.knowledge_id = knowledge_id
-        self.content_status = content_status
+        self.fact_status = fact_status
 
         self.name = name
         self.reason = reason
@@ -71,7 +71,7 @@ class TargetAudienceDto(JSONSerializable):
         data = {
             "id": self.id,
             "knowledge_id": self.knowledge_id,
-            "content_status": self.content_status,
+            "fact_status": self.fact_status,
 
             "name": self.name,
             "reason": self.reason,

@@ -21,7 +21,7 @@ class KnowledgeInsight(Base, JSONSerializable):
 
     type = Column(String(50), nullable=False, index=True)
 
-    content_status = Column(String(20), nullable=False, index=True)
+    fact_status = Column(String(20), nullable=False, index=True)
 
     # optional scoring (AI confidence / business importance)
     # score = Column(Float, nullable=True)
@@ -48,5 +48,5 @@ class KnowledgeInsight(Base, JSONSerializable):
 
     # useful composite index for queries
     __table_args__ = (
-        Index("ix_knowledge_insight_knowledge_type_status", "knowledge_id", "type", "content_status"),
+        Index("ix_knowledge_insight_knowledge_type_fact_status", "knowledge_id", "type", "fact_status"),
     )

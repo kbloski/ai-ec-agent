@@ -62,17 +62,17 @@ export default function KnowledgeDetailPage() {
         target_audiences: `/knowledges/${knowledgeId}/target-audiences`,
       }}
       itemStatusActions={{
-        knowledge_insights: (item, contentStatus) =>
+        knowledge_insights: (item, factStatus) =>
           updateKnowledgeInsight({
             id: item.id as number,
             knowledgeId,
-            content_status: contentStatus,
+            fact_status: factStatus,
           }).unwrap(),
-        target_audiences: (item, contentStatus) =>
+        target_audiences: (item, factStatus) =>
           updateTargetAudience({
             id: item.id as number,
             knowledgeId,
-            content_status: contentStatus,
+            fact_status: factStatus,
           }).unwrap(),
       }}
       editable={{

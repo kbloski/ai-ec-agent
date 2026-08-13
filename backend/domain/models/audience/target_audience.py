@@ -21,7 +21,7 @@ class TargetAudience(Base, JSONSerializable):
     )
 
     # Status
-    content_status = Column(String(20), nullable=False, index=True)
+    fact_status = Column(String(20), nullable=False, index=True)
 
     # Basic information
     name = Column(String(255), nullable=False)
@@ -70,9 +70,9 @@ class TargetAudience(Base, JSONSerializable):
 
     __table_args__ = (
         Index(
-            "ix_target_audience_knowledge_status",
+            "ix_target_audience_knowledge_fact_status",
             "knowledge_id",
-            "content_status"
+            "fact_status"
         ),
         Index(
             "ix_target_audience_score",

@@ -14,7 +14,7 @@ from domain.models.knowledge.knowledge import Knowledge
 from domain.models.knowledge.knowledge_insight import KnowledgeInsight
 
 from domain.enums.knowledge_insight_type import KnowledgeInsightType
-from domain.enums.content_status import ContentStatus
+from domain.enums.fact_status import FactStatus
 
 from infrastructure.database.db import SessionLocal
 
@@ -253,7 +253,7 @@ TASK:
                         knowledge_id=knowledge.id,
                         type=insight_type,
                         value=str(item),
-                        content_status=ContentStatus.APPROVED.value,
+                        fact_status=FactStatus.VERIFIED.value,
                     )
 
                     insight_items.append(insight)

@@ -9,7 +9,7 @@ class OfferInsightMapper:
             id = item.id,
             offer_id = item.offer_id,
             type = item.type,
-            content_status = item.content_status,
+            fact_status = item.fact_status,
             value = item.value,
         )
 

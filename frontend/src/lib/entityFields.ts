@@ -4,6 +4,7 @@ const LABEL_OVERRIDES: Record<string, string> = {
   offer_items: 'Elementy oferty',
   offer_insights: 'Insights',
   knowledge_insights: 'Insights',
+  fact_status: 'Status faktu',
   target_audiences: 'Grupy docelowe',
   question: 'Pytanie',
   answer: 'Odpowiedź',

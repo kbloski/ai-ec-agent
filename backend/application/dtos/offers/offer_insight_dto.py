@@ -6,13 +6,13 @@ class OfferInsightDto(JSONSerializable):
         id: int,
         offer_id: int,
         type: str,
-        content_status: str,
+        fact_status: str,
         value: str,
     ):
         self.id = id
         self.offer_id = offer_id
         self.type = type
-        self.content_status = content_status
+        self.fact_status = fact_status
         self.value = value
 
     def to_dict(self, exclude=None):
@@ -22,7 +22,7 @@ class OfferInsightDto(JSONSerializable):
             "id": self.id,
             "offer_id": self.offer_id,
             "type": self.type,
-            "content_status": self.content_status,
+            "fact_status": self.fact_status,
             "value": self.value,
         }
 

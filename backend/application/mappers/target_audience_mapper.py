@@ -9,7 +9,7 @@ class TargetAudienceMapper:
         return TargetAudienceDto(
             id=item.id,
             knowledge_id=item.knowledge_id,
-            content_status=item.content_status,
+            fact_status=item.fact_status,
 
             name=item.name,
             reason=item.reason,

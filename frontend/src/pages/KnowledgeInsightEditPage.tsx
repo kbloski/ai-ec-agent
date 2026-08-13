@@ -7,26 +7,26 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { EntityViewer } from '@/components/EntityViewer'
 import { useGetKnowledgeInsightQuery, useUpdateKnowledgeInsightMutation } from '@/features/knowledge/knowledgeApi'
-import { useListContentStatusesQuery } from '@/features/contentStatus/contentStatusApi'
+import { useListFactStatusesQuery } from '@/features/factStatus/factStatusApi'
 
 export default function KnowledgeInsightEditPage() {
   const id = Number(useParams().id)
   const navigate = useNavigate()
 
   const { data, isLoading, error } = useGetKnowledgeInsightQuery(id)
-  const { data: statuses } = useListContentStatusesQuery()
+  const { data: statuses } = useListFactStatusesQuery()
   const [updateKnowledgeInsight, updateState] = useUpdateKnowledgeInsightMutation()
 
-  const [contentStatus, setContentStatus] = useState<string | undefined>(undefined)
+  const [factStatus, setFactStatus] = useState<string | undefined>(undefined)
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!data || !contentStatus) return
+    if (!data || !factStatus) return
 
     await updateKnowledgeInsight({
       id,
       knowledgeId: data.knowledge_id as number,
-      content_status: contentStatus,
+      fact_status: factStatus,
     }).unwrap()
 
     navigate(`/knowledges/${data.knowledge_id}`)
@@ -64,14 +64,14 @@ export default function KnowledgeInsightEditPage() {
           </div>
 
           <div className="space-y-1">
-            <Label htmlFor="content_status">Status</Label>
+            <Label htmlFor="fact_status">Status faktu</Label>
             <Select
-              value={contentStatus ?? (data.content_status as string)}
+              value={factStatus ?? (data.fact_status as string)}
               onValueChange={(value) => {
-                if (value !== null) setContentStatus(value)
+                if (value !== null) setFactStatus(value)
               }}
             >
-              <SelectTrigger id="content_status">
+              <SelectTrigger id="fact_status">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>

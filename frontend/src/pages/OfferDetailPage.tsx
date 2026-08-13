@@ -80,11 +80,11 @@ export default function OfferDetailPage() {
         offer_items: `/offers/${offerId}/items`,
       }}
       itemStatusActions={{
-        offer_insights: (item, contentStatus) =>
+        offer_insights: (item, factStatus) =>
           updateOfferInsight({
             id: item.id as number,
             offerId,
-            content_status: contentStatus,
+            fact_status: factStatus,
           }).unwrap(),
       }}
       itemAdditions={{

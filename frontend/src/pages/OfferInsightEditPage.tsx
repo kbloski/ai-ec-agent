@@ -7,26 +7,26 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { EntityViewer } from '@/components/EntityViewer'
 import { useGetOfferInsightQuery, useUpdateOfferInsightMutation } from '@/features/offers/offersApi'
-import { useListContentStatusesQuery } from '@/features/contentStatus/contentStatusApi'
+import { useListFactStatusesQuery } from '@/features/factStatus/factStatusApi'
 
 export default function OfferInsightEditPage() {
   const id = Number(useParams().id)
   const navigate = useNavigate()
 
   const { data, isLoading, error } = useGetOfferInsightQuery(id)
-  const { data: statuses } = useListContentStatusesQuery()
+  const { data: statuses } = useListFactStatusesQuery()
   const [updateOfferInsight, updateState] = useUpdateOfferInsightMutation()
 
-  const [contentStatus, setContentStatus] = useState<string | undefined>(undefined)
+  const [factStatus, setFactStatus] = useState<string | undefined>(undefined)
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!data || !contentStatus) return
+    if (!data || !factStatus) return
 
     await updateOfferInsight({
       id,
       offerId: data.offer_id as number,
-      content_status: contentStatus,
+      fact_status: factStatus,
     }).unwrap()
 
     navigate(`/offers/${data.offer_id}`)
@@ -64,14 +64,14 @@ export default function OfferInsightEditPage() {
           </div>
 
           <div className="space-y-1">
-            <Label htmlFor="content_status">Status</Label>
+            <Label htmlFor="fact_status">Status faktu</Label>
             <Select
-              value={contentStatus ?? (data.content_status as string)}
+              value={factStatus ?? (data.fact_status as string)}
               onValueChange={(value) => {
-                if (value !== null) setContentStatus(value)
+                if (value !== null) setFactStatus(value)
               }}
             >
-              <SelectTrigger id="content_status">
+              <SelectTrigger id="fact_status">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>

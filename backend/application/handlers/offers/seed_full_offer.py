@@ -4,7 +4,7 @@ from infrastructure.database.db import SessionLocal
 from domain.models.offers.offer import Offer
 from domain.models.offers.offer_insight import OfferInsight
 from domain.models.offers.offer_item import OfferItem
-from domain.enums.content_status import ContentStatus
+from domain.enums.fact_status import FactStatus
 from domain.enums.offer_insight_type import OfferInsightType
 from application.mappers.offer_mapper import OfferMapper
 
@@ -59,7 +59,7 @@ def seed_full_offer():
                     offer_insight_item = OfferInsight(
                         offer_id=new_offer.id,
                         type=OfferInsightType.TARGET_AUDIENCE.value,
-                        content_status=ContentStatus.APPROVED.value,
+                        fact_status=FactStatus.VERIFIED.value,
                         value=item
                     )
                     offer_insights.append(offer_insight_item)
@@ -68,7 +68,7 @@ def seed_full_offer():
                     offer_insight_item = OfferInsight(
                         offer_id=new_offer.id,
                         type=OfferInsightType.PAIN_POINTS.value,
-                        content_status=ContentStatus.APPROVED.value,
+                        fact_status=FactStatus.VERIFIED.value,
                         value=item
                     )
                     offer_insights.append(offer_insight_item)

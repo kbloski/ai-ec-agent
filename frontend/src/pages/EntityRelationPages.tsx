@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { useListContentStatusesQuery } from '@/features/contentStatus/contentStatusApi'
+import { useListFactStatusesQuery } from '@/features/factStatus/factStatusApi'
 import {
   useCreateOfferItemMutation,
   useDeleteOfferInsightMutation,
@@ -38,7 +38,7 @@ function CollectionPage({ title, children }: { title: string; children: ReactNod
 export function OfferInsightsPage() {
   const offerId = Number(useParams().offerId)
   const { data, isLoading, error } = useGetOfferQuery(offerId)
-  const { data: statuses } = useListContentStatusesQuery()
+  const { data: statuses } = useListFactStatusesQuery()
   const [remove] = useDeleteOfferInsightMutation()
   const [update] = useUpdateOfferInsightMutation()
   const [generateInsights, generateState] = useGenerateOfferSuggestionsMutation()
@@ -52,7 +52,7 @@ export function OfferInsightsPage() {
       {isLoading && <p className="text-sm text-muted-foreground">Ładowanie…</p>}
       {Boolean(error) && <p className="text-sm text-destructive">Nie udało się pobrać danych.</p>}
       {!isLoading && !error && items.length === 0 && <p className="text-sm text-muted-foreground">Brak elementów.</p>}
-      <RelationList fieldKey="offer_insights" items={items} onEditLink={(item) => `/offer-insights/${item.id}/edit`} onDelete={(item) => remove({ id: item.id as number, offerId })} onStatusChange={(item, content_status) => update({ id: item.id as number, offerId, content_status }).unwrap()} statuses={statuses} showHeading={false} />
+      <RelationList fieldKey="offer_insights" items={items} onEditLink={(item) => `/offer-insights/${item.id}/edit`} onDelete={(item) => remove({ id: item.id as number, offerId })} onStatusChange={(item, fact_status) => update({ id: item.id as number, offerId, fact_status }).unwrap()} statuses={statuses} showHeading={false} />
     </CollectionPage>
   )
 }
@@ -101,7 +101,7 @@ export function OfferItemsPage() {
 export function KnowledgeInsightsPage() {
   const knowledgeId = Number(useParams().knowledgeId)
   const { data, isLoading, error } = useGetKnowledgeQuery(knowledgeId)
-  const { data: statuses } = useListContentStatusesQuery()
+  const { data: statuses } = useListFactStatusesQuery()
   const [remove] = useDeleteKnowledgeInsightMutation()
   const [update] = useUpdateKnowledgeInsightMutation()
   const items = (data?.knowledge_insights as Entity[] | undefined) ?? []
@@ -110,14 +110,14 @@ export function KnowledgeInsightsPage() {
     {isLoading && <p className="text-sm text-muted-foreground">Ładowanie…</p>}
     {Boolean(error) && <p className="text-sm text-destructive">Nie udało się pobrać danych.</p>}
     {!isLoading && !error && items.length === 0 && <p className="text-sm text-muted-foreground">Brak elementów.</p>}
-    <RelationList fieldKey="knowledge_insights" items={items} onEditLink={(item) => `/knowledge-insights/${item.id}/edit`} onDelete={(item) => remove({ id: item.id as number, knowledgeId })} onStatusChange={(item, content_status) => update({ id: item.id as number, knowledgeId, content_status }).unwrap()} statuses={statuses} showHeading={false} />
+    <RelationList fieldKey="knowledge_insights" items={items} onEditLink={(item) => `/knowledge-insights/${item.id}/edit`} onDelete={(item) => remove({ id: item.id as number, knowledgeId })} onStatusChange={(item, fact_status) => update({ id: item.id as number, knowledgeId, fact_status }).unwrap()} statuses={statuses} showHeading={false} />
   </CollectionPage>
 }
 
 export function KnowledgeTargetAudiencesPage() {
   const knowledgeId = Number(useParams().knowledgeId)
   const { data, isLoading, error } = useGetKnowledgeQuery(knowledgeId)
-  const { data: statuses } = useListContentStatusesQuery()
+  const { data: statuses } = useListFactStatusesQuery()
   const [generate, generateState] = useGenerateTargetAudiencesMutation()
   const [remove] = useDeleteTargetAudienceMutation()
   const [update] = useUpdateTargetAudienceMutation()
@@ -128,6 +128,6 @@ export function KnowledgeTargetAudiencesPage() {
     {isLoading && <p className="text-sm text-muted-foreground">Ładowanie…</p>}
     {Boolean(error) && <p className="text-sm text-destructive">Nie udało się pobrać danych.</p>}
     {!isLoading && !error && items.length === 0 && <p className="text-sm text-muted-foreground">Brak elementów.</p>}
-    <RelationList fieldKey="target_audiences" items={items} onEditLink={(item) => `/target-audiences/${item.id}/edit`} onDelete={(item) => remove({ id: item.id as number, knowledgeId })} onStatusChange={(item, content_status) => update({ id: item.id as number, knowledgeId, content_status }).unwrap()} statuses={statuses} showHeading={false} />
+    <RelationList fieldKey="target_audiences" items={items} onEditLink={(item) => `/target-audiences/${item.id}/edit`} onDelete={(item) => remove({ id: item.id as number, knowledgeId })} onStatusChange={(item, fact_status) => update({ id: item.id as number, knowledgeId, fact_status }).unwrap()} statuses={statuses} showHeading={false} />
   </CollectionPage>
 }
