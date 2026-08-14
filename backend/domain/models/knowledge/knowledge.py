@@ -25,9 +25,6 @@ class Knowledge(Base, JSONSerializable):
 
     value_proposition=Column(Text, nullable=True)
 
-    #TODO - prompt
-    #TODO - object used to prompt
-
     is_favorite = Column(Boolean, nullable=False, default=False, server_default="0")
 
     # Timestamps

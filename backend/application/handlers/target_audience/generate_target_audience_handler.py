@@ -19,7 +19,93 @@ from domain.enums.fact_status import FactStatus
 
 from infrastructure.ai.prompts.constraints.uniqueness_prompt import build_uniqueness_constraint_prompt
 
-BASE_SYSTEM_PROMPT = """
+
+
+def enum_values(enum):
+    return [
+        item.value
+        for item in enum
+    ]
+
+
+
+def generate_target_audience_handler(
+    knowledge_id: int
+) -> Dict[str, Any]:
+    container = Container()
+
+    target_audience_repo = container.target_audiences_repository()
+    ai_service = container.ai_service()
+    knowledge_repo = container.knowledge_repository()
+
+    target_audiences_db = target_audience_repo.find_for_knowledge(knowledge_id=knowledge_id)
+    target_audiences_db_dtos = [TargetAudienceMapper.to_dto(item=t) for t in target_audiences_db]
+    knowledge_db = knowledge_repo.get_by_id(id=knowledge_id)
+    knowledge_db_dto = KnowledgeMapper.to_dto(item=knowledge_db)
+    knowledge_context = knowledge_db_dto.to_content_dict()
+
+    response = ai_service.chat_llm(
+        messages=[
+
+            LlmMessage(
+                role=LlmMessageRole.SYSTEM,
+                content=get_system_prompt()
+            ),
+            LlmMessage(
+                role=LlmMessageRole.USER,
+                content=build_uniqueness_constraint_prompt(
+                    existing_data= json.dumps( [t.to_content_dict() for t in target_audiences_db_dtos])
+                )
+            ),
+            LlmMessage(
+                role=LlmMessageRole.USER,
+                content=get_target_audience_prompt(knowledge_context=knowledge_context)
+            )
+        ]
+    )
+
+
+    response_json = json.loads(response.content )
+    audiences_arr = response_json["audiences"]
+
+    new_target_audiences = []
+    for t in audiences_arr:
+        new_target_audiences.append(
+            TargetAudience(
+                knowledge_id=knowledge_id,
+                fact_status=FactStatus.UNVERIFIED.value,
+                name=t["name"],
+                reason=t["reason"],
+                score=t['score'],
+                confidence=t['confidence'],
+                age_min=t["age_min"],
+                age_max=t["age_max"],
+                gender=t["gender"],
+                location=t["location"],
+                purchasing_power=t["purchasing_power"],
+                lifestyles=t["lifestyles"],
+                values=t["values"],
+                awareness_level=t["awareness_level"],
+                price_sensitivity=t["price_sensitivity"],
+                research_level=t["research_level"],
+                decision_time=t["decision_time"],
+                pain_points=t["pain_points"],
+                motivations=t["motivations"],
+                buying_triggers=t["buying_triggers"],
+                objections=t["objections"],
+                message_angles=t["message_angles"],
+                marketing_channels=t["marketing_channels"]
+            )
+        )
+
+    target_audience_repo.create_many(items=new_target_audiences)
+
+    return new_target_audiences
+
+
+
+def get_system_prompt() -> str:
+    return """
 You are a senior AI product strategy specialist specializing in:
 
 - customer segmentation,
@@ -48,20 +134,51 @@ Rules:
 
 Requirements:
 - confidence MUST be a float between 0 and 1.
-- score MUST be an integer between 0 and 1.
+- score MUST be an float between 0 and 1.
 
 Return ONLY valid JSON.
 """
 
 
-def enum_values(enum):
-    return [
-        item.value
-        for item in enum
+def get_target_audience_schema() -> str:
+    return json.dumps(
+{
+    "audiences": [
+        {
+            "name": "",
+            "score": 0,
+            "confidence": 0,
+            "reason": "",
+
+            "age_min": 0,
+            "age_max": 0,
+
+            "gender": "",
+            "location": "",
+            "purchasing_power": "",
+
+            "lifestyles": [""],
+            "values": [""],
+
+            "awareness_level": "",
+            "price_sensitivity": "",
+            "research_level": "",
+            "decision_time": "",
+
+            "pain_points": [""],
+            "motivations": [""],
+            "buying_triggers": [""],
+            "objections": [""],
+
+            "message_angles": [""],
+            "marketing_channels": [""]
+        }
     ]
+}, ensure_ascii=False, indent=2)
+    
 
-
-ENUM_PROMPT = f"""
+def get_enums_prompt() -> str:
+    return f"""
 Allowed enum values:
 
 gender:
@@ -106,63 +223,13 @@ Incorrect example:
 """
 
 
-TARGET_AUDIENCE_SCHEMA = {
-    "audiences": [
-        {
-            "name": "",
-            "score": 0,
-            "confidence": 0,
-            "reason": "",
-
-            "age_min": 0,
-            "age_max": 0,
-
-            "gender": "",
-            "location": "",
-            "purchasing_power": "",
-
-            "lifestyles": [""],
-            "values": [""],
-
-            "awareness_level": "",
-            "price_sensitivity": "",
-            "research_level": "",
-            "decision_time": "",
-
-            "pain_points": [""],
-            "motivations": [""],
-            "buying_triggers": [""],
-            "objections": [""],
-
-            "message_angles": [""],
-            "marketing_channels": [""]
-        }
-    ]
-}
-
-
-
-def generate_target_audience_handler(
-    knowledge_id: int
-) -> Dict[str, Any]:
-    container = Container()
-
-    target_audience_repo = container.target_audiences_repository()
-    ai_service = container.ai_service()
-    knowledge_service = container.knowledge_service()
-
-    target_audiences_db = target_audience_repo.find_for_knowledge(knowledge_id=knowledge_id)
-    target_audiences_db_dtos = [TargetAudienceMapper.to_dto(item=t) for t in target_audiences_db]
-    knowledge_json = knowledge_service.get_knowledge_details_by_id(knowledge_id=knowledge_id).to_dict()
-
-    schema_json = json.dumps( TARGET_AUDIENCE_SCHEMA, ensure_ascii=False, indent=2)
-
-    user_prompt = f"""
+def get_target_audience_prompt(knowledge_context: str) -> str:
+    return f"""
 Analyze the product information.
 
 PRODUCT DATA:
 
-{knowledge_json}
+{knowledge_context}
 
 
 Generate target audience segments.
@@ -170,12 +237,12 @@ Generate target audience segments.
 
 Response format:
 
-{schema_json}
+{get_target_audience_schema()}
 
 
 ENUM RULES:
 
-{ENUM_PROMPT}
+{get_enums_prompt()}
 
 
 Requirements:
@@ -185,62 +252,3 @@ Requirements:
 - Include assumptions.
 - JSON ONLY.
 """
-
-
-    response = ai_service.chat_llm(
-        messages=[
-
-            LlmMessage(
-                role=LlmMessageRole.SYSTEM,
-                content=BASE_SYSTEM_PROMPT
-            ),
-            LlmMessage(
-                role=LlmMessageRole.USER,
-                content=build_uniqueness_constraint_prompt(
-                    existing_data= json.dumps( [t.to_dict() for t in target_audiences_db_dtos])
-                )
-            ),
-            LlmMessage(
-                role=LlmMessageRole.USER,
-                content=user_prompt
-            )
-        ]
-    )
-
-
-    response_json = json.loads(response.content )
-    audiences_arr = response_json["audiences"]
-
-    new_target_audiences = []
-    for t in audiences_arr:
-        new_target_audiences.append(
-            TargetAudience(
-                knowledge_id=knowledge_id,
-                fact_status=FactStatus.UNVERIFIED.value,
-                name=t["name"],
-                reason=t["reason"],
-                score=t['score'],
-                confidence=t['confidence'],
-                age_min=t["age_min"],
-                age_max=t["age_max"],
-                gender=t["gender"],
-                location=t["location"],
-                purchasing_power=t["purchasing_power"],
-                lifestyles=t["lifestyles"],
-                values=t["values"],
-                awareness_level=t["awareness_level"],
-                price_sensitivity=t["price_sensitivity"],
-                research_level=t["research_level"],
-                decision_time=t["decision_time"],
-                pain_points=t["pain_points"],
-                motivations=t["motivations"],
-                buying_triggers=t["buying_triggers"],
-                objections=t["objections"],
-                message_angles=t["message_angles"],
-                marketing_channels=t["marketing_channels"]
-            )
-        )
-
-    target_audience_repo.create_many(items=new_target_audiences)
-
-    return new_target_audiences
