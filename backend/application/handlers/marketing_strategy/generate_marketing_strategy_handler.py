@@ -6,7 +6,82 @@ from domain.enums.llm_message_role import LlmMessageRole
 from domain.models.marketing_strategy.marketing_strategy import MarketingStrategy
 
 
-SYSTEM_PROMPT = """
+
+def generate_marketing_strategy_handler(
+    knowledge_id: int,
+    brand_markeging_id: int
+):
+    container = Container()
+
+    knowledge_service = container.knowledge_service()
+    brand_marketing_service = container.brand_marketing_service()
+    ai_service = container.ai_service()
+    marketing_strategy_repository = container.marketing_strategy_repository()
+    marketing_strategy_service = container.marketing_strategy_service()
+
+
+    knowledge_context = knowledge_service.build_llm_context(knowledge_id=knowledge_id)
+
+    brand_strategy_context = brand_marketing_service.build_llm_context(
+        brand_marketing_id=brand_markeging_id
+    )
+
+
+    user_prompt = get_data_prompt(
+        knowledge_context=knowledge_context,
+        brand_strategy_context=brand_strategy_context
+    )
+
+
+    response = ai_service.chat_llm(
+        messages=[
+            LlmMessage(
+                role=LlmMessageRole.SYSTEM,
+                content=get_system_prompt()
+            ),
+            LlmMessage(
+                role=LlmMessageRole.USER,
+                content=user_prompt
+            ),
+            LlmMessage(
+                role=LlmMessageRole.USER,
+                content="Generate marketing strategy based on the provided data. Return only valid JSON using the specified structure."
+            )
+        ]
+    )
+
+
+    data = json.loads(response.content.strip())
+
+    entity = MarketingStrategy(
+        brand_marketing_id=brand_markeging_id,
+        marketing_objective=data.get("marketing_objective"),
+        growth_strategy=data.get("growth_strategy"),
+        primary_audience=data.get("primary_audience", []),
+        secondary_audience=data.get("secondary_audience", []),
+        audience_prioritization=data.get("audience_prioritization", []),
+        customer_journey=data.get("customer_journey", {}),
+        marketing_channels=data.get("marketing_channels", []),
+        acquisition_strategy=data.get("acquisition_strategy", []),
+        trust_building_strategy=data.get("trust_building_strategy", []),
+        content_strategy=data.get("content_strategy", {}),
+        community_strategy=data.get("community_strategy", []),
+        creator_influencer_strategy=data.get("creator_influencer_strategy", []),
+        campaign_directions=data.get("campaign_directions", []),
+        conversion_strategy=data.get("conversion_strategy", []),
+        retention_strategy=data.get("retention_strategy", []),
+        marketing_experiments=data.get("marketing_experiments", []),
+        marketing_kpis=data.get("marketing_kpis", []),
+    )
+    created = marketing_strategy_repository.create(entity)
+
+    return marketing_strategy_service.get_marketing_strategy_by_id(id=created.id)
+
+
+
+
+def get_system_prompt():
+    return """
 You are an expert in marketing strategy and growth marketing.
 
 Your task is to create a marketing strategy based on the available context.
@@ -104,86 +179,15 @@ Return only valid JSON:
 Return valid JSON only.
 """
 
-USER_PROMPT_TEMPLATE = """
-Generate a marketing strategy based on the following data.
+
+def get_data_prompt(knowledge_context: str, brand_strategy_context: str) -> str:
+    return f"""
 
 KNOWLEDGE BASE:
 
-{knowledge_json}
+{knowledge_context}
 
 BRAND STRATEGY:
 
-{brand_strategy_json}
+{brand_strategy_context}
 """
-
-# To na razie jest w knowledge 
-# CUSTOMER & MARKET INSIGHTS:
-# {insights_json}
-
-
-
-def generate_marketing_strategy_handler(
-    knowledge_id: int,
-    brand_markeging_id: int
-):
-    container = Container()
-
-    knowledge_service = container.knowledge_service()
-    brand_marketing_service = container.brand_marketing_service()
-    ai_service = container.ai_service()
-    marketing_strategy_repository = container.marketing_strategy_repository()
-    marketing_strategy_service = container.marketing_strategy_service()
-
-
-    knowledge_json = knowledge_service.build_llm_context(knowledge_id=knowledge_id)
-
-    brand_strategy_json = brand_marketing_service.build_llm_context(
-        brand_marketing_id=brand_markeging_id
-    )
-
-
-    user_prompt = USER_PROMPT_TEMPLATE.format(
-        knowledge_json=knowledge_json,
-        brand_strategy_json=brand_strategy_json
-    )
-
-
-    response = ai_service.chat_llm(
-        messages=[
-            LlmMessage(
-                role=LlmMessageRole.SYSTEM,
-                content=SYSTEM_PROMPT
-            ),
-            LlmMessage(
-                role=LlmMessageRole.USER,
-                content=user_prompt
-            )
-        ]
-    )
-
-
-    data = json.loads(response.content.strip())
-
-    entity = MarketingStrategy(
-        brand_marketing_id=brand_markeging_id,
-        marketing_objective=data.get("marketing_objective"),
-        growth_strategy=data.get("growth_strategy"),
-        primary_audience=data.get("primary_audience", []),
-        secondary_audience=data.get("secondary_audience", []),
-        audience_prioritization=data.get("audience_prioritization", []),
-        customer_journey=data.get("customer_journey", {}),
-        marketing_channels=data.get("marketing_channels", []),
-        acquisition_strategy=data.get("acquisition_strategy", []),
-        trust_building_strategy=data.get("trust_building_strategy", []),
-        content_strategy=data.get("content_strategy", {}),
-        community_strategy=data.get("community_strategy", []),
-        creator_influencer_strategy=data.get("creator_influencer_strategy", []),
-        campaign_directions=data.get("campaign_directions", []),
-        conversion_strategy=data.get("conversion_strategy", []),
-        retention_strategy=data.get("retention_strategy", []),
-        marketing_experiments=data.get("marketing_experiments", []),
-        marketing_kpis=data.get("marketing_kpis", []),
-    )
-    created = marketing_strategy_repository.create(entity)
-
-    return marketing_strategy_service.get_marketing_strategy_by_id(id=created.id)
