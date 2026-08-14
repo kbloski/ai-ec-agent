@@ -5,6 +5,7 @@ import json
 
 from application.mappers.knowledge_mapper import KnowledgeMapper
 from application.mappers.knowledge_insight_mapper import KnowledgeInsightMapper
+from application.dtos.offers.offer_dto import OfferDto
 
 from di.container import Container
 from domain.models.llm.llm_message import LlmMessage
@@ -19,11 +20,141 @@ from domain.enums.fact_status import FactStatus
 from infrastructure.database.db import SessionLocal
 
 
+
+# =====================================================
+# INSIGHT TYPE MAPPING
+# =====================================================
+
+INSIGHT_MAPPING = {
+    "problem_solved": KnowledgeInsightType.PROBLEM_SOLVED,
+    "solution":KnowledgeInsightType.SOLUTION,
+    "transformation":KnowledgeInsightType.TRANSFORMATION,
+    "offer_components":KnowledgeInsightType.OFFER_COMPONENT,
+    "features":KnowledgeInsightType.FEATURE,
+    "functional_benefits":KnowledgeInsightType.FUNCTIONAL_BENEFIT,
+    "emotional_benefits":KnowledgeInsightType.EMOTIONAL_BENEFIT,
+    "differentiators":KnowledgeInsightType.DIFFERENTIATOR,
+    "strengths":KnowledgeInsightType.STRENGTH,
+    "limitations":KnowledgeInsightType.LIMITATION,
+    "additional_insights":KnowledgeInsightType.ADDITIONAL_INSIGHT,
+}
+
+
+
+# =====================================================
+# MAIN HANDLER
+# =====================================================
+
+def knowledge_generate_handler(offer_id: int):
+
+    container = Container()
+
+    offer_service = container.offer_service()
+    ai_service = container.ai_service()
+
+
+    # ----------------------------
+    # LOAD OFFER
+    # ----------------------------
+    offer_context = offer_service.build_llm_context(offer_id)
+    
+
+    # ----------------------------
+    # GENERATE KNOWLEDGE
+    # ----------------------------
+
+    chat = [
+        LlmMessage(
+            role=LlmMessageRole.SYSTEM,
+            content=get_system_prompt()
+        ),
+        LlmMessage(
+            role=LlmMessageRole.USER,
+            content=get_data_prompt(offer_context)
+        ),
+        LlmMessage(
+            role=LlmMessageRole.USER,
+            content=get_knowledge_prompt()
+        ),
+    ]
+
+    response = ai_service.chat_llm(chat).content
+
+    json_data = json.loads(response)
+
+    # ----------------------------
+    # SAVE TO DATABASE
+    # ----------------------------
+    with SessionLocal() as session:
+        with session.begin():
+
+            knowledge = Knowledge(
+                offer_id=offer_id,
+                offer_summary=json_data.get("offer_summary", ""),
+                category=json_data.get("category", ""),
+                value_proposition=json_data.get("value_proposition", ""),
+            )
+
+            session.add(knowledge)
+            session.flush()
+
+            insight_items = []
+
+            for field, insight_type in INSIGHT_MAPPING.items():
+
+                items = json_data.get(field, [])
+
+                if not isinstance(items, list):
+                    items = [items]
+
+                for item in items:
+
+                    if not item:
+                        continue
+
+                    insight = KnowledgeInsight(
+                        knowledge_id=knowledge.id,
+                        type=insight_type,
+                        value=str(item),
+                        fact_status=FactStatus.VERIFIED.value,
+                    )
+
+                    insight_items.append(insight)
+
+            session.add_all(insight_items)
+            session.flush()
+
+            for insight in insight_items:
+                session.refresh(insight)
+
+            session.refresh(knowledge)
+
+            saved_insights = list(insight_items)
+
+
+    # ----------------------------
+    # PREPARE DTO RESULT
+    # ----------------------------
+
+    result = KnowledgeMapper.to_dto(
+        knowledge
+    )
+
+    result.knowledge_insights = [
+        KnowledgeInsightMapper.to_dto(item)
+        for item in saved_insights
+    ]
+
+    return result
+
+
+
 # =====================================================
 # BASE ROLE
 # =====================================================
 
-BASE_SYSTEM_PROMPT = """
+def get_system_prompt() -> str:
+    return """
 You are a senior product strategist AI specialized in product analysis,
 market research, customer psychology, and marketing strategy.
 
@@ -48,10 +179,22 @@ Do not use markdown.
 """
 
 
+
 # =====================================================
 # KNOWLEDGE PROMPT
 # =====================================================
-KNOWLEDGE_PROMPT = """
+def get_data_prompt( offer_context : str) -> str:
+    return f"""
+OFFER DATA:
+    
+{offer_context}
+"""
+
+# =====================================================
+# KNOWLEDGE PROMPT
+# =====================================================
+def get_knowledge_prompt() -> str:
+    return """
 Analyze the offer information and create a deep understanding of this offer.
 
 Your goal is to build a structured knowledge base that explains:
@@ -132,152 +275,3 @@ Use this structure as a foundation, but extend it when necessary:
 
 
 
-
-
-# =====================================================
-# LLM CALL
-# =====================================================
-
-def call_llm(ai_service, prompt):
-
-    chat = [
-        LlmMessage(
-            role=LlmMessageRole.SYSTEM,
-            content=BASE_SYSTEM_PROMPT
-        ),
-        LlmMessage(
-            role=LlmMessageRole.USER,
-            content=prompt
-        ),
-    ]
-
-    response = ai_service.chat_llm(chat)
-
-    return response.content
-
-
-
-# =====================================================
-# INSIGHT TYPE MAPPING
-# =====================================================
-
-INSIGHT_MAPPING = {
-    "problem_solved": KnowledgeInsightType.PROBLEM_SOLVED,
-    "solution":KnowledgeInsightType.SOLUTION,
-    "transformation":KnowledgeInsightType.TRANSFORMATION,
-    "offer_components":KnowledgeInsightType.OFFER_COMPONENT,
-    "features":KnowledgeInsightType.FEATURE,
-    "functional_benefits":KnowledgeInsightType.FUNCTIONAL_BENEFIT,
-    "emotional_benefits":KnowledgeInsightType.EMOTIONAL_BENEFIT,
-    "differentiators":KnowledgeInsightType.DIFFERENTIATOR,
-    "strengths":KnowledgeInsightType.STRENGTH,
-    "limitations":KnowledgeInsightType.LIMITATION,
-    "additional_insights":KnowledgeInsightType.ADDITIONAL_INSIGHT,
-}
-
-
-
-# =====================================================
-# MAIN HANDLER
-# =====================================================
-
-def knowledge_generate_handler(offer_id: int):
-
-    container = Container()
-
-    offer_service = container.offer_service()
-    ai_service = container.ai_service()
-
-
-    # ----------------------------
-    # LOAD OFFER
-    # ----------------------------
-    offer_json_str = offer_service.build_llm_context(offer_id)
-
-
-    # ----------------------------
-    # GENERATE KNOWLEDGE
-    # ----------------------------
-
-    response = call_llm(
-        ai_service,
-
-        f"""
-OFFER DATA:
-
-{offer_json_str}
-
-TASK:
-
-{KNOWLEDGE_PROMPT}
-
-"""
-    )
-
-
-    json_data = json.loads(response)
-
-    # ----------------------------
-    # SAVE TO DATABASE
-    # ----------------------------
-    with SessionLocal() as session:
-        with session.begin():
-
-            knowledge = Knowledge(
-                offer_id=offer_id,
-                offer_summary=json_data.get("offer_summary", ""),
-                category=json_data.get("category", ""),
-                value_proposition=json_data.get("value_proposition", ""),
-            )
-
-            session.add(knowledge)
-            session.flush()
-
-            insight_items = []
-
-            for field, insight_type in INSIGHT_MAPPING.items():
-
-                items = json_data.get(field, [])
-
-                if not isinstance(items, list):
-                    items = [items]
-
-                for item in items:
-
-                    if not item:
-                        continue
-
-                    insight = KnowledgeInsight(
-                        knowledge_id=knowledge.id,
-                        type=insight_type,
-                        value=str(item),
-                        fact_status=FactStatus.VERIFIED.value,
-                    )
-
-                    insight_items.append(insight)
-
-            session.add_all(insight_items)
-            session.flush()
-
-            for insight in insight_items:
-                session.refresh(insight)
-
-            session.refresh(knowledge)
-
-            saved_insights = list(insight_items)
-
-
-    # ----------------------------
-    # PREPARE DTO RESULT
-    # ----------------------------
-
-    result = KnowledgeMapper.to_dto(
-        knowledge
-    )
-
-    result.knowledge_insights = [
-        KnowledgeInsightMapper.to_dto(item)
-        for item in saved_insights
-    ]
-
-    return result
