@@ -1,5 +1,4 @@
 import json
-import re
 from typing import Dict, Any
 
 from di.container import Container
@@ -18,14 +17,6 @@ from domain.enums.purchasing_power import PurchasingPower
 from domain.enums.fact_status import FactStatus
 
 from infrastructure.ai.prompts.constraints.uniqueness_prompt import build_uniqueness_constraint_prompt
-
-
-
-def enum_values(enum):
-    return [
-        item.value
-        for item in enum
-    ]
 
 
 
@@ -177,33 +168,37 @@ def get_target_audience_schema() -> str:
 }, ensure_ascii=False, indent=2)
     
 
+def _enum_values(enum_cls) -> str:
+    return ", ".join(member.value for member in enum_cls)
+
+
 def get_enums_prompt() -> str:
     return f"""
 Allowed enum values:
 
 gender:
 AudienceGenderEnum:
-{enum_values(AudienceGender)}
+{_enum_values(AudienceGender)}
 
 purchasing_power:
 PurchasingPowerEnum:
-{enum_values(PurchasingPower)}
+{_enum_values(PurchasingPower)}
 
 awareness_level:
 AwarenessLevelEnum:
-{enum_values(AwarenessLevel)}
+{_enum_values(AwarenessLevel)}
 
 price_sensitivity:
 IntensityLevelEnum:
-{enum_values(IntensityLevel)}
+{_enum_values(IntensityLevel)}
 
 research_level:
 IntensityLevelEnum:
-{enum_values(IntensityLevel)}
+{_enum_values(IntensityLevel)}
 
 decision_time:
 DecisionTimeEnum:
-{enum_values(DecisionTime)}
+{_enum_values(DecisionTime)}
 
 
 Enum rules:
