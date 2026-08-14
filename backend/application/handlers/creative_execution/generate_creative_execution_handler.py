@@ -147,37 +147,36 @@ def generate_creative_execution_handler(
 
     # Create user prompt
 
-    prompt = USER_PROMPT.format(
-
-        knowledge=knowledge_service.build_llm_context(
+    prompt = get_data_prompt(
+        knowledge_context=knowledge_service.build_llm_context(
             knowledge_id=brand_strategy.knowledge_id
         ),
 
-        brand_strategy=brand_marketing_service.build_llm_context(
+        brand_strategy_context=brand_marketing_service.build_llm_context(
             brand_marketing_id=marketing_strategy.brand_marketing_id
         ),
 
-        marketing_strategy=marketing_strategy_service.build_llm_context(
+        marketing_strategy_context=marketing_strategy_service.build_llm_context(
             marketing_strategy_id=offer_strategy.marketing_strategy_id
         ),
 
-        offer_strategy=offer_strategy_service.build_llm_context(
+        offer_strategy_context=offer_strategy_service.build_llm_context(
             offer_strategy_id=message_strategy.offer_strategy_id
         ),
 
-        message_strategy=message_strategy_service.build_llm_context(
+        message_strategy_context=message_strategy_service.build_llm_context(
             message_strategy_id=ad_strategy.message_strategy_id
         ),
 
-        ad_strategy=ad_strategy_service.build_llm_context(
+        ad_strategy_context=ad_strategy_service.build_llm_context(
             ad_strategy_id=creative_strategy.ad_strategy_id
         ),
 
-        creative_strategy=creative_strategy_service.build_llm_context(
+        creative_strategy_context=creative_strategy_service.build_llm_context(
             creative_strategy_id=ad_execution.creative_strategy_id
         ),
 
-        ad_execution=ad_execution_service.build_llm_context(
+        ad_execution_context=ad_execution_service.build_llm_context(
             ad_execution_id=ad_execution_id
         ),
     )
@@ -367,46 +366,46 @@ Platform:
 
 
 def get_data_prompt(
-    knowledge_context
+    knowledge_context: str,
+    brand_strategy_context: str,
+    marketing_strategy_context: str,
+    offer_strategy_context: str,
+    message_strategy_context: str,
+    ad_strategy_context: str,
+    creative_strategy_context: str,
+    ad_execution_context: str
 ) -> str:
-    return """
+    return f"""
 KNOWLEDGE:
-{knowledge}
+{knowledge_context}
 
 
 BRAND STRATEGY:
-
-{brand_strategy}
+{brand_strategy_context}
 
 
 MARKETING STRATEGY:
-
-{marketing_strategy}
+{marketing_strategy_context}
 
 
 OFFER STRATEGY:
-
-{offer_strategy}
+{offer_strategy_context}
 
 
 MESSAGE STRATEGY:
-
-{message_strategy}
+{message_strategy_context}
 
 
 AD STRATEGY:
-
-{ad_strategy}
+{ad_strategy_context}
 
 
 CREATIVE STRATEGY:
-
-{creative_strategy}
+{creative_strategy_context}
 
 
 AD EXECUTION:
-
-{ad_execution}
+{ad_execution_context}
 """
 
 
