@@ -57,7 +57,7 @@ def generate_offer_strategy_handler(
             ),
             LlmMessage(
                 role=LlmMessageRole.USER,
-                content="Generate an Offer Strategy based on the provided data."
+                content="Generate an Offer Strategy based on the provided data. Return only valid JSON using the specified structure."
             ),
         ]
     )
@@ -280,7 +280,7 @@ def get_data_prompt(
     brand_strategy_context: str,
     marketing_strategy_context: str
 ) -> str:
-    USER_PROMPT_TEMPLATE = """
+    return """
 KNOWLEDGE:
 
 {knowledge_context}
