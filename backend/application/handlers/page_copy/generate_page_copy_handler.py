@@ -6,6 +6,188 @@ from domain.enums.llm_message_role import LlmMessageRole
 from domain.models.page_copy.page_copy import PageCopy
 
 
+
+def generate_page_copy_handler(
+    page_content_plan_id: int
+):
+
+    container = Container()
+
+
+    page_content_plan_service = container.page_content_plan_service()
+    page_strategy_service = container.page_strategy_service()
+    message_strategy_service = container.message_strategy_service()
+    offer_strategy_service = container.offer_strategy_service()
+
+    knowledge_service = container.knowledge_service()
+    brand_marketing_service = container.brand_marketing_service()
+    marketing_strategy_service = container.marketing_strategy_service()
+
+    page_blueprint_service = container.page_blueprint_service()
+
+    page_copy_repository = container.page_copy_repository()
+    page_copy_service = container.page_copy_service()
+
+    ai_service = container.ai_service()
+
+
+
+    page_content_plan = (
+        page_content_plan_service
+        .get_page_content_plan_by_id(
+            id=page_content_plan_id
+        )
+    )
+
+
+    page_blueprint = (
+        page_blueprint_service
+        .get_page_blueprint_by_id(
+            id=page_content_plan.page_blueprint_id
+        )
+    )
+
+
+    page_strategy = (
+        page_strategy_service
+        .get_page_strategy_by_id(
+            id=page_blueprint.page_strategy_id
+        )
+    )
+
+
+    message_strategy = (
+        message_strategy_service
+        .get_message_strategy_by_id(
+            id=page_strategy.message_strategy_id
+        )
+    )
+
+
+    offer_strategy = (
+        offer_strategy_service
+        .get_offer_strategy_by_id(
+            id=message_strategy.offer_strategy_id
+        )
+    )
+
+
+    marketing_strategy = (
+        marketing_strategy_service
+        .get_marketing_strategy_by_id(
+            id=offer_strategy.marketing_strategy_id
+        )
+    )
+
+
+    brand_marketing = (
+        brand_marketing_service
+        .get_brand_marketing_by_id(
+            id=marketing_strategy.brand_marketing_id
+        )
+    )
+
+
+    data_prompt = get_data_prompt(
+        knowledge_context=knowledge_service.build_llm_context(
+            knowledge_id=brand_marketing.knowledge_id
+        ),
+
+        brand_marketing_context=brand_marketing_service.build_llm_context(
+            brand_marketing_id=marketing_strategy.brand_marketing_id
+        ),
+
+        marketing_strategy_context=marketing_strategy_service.build_llm_context(
+            marketing_strategy_id=offer_strategy.marketing_strategy_id
+        ),
+
+        offer_strategy_context=offer_strategy_service.build_llm_context(
+            offer_strategy_id=message_strategy.offer_strategy_id
+        ),
+
+        message_strategy_context=message_strategy_service.build_llm_context(
+            message_strategy_id=page_strategy.message_strategy_id
+        ),
+
+        page_strategy_context=page_strategy_service.build_llm_context(
+            page_strategy_id=page_blueprint.page_strategy_id
+        ),
+
+        page_blueprint_context=page_blueprint_service.build_llm_context(
+            page_blueprint_id=page_content_plan.page_blueprint_id
+        ),
+
+        page_content_plan_context=page_content_plan_service.build_llm_context(
+            page_content_plan_id=page_content_plan_id
+        )
+    )
+
+
+
+    response = ai_service.chat_llm(
+
+        messages=[
+            LlmMessage(
+                role=LlmMessageRole.SYSTEM,
+                content=get_system_prompt()
+            ),
+            LlmMessage(
+                role=LlmMessageRole.USER,
+                content=data_prompt
+            ),
+            LlmMessage(
+                role=LlmMessageRole.USER,
+                content="Generate Page Copy based on the provided data. Return only valid JSON using the specified structure."
+            ),
+        ]
+
+    )
+    
+    
+
+    try:
+        content = response.content.strip()
+
+        if content.startswith("```"):
+            content = content.replace(
+                "```json",
+                ""
+            )
+            content = content.replace(
+                "```",
+                ""
+            ).strip()
+
+        result = json.loads(content)
+    except Exception as e:
+        return {
+            "error": "Invalid JSON response",
+            "exception": str(e),
+            "raw_response": response.content
+        }
+
+
+
+    if "page_copy" not in result:
+        return {
+            "error": "Missing page_copy",
+            "raw_response": response.content
+        }
+
+    page_copy_data = result.get("page_copy", {})
+
+    entity = PageCopy(
+        page_content_plan_id=page_content_plan_id,
+        sections=page_copy_data.get("sections", []),
+    )
+
+    created = page_copy_repository.create(entity)
+
+    return page_copy_service.get_page_copy_by_id(id=created.id)
+
+
+
+
 def get_system_prompt() -> str:
     return """
 You are an expert in:
@@ -271,289 +453,46 @@ STRICT JSON RULES:
 
 
 def get_data_prompt(
-    knowledge_json: str,
-    brand_marketing_json: str,
-    marketing_strategy_json: str,
-    offer_strategy_json: str,
-    message_strategy_json: str,
-    page_strategy_json: str,
-    page_blueprint_json: str,
-    page_content_plan_json: str
+    knowledge_context: str,
+    brand_marketing_context: str,
+    marketing_strategy_context: str,
+    offer_strategy_context: str,
+    message_strategy_context: str,
+    page_strategy_context: str,
+    page_blueprint_context: str,
+    page_content_plan_context: str
 ) -> str:
     return f"""
-Generate Page Copy based on the following marketing context:
-
-KNOWLEDGE BASE:
-{knowledge_json}
+KNOWLEDGE:
+{knowledge_context}
 
 
 BRAND MARKETING STRATEGY:
-{brand_marketing_json}
+{brand_marketing_context}
 
 
 MARKETING STRATEGY:
-{marketing_strategy_json}
+{marketing_strategy_context}
 
 
 OFFER STRATEGY:
-{offer_strategy_json}
+{offer_strategy_context}
 
 
 MESSAGE STRATEGY:
-{message_strategy_json}
+{message_strategy_context}
 
 
 PAGE STRATEGY:
-{page_strategy_json}
+{page_strategy_context}
 
 
 PAGE BLUEPRINT:
-{page_blueprint_json}
+{page_blueprint_context}
 
 
 PAGE CONTENT PLAN:
-{page_content_plan_json}
+{page_content_plan_context}
 """
 
 
-
-def normalize_json(content: str):
-
-    replacements = {
-        "‚": "'",
-        "’": "'",
-    }
-
-    for old, new in replacements.items():
-        content = content.replace(old, new)
-
-    return content.strip()
-
-
-
-def extract_json(content: str):
-
-    content = content.strip()
-
-    if "```" in content:
-
-        content = (
-            content
-            .replace("```json", "")
-            .replace("```", "")
-            .strip()
-        )
-
-
-    start = content.find("{")
-    end = content.rfind("}")
-
-
-    if start == -1 or end == -1:
-
-        raise ValueError(
-            "JSON object not found"
-        )
-
-
-    return content[start:end + 1]
-
-
-
-def generate_page_copy_handler(
-    page_content_plan_id: int
-):
-
-    container = Container()
-
-
-    page_content_plan_service = container.page_content_plan_service()
-    page_strategy_service = container.page_strategy_service()
-    message_strategy_service = container.message_strategy_service()
-    offer_strategy_service = container.offer_strategy_service()
-
-    knowledge_service = container.knowledge_service()
-    brand_marketing_service = container.brand_marketing_service()
-    marketing_strategy_service = container.marketing_strategy_service()
-
-    page_blueprint_service = container.page_blueprint_service()
-
-    page_copy_repository = container.page_copy_repository()
-    page_copy_service = container.page_copy_service()
-
-    ai_service = container.ai_service()
-
-
-
-    page_content_plan = (
-        page_content_plan_service
-        .get_page_content_plan_by_id(
-            id=page_content_plan_id
-        )
-    )
-
-
-    page_blueprint = (
-        page_blueprint_service
-        .get_page_blueprint_by_id(
-            id=page_content_plan.page_blueprint_id
-        )
-    )
-
-
-    page_strategy = (
-        page_strategy_service
-        .get_page_strategy_by_id(
-            id=page_blueprint.page_strategy_id
-        )
-    )
-
-
-    message_strategy = (
-        message_strategy_service
-        .get_message_strategy_by_id(
-            id=page_strategy.message_strategy_id
-        )
-    )
-
-
-    offer_strategy = (
-        offer_strategy_service
-        .get_offer_strategy_by_id(
-            id=message_strategy.offer_strategy_id
-        )
-    )
-
-
-    marketing_strategy = (
-        marketing_strategy_service
-        .get_marketing_strategy_by_id(
-            id=offer_strategy.marketing_strategy_id
-        )
-    )
-
-
-    brand_marketing = (
-        brand_marketing_service
-        .get_brand_marketing_by_id(
-            id=marketing_strategy.brand_marketing_id
-        )
-    )
-
-
-    user_prompt = get_data_prompt(
-
-        knowledge_json=knowledge_service.build_llm_context(
-            knowledge_id=brand_marketing.knowledge_id
-        ),
-
-        brand_marketing_json=brand_marketing_service.build_llm_context(
-            brand_marketing_id=marketing_strategy.brand_marketing_id
-        ),
-
-        marketing_strategy_json=marketing_strategy_service.build_llm_context(
-            marketing_strategy_id=offer_strategy.marketing_strategy_id
-        ),
-
-        offer_strategy_json=offer_strategy_service.build_llm_context(
-            offer_strategy_id=message_strategy.offer_strategy_id
-        ),
-
-        message_strategy_json=message_strategy_service.build_llm_context(
-            message_strategy_id=page_strategy.message_strategy_id
-        ),
-
-        page_strategy_json=page_strategy_service.build_llm_context(
-            page_strategy_id=page_blueprint.page_strategy_id
-        ),
-
-        page_blueprint_json=page_blueprint_service.build_llm_context(
-            page_blueprint_id=page_content_plan.page_blueprint_id
-        ),
-
-        page_content_plan_json=page_content_plan_service.build_llm_context(
-            page_content_plan_id=page_content_plan_id
-        )
-
-    )
-
-
-
-    response = ai_service.chat_llm(
-
-        messages=[
-
-            LlmMessage(
-                role=LlmMessageRole.SYSTEM,
-                content=get_system_prompt()
-            ),
-
-            LlmMessage(
-                role=LlmMessageRole.USER,
-                content=user_prompt
-            )
-
-        ]
-
-    )
-
-
-
-    try:
-
-        content = extract_json(
-            response.content
-        )
-
-
-        content = normalize_json(
-            content
-        )
-
-
-        result = json.loads(
-            content
-        )
-
-
-    except Exception as e:
-
-        return {
-
-            "error": "Invalid JSON response",
-
-            "exception": str(e),
-
-            "raw_response": response.content
-
-        }
-
-
-
-    if "page_copy" not in result:
-
-        return {
-
-            "error": "Missing page_copy",
-
-            "raw_response": response.content
-
-        }
-
-
-    page_copy_data = result.get("page_copy", {})
-
-
-    entity = PageCopy(
-
-        page_content_plan_id=page_content_plan_id,
-
-        sections=page_copy_data.get("sections", []),
-
-    )
-
-
-    created = page_copy_repository.create(entity)
-
-
-    return page_copy_service.get_page_copy_by_id(id=created.id)
