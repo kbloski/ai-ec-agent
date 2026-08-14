@@ -20,6 +20,8 @@ def generate_offer_strategy_handler(
     offer_strategy_repository = container.offer_strategy_repository()
     offer_strategy_service = container.offer_strategy_service()
 
+
+
     marketing_strategy = marketing_strategy_service.get_marketing_strategy_by_id(
         id=marketing_strategy_id
     )
@@ -280,7 +282,7 @@ def get_data_prompt(
     brand_strategy_context: str,
     marketing_strategy_context: str
 ) -> str:
-    return """
+    return f"""
 KNOWLEDGE:
 
 {knowledge_context}
