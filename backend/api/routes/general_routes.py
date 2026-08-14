@@ -4,6 +4,7 @@ from fastapi import APIRouter
 from pydantic import BaseModel
 from domain.enums.fact_status import FactStatus
 from domain.enums.review_status import ReviewStatus
+from domain.enums.offer_insight_type import OfferInsightType
 
 from application.handlers.ads.list_ad_frameworks_handler import list_ad_frameworks_handler
 from application.handlers.ads.list_creative_angels_handler import list_creative_angels_handler
@@ -48,7 +49,7 @@ from application.handlers.target_audience.get_target_audience_handler import get
 from application.handlers.target_audience.get_target_audience_preview_handler import get_target_audience_preview_handler
 from application.handlers.target_audience.delete_target_audience_handler import delete_target_audience_handler
 from application.handlers.target_audience.update_target_audience_handler import update_target_audience_handler
-from application.handlers.offers.suggest_offer_data_handler import suggets_offer_data_handler
+from application.handlers.offers.generate_offer_insights_handler import generate_offer_insights_handler
 # from application.handlers.offers.suggest_knowledge_data_handler import suggest_knowledge_data_handler
 from application.handlers.analysis.knowledge_analysis_answers_generate_handler import knowledge_analysis_answers_generate_handler
 from application.handlers.analysis.create_analysis_for_knowledge_handler import create_analysis_for_knowledge_handler
@@ -138,6 +139,10 @@ class UpdateOfferInsightRequest(BaseModel):
     review_status: Optional[ReviewStatus] = None
 
 
+class GenerateOfferInsightsRequest(BaseModel):
+    types: List[OfferInsightType]
+
+
 class UpdateKnowledgeInsightRequest(BaseModel):
     fact_status: Optional[FactStatus] = None
     review_status: Optional[ReviewStatus] = None
@@ -209,9 +214,9 @@ def register_general_routes(router: APIRouter):
         return update_offer_handler(id=id, fields=payload.fields)
 
 
-    @router.get("/offers/{id}/suggestions")
-    def suggest_offer_data(id: int):
-        return suggets_offer_data_handler(offer_id=id)
+    @router.post("/offers/{offer_id}/insights/generate")
+    def generate_offer_insights_route(offer_id: int, payload: GenerateOfferInsightsRequest):
+        return generate_offer_insights_handler(offer_id=offer_id, types=payload.types)
 
     # DELETE in future
     @router.get("/offers/{id}/delete")

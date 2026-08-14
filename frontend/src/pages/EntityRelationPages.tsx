@@ -1,6 +1,7 @@
 import { useState, type FormEvent, type ReactNode } from 'react'
 import { useParams } from 'react-router-dom'
 import { RelationList } from '@/components/EditableFields'
+import { MultiToggle } from '@/components/MultiToggle'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -12,7 +13,7 @@ import {
   useDeleteOfferInsightMutation,
   useDeleteOfferItemMutation,
   useGetOfferQuery,
-  useGenerateOfferSuggestionsMutation,
+  useGenerateOfferInsightsMutation,
   useUpdateOfferInsightMutation,
 } from '@/features/offers/offersApi'
 import {
@@ -43,14 +44,30 @@ export function OfferInsightsPage() {
   const { data: reviewStatuses } = useListReviewStatusesQuery()
   const [remove] = useDeleteOfferInsightMutation()
   const [update] = useUpdateOfferInsightMutation()
-  const [generateInsights, generateState] = useGenerateOfferSuggestionsMutation()
+  const [generateInsights, generateState] = useGenerateOfferInsightsMutation()
+  const [selectedTypes, setSelectedTypes] = useState<string[]>(['pain_points', 'target_audience'])
   const items = (data?.offer_insights as Entity[] | undefined) ?? []
 
   return (
     <CollectionPage title="Insights">
-      <Button onClick={() => generateInsights(offerId)} disabled={generateState.isLoading}>
-        {generateState.isLoading ? 'Generowanie…' : 'Generuj insights'}
-      </Button>
+      <div className="flex flex-wrap items-center gap-3">
+        <MultiToggle
+          ariaLabel="Typy insightów do wygenerowania"
+          values={selectedTypes}
+          onValueChange={setSelectedTypes}
+          options={[
+            { value: 'pain_points', label: 'Pain points' },
+            { value: 'target_audience', label: 'Target audience' },
+          ]}
+          disabled={generateState.isLoading}
+        />
+        <Button
+          onClick={() => generateInsights({ id: offerId, types: selectedTypes })}
+          disabled={generateState.isLoading || selectedTypes.length === 0}
+        >
+          {generateState.isLoading ? 'Generowanie…' : 'Generuj insights'}
+        </Button>
+      </div>
       {isLoading && <p className="text-sm text-muted-foreground">Ładowanie…</p>}
       {Boolean(error) && <p className="text-sm text-destructive">Nie udało się pobrać danych.</p>}
       {!isLoading && !error && items.length === 0 && <p className="text-sm text-muted-foreground">Brak elementów.</p>}
