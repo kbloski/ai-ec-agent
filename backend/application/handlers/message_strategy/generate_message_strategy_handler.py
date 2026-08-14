@@ -7,29 +7,6 @@ from domain.models.message_strategy.message_strategy import MessageStrategy
 
 
 
-USER_PROMPT_TEMPLATE = """
-KNOWLEDGE BASE:
-
-{knowledge_json}
-
-
-BRAND STRATEGY:
-
-{brand_strategy_json}
-
-
-MARKETING STRATEGY:
-
-{marketing_strategy_json}
-
-
-OFFER STRATEGY:
-
-{offer_strategy_json}
-
-"""
-
-
 def generate_message_strategy_handler(
     offer_strategy_id: int
 ):
@@ -58,29 +35,22 @@ def generate_message_strategy_handler(
         id=marketing_strategy.brand_marketing_id
     )
 
-    knowledge_json = knowledge_service.build_llm_context(
+    knowledge_context = knowledge_service.build_llm_context(
         knowledge_id=brand_strategy.knowledge_id
     )
 
-    brand_strategy_json = brand_marketing_service.build_llm_context(
+    brand_strategy_context = brand_marketing_service.build_llm_context(
         brand_marketing_id=marketing_strategy.brand_marketing_id
     )
 
-    marketing_strategy_json = marketing_strategy_service.build_llm_context(
+    marketing_strategy_context = marketing_strategy_service.build_llm_context(
         marketing_strategy_id=offer_strategy.marketing_strategy_id
     )
 
-    offer_strategy_json = offer_strategy_service.build_llm_context(
+    offer_strategy_context = offer_strategy_service.build_llm_context(
         offer_strategy_id=offer_strategy_id
     )
 
-
-    user_prompt = USER_PROMPT_TEMPLATE.format(
-        knowledge_json=knowledge_json,
-        brand_strategy_json=brand_strategy_json,
-        marketing_strategy_json=marketing_strategy_json,
-        offer_strategy_json=offer_strategy_json
-    )
 
 
     response = ai_service.chat_llm(
@@ -91,7 +61,12 @@ def generate_message_strategy_handler(
             ),
             LlmMessage(
                 role=LlmMessageRole.USER,
-                content=user_prompt
+                content=get_data_prompt(
+                    knowledge_context=knowledge_context,
+                    brand_strategy_context=brand_strategy_context,
+                    marketing_strategy_context=marketing_strategy_context,
+                    offer_strategy_context=offer_strategy_context
+                )
             ),
             LlmMessage(
                 role=LlmMessageRole.USER,
@@ -323,4 +298,34 @@ OUTPUT JSON:
 
 STRICT JSON RULES:
 - Return only valid JSON.
+"""
+
+
+
+def get_data_prompt(
+    knowledge_context: str,
+    brand_strategy_context: str,
+    marketing_strategy_context: str,
+    offer_strategy_context: str
+) -> str:
+    return f"""
+KNOWLEDGE BASE:
+
+{knowledge_context}
+
+
+
+BRAND STRATEGY:
+
+{brand_strategy_context}
+
+
+MARKETING STRATEGY:
+
+{marketing_strategy_context}
+
+
+OFFER STRATEGY:
+
+{offer_strategy_context}
 """
