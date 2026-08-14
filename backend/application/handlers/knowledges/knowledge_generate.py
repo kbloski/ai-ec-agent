@@ -116,7 +116,7 @@ def knowledge_generate_handler(offer_id: int):
                         knowledge_id=knowledge.id,
                         type=insight_type,
                         value=str(item),
-                        fact_status=FactStatus.VERIFIED.value,
+                        fact_status=FactStatus.UNVERIFIED.value,
                     )
 
                     insight_items.append(insight)
