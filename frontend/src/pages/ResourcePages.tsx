@@ -1,8 +1,29 @@
-import type { FormEvent, ReactNode } from 'react'
+import { useState, type FormEvent, type ReactNode } from 'react'
 import { useParams } from 'react-router-dom'
 import { ResourceList } from '@/components/ResourceList'
 import { RelationList } from '@/components/EditableFields'
 import { Button } from '@/components/ui/button'
+import { ChevronDown } from 'lucide-react'
+import { SegmentedControl } from '@/components/SegmentedControl'
+import { EntityViewer } from '@/components/EntityViewer'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
+
+/** Collapsible raw-JSON preview, collapsed by default. */
+function SelectedJsonPreview({ item }: { item: unknown }) {
+  if (!item) return null
+
+  return (
+    <Collapsible>
+      <CollapsibleTrigger className="group flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
+        <ChevronDown className="size-3 shrink-0 transition-transform group-data-[panel-open]:rotate-180" />
+        Podgląd JSON
+      </CollapsibleTrigger>
+      <CollapsibleContent className="pt-1">
+        <EntityViewer data={item} />
+      </CollapsibleContent>
+    </Collapsible>
+  )
+}
 import type { Entity } from '@/types'
 import { useGetKnowledgeQuery } from '@/features/knowledge/knowledgeApi'
 import { useCreateAnalysisMutation, useDeleteAnalysisMutation, useDeleteAnalysisQuestionMutation, useGenerateAnalysisAnswersMutation, useGetAnalysisQuery, useListAnalysisForKnowledgeQuery } from '@/features/analysis/analysisApi'
@@ -139,14 +160,32 @@ export function CreativeAdExecutionsPage() {
 export function AdCreativeExecutionsPage() {
   const id = Number(useParams().id); const { data } = useGetAdExecutionQuery(id); const isGeneratable = ['video', 'image', 'carousel'].includes(String(data?.creative_type))
   const list = useListCreativeExecutionForAdExecutionQuery(id, { skip: !isGeneratable }); const [generate, state] = useGenerateCreativeExecutionMutation(); const [remove] = useDeleteCreativeExecutionMutation(); const frameworks = useListAdFrameworksQuery(); const angles = useListCreativeAnglesQuery(); const styles = useListExecutionStylesQuery()
-  const submit = (event: FormEvent<HTMLFormElement>) => { event.preventDefault(); const form = new FormData(event.currentTarget); const duration = form.get('duration_seconds'); const slides = form.get('number_of_slides'); const framework = form.get('ad_framework_id'); const angle = form.get('creative_angle_id'); const style = form.get('execution_style_id'); void generate({ adExecutionId: id, ...(duration ? { duration_seconds: Number(duration) } : {}), ...(slides ? { number_of_slides: Number(slides) } : {}), ...(framework ? { ad_framework_id: String(framework) } : {}), ...(angle ? { creative_angle_id: String(angle) } : {}), ...(style ? { execution_style_id: String(style) } : {}) }) }
+  const [frameworkId, setFrameworkId] = useState(''); const [angleId, setAngleId] = useState(''); const [styleId, setStyleId] = useState('')
+  const selectedFramework = frameworks.data?.find((x: AdFramework) => x.id === frameworkId)
+  const selectedAngle = angles.data?.find((x: CreativeAngle) => x.id === angleId)
+  const selectedStyle = styles.data?.find((x: ExecutionStyle) => x.id === styleId)
+  const submit = (event: FormEvent<HTMLFormElement>) => { event.preventDefault(); const form = new FormData(event.currentTarget); const duration = form.get('duration_seconds'); const slides = form.get('number_of_slides'); void generate({ adExecutionId: id, ...(duration ? { duration_seconds: Number(duration) } : {}), ...(slides ? { number_of_slides: Number(slides) } : {}), ...(frameworkId ? { ad_framework_id: frameworkId } : {}), ...(angleId ? { creative_angle_id: angleId } : {}), ...(styleId ? { execution_style_id: styleId } : {}) }) }
   return <ResourcePage backTo={`/ad-execution/${id}`} backLabel={(data?.name as string) ?? 'Ad execution'} title="Creative execution">
-    {isGeneratable && <form onSubmit={submit} className="flex flex-wrap items-end gap-2">
-      <label className="text-xs">Czas trwania (s)<input name="duration_seconds" type="number" defaultValue={15} disabled={data?.creative_type !== 'video'} className="block w-28 rounded-md border px-2 py-1 text-sm disabled:opacity-50" /></label>
-      <label className="text-xs">Liczba slajdów<input name="number_of_slides" type="number" defaultValue={5} disabled={data?.creative_type !== 'carousel'} className="block w-28 rounded-md border px-2 py-1 text-sm disabled:opacity-50" /></label>
-      <label className="text-xs">Framework<select name="ad_framework_id" defaultValue="" className="block w-40 rounded-md border px-2 py-1 text-sm"><option value="">—</option>{frameworks.data?.map((x: AdFramework) => <option key={x.id} value={x.id}>{x.name}</option>)}</select></label>
-      <label className="text-xs">Creative angle<select name="creative_angle_id" defaultValue="" className="block w-40 rounded-md border px-2 py-1 text-sm"><option value="">—</option>{angles.data?.map((x: CreativeAngle) => <option key={x.id} value={x.id}>{x.name}</option>)}</select></label>
-      <label className="text-xs">Execution style<select name="execution_style_id" defaultValue="" className="block w-40 rounded-md border px-2 py-1 text-sm"><option value="">—</option>{styles.data?.map((x: ExecutionStyle) => <option key={x.id} value={x.id}>{x.name}</option>)}</select></label>
+    {isGeneratable && <form onSubmit={submit} className="space-y-3">
+      <div className="flex flex-wrap items-end gap-2">
+        <label className="text-xs">Czas trwania (s)<input name="duration_seconds" type="number" defaultValue={15} disabled={data?.creative_type !== 'video'} className="block w-28 rounded-md border px-2 py-1 text-sm disabled:opacity-50" /></label>
+        <label className="text-xs">Liczba slajdów<input name="number_of_slides" type="number" defaultValue={5} disabled={data?.creative_type !== 'carousel'} className="block w-28 rounded-md border px-2 py-1 text-sm disabled:opacity-50" /></label>
+      </div>
+      <div className="space-y-1">
+        <p className="text-xs text-muted-foreground">Framework</p>
+        <SegmentedControl ariaLabel="Ad framework" value={frameworkId || undefined} options={frameworks.data?.map((x: AdFramework) => ({ value: x.id, label: x.name }))} onValueChange={setFrameworkId} />
+        <SelectedJsonPreview item={selectedFramework} />
+      </div>
+      <div className="space-y-1">
+        <p className="text-xs text-muted-foreground">Creative angle</p>
+        <SegmentedControl ariaLabel="Creative angle" value={angleId || undefined} options={angles.data?.map((x: CreativeAngle) => ({ value: x.id, label: x.name }))} onValueChange={setAngleId} />
+        <SelectedJsonPreview item={selectedAngle} />
+      </div>
+      <div className="space-y-1">
+        <p className="text-xs text-muted-foreground">Execution style</p>
+        <SegmentedControl ariaLabel="Execution style" value={styleId || undefined} options={styles.data?.map((x: ExecutionStyle) => ({ value: x.id, label: x.name }))} onValueChange={setStyleId} />
+        <SelectedJsonPreview item={selectedStyle} />
+      </div>
       <Button type="submit" size="sm" disabled={state.isLoading}>{state.isLoading ? 'Generowanie…' : 'Generuj creative execution'}</Button>
     </form>}
     <ResourceList title="Creative execution" items={list.data} isLoading={list.isLoading} error={list.error} linkTo={(x) => `/creative-execution/${x.id}`} itemLabel={(x) => `#${x.id}`} onDelete={(x) => remove({ id: x.id as number, adExecutionId: id })} />
