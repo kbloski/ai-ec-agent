@@ -6,7 +6,8 @@ from domain.enums.llm_message_role import LlmMessageRole
 from domain.models.page_content_plan.page_content_plan import PageContentPlan
 
 
-SYSTEM_PROMPT = """
+def get_system_prompt() -> str:
+    return """
 You are an expert in:
 
 - Landing Page Content Architecture
@@ -212,8 +213,16 @@ STRICT JSON RULES
 """
 
 
-
-USER_PROMPT_TEMPLATE = """
+def get_data_prompt(
+    knowledge_json: str,
+    brand_marketing_json: str,
+    marketing_strategy_json: str,
+    offer_strategy_json: str,
+    message_strategy_json: str,
+    page_strategy_json: str,
+    page_blueprint_json: str
+) -> str:
+    return f"""
 Generate Page Content Plan based on:
 
 
@@ -308,7 +317,7 @@ def generate_page_content_plan_handler(
     )
 
 
-    user_prompt = USER_PROMPT_TEMPLATE.format(
+    user_prompt = get_data_prompt(
 
         knowledge_json=knowledge_service.build_llm_context(
             knowledge_id=brand_marketing.knowledge_id
@@ -347,7 +356,7 @@ def generate_page_content_plan_handler(
 
             LlmMessage(
                 role=LlmMessageRole.SYSTEM,
-                content=SYSTEM_PROMPT
+                content=get_system_prompt()
             ),
 
             LlmMessage(

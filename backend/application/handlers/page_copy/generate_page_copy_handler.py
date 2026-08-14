@@ -6,7 +6,8 @@ from domain.enums.llm_message_role import LlmMessageRole
 from domain.models.page_copy.page_copy import PageCopy
 
 
-SYSTEM_PROMPT = """
+def get_system_prompt() -> str:
+    return """
 You are an expert in:
 
 - Conversion Copywriting
@@ -269,7 +270,17 @@ STRICT JSON RULES:
 """
 
 
-USER_PROMPT_TEMPLATE = """
+def get_data_prompt(
+    knowledge_json: str,
+    brand_marketing_json: str,
+    marketing_strategy_json: str,
+    offer_strategy_json: str,
+    message_strategy_json: str,
+    page_strategy_json: str,
+    page_blueprint_json: str,
+    page_content_plan_json: str
+) -> str:
+    return f"""
 Generate Page Copy based on the following marketing context:
 
 KNOWLEDGE BASE:
@@ -430,7 +441,7 @@ def generate_page_copy_handler(
     )
 
 
-    user_prompt = USER_PROMPT_TEMPLATE.format(
+    user_prompt = get_data_prompt(
 
         knowledge_json=knowledge_service.build_llm_context(
             knowledge_id=brand_marketing.knowledge_id
@@ -474,7 +485,7 @@ def generate_page_copy_handler(
 
             LlmMessage(
                 role=LlmMessageRole.SYSTEM,
-                content=SYSTEM_PROMPT
+                content=get_system_prompt()
             ),
 
             LlmMessage(

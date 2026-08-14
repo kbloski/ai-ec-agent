@@ -6,7 +6,271 @@ from domain.enums.llm_message_role import LlmMessageRole
 from domain.models.page_blueprint.page_blueprint import PageBlueprint
 
 
-SYSTEM_PROMPT = """
+
+
+def generate_page_blueprint_handler(
+    page_strategy_id: int
+):
+
+    container = Container()
+
+
+    page_strategy_service = (
+        container.page_strategy_service()
+    )
+
+    message_strategy_service = (
+        container.message_strategy_service()
+    )
+
+    knowledge_service = (
+        container.knowledge_service()
+    )
+
+    brand_marketing_service = (
+        container.brand_marketing_service()
+    )
+
+    marketing_strategy_service = (
+        container.marketing_strategy_service()
+    )
+
+    offer_strategy_service = (
+        container.offer_strategy_service()
+    )
+
+
+    page_blueprint_repository = (
+        container.page_blueprint_repository()
+    )
+
+    page_blueprint_service = (
+        container.page_blueprint_service()
+    )
+
+    ai_service = (
+        container.ai_service()
+    )
+
+
+
+    page_strategy = (
+        page_strategy_service
+        .get_page_strategy_by_id(
+            id=page_strategy_id
+        )
+    )
+
+
+    message_strategy = (
+        message_strategy_service
+        .get_message_strategy_by_id(
+            id=page_strategy.message_strategy_id
+        )
+    )
+
+
+    offer_strategy = (
+        offer_strategy_service
+        .get_offer_strategy_by_id(
+            id=message_strategy.offer_strategy_id
+        )
+    )
+
+
+    marketing_strategy = (
+        marketing_strategy_service
+        .get_marketing_strategy_by_id(
+            id=offer_strategy.marketing_strategy_id
+        )
+    )
+
+
+    brand_strategy = (
+        brand_marketing_service
+        .get_brand_marketing_by_id(
+            id=marketing_strategy.brand_marketing_id
+        )
+    )
+
+
+    user_prompt = get_data_prompt(
+
+        knowledge_context=knowledge_service.build_llm_context(
+            knowledge_id=brand_strategy.knowledge_id
+        ),
+
+        brand_strategy_context=brand_marketing_service.build_llm_context(
+            brand_marketing_id=marketing_strategy.brand_marketing_id
+        ),
+
+        marketing_strategy_context=marketing_strategy_service.build_llm_context(
+            marketing_strategy_id=offer_strategy.marketing_strategy_id
+        ),
+
+        offer_strategy_context=offer_strategy_service.build_llm_context(
+            offer_strategy_id=message_strategy.offer_strategy_id
+        ),
+
+        message_strategy_context=message_strategy_service.build_llm_context(
+            message_strategy_id=page_strategy.message_strategy_id
+        ),
+
+        page_strategy_context=page_strategy_service.build_llm_context(
+            page_strategy_id=page_strategy_id
+        )
+    )
+
+
+
+    response = ai_service.chat_llm(
+
+        messages=[
+
+            LlmMessage(
+                role=LlmMessageRole.SYSTEM,
+                content=get_system_prompt()
+            ),
+
+            LlmMessage(
+                role=LlmMessageRole.USER,
+                content=user_prompt
+            ),
+            LlmMessage(
+                role=LlmMessageRole.SYSTEM,
+                content="Generate Page Blueprint based on the provided data. Return only valid JSON using the specified structure."
+            ),
+
+        ]
+
+    )
+
+
+
+    try:
+        content = response.content.strip()
+        if content.startswith("```"):
+            content = content.replace(
+                "```json",
+                ""
+            )
+            content = content.replace(
+                "```",
+                ""
+            ).strip()
+        result = json.loads(content)
+
+
+    except Exception as e:
+        return {
+            "error": "Invalid JSON response",
+            "exception": str(e),
+            "raw_response": response.content
+        }
+
+
+    page_blueprint_data = (
+        result.get(
+            "page_blueprint",
+            {}
+        )
+    )
+
+
+    if not page_blueprint_data:
+        return {
+            "error": "Missing page_blueprint",
+            "raw_response": response.content
+        }
+
+
+    sections = (
+        page_blueprint_data.get(
+            "sections",
+            []
+        )
+    )
+
+    if not isinstance(
+        sections,
+        list
+    ):
+
+        return {
+            "error": "Sections must be list",
+            "raw_response": response.content
+        }
+
+    allowed_sections = {
+        "hero",
+        "problem",
+        "solution",
+        "benefits",
+        "features",
+        "how_it_works",
+        "social_proof",
+        "offer",
+        "risk_reversal",
+        "faq",
+        "final_cta",
+        "product_showcase",
+        "comparison",
+        "testimonials",
+        "before_after",
+        "unique_mechanism",
+        "bonus_stack",
+        "urgency",
+        "pricing"
+
+    }
+
+
+    for section in sections:
+        if (
+            section.get("section_type")
+            not in allowed_sections
+        ):
+            return {
+                "error": "Invalid section_type",
+                "section": section
+            }
+
+
+
+    entity = PageBlueprint(
+        page_strategy_id=page_strategy_id,
+        page_type=(
+            page_blueprint_data.get(
+                "page_type",
+                "ecommerce_product"
+            )
+        ),
+        primary_conversion_goal=(
+            page_blueprint_data.get(
+                "primary_conversion_goal",
+                "purchase"
+            )
+        ),
+        sections=sections
+    )
+
+    created = (
+        page_blueprint_repository.create(
+            entity
+        )
+    )
+
+    return (
+        page_blueprint_service
+        .get_page_blueprint_by_id(
+            id=created.id
+        )
+    )
+    
+    
+
+def get_system_prompt() -> str:
+    return """
 You are an expert in:
 
 - E-commerce Landing Page Architecture
@@ -395,353 +659,35 @@ STRICT JSON RULES:
 """
 
 
-USER_PROMPT_TEMPLATE = """
-Generate Page Blueprint based on:
-
-
-KNOWLEDGE BASE:
-{knowledge_json}
+def get_data_prompt(
+    knowledge_context: str,
+    brand_strategy_context: str,
+    marketing_strategy_context: str,
+    offer_strategy_context: str,
+    message_strategy_context: str,
+    page_strategy_context: str
+) -> str:
+    return f"""
+KNOWLEDGE:
+{knowledge_context}
 
 
 BRAND STRATEGY:
-{brand_strategy_json}
+{brand_strategy_context}
 
 
 MARKETING STRATEGY:
-{marketing_strategy_json}
+{marketing_strategy_context}
 
 
 OFFER STRATEGY:
-{offer_strategy_json}
+{offer_strategy_context}
 
 
 MESSAGE STRATEGY:
-{message_strategy_json}
+{message_strategy_context}
 
 
 PAGE STRATEGY:
-{page_strategy_json}
+{page_strategy_context}
 """
-
-
-
-def extract_json(content: str):
-
-    content = content.strip()
-
-
-    if "```" in content:
-
-        content = (
-            content
-            .replace("```json", "")
-            .replace("```", "")
-            .strip()
-        )
-
-
-    start = content.find("{")
-
-    end = content.rfind("}")
-
-
-    if start == -1 or end == -1:
-
-        raise ValueError(
-            "JSON object not found"
-        )
-
-
-    return content[start:end + 1]
-
-
-
-def generate_page_blueprint_handler(
-    page_strategy_id: int
-):
-
-    container = Container()
-
-
-    page_strategy_service = (
-        container.page_strategy_service()
-    )
-
-    message_strategy_service = (
-        container.message_strategy_service()
-    )
-
-    knowledge_service = (
-        container.knowledge_service()
-    )
-
-    brand_marketing_service = (
-        container.brand_marketing_service()
-    )
-
-    marketing_strategy_service = (
-        container.marketing_strategy_service()
-    )
-
-    offer_strategy_service = (
-        container.offer_strategy_service()
-    )
-
-
-    page_blueprint_repository = (
-        container.page_blueprint_repository()
-    )
-
-    page_blueprint_service = (
-        container.page_blueprint_service()
-    )
-
-    ai_service = (
-        container.ai_service()
-    )
-
-
-
-    page_strategy = (
-        page_strategy_service
-        .get_page_strategy_by_id(
-            id=page_strategy_id
-        )
-    )
-
-
-    message_strategy = (
-        message_strategy_service
-        .get_message_strategy_by_id(
-            id=page_strategy.message_strategy_id
-        )
-    )
-
-
-    offer_strategy = (
-        offer_strategy_service
-        .get_offer_strategy_by_id(
-            id=message_strategy.offer_strategy_id
-        )
-    )
-
-
-    marketing_strategy = (
-        marketing_strategy_service
-        .get_marketing_strategy_by_id(
-            id=offer_strategy.marketing_strategy_id
-        )
-    )
-
-
-    brand_strategy = (
-        brand_marketing_service
-        .get_brand_marketing_by_id(
-            id=marketing_strategy.brand_marketing_id
-        )
-    )
-
-
-    user_prompt = USER_PROMPT_TEMPLATE.format(
-
-        knowledge_json=knowledge_service.build_llm_context(
-            knowledge_id=brand_strategy.knowledge_id
-        ),
-
-        brand_strategy_json=brand_marketing_service.build_llm_context(
-            brand_marketing_id=marketing_strategy.brand_marketing_id
-        ),
-
-        marketing_strategy_json=marketing_strategy_service.build_llm_context(
-            marketing_strategy_id=offer_strategy.marketing_strategy_id
-        ),
-
-        offer_strategy_json=offer_strategy_service.build_llm_context(
-            offer_strategy_id=message_strategy.offer_strategy_id
-        ),
-
-        message_strategy_json=message_strategy_service.build_llm_context(
-            message_strategy_id=page_strategy.message_strategy_id
-        ),
-
-        page_strategy_json=page_strategy_service.build_llm_context(
-            page_strategy_id=page_strategy_id
-        )
-
-    )
-
-
-
-    response = ai_service.chat_llm(
-
-        messages=[
-
-            LlmMessage(
-                role=LlmMessageRole.SYSTEM,
-                content=SYSTEM_PROMPT
-            ),
-
-            LlmMessage(
-                role=LlmMessageRole.USER,
-                content=user_prompt
-            )
-
-        ]
-
-    )
-
-
-
-    try:
-
-        content = extract_json(
-            response.content
-        )
-
-
-        result = json.loads(
-            content
-        )
-
-
-    except Exception as e:
-
-        return {
-
-            "error": "Invalid JSON response",
-
-            "exception": str(e),
-
-            "raw_response": response.content
-
-        }
-
-
-
-    page_blueprint_data = (
-        result.get(
-            "page_blueprint",
-            {}
-        )
-    )
-
-
-
-    if not page_blueprint_data:
-
-        return {
-
-            "error": "Missing page_blueprint",
-
-            "raw_response": response.content
-
-        }
-
-
-
-    sections = (
-        page_blueprint_data.get(
-            "sections",
-            []
-        )
-    )
-
-
-
-    if not isinstance(
-        sections,
-        list
-    ):
-
-        return {
-
-            "error": "Sections must be list",
-
-            "raw_response": response.content
-
-        }
-
-
-
-    allowed_sections = {
-
-        "hero",
-        "problem",
-        "solution",
-        "benefits",
-        "features",
-        "how_it_works",
-        "social_proof",
-        "offer",
-        "risk_reversal",
-        "faq",
-        "final_cta",
-        "product_showcase",
-        "comparison",
-        "testimonials",
-        "before_after",
-        "unique_mechanism",
-        "bonus_stack",
-        "urgency",
-        "pricing"
-
-    }
-
-
-
-    for section in sections:
-
-
-        if (
-            section.get("section_type")
-            not in allowed_sections
-        ):
-
-            return {
-
-                "error": "Invalid section_type",
-
-                "section": section
-
-            }
-
-
-
-    entity = PageBlueprint(
-
-        page_strategy_id=page_strategy_id,
-
-        page_type=(
-            page_blueprint_data.get(
-                "page_type",
-                "ecommerce_product"
-            )
-        ),
-
-        primary_conversion_goal=(
-            page_blueprint_data.get(
-                "primary_conversion_goal",
-                "purchase"
-            )
-        ),
-
-        sections=sections
-
-    )
-
-
-
-    created = (
-        page_blueprint_repository.create(
-            entity
-        )
-    )
-
-
-
-    return (
-        page_blueprint_service
-        .get_page_blueprint_by_id(
-            id=created.id
-        )
-    )
