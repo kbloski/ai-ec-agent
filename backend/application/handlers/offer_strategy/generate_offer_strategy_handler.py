@@ -5,7 +5,95 @@ from domain.models.llm.llm_message import LlmMessage
 from domain.enums.llm_message_role import LlmMessageRole
 from domain.models.offer_strategy.offer_strategy import OfferStrategy
 
-SYSTEM_PROMPT = """
+
+
+def generate_offer_strategy_handler(
+    marketing_strategy_id: int
+):
+
+    container = Container()
+
+    knowledge_service = container.knowledge_service()
+    brand_marketing_service = container.brand_marketing_service()
+    marketing_strategy_service = container.marketing_strategy_service()
+    ai_service = container.ai_service()
+    offer_strategy_repository = container.offer_strategy_repository()
+    offer_strategy_service = container.offer_strategy_service()
+
+    marketing_strategy = marketing_strategy_service.get_marketing_strategy_by_id(
+        id=marketing_strategy_id
+    )
+
+    brand_strategy = brand_marketing_service.get_brand_marketing_by_id(
+        id=marketing_strategy.brand_marketing_id
+    )
+
+    knowledge_context = knowledge_service.build_llm_context(
+        knowledge_id=brand_strategy.knowledge_id
+    )
+
+    brand_strategy_context = brand_marketing_service.build_llm_context(
+        brand_marketing_id=marketing_strategy.brand_marketing_id
+    )
+
+    marketing_strategy_context = marketing_strategy_service.build_llm_context(
+        marketing_strategy_id=marketing_strategy_id
+    )
+
+
+    response = ai_service.chat_llm(
+        messages=[
+            LlmMessage(
+                role=LlmMessageRole.SYSTEM,
+                content=get_system_prompt()
+            ),
+            LlmMessage(
+                role=LlmMessageRole.USER,
+                content=get_data_prompt(
+                    knowledge_context=knowledge_context,
+                    brand_strategy_context=brand_strategy_context,
+                    marketing_strategy_context=marketing_strategy_context
+                )
+            ),
+            LlmMessage(
+                role=LlmMessageRole.USER,
+                content="Generate an Offer Strategy based on the provided data."
+            ),
+        ]
+    )
+
+
+    data = json.loads(response.content.strip())
+    data = data.get("offer_strategy", {})
+
+    entity = OfferStrategy(
+        marketing_strategy_id=marketing_strategy_id,
+        offer_name=data.get("offer_name"),
+        offer_positioning=data.get("offer_positioning"),
+        core_value_proposition=data.get("core_value_proposition"),
+        main_customer_problem=data.get("customer_problem", {}).get("main_problem"),
+        solution_mechanism=data.get("solution_mechanism"),
+        primary_benefit=data.get("primary_benefit"),
+        secondary_benefits=data.get("secondary_benefits", []),
+        functional_benefits=data.get("functional_benefits", []),
+        emotional_benefits=data.get("emotional_benefits", []),
+        offer_structure=data.get("offer_structure", {}),
+        value_stack=data.get("value_stack", []),
+        risk_reversal=data.get("risk_reversal", []),
+        trust_elements=data.get("trust_elements", []),
+        pricing_strategy=data.get("pricing_strategy"),
+        urgency_strategy=data.get("urgency_strategy"),
+        customer_objection_handling=data.get("customer_objection_handling", []),
+        competitive_difference=data.get("competitive_difference"),
+        conversion_levers=data.get("conversion_levers", []),
+    )
+    created = offer_strategy_repository.create(entity)
+
+    return offer_strategy_service.get_offer_strategy_by_id(id=created.id)
+
+
+def get_system_prompt() -> str:
+    return """
 You are an expert in creating Offer Strategy
 for e-commerce products, direct response marketing,
 and conversion optimization.
@@ -187,104 +275,23 @@ STRICT JSON RULES:
 """
 
 
-USER_PROMPT_TEMPLATE = """
-Generate an Offer Strategy based on the provided data.
+def get_data_prompt(
+    knowledge_context: str,
+    brand_strategy_context: str,
+    marketing_strategy_context: str
+) -> str:
+    USER_PROMPT_TEMPLATE = """
+KNOWLEDGE:
 
-KNOWLEDGE BASE:
-
-{knowledge_json}
+{knowledge_context}
 
 
 BRAND STRATEGY:
 
-{brand_strategy_json}
+{brand_strategy_context}
 
 
 MARKETING STRATEGY:
 
-{marketing_strategy_json}
+{marketing_strategy_context}
 """
-
-
-def generate_offer_strategy_handler(
-    marketing_strategy_id: int
-):
-
-    container = Container()
-
-    knowledge_service = container.knowledge_service()
-    brand_marketing_service = container.brand_marketing_service()
-    marketing_strategy_service = container.marketing_strategy_service()
-    ai_service = container.ai_service()
-    offer_strategy_repository = container.offer_strategy_repository()
-    offer_strategy_service = container.offer_strategy_service()
-
-    marketing_strategy = marketing_strategy_service.get_marketing_strategy_by_id(
-        id=marketing_strategy_id
-    )
-
-    brand_strategy = brand_marketing_service.get_brand_marketing_by_id(
-        id=marketing_strategy.brand_marketing_id
-    )
-
-    knowledge_json = knowledge_service.build_llm_context(
-        knowledge_id=brand_strategy.knowledge_id
-    )
-
-    brand_strategy_json = brand_marketing_service.build_llm_context(
-        brand_marketing_id=marketing_strategy.brand_marketing_id
-    )
-
-    marketing_strategy_json = marketing_strategy_service.build_llm_context(
-        marketing_strategy_id=marketing_strategy_id
-    )
-
-
-    user_prompt = USER_PROMPT_TEMPLATE.format(
-        knowledge_json=knowledge_json,
-        brand_strategy_json=brand_strategy_json,
-        marketing_strategy_json=marketing_strategy_json
-    )
-
-
-    response = ai_service.chat_llm(
-        messages=[
-            LlmMessage(
-                role=LlmMessageRole.SYSTEM,
-                content=SYSTEM_PROMPT
-            ),
-            LlmMessage(
-                role=LlmMessageRole.USER,
-                content=user_prompt
-            )
-        ]
-    )
-
-
-    data = json.loads(response.content.strip())
-    data = data.get("offer_strategy", {})
-
-    entity = OfferStrategy(
-        marketing_strategy_id=marketing_strategy_id,
-        offer_name=data.get("offer_name"),
-        offer_positioning=data.get("offer_positioning"),
-        core_value_proposition=data.get("core_value_proposition"),
-        main_customer_problem=data.get("customer_problem", {}).get("main_problem"),
-        solution_mechanism=data.get("solution_mechanism"),
-        primary_benefit=data.get("primary_benefit"),
-        secondary_benefits=data.get("secondary_benefits", []),
-        functional_benefits=data.get("functional_benefits", []),
-        emotional_benefits=data.get("emotional_benefits", []),
-        offer_structure=data.get("offer_structure", {}),
-        value_stack=data.get("value_stack", []),
-        risk_reversal=data.get("risk_reversal", []),
-        trust_elements=data.get("trust_elements", []),
-        pricing_strategy=data.get("pricing_strategy"),
-        urgency_strategy=data.get("urgency_strategy"),
-        customer_objection_handling=data.get("customer_objection_handling", []),
-        competitive_difference=data.get("competitive_difference"),
-        conversion_levers=data.get("conversion_levers", []),
-    )
-    created = offer_strategy_repository.create(entity)
-
-    return offer_strategy_service.get_offer_strategy_by_id(id=created.id)

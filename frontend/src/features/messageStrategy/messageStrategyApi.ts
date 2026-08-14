@@ -27,6 +27,14 @@ export const messageStrategyApi = api.injectEndpoints({
         itemTag('MessageStrategy', id),
       ],
     }),
+    updateMessageStrategy: builder.mutation<Entity, { id: number; fields: Record<string, unknown> }>({
+      query: ({ id, fields }) => ({
+        url: `/message-strategy/${id}/update`,
+        method: 'POST',
+        body: { fields },
+      }),
+      invalidatesTags: (_result, _err, { id }) => [itemTag('MessageStrategy', id)],
+    }),
   }),
 })
 
@@ -35,4 +43,5 @@ export const {
   useGetMessageStrategyQuery,
   useGenerateMessageStrategyMutation,
   useDeleteMessageStrategyMutation,
+  useUpdateMessageStrategyMutation,
 } = messageStrategyApi

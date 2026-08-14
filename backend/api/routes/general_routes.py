@@ -80,6 +80,7 @@ from application.handlers.message_strategy.generate_message_strategy_handler imp
 from application.handlers.message_strategy.get_message_strategy_handler import get_message_strategy_handler
 from application.handlers.message_strategy.get_offer_strategy_message_strategies_handler import get_offer_strategy_message_strategies_handler
 from application.handlers.message_strategy.delete_message_strategy_handler import delete_message_strategy_handler
+from application.handlers.message_strategy.update_message_strategy_handler import update_message_strategy_handler
 from application.handlers.page_strategy.generate_page_strategy_json_handler import generate_page_strategy_json_handler
 from application.handlers.ad_strategy.generate_ad_strategy_handler import generate_ad_strategy_handler
 from application.handlers.ad_strategy.get_ad_strategy_handler import get_ad_strategy_handler
@@ -513,6 +514,10 @@ def register_general_routes(router: APIRouter):
     @router.get("/message-strategy/{id}")
     def get_message_strategy( id: int ):
         return get_message_strategy_handler( id=id )
+
+    @router.post("/message-strategy/{id}/update")
+    def update_message_strategy_route(id: int, payload: UpdateFieldsRequest):
+        return update_message_strategy_handler(id=id, fields=payload.fields)
 
     # DELETE in future
     @router.get("/message-strategy/{id}/delete")
