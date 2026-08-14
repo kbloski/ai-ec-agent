@@ -19,53 +19,6 @@ from domain.models.creative_execution.creative_execution import (
 
 
 
-
-
-
-USER_PROMPT = r"""
-Generate creative execution.
-
-KNOWLEDGE:
-
-{knowledge}
-
-
-BRAND STRATEGY:
-
-{brand_strategy}
-
-
-MARKETING STRATEGY:
-
-{marketing_strategy}
-
-
-OFFER STRATEGY:
-
-{offer_strategy}
-
-
-MESSAGE STRATEGY:
-
-{message_strategy}
-
-
-AD STRATEGY:
-
-{ad_strategy}
-
-
-CREATIVE STRATEGY:
-
-{creative_strategy}
-
-
-AD EXECUTION:
-
-{ad_execution}
-"""
-
-
 def generate_creative_execution_handler(
     ad_execution_id: int,
     duration_seconds: Optional[int] = None,
@@ -412,6 +365,49 @@ Platform:
     return creative_execution_service.create_creative_execution(entity)
 
 
+
+def get_data_prompt(
+    knowledge_context
+) -> str:
+    return """
+KNOWLEDGE:
+{knowledge}
+
+
+BRAND STRATEGY:
+
+{brand_strategy}
+
+
+MARKETING STRATEGY:
+
+{marketing_strategy}
+
+
+OFFER STRATEGY:
+
+{offer_strategy}
+
+
+MESSAGE STRATEGY:
+
+{message_strategy}
+
+
+AD STRATEGY:
+
+{ad_strategy}
+
+
+CREATIVE STRATEGY:
+
+{creative_strategy}
+
+
+AD EXECUTION:
+
+{ad_execution}
+"""
 
 
 

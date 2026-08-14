@@ -6,7 +6,156 @@ from domain.enums.llm_message_role import LlmMessageRole
 from domain.models.ad_strategy.ad_strategy import AdStrategy
 
 
-SYSTEM_PROMPT = """
+
+def generate_ad_strategy_handler(
+    message_strategy_id: int
+):
+
+    container = Container()
+
+
+    knowledge_service = container.knowledge_service()
+
+    brand_marketing_service = (
+        container.brand_marketing_service()
+    )
+
+    marketing_strategy_service = (
+        container.marketing_strategy_service()
+    )
+
+    offer_strategy_service = (
+        container.offer_strategy_service()
+    )
+
+    message_strategy_service = (
+        container.message_strategy_service()
+    )
+
+    ad_strategy_repository = container.ad_strategy_repository()
+    ad_strategy_service = container.ad_strategy_service()
+
+    ai_service = container.ai_service()
+
+
+
+    message_strategy = (
+        message_strategy_service.get_message_strategy_by_id(
+            id=message_strategy_id
+        )
+    )
+
+    offer_strategy = (
+        offer_strategy_service.get_offer_strategy_by_id(
+            id=message_strategy.offer_strategy_id
+        )
+    )
+
+    marketing_strategy = (
+        marketing_strategy_service.get_marketing_strategy_by_id(
+            id=offer_strategy.marketing_strategy_id
+        )
+    )
+
+    brand_strategy = (
+        brand_marketing_service.get_brand_marketing_by_id(
+            id=marketing_strategy.brand_marketing_id
+        )
+    )
+
+    knowledge_context = knowledge_service.build_llm_context(
+        knowledge_id=brand_strategy.knowledge_id
+    )
+
+    brand_strategy_context = brand_marketing_service.build_llm_context(
+        brand_marketing_id=marketing_strategy.brand_marketing_id
+    )
+
+    marketing_strategy_context = marketing_strategy_service.build_llm_context(
+        marketing_strategy_id=offer_strategy.marketing_strategy_id
+    )
+
+    offer_strategy_context = offer_strategy_service.build_llm_context(
+        offer_strategy_id=message_strategy.offer_strategy_id
+    )
+
+    message_strategy_context = message_strategy_service.build_llm_context(
+        message_strategy_id=message_strategy_id
+    )
+
+
+
+    response = ai_service.chat_llm(
+        messages=[
+            LlmMessage(
+                role=LlmMessageRole.SYSTEM,
+                content=get_system_prompt()
+            ),
+            LlmMessage(
+                role=LlmMessageRole.USER,
+                content=get_data_prompt(
+                    knowledge_context=knowledge_context,
+                    brand_strategy_context=brand_strategy_context,
+                    marketing_strategy_context=marketing_strategy_context,
+                    offer_strategy_context=offer_strategy_context,
+                    message_strategy_context=message_strategy_context
+                )
+            ),
+            LlmMessage(
+                role=LlmMessageRole.USER,
+                content="Generate Ad Strategy based on the provided data. Return only valid JSON using the specified structure."
+            )
+        ]
+    )
+
+
+
+    try:
+
+        content = response.content.strip()
+
+
+        if content.startswith("```"):
+
+            content = (
+                content
+                .replace("```json", "")
+                .replace("```", "")
+                .strip()
+            )
+
+
+        result = json.loads(content)
+
+
+    except json.JSONDecodeError:
+
+        result = {
+            "raw_response": response.content
+        }
+
+
+    entity = AdStrategy(
+        message_strategy_id=message_strategy_id,
+        objective=result.get("objective"),
+        customer_stage=result.get("customer_stage"),
+        priority_audiences=result.get("priority_audiences", []),
+        audience_angles=result.get("audience_angles", []),
+        message_angles=result.get("message_angles", []),
+        offer_angles=result.get("offer_angles", []),
+        creative_concepts=result.get("creative_concepts", []),
+        recommended_formats=result.get("recommended_formats", []),
+        testing_hypotheses=result.get("testing_hypotheses", []),
+    )
+    created = ad_strategy_repository.create(entity)
+
+    return ad_strategy_service.get_ad_strategy_by_id(id=created.id)
+
+
+
+
+def get_system_prompt() -> str:
+    return """
 You are an expert in Advertising Strategy,
 Performance Marketing, and Direct Response Marketing.
 
@@ -250,202 +399,32 @@ STRICT JSON RULES:
 """
 
 
-USER_PROMPT_TEMPLATE = """
-Generate an Ad Strategy based on the following data:
 
-
-KNOWLEDGE BASE:
-
-{knowledge_json}
-
+def get_data_prompt(
+    knowledge_context: str,
+    brand_strategy_context: str,
+    marketing_strategy_context: str,
+    offer_strategy_context: str,
+    message_strategy_context: str
+) -> str:
+    return f"""
+KNOWLEDGE:
+{knowledge_context}
 
 
 BRAND STRATEGY:
-
-{brand_strategy_json}
-
+{brand_strategy_context}
 
 
 MARKETING STRATEGY:
-
-{marketing_strategy_json}
-
+{marketing_strategy_context}
 
 
 OFFER STRATEGY:
-
-{offer_strategy_json}
-
+{offer_strategy_context}
 
 
 MESSAGE STRATEGY:
-
-{message_strategy_json}
-
+{message_strategy_context}
 """
 
-
-
-def generate_ad_strategy_handler(
-    message_strategy_id: int
-):
-
-    container = Container()
-
-
-    knowledge_service = container.knowledge_service()
-
-    brand_marketing_service = (
-        container.brand_marketing_service()
-    )
-
-    marketing_strategy_service = (
-        container.marketing_strategy_service()
-    )
-
-    offer_strategy_service = (
-        container.offer_strategy_service()
-    )
-
-    message_strategy_service = (
-        container.message_strategy_service()
-    )
-
-    ad_strategy_repository = container.ad_strategy_repository()
-    ad_strategy_service = container.ad_strategy_service()
-
-    ai_service = container.ai_service()
-
-
-
-    message_strategy = (
-        message_strategy_service.get_message_strategy_by_id(
-            id=message_strategy_id
-        )
-    )
-
-
-    offer_strategy = (
-        offer_strategy_service.get_offer_strategy_by_id(
-            id=message_strategy.offer_strategy_id
-        )
-    )
-
-
-    marketing_strategy = (
-        marketing_strategy_service.get_marketing_strategy_by_id(
-            id=offer_strategy.marketing_strategy_id
-        )
-    )
-
-
-    brand_strategy = (
-        brand_marketing_service.get_brand_marketing_by_id(
-            id=marketing_strategy.brand_marketing_id
-        )
-    )
-
-
-    knowledge_json = knowledge_service.build_llm_context(
-        knowledge_id=brand_strategy.knowledge_id
-    )
-
-
-    brand_strategy_json = brand_marketing_service.build_llm_context(
-        brand_marketing_id=marketing_strategy.brand_marketing_id
-    )
-
-
-    marketing_strategy_json = marketing_strategy_service.build_llm_context(
-        marketing_strategy_id=offer_strategy.marketing_strategy_id
-    )
-
-
-    offer_strategy_json = offer_strategy_service.build_llm_context(
-        offer_strategy_id=message_strategy.offer_strategy_id
-    )
-
-
-    message_strategy_json = message_strategy_service.build_llm_context(
-        message_strategy_id=message_strategy_id
-    )
-
-
-
-    user_prompt = USER_PROMPT_TEMPLATE.format(
-
-        knowledge_json=knowledge_json,
-
-        brand_strategy_json=brand_strategy_json,
-
-        marketing_strategy_json=marketing_strategy_json,
-
-        offer_strategy_json=offer_strategy_json,
-
-        message_strategy_json=message_strategy_json
-
-    )
-
-
-
-    response = ai_service.chat_llm(
-
-        messages=[
-
-            LlmMessage(
-                role=LlmMessageRole.SYSTEM,
-                content=SYSTEM_PROMPT
-            ),
-
-
-            LlmMessage(
-                role=LlmMessageRole.USER,
-                content=user_prompt
-            )
-
-        ]
-
-    )
-
-
-
-    try:
-
-        content = response.content.strip()
-
-
-        if content.startswith("```"):
-
-            content = (
-                content
-                .replace("```json", "")
-                .replace("```", "")
-                .strip()
-            )
-
-
-        result = json.loads(content)
-
-
-    except json.JSONDecodeError:
-
-        result = {
-            "raw_response": response.content
-        }
-
-
-    entity = AdStrategy(
-        message_strategy_id=message_strategy_id,
-        objective=result.get("objective"),
-        customer_stage=result.get("customer_stage"),
-        priority_audiences=result.get("priority_audiences", []),
-        audience_angles=result.get("audience_angles", []),
-        message_angles=result.get("message_angles", []),
-        offer_angles=result.get("offer_angles", []),
-        creative_concepts=result.get("creative_concepts", []),
-        recommended_formats=result.get("recommended_formats", []),
-        testing_hypotheses=result.get("testing_hypotheses", []),
-    )
-    created = ad_strategy_repository.create(entity)
-
-    return ad_strategy_service.get_ad_strategy_by_id(id=created.id)
