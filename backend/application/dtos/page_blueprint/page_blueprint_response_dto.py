@@ -9,12 +9,14 @@ class PageBlueprintDto(JSONSerializable):
         self,
         id: int,
         page_strategy_id: int,
+        page_requirements_id: Optional[int],
         page_type: Optional[str],
         primary_conversion_goal: Optional[str],
         sections: Optional[List[dict]],
     ):
         self.id = id
         self.page_strategy_id = page_strategy_id
+        self.page_requirements_id = page_requirements_id
         self.page_type = page_type
         self.primary_conversion_goal = primary_conversion_goal
         self.sections = sections
@@ -25,6 +27,7 @@ class PageBlueprintDto(JSONSerializable):
         data = {
             "id": self.id,
             "page_strategy_id": self.page_strategy_id,
+            "page_requirements_id": self.page_requirements_id,
             "page_type": self.page_type,
             "primary_conversion_goal": self.primary_conversion_goal,
             "sections": self.sections,

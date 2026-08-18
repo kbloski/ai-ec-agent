@@ -22,6 +22,7 @@ import AdExecutionDetailPage from '@/pages/AdExecutionDetailPage'
 import CreativeExecutionDetailPage from '@/pages/CreativeExecutionDetailPage'
 import UgcCreativeDetailPage from '@/pages/UgcCreativeDetailPage'
 import PageStrategyDetailPage from '@/pages/PageStrategyDetailPage'
+import PageRequirementsDetailPage from '@/pages/PageRequirementsDetailPage'
 import PageBlueprintDetailPage from '@/pages/PageBlueprintDetailPage'
 import PageContentPlanDetailPage from '@/pages/PageContentPlanDetailPage'
 import PageCopyDetailPage from '@/pages/PageCopyDetailPage'
@@ -32,7 +33,7 @@ import {
   BrandMarketingStrategiesPage, ChecklistItemsPage, KnowledgeAnalysesPage,
   KnowledgeBrandMarketingPage, MarketingOfferStrategiesPage, MessageAdStrategiesPage,
   MessagePageStrategiesPage, MessageUgcCreativesPage, OfferMessageStrategiesPage,
-  PageBlueprintsPage, PageContentPlansPage, PageCopiesPage, CreativeAdExecutionsPage,
+  PageRequirementsPage, PageBlueprintsPage, PageContentPlansPage, PageCopiesPage, CreativeAdExecutionsPage,
 } from '@/pages/ResourcePages'
 
 function App() {
@@ -82,7 +83,9 @@ function App() {
         <Route path="/creative-execution/:id" element={<CreativeExecutionDetailPage />} />
         <Route path="/ugc-creatives/:id" element={<UgcCreativeDetailPage />} />
         <Route path="/page-strategy/:id" element={<PageStrategyDetailPage />} />
-        <Route path="/page-strategy/:id/page-blueprints" element={<PageBlueprintsPage />} />
+        <Route path="/page-strategy/:id/page-requirements" element={<PageRequirementsPage />} />
+        <Route path="/page-requirements/:id" element={<PageRequirementsDetailPage />} />
+        <Route path="/page-requirements/:id/page-blueprints" element={<PageBlueprintsPage />} />
         <Route path="/page-blueprint/:id" element={<PageBlueprintDetailPage />} />
         <Route path="/page-blueprint/:id/content-plans" element={<PageContentPlansPage />} />
         <Route path="/page-content-plan/:id" element={<PageContentPlanDetailPage />} />

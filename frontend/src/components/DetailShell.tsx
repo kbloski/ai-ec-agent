@@ -46,6 +46,7 @@ export function DetailShell({
   itemAdditions,
   relationLinks,
   editable,
+  children,
 }: DetailShellProps) {
   return (
     <div className="w-full space-y-6 p-6 lg:p-10">
@@ -64,7 +65,7 @@ export function DetailShell({
 
       <div className="space-y-6">
 
-        <h1 className="text-2xl font-semibold">{title}</h1>
+        {title && <h1 className="text-2xl font-semibold">{title}</h1>}
 
         {actions && <div className="flex flex-wrap gap-2">{actions}</div>}
 
@@ -88,6 +89,7 @@ export function DetailShell({
         )}
 
         {data && overview}
+        {data && children}
       </div>
     </div>
   )

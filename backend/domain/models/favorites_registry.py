@@ -20,6 +20,7 @@ from domain.models.ad_execution.ad_execution import AdExecution
 from domain.models.creative_execution.creative_execution import CreativeExecution
 from domain.models.ugc_creatives.ugc_creative import UgcCreative
 from domain.models.page_strategy.page_strategy import PageStrategy
+from domain.models.page_requirements.page_requirements import PageRequirements
 from domain.models.page_blueprint.page_blueprint import PageBlueprint
 from domain.models.page_content_plan.page_content_plan import PageContentPlan
 from domain.models.page_copy.page_copy import PageCopy
@@ -45,6 +46,7 @@ FAVORITABLE_MODELS: Dict[str, Type[Base]] = {
     TableName.CREATIVE_EXECUTIONS.value: CreativeExecution,
     TableName.UGC_CREATIVES.value: UgcCreative,
     TableName.PAGE_STRATEGY.value: PageStrategy,
+    TableName.PAGE_REQUIREMENTS.value: PageRequirements,
     TableName.PAGE_BLUEPRINT.value: PageBlueprint,
     TableName.PAGE_CONTENT_PLAN.value: PageContentPlan,
     TableName.PAGE_COPY.value: PageCopy,

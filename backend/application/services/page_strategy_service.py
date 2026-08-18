@@ -9,6 +9,7 @@ from infrastructure.repositories.page_strategy_repository import PageStrategyRep
 from application.mappers.page_strategy_mapper import PageStrategyMapper
 from application.assemblers.page_strategy_assembler import PageStrategyAssembler
 from application.services.llm_context_builder import build_llm_section
+from domain.enums.context_section_purpose import ContextSectionPurpose
 
 
 class PageStrategyService:
@@ -49,4 +50,8 @@ class PageStrategyService:
             default=str
         )
 
-        return build_llm_section("page-strategy", page_strategy_json)
+        return build_llm_section(
+            "page-strategy",
+            page_strategy_json,
+            purpose=ContextSectionPurpose.PAGE_STRATEGY.value,
+        )

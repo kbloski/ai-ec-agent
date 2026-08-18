@@ -68,6 +68,10 @@ from application.services.creative_execution_service import CreativeExecutionSer
 from infrastructure.repositories.page_strategy_repository import PageStrategyRepository
 from application.assemblers.page_strategy_assembler import PageStrategyAssembler
 from application.services.page_strategy_service import PageStrategyService
+from infrastructure.repositories.page_requirements_repository import PageRequirementsRepository
+from infrastructure.repositories.page_section_requirements_repository import PageSectionRequirementsRepository
+from application.assemblers.page_requirements_assembler import PageRequirementsAssembler
+from application.services.page_requirements_service import PageRequirementsService
 from infrastructure.repositories.page_blueprint_repository import PageBlueprintRepository
 from application.assemblers.page_blueprint_assembler import PageBlueprintAssembler
 from application.services.page_blueprint_service import PageBlueprintService
@@ -248,6 +252,18 @@ class Container(containers.DeclarativeContainer):
         db=db
     )
 
+    page_requirements_repository = providers.Singleton(
+        PageRequirementsRepository,
+        logger=logger,
+        db=db
+    )
+
+    page_section_requirements_repository = providers.Singleton(
+        PageSectionRequirementsRepository,
+        logger=logger,
+        db=db
+    )
+
     page_blueprint_repository = providers.Singleton(
         PageBlueprintRepository,
         logger=logger,
@@ -355,6 +371,12 @@ class Container(containers.DeclarativeContainer):
         logger=logger,
     )
 
+    page_requirements_assembler = providers.Singleton(
+        PageRequirementsAssembler,
+        logger=logger,
+        page_section_requirements_repository=page_section_requirements_repository
+    )
+
     page_blueprint_assembler = providers.Singleton(
         PageBlueprintAssembler,
         logger=logger,
@@ -436,6 +458,7 @@ class Container(containers.DeclarativeContainer):
         PageSectionsService,
         logger=logger,
         page_sections_repository=page_sections_repository,
+        page_section_requirements_repository=page_section_requirements_repository,
     )
 
     ollama_service = providers.Singleton(
@@ -545,6 +568,13 @@ class Container(containers.DeclarativeContainer):
         logger=logger,
         page_strategy_repository=page_strategy_repository,
         page_strategy_assembler=page_strategy_assembler
+    )
+
+    page_requirements_service = providers.Singleton(
+        PageRequirementsService,
+        logger=logger,
+        page_requirements_repository=page_requirements_repository,
+        page_requirements_assembler=page_requirements_assembler
     )
 
     page_blueprint_service = providers.Singleton(

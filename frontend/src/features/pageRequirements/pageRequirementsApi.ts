@@ -1,0 +1,55 @@
+import { api } from '@/store/api'
+import { listTag, itemTag } from '@/lib/tags'
+import type { Entity } from '@/types'
+
+export interface PageSectionRequirementInput {
+  page_section_type_id: string
+  requirement_type: 'required' | 'optional' | 'excluded'
+  position?: number | null
+}
+
+export const pageRequirementsApi = api.injectEndpoints({
+  endpoints: (builder) => ({
+    listPageRequirementsForPageStrategy: builder.query<Entity[], number>({
+      query: (pageStrategyId) => `/page-strategy/${pageStrategyId}/page-requirements`,
+      providesTags: (result, _err, pageStrategyId) => [
+        ...(result ?? []).map((item) => itemTag('PageRequirements', item.id)),
+        listTag('PageRequirements', pageStrategyId),
+      ],
+    }),
+    getPageRequirements: builder.query<Entity, number>({
+      query: (id) => `/page-requirements/${id}`,
+      providesTags: (_result, _err, id) => [itemTag('PageRequirements', id)],
+    }),
+    createPageRequirements: builder.mutation<Entity, number>({
+      query: (pageStrategyId) => `/page-strategy/${pageStrategyId}/page-requirements/create`,
+      invalidatesTags: (_result, _err, pageStrategyId) => [listTag('PageRequirements', pageStrategyId)],
+    }),
+    updatePageRequirements: builder.mutation<
+      Entity,
+      { id: number; sectionRequirements: PageSectionRequirementInput[] }
+    >({
+      query: ({ id, sectionRequirements }) => ({
+        url: `/page-requirements/${id}/update`,
+        method: 'POST',
+        body: { section_requirements: sectionRequirements },
+      }),
+      invalidatesTags: (_result, _err, { id }) => [itemTag('PageRequirements', id)],
+    }),
+    deletePageRequirements: builder.mutation<void, { id: number; pageStrategyId: number }>({
+      query: ({ id }) => `/page-requirements/${id}/delete`,
+      invalidatesTags: (_result, _err, { id, pageStrategyId }) => [
+        listTag('PageRequirements', pageStrategyId),
+        itemTag('PageRequirements', id),
+      ],
+    }),
+  }),
+})
+
+export const {
+  useListPageRequirementsForPageStrategyQuery,
+  useGetPageRequirementsQuery,
+  useCreatePageRequirementsMutation,
+  useUpdatePageRequirementsMutation,
+  useDeletePageRequirementsMutation,
+} = pageRequirementsApi

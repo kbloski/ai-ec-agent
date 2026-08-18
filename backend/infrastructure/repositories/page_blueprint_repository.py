@@ -22,11 +22,11 @@ class PageBlueprintRepository:
     def get_by_id(self, id: int) -> Optional[PageBlueprint]:
         return self.db.query(PageBlueprint).filter(PageBlueprint.id == id).first()
 
-    # 🔍 GET BY PAGE STRATEGY ID
-    def get_by_page_strategy_id(self, page_strategy_id: int) -> List[PageBlueprint]:
+    # 🔍 GET BY PAGE REQUIREMENTS ID
+    def get_by_page_requirements_id(self, page_requirements_id: int) -> List[PageBlueprint]:
         return (
             self.db.query(PageBlueprint)
-            .filter(PageBlueprint.page_strategy_id == page_strategy_id)
+            .filter(PageBlueprint.page_requirements_id == page_requirements_id)
             .all()
         )
 

@@ -9,6 +9,7 @@ from infrastructure.repositories.page_content_plan_repository import PageContent
 from application.mappers.page_content_plan_mapper import PageContentPlanMapper
 from application.assemblers.page_content_plan_assembler import PageContentPlanAssembler
 from application.services.llm_context_builder import build_llm_section
+from domain.enums.context_section_purpose import ContextSectionPurpose
 
 
 class PageContentPlanService:
@@ -49,4 +50,8 @@ class PageContentPlanService:
             default=str
         )
 
-        return build_llm_section("page-content-plan", page_content_plan_json)
+        return build_llm_section(
+            "page-content-plan",
+            page_content_plan_json,
+            purpose=ContextSectionPurpose.PAGE_CONTENT_PLAN.value,
+        )

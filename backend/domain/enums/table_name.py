@@ -25,6 +25,8 @@ class TableName(str, Enum):
     AD_EXECUTION = "ad_execution"
     CREATIVE_EXECUTIONS = "creative_executions"
     PAGE_STRATEGY = "page_strategy"
+    PAGE_REQUIREMENTS = "page_requirements"
+    PAGE_SECTION_REQUIREMENT = "page_section_requirement"
     PAGE_BLUEPRINT = "page_blueprint"
     PAGE_CONTENT_PLAN = "page_content_plan"
     PAGE_COPY = "page_copy"

@@ -105,10 +105,16 @@ from application.handlers.ugc_creatives.delete_ugc_creative_handler import delet
 from application.handlers.page_strategy.get_page_strategy_handler import get_page_strategy_handler
 from application.handlers.page_strategy.get_message_strategy_page_strategies_handler import get_message_strategy_page_strategies_handler
 from application.handlers.page_strategy.delete_page_strategy_handler import delete_page_strategy_handler
+from application.handlers.page_requirements.create_page_requirements_handler import create_page_requirements_handler
+from application.handlers.page_requirements.get_page_requirements_handler import get_page_requirements_handler
+from application.handlers.page_requirements.get_page_strategy_page_requirements_handler import get_page_strategy_page_requirements_handler
+from application.handlers.page_requirements.update_page_requirements_handler import update_page_requirements_handler
+from application.handlers.page_requirements.delete_page_requirements_handler import delete_page_requirements_handler
 from application.handlers.page_blueprint.generate_page_blueprint_handler import generate_page_blueprint_handler
 from application.handlers.page_blueprint.get_page_blueprint_handler import get_page_blueprint_handler
-from application.handlers.page_blueprint.get_page_strategy_page_blueprints_handler import get_page_strategy_page_blueprints_handler
+from application.handlers.page_blueprint.get_page_requirements_page_blueprints_handler import get_page_requirements_page_blueprints_handler
 from application.handlers.page_blueprint.delete_page_blueprint_handler import delete_page_blueprint_handler
+from application.handlers.ads.list_page_sections_handler import list_page_sections_handler
 from application.handlers.page_content_plan.generate_page_content_plan_handler import generate_page_content_plan_handler
 from application.handlers.page_content_plan.get_page_content_plan_handler import get_page_content_plan_handler
 from application.handlers.page_content_plan.get_page_blueprint_page_content_plans_handler import get_page_blueprint_page_content_plans_handler
@@ -127,6 +133,16 @@ class SaveOutputPromptRequest(BaseModel):
 
 class UpdateFieldsRequest(BaseModel):
     fields: Dict[str, Any]
+
+
+class PageSectionRequirementInput(BaseModel):
+    page_section_type_id: str
+    requirement_type: str
+    position: Optional[int] = None
+
+
+class UpdatePageRequirementsRequest(BaseModel):
+    section_requirements: List[PageSectionRequirementInput]
 
 
 class CreateOfferItemRequest(BaseModel):
@@ -669,6 +685,10 @@ def register_general_routes(router: APIRouter):
     def review_statuses_list():
         return list_review_statuses_handler()
 
+    @router.get("/page-sections")
+    def page_sections_list():
+        return list_page_sections_handler()
+
     # -----------------------------
     # Creative execution
     # -----------------------------
@@ -736,17 +756,45 @@ def register_general_routes(router: APIRouter):
 
 
     # -----------------------------
-    # Page blueprint
+    # Page requirements
     # -----------------------------
-    @router.get("/page-strategy/{page_strategy_id}/page-blueprint/generate")
-    def page_strategy_page_blueprint_generate( page_strategy_id: int ):
-        return generate_page_blueprint_handler(
-            page_strategy_id=page_strategy_id
+    @router.get("/page-strategy/{page_strategy_id}/page-requirements/create")
+    def page_strategy_page_requirements_create( page_strategy_id: int ):
+        return create_page_requirements_handler(page_strategy_id=page_strategy_id)
+
+    @router.get("/page-strategy/{page_strategy_id}/page-requirements")
+    def get_page_strategy_page_requirements( page_strategy_id: int ):
+        return get_page_strategy_page_requirements_handler( page_strategy_id=page_strategy_id )
+
+    @router.get("/page-requirements/{id}")
+    def get_page_requirements( id: int ):
+        return get_page_requirements_handler( id=id )
+
+    @router.post("/page-requirements/{id}/update")
+    def update_page_requirements_route(id: int, payload: UpdatePageRequirementsRequest):
+        return update_page_requirements_handler(
+            id=id,
+            section_requirements=[item.dict() for item in payload.section_requirements],
         )
 
-    @router.get("/page-strategy/{page_strategy_id}/page-blueprint")
-    def get_page_strategy_page_blueprints( page_strategy_id: int ):
-        return get_page_strategy_page_blueprints_handler( page_strategy_id=page_strategy_id )
+    # DELETE in future
+    @router.get("/page-requirements/{id}/delete")
+    def delete_page_requirements_route( id: int ):
+        return delete_page_requirements_handler(id=id)
+
+
+    # -----------------------------
+    # Page blueprint
+    # -----------------------------
+    @router.get("/page-requirements/{page_requirements_id}/page-blueprint/generate")
+    def page_requirements_page_blueprint_generate( page_requirements_id: int ):
+        return generate_page_blueprint_handler(
+            page_requirements_id=page_requirements_id
+        )
+
+    @router.get("/page-requirements/{page_requirements_id}/page-blueprint")
+    def get_page_requirements_page_blueprints( page_requirements_id: int ):
+        return get_page_requirements_page_blueprints_handler( page_requirements_id=page_requirements_id )
 
     @router.get("/page-blueprint/{id}")
     def get_page_blueprint( id: int ):

@@ -19,6 +19,12 @@ class PageBlueprint(Base, JSONSerializable):
         nullable=False
     )
 
+    page_requirements_id = Column(
+        Integer,
+        ForeignKey(TableName.PAGE_REQUIREMENTS + ".id", ondelete="CASCADE"),
+        nullable=True
+    )
+
     page_type = Column(String, nullable=True)
     primary_conversion_goal = Column(String, nullable=True)
 

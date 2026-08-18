@@ -9,6 +9,7 @@ from infrastructure.repositories.ad_execution_repository import AdExecutionRepos
 from application.mappers.ad_execution_mapper import AdExecutionMapper
 from application.assemblers.ad_execution_assembler import AdExecutionAssembler
 from application.services.llm_context_builder import build_llm_section
+from domain.enums.context_section_purpose import ContextSectionPurpose
 
 
 class AdExecutionService:
@@ -49,4 +50,8 @@ class AdExecutionService:
             default=str
         )
 
-        return build_llm_section("ad-execution", ad_execution_json)
+        return build_llm_section(
+            "ad-execution",
+            ad_execution_json,
+            purpose=ContextSectionPurpose.CREATIVE_EXECUTION.value,
+        )

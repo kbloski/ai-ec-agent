@@ -4,11 +4,11 @@ import type { Entity } from '@/types'
 
 export const pageBlueprintApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    listPageBlueprintForPageStrategy: builder.query<Entity[], number>({
-      query: (pageStrategyId) => `/page-strategy/${pageStrategyId}/page-blueprint`,
-      providesTags: (result, _err, pageStrategyId) => [
+    listPageBlueprintForPageRequirements: builder.query<Entity[], number>({
+      query: (pageRequirementsId) => `/page-requirements/${pageRequirementsId}/page-blueprint`,
+      providesTags: (result, _err, pageRequirementsId) => [
         ...(result ?? []).map((item) => itemTag('PageBlueprint', item.id)),
-        listTag('PageBlueprint', pageStrategyId),
+        listTag('PageBlueprint', pageRequirementsId),
       ],
     }),
     getPageBlueprint: builder.query<Entity, number>({
@@ -24,13 +24,13 @@ export const pageBlueprintApi = api.injectEndpoints({
       invalidatesTags: (_result, _err, { id }) => [itemTag('PageBlueprint', id)],
     }),
     generatePageBlueprint: builder.mutation<Entity, number>({
-      query: (pageStrategyId) => `/page-strategy/${pageStrategyId}/page-blueprint/generate`,
-      invalidatesTags: (_result, _err, pageStrategyId) => [listTag('PageBlueprint', pageStrategyId)],
+      query: (pageRequirementsId) => `/page-requirements/${pageRequirementsId}/page-blueprint/generate`,
+      invalidatesTags: (_result, _err, pageRequirementsId) => [listTag('PageBlueprint', pageRequirementsId)],
     }),
-    deletePageBlueprint: builder.mutation<void, { id: number; pageStrategyId: number }>({
+    deletePageBlueprint: builder.mutation<void, { id: number; pageRequirementsId: number }>({
       query: ({ id }) => `/page-blueprint/${id}/delete`,
-      invalidatesTags: (_result, _err, { id, pageStrategyId }) => [
-        listTag('PageBlueprint', pageStrategyId),
+      invalidatesTags: (_result, _err, { id, pageRequirementsId }) => [
+        listTag('PageBlueprint', pageRequirementsId),
         itemTag('PageBlueprint', id),
       ],
     }),
@@ -38,7 +38,7 @@ export const pageBlueprintApi = api.injectEndpoints({
 })
 
 export const {
-  useListPageBlueprintForPageStrategyQuery,
+  useListPageBlueprintForPageRequirementsQuery,
   useGetPageBlueprintQuery,
   useGeneratePageBlueprintMutation,
   useDeletePageBlueprintMutation,

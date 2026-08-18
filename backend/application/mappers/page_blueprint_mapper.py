@@ -9,6 +9,7 @@ class PageBlueprintMapper:
         return PageBlueprintDto(
             id=item.id,
             page_strategy_id=item.page_strategy_id,
+            page_requirements_id=item.page_requirements_id,
             page_type=item.page_type,
             primary_conversion_goal=item.primary_conversion_goal,
             sections=item.sections,

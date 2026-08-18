@@ -20,8 +20,8 @@ export default function PageBlueprintDetailPage() {
   return (
     <DetailShell
       title={(pageBlueprint?.page_type as string) ?? 'Page blueprint'}
-      backTo={pageBlueprint ? `/page-strategy/${pageBlueprint.page_strategy_id}` : undefined}
-      backLabel="← Page strategy"
+      backTo={pageBlueprint ? `/page-requirements/${pageBlueprint.page_requirements_id}` : undefined}
+      backLabel="← Page requirements"
       data={pageBlueprint}
       isLoading={isLoading}
       error={error}

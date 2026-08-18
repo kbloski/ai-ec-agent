@@ -3,7 +3,7 @@ from typing import Any, Dict
 from di.container import Container
 from application.mappers.page_blueprint_mapper import PageBlueprintMapper
 
-DENYLIST = {"id", "page_strategy_id", "created_at", "updated_at"}
+DENYLIST = {"id", "page_strategy_id", "page_requirements_id", "created_at", "updated_at"}
 
 
 def update_page_blueprint_handler(id: int, fields: Dict[str, Any]):

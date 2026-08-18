@@ -9,6 +9,7 @@ from infrastructure.repositories.ad_strategy_repository import AdStrategyReposit
 from application.mappers.ad_strategy_mapper import AdStrategyMapper
 from application.assemblers.ad_strategy_assembler import AdStrategyAssembler
 from application.services.llm_context_builder import build_llm_section
+from domain.enums.context_section_purpose import ContextSectionPurpose
 
 
 class AdStrategyService:
@@ -49,4 +50,8 @@ class AdStrategyService:
             default=str
         )
 
-        return build_llm_section("ad-strategy", ad_strategy_json)
+        return build_llm_section(
+            "ad-strategy",
+            ad_strategy_json,
+            purpose=ContextSectionPurpose.CAMPAIGN.value,
+        )

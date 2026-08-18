@@ -5,6 +5,7 @@ from infrastructure.repositories.offers_repository import OffersRepository
 from application.mappers.offer_mapper import OfferMapper
 from application.assemblers.offer_assembler import OfferAssembler
 from application.services.llm_context_builder import build_llm_section
+from domain.enums.context_section_purpose import ContextSectionPurpose
 
 
 class OfferService:
@@ -31,4 +32,8 @@ class OfferService:
             default=str,
         )
 
-        return build_llm_section("offer", offer_json)
+        return build_llm_section(
+            "offer",
+            offer_json,
+            purpose=ContextSectionPurpose.KNOWLEDGE.value,
+        )

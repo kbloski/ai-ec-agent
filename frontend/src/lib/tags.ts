@@ -17,6 +17,7 @@ export const TAG_TYPES = [
   'CreativeExecution',
   'UgcCreative',
   'PageStrategy',
+  'PageRequirements',
   'PageBlueprint',
   'PageContentPlan',
   'PageCopy',

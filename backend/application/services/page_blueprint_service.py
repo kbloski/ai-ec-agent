@@ -9,6 +9,7 @@ from infrastructure.repositories.page_blueprint_repository import PageBlueprintR
 from application.mappers.page_blueprint_mapper import PageBlueprintMapper
 from application.assemblers.page_blueprint_assembler import PageBlueprintAssembler
 from application.services.llm_context_builder import build_llm_section
+from domain.enums.context_section_purpose import ContextSectionPurpose
 
 
 class PageBlueprintService:
@@ -36,8 +37,8 @@ class PageBlueprintService:
         page_blueprint_dto = PageBlueprintMapper.to_dto(page_blueprint_db)
         return self.page_blueprint_assembler.assemble_dto(page_blueprint_dto)
 
-    def get_page_blueprints_by_page_strategy(self, page_strategy_id: int) -> List[PageBlueprintDto]:
-        items = self.page_blueprint_repository.get_by_page_strategy_id(page_strategy_id)
+    def get_page_blueprints_by_page_requirements(self, page_requirements_id: int) -> List[PageBlueprintDto]:
+        items = self.page_blueprint_repository.get_by_page_requirements_id(page_requirements_id)
         dtos = [PageBlueprintMapper.to_dto(item) for item in items]
         return [self.page_blueprint_assembler.assemble_dto(dto) for dto in dtos]
 
@@ -49,4 +50,8 @@ class PageBlueprintService:
             default=str
         )
 
-        return build_llm_section("page-blueprint", page_blueprint_json)
+        return build_llm_section(
+            "page-blueprint",
+            page_blueprint_json,
+            purpose=ContextSectionPurpose.PAGE_BLUEPRINT.value,
+        )
