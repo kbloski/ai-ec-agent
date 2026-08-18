@@ -1,0 +1,128 @@
+[
+  {
+    "id": "hero",
+    "name": "Hero",
+    "category": "core",
+    "description": "Creates the first customer interaction, communicates the primary product value, and generates initial interest."
+  },
+  {
+    "id": "problem",
+    "name": "Problem",
+    "category": "core",
+    "description": "Establishes the customer's problem, frustration, unmet need, undesirable situation, or gap between their current and desired state."
+  },
+  {
+    "id": "solution",
+    "name": "Solution",
+    "category": "core",
+    "description": "Positions the product as the solution to the customer's problem or desired outcome."
+  },
+  {
+    "id": "benefits",
+    "name": "Benefits",
+    "category": "core",
+    "description": "Explains what the customer gains or how their situation improves as a result of using the product."
+  },
+  {
+    "id": "features",
+    "name": "Features",
+    "category": "conditional",
+    "description": "Describes concrete product attributes, specifications, components, capabilities, or included functionality."
+  },
+  {
+    "id": "how_it_works",
+    "name": "How It Works",
+    "category": "conditional",
+    "description": "Explains the steps, process, practical usage, or customer journey involved in using the product."
+  },
+  {
+    "id": "social_proof",
+    "name": "Social Proof",
+    "category": "core",
+    "description": "Builds trust using aggregate evidence such as ratings, customer counts, logos, awards, certifications, press mentions, adoption metrics, or other credibility signals."
+  },
+  {
+    "id": "offer",
+    "name": "Offer",
+    "category": "core",
+    "description": "Presents the complete purchase proposition, including what the customer receives, the core package, and the overall value."
+  },
+  {
+    "id": "risk_reversal",
+    "name": "Risk Reversal",
+    "category": "conditional",
+    "description": "Reduces perceived purchase risk through guarantees, free trials, easy returns, cancellation policies, or other confidence-building assurances."
+  },
+  {
+    "id": "faq",
+    "name": "FAQ",
+    "category": "conditional",
+    "description": "Answers common customer questions in a question-and-answer format and removes remaining uncertainty before purchase."
+  },
+  {
+    "id": "final_cta",
+    "name": "Final CTA",
+    "category": "core",
+    "description": "Encourages the customer to take the primary conversion action and move toward the purchase decision."
+  },
+  {
+    "id": "product_showcase",
+    "name": "Product Showcase",
+    "category": "conditional",
+    "description": "Visually presents the product, its variants, appearance, interface, usage, or important details that benefit from demonstration."
+  },
+  {
+    "id": "comparison",
+    "name": "Comparison",
+    "category": "conditional",
+    "description": "Compares the product with alternatives, competitors, previous methods, or other available solutions."
+  },
+  {
+    "id": "testimonials",
+    "name": "Testimonials",
+    "category": "conditional",
+    "description": "Uses direct customer quotes, reviews, endorsements, or personal experiences to build trust."
+  },
+  {
+    "id": "transformation",
+    "name": "Transformation",
+    "category": "conditional",
+    "description": "Shows a clear before-and-after change in the customer's situation, results, experience, or visible outcome."
+  },
+  {
+    "id": "unique_mechanism",
+    "name": "Unique Mechanism",
+    "category": "conditional",
+    "description": "Explains the distinctive underlying mechanism, technology, formulation, process, or method that makes the product work differently from alternatives."
+  },
+  {
+    "id": "bonus_stack",
+    "name": "Bonus Stack",
+    "category": "conditional",
+    "description": "Presents additional items, gifts, add-ons, services, or bonuses included beyond the core product or offer."
+  },
+  {
+    "id": "urgency",
+    "name": "Urgency",
+    "category": "conditional",
+    "description": "Encourages immediate action when there is a genuine time-sensitive reason, such as a deadline, limited availability, or expiring offer."
+  },
+  {
+    "id": "pricing",
+    "name": "Pricing",
+    "category": "conditional",
+    "description": "Presents prices, plans, packages, subscriptions, payment options, product variants, or other purchase configurations."
+  },
+  {
+    "id": "case_studies",
+    "name": "Case Studies",
+    "category": "conditional",
+    "description": "Uses detailed customer success stories with context, actions, outcomes, and optionally measurable results."
+  },
+  {
+    "id": "objection_handling",
+    "name": "Objection Handling",
+    "category": "conditional",
+    "description": "Directly addresses specific reasons a customer may hesitate to buy and provides persuasive responses beyond a standard FAQ format."
+  }
+]

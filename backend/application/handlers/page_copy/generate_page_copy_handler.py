@@ -18,6 +18,7 @@ def generate_page_copy_handler(
     page_strategy_service = container.page_strategy_service()
     message_strategy_service = container.message_strategy_service()
     offer_strategy_service = container.offer_strategy_service()
+    page_sections_service = container.page_sections_service()
 
     knowledge_service = container.knowledge_service()
     brand_marketing_service = container.brand_marketing_service()
@@ -129,7 +130,11 @@ def generate_page_copy_handler(
         messages=[
             LlmMessage(
                 role=LlmMessageRole.SYSTEM,
-                content=get_system_prompt()
+                content=get_system_prompt(
+                    section_type_list=build_copy_section_types_block(
+                        page_sections_service.get_all()
+                    )
+                )
             ),
             LlmMessage(
                 role=LlmMessageRole.USER,
@@ -188,7 +193,11 @@ def generate_page_copy_handler(
 
 
 
-def get_system_prompt() -> str:
+def build_copy_section_types_block(sections: list[dict]) -> str:
+    return "\n".join(section["id"] for section in sections)
+
+
+def get_system_prompt(section_type_list: str) -> str:
     return """
 You are an expert in:
 
@@ -403,22 +412,7 @@ CONTENT_BLOCK RULES:
 
 SECTION TYPE MUST BE ONE OF:
 
-hero
-problem
-solution
-benefits
-features
-how_it_works
-social_proof
-testimonials
-case_studies
-comparison
-offer
-pricing
-risk_reversal
-objection_handling
-faq
-final_cta
+""" + section_type_list + """
 
 
 

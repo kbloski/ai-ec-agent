@@ -1,275 +1,301 @@
 import json
+from typing import Optional
 
 from di.container import Container
-from domain.models.llm.llm_message import LlmMessage
 from domain.enums.llm_message_role import LlmMessageRole
+from domain.enums.page_section_category import PageSectionCategory
+from domain.models.llm.llm_message import LlmMessage
 from domain.models.page_blueprint.page_blueprint import PageBlueprint
 
 
+ALLOWED_SECTION_PRIORITIES = {"required", "optional"}
+ALLOWED_CUSTOMER_JOURNEY_STAGES = {
+    "Attention",
+    "Problem Awareness",
+    "Product Desire",
+    "Value Understanding",
+    "Trust",
+    "Purchase Decision",
+}
+REQUIRED_SECTION_KEYS = {
+    "order",
+    "section_type",
+    "section_priority",
+    "purpose",
+    "customer_journey_stage",
+    "conversion_role",
+    "psychological_goal",
+    "required_content_elements",
+    "proof_elements",
+    "objection_targets",
+}
+ARRAY_SECTION_KEYS = {
+    "required_content_elements",
+    "proof_elements",
+    "objection_targets",
+}
 
 
-def generate_page_blueprint_handler(
-    page_strategy_id: int
-):
-
+def generate_page_blueprint_handler(page_strategy_id: int):
     container = Container()
 
+    page_strategy_service = container.page_strategy_service()
+    message_strategy_service = container.message_strategy_service()
+    knowledge_service = container.knowledge_service()
+    brand_marketing_service = container.brand_marketing_service()
+    marketing_strategy_service = container.marketing_strategy_service()
+    offer_strategy_service = container.offer_strategy_service()
+    page_sections_service = container.page_sections_service()
+    page_blueprint_repository = container.page_blueprint_repository()
+    page_blueprint_service = container.page_blueprint_service()
+    ai_service = container.ai_service()
 
-    page_strategy_service = (
-        container.page_strategy_service()
+    page_strategy = page_strategy_service.get_page_strategy_by_id(
+        id=page_strategy_id
     )
 
-    message_strategy_service = (
-        container.message_strategy_service()
+    message_strategy = message_strategy_service.get_message_strategy_by_id(
+        id=page_strategy.message_strategy_id
     )
 
-    knowledge_service = (
-        container.knowledge_service()
+    offer_strategy = offer_strategy_service.get_offer_strategy_by_id(
+        id=message_strategy.offer_strategy_id
     )
 
-    brand_marketing_service = (
-        container.brand_marketing_service()
+    marketing_strategy = marketing_strategy_service.get_marketing_strategy_by_id(
+        id=offer_strategy.marketing_strategy_id
     )
 
-    marketing_strategy_service = (
-        container.marketing_strategy_service()
+    brand_strategy = brand_marketing_service.get_brand_marketing_by_id(
+        id=marketing_strategy.brand_marketing_id
     )
-
-    offer_strategy_service = (
-        container.offer_strategy_service()
-    )
-
-
-    page_blueprint_repository = (
-        container.page_blueprint_repository()
-    )
-
-    page_blueprint_service = (
-        container.page_blueprint_service()
-    )
-
-    ai_service = (
-        container.ai_service()
-    )
-
-
-
-    page_strategy = (
-        page_strategy_service
-        .get_page_strategy_by_id(
-            id=page_strategy_id
-        )
-    )
-
-
-    message_strategy = (
-        message_strategy_service
-        .get_message_strategy_by_id(
-            id=page_strategy.message_strategy_id
-        )
-    )
-
-
-    offer_strategy = (
-        offer_strategy_service
-        .get_offer_strategy_by_id(
-            id=message_strategy.offer_strategy_id
-        )
-    )
-
-
-    marketing_strategy = (
-        marketing_strategy_service
-        .get_marketing_strategy_by_id(
-            id=offer_strategy.marketing_strategy_id
-        )
-    )
-
-
-    brand_strategy = (
-        brand_marketing_service
-        .get_brand_marketing_by_id(
-            id=marketing_strategy.brand_marketing_id
-        )
-    )
-
 
     user_prompt = get_data_prompt(
-
         knowledge_context=knowledge_service.build_llm_context(
             knowledge_id=brand_strategy.knowledge_id
         ),
-
         brand_strategy_context=brand_marketing_service.build_llm_context(
             brand_marketing_id=marketing_strategy.brand_marketing_id
         ),
-
         marketing_strategy_context=marketing_strategy_service.build_llm_context(
             marketing_strategy_id=offer_strategy.marketing_strategy_id
         ),
-
         offer_strategy_context=offer_strategy_service.build_llm_context(
             offer_strategy_id=message_strategy.offer_strategy_id
         ),
-
         message_strategy_context=message_strategy_service.build_llm_context(
             message_strategy_id=page_strategy.message_strategy_id
         ),
-
         page_strategy_context=page_strategy_service.build_llm_context(
             page_strategy_id=page_strategy_id
-        )
+        ),
     )
-
-
 
     response = ai_service.chat_llm(
-
         messages=[
-
             LlmMessage(
                 role=LlmMessageRole.SYSTEM,
-                content=get_system_prompt()
+                content=get_system_prompt(
+                    section_types_prompt=build_blueprint_taxonomy_prompt(
+                        page_sections_service.get_all()
+                    )
+                ),
             ),
-
             LlmMessage(
                 role=LlmMessageRole.USER,
-                content=user_prompt
+                content=user_prompt,
             ),
             LlmMessage(
                 role=LlmMessageRole.SYSTEM,
-                content="Generate Page Blueprint based on the provided data. Return only valid JSON using the specified structure."
+                content=(
+                    "Generate the Page Blueprint now from the provided data. "
+                    "Return only valid JSON using the specified structure. "
+                    "Do not invent evidence, claims, objections, urgency, or scarcity."
+                ),
             ),
-
         ]
-
     )
 
-
-
     try:
-        content = response.content.strip()
-        if content.startswith("```"):
-            content = content.replace(
-                "```json",
-                ""
-            )
-            content = content.replace(
-                "```",
-                ""
-            ).strip()
-        result = json.loads(content)
-
-
+        result = parse_llm_json(response.content)
     except Exception as e:
         return {
             "error": "Invalid JSON response",
             "exception": str(e),
-            "raw_response": response.content
+            "raw_response": response.content,
         }
 
-
-    page_blueprint_data = (
-        result.get(
-            "page_blueprint",
-            {}
-        )
-    )
-
+    page_blueprint_data = result.get("page_blueprint", {})
 
     if not page_blueprint_data:
         return {
             "error": "Missing page_blueprint",
-            "raw_response": response.content
+            "raw_response": response.content,
         }
 
+    sections = page_blueprint_data.get("sections", [])
 
-    sections = (
-        page_blueprint_data.get(
-            "sections",
-            []
-        )
-    )
-
-    if not isinstance(
-        sections,
-        list
-    ):
-
+    if not isinstance(sections, list):
         return {
             "error": "Sections must be list",
-            "raw_response": response.content
+            "raw_response": response.content,
         }
 
-    allowed_sections = {
-        "hero",
-        "problem",
-        "solution",
-        "benefits",
-        "features",
-        "how_it_works",
-        "social_proof",
-        "offer",
-        "risk_reversal",
-        "faq",
-        "final_cta",
-        "product_showcase",
-        "comparison",
-        "testimonials",
-        "before_after",
-        "unique_mechanism",
-        "bonus_stack",
-        "urgency",
-        "pricing"
+    allowed_sections = set(page_sections_service.get_allowed_ids())
 
-    }
+    validation_error = validate_sections(
+        sections=sections,
+        allowed_sections=allowed_sections,
+    )
 
-
-    for section in sections:
-        if (
-            section.get("section_type")
-            not in allowed_sections
-        ):
-            return {
-                "error": "Invalid section_type",
-                "section": section
-            }
-
-
+    if validation_error:
+        return {
+            "error": "Invalid page blueprint",
+            "details": validation_error,
+            "raw_response": response.content,
+        }
 
     entity = PageBlueprint(
         page_strategy_id=page_strategy_id,
-        page_type=(
-            page_blueprint_data.get(
-                "page_type",
-                "ecommerce_product"
-            )
+        page_type=page_blueprint_data.get(
+            "page_type",
+            "ecommerce_product",
         ),
-        primary_conversion_goal=(
-            page_blueprint_data.get(
-                "primary_conversion_goal",
-                "purchase"
-            )
+        primary_conversion_goal=page_blueprint_data.get(
+            "primary_conversion_goal",
+            "purchase",
         ),
-        sections=sections
+        sections=sections,
     )
 
-    created = (
-        page_blueprint_repository.create(
-            entity
+    created = page_blueprint_repository.create(entity)
+
+    return page_blueprint_service.get_page_blueprint_by_id(
+        id=created.id
+    )
+
+
+def parse_llm_json(raw_content: str) -> dict:
+    if not isinstance(raw_content, str) or not raw_content.strip():
+        raise ValueError("LLM returned empty response")
+
+    content = raw_content.strip()
+
+    if content.startswith("```"):
+        lines = content.splitlines()
+
+        if lines and lines[0].strip().startswith("```"):
+            lines = lines[1:]
+
+        if lines and lines[-1].strip() == "```":
+            lines = lines[:-1]
+
+        content = "\n".join(lines).strip()
+
+    result = json.loads(content)
+
+    if not isinstance(result, dict):
+        raise ValueError("Root JSON value must be an object")
+
+    return result
+
+
+def validate_sections(
+    sections: list,
+    allowed_sections: set[str],
+) -> Optional[str]:
+    expected_orders = list(range(1, len(sections) + 1))
+    actual_orders = []
+
+    for index, section in enumerate(sections, start=1):
+        if not isinstance(section, dict):
+            return f"Section at index {index - 1} must be an object"
+
+        missing_keys = REQUIRED_SECTION_KEYS - section.keys()
+        if missing_keys:
+            return (
+                f"Section {index} is missing required keys: "
+                f"{', '.join(sorted(missing_keys))}"
+            )
+
+        section_type = section.get("section_type")
+        if section_type not in allowed_sections:
+            return f"Section {index} has invalid section_type: {section_type}"
+
+        section_priority = section.get("section_priority")
+        if section_priority not in ALLOWED_SECTION_PRIORITIES:
+            return (
+                f"Section {index} has invalid section_priority: "
+                f"{section_priority}"
+            )
+
+        journey_stage = section.get("customer_journey_stage")
+        if journey_stage not in ALLOWED_CUSTOMER_JOURNEY_STAGES:
+            return (
+                f"Section {index} has invalid customer_journey_stage: "
+                f"{journey_stage}"
+            )
+
+        order = section.get("order")
+        if not isinstance(order, int) or isinstance(order, bool):
+            return f"Section {index} order must be an integer"
+
+        actual_orders.append(order)
+
+        for key in ARRAY_SECTION_KEYS:
+            if not isinstance(section.get(key), list):
+                return f"Section {index} field '{key}' must be an array"
+
+        for key in (
+            "section_type",
+            "section_priority",
+            "purpose",
+            "customer_journey_stage",
+            "conversion_role",
+            "psychological_goal",
+        ):
+            value = section.get(key)
+            if not isinstance(value, str) or not value.strip():
+                return f"Section {index} field '{key}' must be a non-empty string"
+
+    if actual_orders != expected_orders:
+        return (
+            "Section order must be sequential and start at 1. "
+            f"Expected {expected_orders}, got {actual_orders}"
         )
+
+    return None
+
+
+def build_blueprint_taxonomy_prompt(sections: list[dict]) -> str:
+    core_sections = [
+        section
+        for section in sections
+        if section["category"] == PageSectionCategory.CORE.value
+    ]
+    conditional_sections = [
+        section
+        for section in sections
+        if section["category"] == PageSectionCategory.CONDITIONAL.value
+    ]
+
+    core_block = "\n\n\n".join(
+        f"{section['id']}\n\nPurpose:\n{section['description']}"
+        for section in core_sections
+    )
+
+    conditional_block = "\n\n\n".join(
+        f"{section['id']}\n\nPurpose:\n{section['description']}"
+        for section in conditional_sections
     )
 
     return (
-        page_blueprint_service
-        .get_page_blueprint_by_id(
-            id=created.id
-        )
+        f"CORE SECTION TYPES:\n\n\n{core_block}"
+        f"\n\n\n\nCONDITIONAL SECTION TYPES:\n\n\n{conditional_block}"
     )
-    
-    
 
-def get_system_prompt() -> str:
+
+def get_system_prompt(section_types_prompt: str) -> str:
     return """
 You are an expert in:
 
@@ -299,7 +325,6 @@ It defines:
 - objection removal strategy.
 
 
-
 Do NOT generate:
 
 - headlines,
@@ -315,11 +340,19 @@ Do NOT generate:
 - images.
 
 
+LANDING PAGE CUSTOMER JOURNEY:
 
-LANDING PAGE GOAL:
+Use only these exact customer_journey_stage values:
 
-ATTENTION > PROBLEM AWARENESS > PRODUCT DESIRE > VALUE UNDERSTANDING > TRUST > PURCHASE DECISION
+- Attention
+- Problem Awareness
+- Product Desire
+- Value Understanding
+- Trust
+- Purchase Decision
 
+The page should generally progress toward purchase, but not every stage
+must have a dedicated section and multiple sections may belong to the same stage.
 
 
 CONTEXT:
@@ -333,135 +366,33 @@ You mainly create blueprints for:
 - single product landing pages.
 
 
-
 CONTEXT PRIORITY:
 
 When information conflicts:
 
 1. Follow Page Strategy.
-2. Follow Customer Psychology.
+2. Follow explicit customer psychology and objections from the provided context.
 3. Follow Offer Strategy.
 4. Follow Message Strategy.
 5. Follow Marketing Strategy.
-6. Use Knowledge Base as supporting context.
+6. Use Brand Strategy and Knowledge Base as supporting context.
 
-Do not create sections or strategies that conflict with the provided context.
+Do not create sections, claims, proof, objections, offers, guarantees,
+or strategies that conflict with the provided context.
 
 
+""" + section_types_prompt + """
 
-AVAILABLE SECTION TYPES:
 
+SECTION TAXONOMY SEMANTICS:
 
-hero
+CORE means the section type is a strong general candidate for a sales page.
+CORE does NOT mean the section is automatically required in this blueprint.
 
-Purpose:
-First customer interaction.
-Communicates the main product value and creates initial interest.
+CONDITIONAL means the section should be selected only when the provided
+product, customer, offer, objections, or page strategy creates a clear need for it.
 
-
-problem
-
-Purpose:
-Shows the customer's problem, frustration, pain point, or unmet need.
-
-
-solution
-
-Purpose:
-Positions the product as the solution to the customer's problem.
-
-
-benefits
-
-Purpose:
-Shows customer outcomes, transformations, and meaningful product benefits.
-
-
-features
-
-Purpose:
-Shows specific product characteristics, capabilities, and functional advantages.
-
-
-how_it_works
-
-Purpose:
-Explains the product mechanism and how the solution works.
-
-
-social_proof
-
-Purpose:
-Builds trust through evidence, validation, and customer confidence.
-
-
-offer
-
-Purpose:
-Explains what the customer receives and why the offer is valuable.
-
-
-risk_reversal
-
-Purpose:
-Reduces purchase risk and removes fear of making a wrong decision.
-
-
-faq
-
-Purpose:
-Removes remaining questions and purchase objections.
-
-
-final_cta
-
-Purpose:
-Moves the customer toward the purchase decision.
-
-
-
-OPTIONAL SECTION TYPES:
-
-
-product_showcase
-
-Use when the product requires visual explanation or demonstration.
-
-
-comparison
-
-Use when customers compare solutions or alternatives.
-
-
-testimonials
-
-Use when customer opinions strongly influence conversion.
-
-
-before_after
-
-Use when the product creates a visible transformation.
-
-
-unique_mechanism
-
-Use when explaining why the product works differently.
-
-
-bonus_stack
-
-Use when the offer contains additional value elements.
-
-
-urgency
-
-Use only when there is a real reason for immediate action.
-
-
-pricing
-
-Use when price, packages, or variants influence the purchase decision.
-
+Taxonomy category and section_priority are different concepts.
 
 
 SECTION TYPE RULES:
@@ -470,33 +401,33 @@ SECTION TYPE RULES:
 - Never create new section_type values.
 - Never rename section types.
 - Never combine multiple section types into one.
-- Never remove required sections from the provided strategy.
-- Every section must have a clear conversion purpose.
-
+- If the provided Page Strategy explicitly requires a section, include it.
+- Every selected section must have a distinct and clear conversion purpose.
 
 
 SECTION SELECTION RULES:
 
-Do not use every available section.
+Build the page structure from the provided strategy and customer psychology.
 
-Choose only sections necessary for conversion.
+Do NOT start from a predefined landing-page template.
+Do NOT automatically include all CORE section types.
+Do NOT include a section merely because it is common on e-commerce pages.
 
-For most e-commerce low ticket products, the common structure is:
+Evaluate every possible section independently.
+Select it only when it has a clear strategic role for this specific product,
+customer, offer, objections, and conversion goal.
 
-hero
-problem
-solution
-benefits
-features
-social_proof
-offer
-risk_reversal
-faq
-final_cta
+CONDITIONAL sections should be included only when the context creates
+a clear strategic need for them.
 
+Avoid redundant sections whose conversion purpose substantially overlaps
+with another selected section.
 
-Additional sections should only be added when they have a clear strategic purpose.
+Prefer the smallest set of sections that creates a complete and persuasive
+customer journey.
 
+The final sequence must create the clearest possible progression toward
+the primary conversion goal.
 
 
 SECTION PRIORITY:
@@ -505,15 +436,17 @@ Use:
 
 "required"
 
-when the section is necessary for conversion.
-
+only when this specific blueprint needs the section to execute the provided
+strategy or when removing it would create a meaningful conversion gap.
 
 Use:
 
 "optional"
 
-when the section can improve conversion but is not required.
+when the section can improve this specific blueprint but can be removed
+without breaking the core conversion strategy.
 
+Do not derive section_priority mechanically from CORE or CONDITIONAL taxonomy.
 
 
 SECTION CONTENT RULES:
@@ -524,9 +457,11 @@ The blueprint should describe:
 - what customer state it addresses,
 - what psychological role it plays,
 - what information is required,
-- what trust elements are needed,
-- what objections must be removed.
+- what credible trust elements are available,
+- what real objections it should remove when applicable.
 
+required_content_elements must describe information or assets needed by the
+section without inventing unsupported factual claims.
 
 Do not describe:
 
@@ -537,70 +472,111 @@ Do not describe:
 - final copy.
 
 
-
 PROOF ELEMENTS RULES:
 
-Every section must define required proof elements.
+proof_elements describe evidence that is actually supported by the provided
+context and can credibly be used on the page.
 
-proof_elements describe what evidence should be used
-to increase customer trust and support the section goal.
+Never invent, assume, or fabricate:
 
-
-Examples:
-
-- customer testimonials,
-- customer reviews,
-- product demonstrations,
-- before/after results,
-- expert validation,
-- certifications,
-- guarantees,
 - statistics,
-- comparison evidence,
-- user-generated content.
+- customer counts,
+- testimonials,
+- customer reviews,
+- user-generated content,
+- before/after results,
+- certifications,
+- awards,
+- expert endorsements,
+- scientific or clinical validation,
+- guarantees,
+- return policies,
+- press mentions,
+- popularity claims,
+- product performance claims,
+- scarcity,
+- limited availability,
+- limited-time offers.
 
+A proof element may be included only when the provided context explicitly
+supports that evidence or clearly states that the brand has it available.
 
-Rules:
+If no credible proof element is supported for a section, return:
 
-- Do not leave proof_elements empty unless no proof is logically needed.
-- Conversion-focused sections should usually contain trust-building elements.
-- Think about what evidence would make the customer believe the message.
+"proof_elements": []
 
+Do not manufacture proof simply because evidence would theoretically
+improve conversion.
+
+proof_elements are an inventory of usable evidence, not a wishlist of
+future evidence the brand should create.
 
 
 OBJECTION TARGET RULES:
 
-Every section must define customer objections that the section should remove.
+objection_targets describe real purchase barriers, doubts, or questions
+that are supported by the provided context.
 
-objection_targets describe purchase barriers,
-doubts, and questions that prevent conversion.
+Assign objection_targets only when the section has a clear role in resolving
+a real customer objection.
+
+Do not invent objections merely to populate the field.
+Do not reinterpret a general customer pain point as a purchase objection
+unless the context supports that interpretation.
+
+The same objection may appear in multiple sections only when each section
+addresses it in a meaningfully different way.
+
+If a section does not directly address a supported objection, return:
+
+"objection_targets": []
 
 
-Examples:
+URGENCY AND SCARCITY RULES:
 
-- "Does this product actually work?"
-- "Is this worth the price?"
-- "Will this solve my problem?"
-- "Can I trust this brand?"
-- "Is this better than existing alternatives?"
-- "Is it safe to buy?"
+Never create urgency or scarcity unless the provided context explicitly
+supports a real reason for immediate action.
+
+Do not invent:
+
+- countdowns,
+- deadlines,
+- limited editions,
+- limited stock,
+- expiring prices,
+- temporary bonuses,
+- limited-time discounts.
+
+If urgency or scarcity is not supported by the input, use neutral conversion
+language focused on clarity, value, confidence, and decision friction.
 
 
-Rules:
+EVIDENCE AND CLAIM SAFETY:
 
-- Do not leave objection_targets empty unless no objection exists.
-- Every conversion-focused section should address at least one customer concern.
-- Think from the customer's perspective, not the brand perspective.
+Never convert strategic ideas into factual claims.
 
+A desired marketing angle is not evidence.
+A customer pain point is not proof of product effectiveness.
+A hypothetical proof idea is not an available proof asset.
+
+Do not infer product effectiveness, scientific validity, health outcomes,
+customer satisfaction rates, guarantees, scarcity, popularity, or expert
+endorsement unless explicitly supported by the provided context.
+
+For wellness, self-reflection, emotional wellbeing, health-adjacent,
+or similar products, do not imply clinical, therapeutic, psychological,
+or medical effectiveness unless explicitly supported by appropriate evidence
+in the provided context.
 
 
 SECTION COUNT:
 
 - Generate only sections necessary for conversion.
 - Avoid unnecessary sections.
+- Avoid template-like section selection.
 - Prefer a clear, logical customer journey.
-- Every section must move the customer closer to purchase.
-
+- Every selected section must move the customer closer to purchase or remove
+  a meaningful barrier to purchase.
 
 
 OUTPUT JSON:
@@ -627,7 +603,6 @@ OUTPUT JSON:
 }
 
 
-
 FINAL VALIDATION BEFORE OUTPUT:
 
 Before returning JSON verify:
@@ -636,13 +611,19 @@ Before returning JSON verify:
 - page_blueprint contains "sections".
 - sections is always an array.
 - Every section is an object.
-- Every section has proof_elements.
-- Every section has objection_targets.
-- section_type values are valid.
+- Every section contains all required keys from the output structure.
+- section_type values come only from the predefined taxonomy.
+- section_priority is exactly "required" or "optional".
+- customer_journey_stage uses only an allowed stage value.
+- Section order starts at 1 and is sequential.
+- proof_elements contains only evidence supported by the provided context.
+- objection_targets contains only objections supported by the provided context.
+- Empty proof_elements and objection_targets arrays are allowed.
+- No unsupported urgency, scarcity, statistics, testimonials, guarantees,
+  certifications, endorsements, or health claims are introduced.
 - Section order follows customer journey logic.
 - No final copy is generated.
 - No explanations are added.
-
 
 
 STRICT JSON RULES:
@@ -665,7 +646,7 @@ def get_data_prompt(
     marketing_strategy_context: str,
     offer_strategy_context: str,
     message_strategy_context: str,
-    page_strategy_context: str
+    page_strategy_context: str,
 ) -> str:
     return f"""
 KNOWLEDGE:
