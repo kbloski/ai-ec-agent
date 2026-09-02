@@ -4,7 +4,7 @@ from di.container import Container
 from domain.models.llm.llm_message import LlmMessage
 from domain.enums.llm_message_role import LlmMessageRole
 from domain.models.ugc_creatives.ugc_creative import UgcCreative
-from infrastructure.ai.prompts.constraints.uniqueness_prompt import build_uniqueness_constraint_prompt
+from infrastructure.ai.prompts.uniqueness import build_uniqueness_prompt
 from application.mappers.ugc_creative_mapper import UgcCreativeMapper
 
 
@@ -77,7 +77,7 @@ def generate_ugc_creatives_handler(
             ),
             LlmMessage(
                 role=LlmMessageRole.USER,
-                content=build_uniqueness_constraint_prompt(existed_ugc_creatives_str)
+                content=build_uniqueness_prompt(existed_ugc_creatives_str)
             ),
             LlmMessage(
                 role=LlmMessageRole.USER,

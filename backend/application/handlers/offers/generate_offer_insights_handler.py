@@ -4,7 +4,7 @@ from di.container import Container
 from application.mappers.offer_mapper import OfferMapper
 from domain.models.llm.llm_message import LlmMessage
 from domain.enums.llm_message_role import LlmMessageRole
-from infrastructure.ai.prompts.constraints.uniqueness_prompt import build_uniqueness_constraint_prompt
+from infrastructure.ai.prompts.uniqueness import build_uniqueness_prompt
 from domain.enums.offer_insight_type import OfferInsightType
 from domain.models.offers.offer_insight import OfferInsight
 from domain.enums.fact_status import FactStatus
@@ -41,7 +41,7 @@ def generate_offer_insights_handler(offer_id: int, types: List[OfferInsightType]
             ),
             LlmMessage(
                 role=LlmMessageRole.USER,
-                content=build_uniqueness_constraint_prompt(json.dumps(existing_insights))
+                content=build_uniqueness_prompt(json.dumps(existing_insights))
             ),
             LlmMessage(
                 role=LlmMessageRole.USER,

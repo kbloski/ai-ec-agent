@@ -1,4 +1,4 @@
-def build_uniqueness_constraint_prompt(
+def build_uniqueness_prompt(
     existing_data: str
 ) -> str:
 

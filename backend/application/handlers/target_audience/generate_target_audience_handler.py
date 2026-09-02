@@ -16,7 +16,7 @@ from domain.enums.intensity_level import IntensityLevel
 from domain.enums.purchasing_power import PurchasingPower
 from domain.enums.fact_status import FactStatus
 
-from infrastructure.ai.prompts.constraints.uniqueness_prompt import build_uniqueness_constraint_prompt
+from infrastructure.ai.prompts.uniqueness import build_uniqueness_prompt
 
 
 
@@ -44,7 +44,7 @@ def generate_target_audience_handler(
             ),
             LlmMessage(
                 role=LlmMessageRole.USER,
-                content=build_uniqueness_constraint_prompt(
+                content=build_uniqueness_prompt(
                     existing_data= json.dumps( [t.to_content_dict() for t in target_audiences_db_dtos])
                 )
             ),

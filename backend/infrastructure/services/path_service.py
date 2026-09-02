@@ -12,7 +12,9 @@ class PathService:
         self.UPLOADS_PROD = self.BASE_DIR / "uploads" / "prod"
 
         self.PROMPTS_DIR = self.BASE_DIR / "infrastructure" / "ai" / "prompts"
-        self.OUTPUT_RULES_PROMPT = self.PROMPTS_DIR / "output" / "output.rules.md"
+
+        self.RULES_DIR = self.BASE_DIR / "infrastructure" / "ai" / "rules"
+        self.OUTPUT_RULES_PROMPT = self.RULES_DIR / "output.rules.md"
 
         self.FRAMEWORKS_DIR = self.BASE_DIR / "infrastructure" / "ai" / "frameworks"
 
