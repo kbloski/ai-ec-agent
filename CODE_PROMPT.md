@@ -1,3 +1,6 @@
+# Główny katalog projektu 
+./
+
 # Kontekst projektu
 
 Pracujesz na istniejącym projekcie składającym się z:
@@ -42,6 +45,16 @@ Katalog:
 `_ai/agent_memory`
 
 służy jako trwała pamięć agenta pomiędzy sesjami.
+
+Plik `_ai/agent_memory/README.md` opisuje zasady prowadzenia tej pamięci.
+
+Zawartość katalogu `_ai/agent_memory` nie jest z góry ustalona — pliki mogą być dowolnie dodawane, usuwane, dzielone lub przenazywane w miarę rozwoju wiedzy o projekcie (np. osobny plik o strukturze projektu, osobny o danej domenie, integracji, module itd.). Nie polegaj na jednej, sztywnej liście plików.
+
+Na początku pracy nad zadaniem odczytaj zawartość całego katalogu `_ai/agent_memory` (wszystkie znajdujące się w nim pliki `.md`), a nie tylko `README.md`, aby uwzględnić wszystkie zapisane wcześniej notatki.
+
+Grupuj notatki tematycznie w osobnych plikach (np. dotyczące struktury projektu, konkretnego modułu, domeny biznesowej lub integracji) zamiast trzymać wszystko w jednym pliku. Jeżeli temat rozrasta się na tyle, że utrudnia to czytelność, podziel go na osobne pliki.
+
+Jeżeli notatka stała się nieaktualna, a plik, w którym się znajduje, nie zawiera już żadnych aktualnych informacji, usuń cały plik.
 
 Pamięć ma przechowywać przede wszystkim wiedzę, której ponowne ustalenie w przyszłości:
 

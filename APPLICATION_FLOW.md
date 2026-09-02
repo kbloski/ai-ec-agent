@@ -1,11 +1,25 @@
 # Application Flow
 
+> Zaktualizowano na podstawie faktycznego stanu `api/routes/general_routes.py` oraz
+> handlerów w `application/handlers/*` (weryfikacja: 2026-09-02). Poprzednia wersja
+> tego dokumentu była nieaktualna w kilku miejscach — patrz `_ai/agent_memory/application_flow.md`
+> dla skróconej wersji na potrzeby pamięci agenta.
+
 Dokument opisuje pełny przepływ aplikacji na podstawie faktycznie zarejestrowanych
 endpointów w `api/routes/general_routes.py`. Każdy kolejny krok w łańcuchu wymaga
-`id` obiektu wygenerowanego w kroku poprzednim — widać to po parametrach ścieżki
-(`{knowledge_id}`, `{brand_marketing_id}`, itd.), które kumulują się przy kolejnych
-generacjach. Przy każdym kroku opisano: **co konkretnie generuje LLM** (jakie dane/pola),
-**gdzie to się zapisuje** oraz **po co ten krok istnieje** w całym łańcuchu.
+`id` obiektu wygenerowanego w kroku poprzednim. Przy każdym kroku opisano: **co
+konkretnie generuje LLM** (jakie dane/pola), **gdzie to się zapisuje** oraz **po co
+ten krok istnieje** w całym łańcuchu.
+
+**Ważne:** generatory (`.../generate` handlery) przyjmują w URL wyłącznie **id
+bezpośredniego rodzica** — dawniej (i w części dokumentacji) sugerowano, że URL
+kumuluje id wszystkich przodków. To nieprawda dla generatorów niżej w łańcuchu:
+`offer-strategy/generate` bierze tylko `marketing_strategy_id`, `message-strategy/generate`
+tylko `offer_strategy_id`. Handler sam odtwarza pełny kontekst przodków, chodząc w
+górę po relacjach (`marketing_strategy → brand_marketing → knowledge` itd.) przez
+repozytoria. Jedynym wyjątkiem jest `marketing-strategy/generate`, który w URL
+nadal przyjmuje dwa id: `knowledge_id` i `brand_markeging_id` (celowo, bo
+`brand_marketing` samo w sobie nie przechowuje `knowledge_id` w ścieżce URL-a).
 
 ## Skrócony przepływ
 
@@ -20,19 +34,26 @@ Offer
                       └─ Message strategy
                            ├─ Ad strategy
                            │    └─ Creative strategy
-                           │         └─ Ad execution   (gotowa reklama)
+                           │         └─ Ad execution (kontener, bez LLM)
+                           │              └─ Creative execution   (gotowa reklama)
                            ├─ UGC creatives             (gotowe kreacje UGC)
                            └─ Page strategy
-                                └─ Page blueprint
-                                     └─ Page content plan
-                                          └─ Page copy   (gotowy tekst strony)
+                                └─ Page requirements (kontener, bez LLM)
+                                     └─ Page blueprint
+                                          └─ Page content plan
+                                               └─ Page copy   (gotowy tekst strony)
 ```
 
 Od `Message strategy` w dół droga się rozgałęzia na dwa równoległe piony:
-**reklamy wideo/ads** (Ad strategy → Creative strategy → Ad execution, oraz
-osobno UGC creatives) i **strona sprzedażowa** (Page strategy → Page blueprint →
-Page content plan → Page copy). Oba piony bazują na tym samym `message_strategy_id`
-i mogą być generowane niezależnie od siebie.
+**reklamy wideo/ads** (Ad strategy → Creative strategy → Ad execution → Creative
+execution, oraz osobno UGC creatives) i **strona sprzedażowa** (Page strategy →
+Page requirements → Page blueprint → Page content plan → Page copy). Oba piony
+bazują na tym samym `message_strategy_id` i mogą być generowane niezależnie od siebie.
+
+Wzdłuż obu pionów pojawia się ten sam wzorzec: krok "strategia" (LLM) → krok
+"kontener/wymagania" (**bez LLM**, czysty CRUD, ustawia parametry wejściowe: format
+reklamy/platformę dla Ad Execution, wymagane sekcje dla Page Requirements) → krok
+finalnej generacji (LLM, korzysta z kontenera jako doprecyzowania).
 
 Ogólna logika całego łańcucha: każdy kolejny krok **zawęża i konkretyzuje** to, co
 wygenerował poprzedni — od surowych danych o ofercie, przez strategię (dlaczego i
@@ -49,9 +70,13 @@ Punkt wejścia — dane produktu/oferty. Bez LLM, czysty CRUD/lista.
 | Akcja | Endpoint | Co robi |
 |---|---|---|
 | Lista ofert | `GET /offers?page=` | Paginowana lista ofert z bazy — brak LLM. |
+| Utwórz ofertę | `GET /offers/create` | Bez LLM. |
 | Seed przykładowej pełnej oferty | `GET /offers/seed-full` | Wstawia przykładowe dane testowe. |
 | Szczegóły oferty | `GET /offers/{id}` | Pojedyncza oferta. |
-| Sugestie uzupełnień do oferty | `GET /offers/{id}/suggestions` | Generuje unikalne (nieduplikujące istniejących) propozycje `pain_points` i `target_audience` jako `OfferInsight` ze statusem `suggested` — dwa osobne wywołania LLM, każde z kontekstem uniqueness-constraint względem już istniejących insightów. Po co: pozwala użytkownikowi rozszerzyć surowe dane oferty o świeże kąty, zanim zbuduje się z nich Knowledge. |
+| Edytuj pola oferty | `POST /offers/{id}/update` | Bez LLM. |
+| Wygeneruj insighty do oferty | `POST /offers/{offer_id}/insights/generate` (body: `{types: [OfferInsightType, ...]}`) | Generuje `OfferInsight` dla wskazanych typów (`fact_status=UNVERIFIED` domyślnie) — zastąpiło starsze `GET /offers/{id}/suggestions` z wcześniejszej wersji tego dokumentu (ten endpoint już nie istnieje). Po co: pozwala użytkownikowi rozszerzyć surowe dane oferty o insighty, zanim zbuduje się z nich Knowledge. |
+| Szczegóły / edycja insightu oferty | `GET /offer-insights/{id}`, `POST /offer-insights/{id}/update` (`fact_status`, `review_status`) | Ręczna weryfikacja wygenerowanego insightu. |
+| Pozycje oferty (Offer Items) | `POST /offers/{offer_id}/items` (create), `GET /offer-items/{id}`, `POST /offer-items/{id}/update` | Bez LLM — CRUD produktów/pozycji wchodzących w skład oferty. |
 
 ## 2. Knowledge (z Offer)
 
@@ -74,7 +99,9 @@ ads, strony) — nic dalej nie powstaje bez przejścia przez ten krok.
 | Wygeneruj knowledge dla oferty | `GET /offers/{id}/knowledges/generate` |
 | Lista knowledge dla oferty | `GET /offers/{offer_id}/knowledges` |
 | Szczegóły knowledge | `GET /knowledges/{knowledge_id}` |
-| Sugestie uzupełnień knowledge | `GET /knowledges/{knowledge_id}/suggestions` *(obecnie wyłączone w routingu — handler `suggest_knowledge_data_handler` istnieje i działa)*. Trzy pogrupowane wywołania LLM (features/benefits, positioning, additional_insights), każde z uniqueness-constraint względem istniejących insightów danego typu — dopisuje nowe `KnowledgeInsight` ze statusem `suggested`. Po co: pozwala douzupełnić wiedzę o produkcie bez ręcznego wymyślania kolejnych cech/różnicowników. |
+| Edytuj pola knowledge | `POST /knowledges/{id}/update` |
+| Szczegóły / edycja insightu knowledge (ręczna weryfikacja, patrz "Workflow weryfikacji" niżej) | `GET /knowledge-insights/{id}`, `POST /knowledge-insights/{id}/update` (`fact_status`, `review_status`) |
+| Sugestie uzupełnień knowledge | `GET /knowledges/{knowledge_id}/suggestions` *(nadal zakomentowane w routingu — handler `suggest_knowledge_data_handler` istnieje, ale route wyłączony)*. Trzy pogrupowane wywołania LLM (features/benefits, positioning, additional_insights), każde z uniqueness-constraint względem istniejących insightów danego typu — dopisuje nowe `KnowledgeInsight` ze statusem `suggested`. Po co: pozwala douzupełnić wiedzę o produkcie bez ręcznego wymyślania kolejnych cech/różnicowników. |
 
 ## 3. Target audience (opcjonalna gałąź od Knowledge)
 
@@ -174,9 +201,10 @@ fundament pod dalsze przekazy komunikacyjne (message strategy) i kreacje.
 
 | Akcja | Endpoint |
 |---|---|
-| Wygeneruj (wymaga `knowledge_id` + `brand_marketing_id` + `marketing_strategy_id`) | `GET /knowledges/{knowledge_id}/brand-marketing/{brand_marketing_id}/marketing-strategy/{marketing_strategy_id}/offer-strategy/generate` |
+| Wygeneruj (tylko `marketing_strategy_id` — kontekst przodków handler odtwarza sam) | `GET /marketing-strategy/{marketing_strategy_id}/offer-strategy/generate` |
 | Lista dla marketing strategy | `GET /marketing-strategy/{marketing_strategy_id}/offer-strategy` |
 | Szczegóły | `GET /offer-strategy/{id}` |
+| Edytuj pola | `POST /offer-strategy/{id}/update` |
 
 ## 8. Message strategy
 
@@ -195,9 +223,10 @@ zarówno generatory reklam (ad strategy, creative strategy, UGC), jak i strony
 
 | Akcja | Endpoint |
 |---|---|
-| Wygeneruj (kumuluje całą ścieżkę: `knowledge_id`, `brand_marketing_id`, `marketing_strategy_id`, `offer_strategy_id`) | `GET /knowledges/{knowledge_id}/brand-marketing/{brand_marketing_id}/marketing-strategy/{marketing_strategy_id}/offer-strategy/{offer_strategy_id}/message-strategy/generate` |
+| Wygeneruj (tylko `offer_strategy_id`) | `GET /offer-strategy/{offer_strategy_id}/message-strategy/generate` |
 | Lista dla offer strategy | `GET /offer-strategy/{offer_strategy_id}/message-strategy` |
 | Szczegóły | `GET /message-strategy/{id}` |
+| Edytuj pola | `POST /message-strategy/{id}/update` |
 
 ---
 
@@ -246,27 +275,51 @@ gotowy do przełożenia na konkretną, "kręcalną" egzekucję (Ad Execution).
 | Lista dla ad strategy | `GET /ad-strategy/{ad_strategy_id}/creative-strategy` |
 | Szczegóły | `GET /creative-strategy/{id}` |
 
-### 11a. Ad execution (finalna kreacja reklamowa)
+### 11a. Ad execution (kontener, bez LLM)
 
-**Co generuje:** `AdExecution` — precyzyjny, gotowy do realizacji blueprint
-reklamy wideo: platforma/format/placement/czas trwania/proporcje, strategia
-hooka, oś czasu sekcji hook→problem→solution→proof→offer→cta (każda z nazwą,
-zakresem sekund, celem i emocją), pełny podział na sceny (kolejność, sekcja,
-czas trwania, cel, opis wizualny, wskazówki kamery, voiceover, dialogi, teksty
-na ekranie, emocja per scena), wymagane materiały produkcyjne (nagrania, ujęcia
-produktu, testimoniale, screenshoty, animacje), notatki produkcyjne oraz
-szczegóły CTA. Handler waliduje, że suma czasu trwania scen dokładnie odpowiada
-zadanej długości reklamy (inaczej zwraca błąd). Świadomie **nie** jest
-dokumentem strategicznym ani nie generuje grafik/wideo/promptów AI.
+**Co robi:** tworzy pusty rekord `AdExecution` — kontener/parametryzację pod
+konkretną egzekucję: `creative_strategy_id`, `name`, `creative_type` (np.
+video/image/carousel), `platform`, `format`, `is_favorite`. **Nie wywołuje LLM** —
+to czysty CRUD, analogiczny do "Analysis"/"Checklist create" i do "Page requirements"
+w pionie strony.
 
-**Po co:** to finalny, produkcyjny shot-list reklamy, który ekipa
-produkcyjna/generator zasobów może wykonać wprost — koniec pionu reklamowego.
+**Po co:** pozwala z jednej Creative Strategy stworzyć wiele niezależnych
+egzekucji (różne platformy/formaty/typy kreacji), z których każda dostaje
+osobną generację w kroku Creative Execution.
+
+| Akcja | Endpoint | Co robi |
+|---|---|---|
+| Utwórz (+ `creative_strategy_id`, `creative_type`, `platform`, `format`, opcjonalnie `name`) | `GET /creative-strategy/{creative_strategy_id}/ad-execution/create` | Bez LLM. |
+| Lista dla creative strategy | `GET /creative-strategy/{creative_strategy_id}/ad-execution` | Podgląd. |
+| Szczegóły | `GET /ad-execution/{id}` | Podgląd. |
+| Edytuj pola | `POST /ad-execution/{id}/update` | Bez LLM. |
+
+### 12a. Creative execution (finalna kreacja reklamowa)
+
+**Co generuje:** `CreativeExecution` — precyzyjny, gotowy do realizacji blueprint
+reklamy, zapisany jako `content_json` powiązany z `ad_execution_id`. Handler
+odtwarza pełny kontekst przodków (`ad_execution → creative_strategy → ad_strategy →
+message_strategy → offer_strategy → marketing_strategy → brand_marketing → knowledge`),
+opcjonalnie doprecyzowuje generację o `ad_framework_id`/`creative_angle_id`/
+`execution_style_id` (statyczne słowniki, patrz "Ad frameworks / Creative angels /
+Execution styles" niżej) oraz `duration_seconds`/`number_of_slides`, i wybiera
+prompt zależnie od `creative_type` z Ad Execution. Dla wideo: `creative_thesis`,
+strategia hooka, `structure`, pełny podział na sceny (kolejność, sekcja, zakres
+sekund, opis wizualny, voiceover, dialogi, teksty na ekranie), notatki
+produkcyjne. Świadomie **nie** generuje grafik/wideo/promptów AI, tylko blueprint
+tekstowy.
+
+**Po co:** to finalny, produkcyjny shot-list reklamy — koniec pionu reklamowego.
+Rozdzielenie na Ad Execution (kontener) + Creative Execution (LLM) pozwala
+wygenerować/regenerować wiele wariantów egzekucji dla tych samych parametrów
+kontenera.
 
 | Akcja | Endpoint |
 |---|---|
-| Wygeneruj (+ `creative_strategy_id`) | `.../creative-strategy/{creative_strategy_id}/ad-execution/generate` |
-| Lista dla creative strategy | `GET /creative-strategy/{creative_strategy_id}/ad-execution` |
-| Szczegóły | `GET /ad-execution/{id}` |
+| Wygeneruj (+ `ad_execution_id`, opcjonalnie `duration_seconds`, `number_of_slides`, `ad_framework_id`, `creative_angle_id`, `execution_style_id`) | `GET /ad-execution/{ad_execution_id}/creative-execution/generate` |
+| Lista dla ad execution | `GET /ad-execution/{ad_execution_id}/creative-execution` |
+| Szczegóły | `GET /creative-execution/{id}` |
+| Edytuj pola | `POST /creative-execution/{id}/update` |
 
 ### Boczna gałąź od Message strategy: UGC creatives
 
@@ -333,7 +386,28 @@ logika konwersji), z którego korzystają dalej Page Blueprint, Content Plan i C
 | Lista dla message strategy | `GET /message-strategy/{message_strategy_id}/page-strategy` |
 | Szczegóły | `GET /page-strategy/{id}` |
 
-### 10b. Page blueprint
+### 10b. Page requirements (kontener, bez LLM)
+
+**Co robi:** tworzy pusty rekord `PageRequirements` (`page_strategy_id`,
+`is_favorite`) — kontener na listę wymaganych sekcji strony. Sama lista sekcji
+to osobne rekordy `PageSectionRequirement` (`page_requirements_id`,
+`page_section_type_id`, `requirement_type`, `position`), nadpisywane w całości
+przez `update` (`replace_for_page_requirements`). Typy sekcji pochodzą ze
+stałego słownika (`GET /page-sections`, patrz niżej). **Bez LLM.**
+
+**Po co:** pozwala użytkownikowi ręcznie ustalić/dostosować wymaganą strukturę
+strony (które sekcje muszą/mogą się pojawić, w jakiej kolejności) **przed**
+wygenerowaniem Page Blueprint — Blueprint generuje się już z tym ograniczeniem
+jako inputem, a nie generuje struktury w pełni od zera.
+
+| Akcja | Endpoint | Co robi |
+|---|---|---|
+| Utwórz (+ `page_strategy_id`) | `GET /page-strategy/{page_strategy_id}/page-requirements/create` | Bez LLM. |
+| Lista dla page strategy | `GET /page-strategy/{page_strategy_id}/page-requirements` | Podgląd. |
+| Szczegóły | `GET /page-requirements/{id}` | Podgląd. |
+| Ustaw listę sekcji | `POST /page-requirements/{id}/update` (body: `section_requirements: [{page_section_type_id, requirement_type, position}]`) | Bez LLM, nadpisuje całą listę. |
+
+### 11b. Page blueprint
 
 **Co generuje:** `PageBlueprint` — strukturę strony (bez treści): listę sekcji
 w kolejności, każda z typem sekcji, priorytetem (wymagana/opcjonalna), celem,
@@ -343,18 +417,24 @@ Typy sekcji wybierane ze stałego słownika (core: hero, problem, solution,
 benefits, features, how_it_works, social_proof, offer, risk_reversal, faq,
 final_cta; opcjonalne: product_showcase, comparison, testimonials, before_after,
 unique_mechanism, bonus_stack, urgency, pricing) — handler waliduje każdy
-`section_type` względem dozwolonej listy i odrzuca nieznane wartości.
+`section_type` względem dozwolonej listy i odrzuca nieznane wartości. Wejściem
+jest `page_requirements_id` (nie `page_strategy_id` bezpośrednio) — handler
+odtwarza kontekst przodków samodzielnie: `page_requirements → page_strategy →
+message_strategy → offer_strategy → marketing_strategy → brand_marketing → knowledge`.
+Zapisany rekord przechowuje zarówno `page_strategy_id`, jak i `page_requirements_id`.
 
 **Po co:** definiuje architekturę informacyjną/kolejność sekcji strony, którą
-Content Plan i Copy dalej wypełniają treścią.
+Content Plan i Copy dalej wypełniają treścią, respektując ograniczenia z Page
+Requirements.
 
 | Akcja | Endpoint |
 |---|---|
-| Wygeneruj (+ `page_strategy_id`) | `.../page-strategy/{page_strategy_id}/page-blueprint/generate` |
-| Lista dla page strategy | `GET /page-strategy/{page_strategy_id}/page-blueprint` |
+| Wygeneruj (+ `page_requirements_id`) | `GET /page-requirements/{page_requirements_id}/page-blueprint/generate` |
+| Lista dla page requirements | `GET /page-requirements/{page_requirements_id}/page-blueprint` |
 | Szczegóły | `GET /page-blueprint/{id}` |
+| Edytuj pola | `POST /page-blueprint/{id}/update` |
 
-### 11b. Page content plan
+### 12b. Page content plan
 
 **Co generuje:** `PageContentPlan` — dla każdej sekcji z Page Blueprint (1:1,
 bez dodawania/usuwania sekcji) określa, jaka treść i argumentacja ma się w niej
@@ -368,11 +448,12 @@ dokładnie jaki argument ma nieść każda sekcja, zanim padnie ostateczny tekst
 
 | Akcja | Endpoint |
 |---|---|
-| Wygeneruj (+ `page_blueprint_id`) | `.../page-blueprint/{page_blueprint_id}/page-content-plan/generate` |
+| Wygeneruj (+ `page_blueprint_id`) | `GET /page-blueprint/{page_blueprint_id}/page-content-plan/generate` |
 | Lista dla page blueprint | `GET /page-blueprint/{page_blueprint_id}/page-content-plan` |
 | Szczegóły | `GET /page-content-plan/{id}` |
+| Edytuj pola | `POST /page-content-plan/{id}/update` |
 
-### 12b. Page copy (finalny tekst strony)
+### 13b. Page copy (finalny tekst strony)
 
 **Co generuje:** `PageCopy` — finalną warstwę tekstową strony. Dla każdej
 sekcji z Content Plan (ta sama kolejność, bez zmian w liście sekcji) pisze
@@ -388,27 +469,84 @@ konsumowany bezpośrednio przez frontend/renderer strony.
 
 | Akcja | Endpoint |
 |---|---|
-| Wygeneruj (+ `page_content_plan_id`) | `.../page-content-plan/{page_content_plan_id}/page-copy/generate` |
+| Wygeneruj (+ `page_content_plan_id`) | `GET /page-content-plan/{page_content_plan_id}/page-copy/generate` |
 | Lista dla page content plan | `GET /page-content-plan/{page_content_plan_id}/page-copy` |
 | Szczegóły | `GET /page-copy/{id}` |
+| Edytuj pola | `POST /page-copy/{id}/update` |
 
 ---
 
+## Statyczne słowniki / lookupy
+
+Kilka endpointów nie dotyczy żadnego konkretnego rekordu w łańcuchu — zwracają
+stałe listy (JSON w `infrastructure/ads/*.json` lub domenowe enumy), używane jako
+opcje w UI i/lub jako opcjonalny kontekst doprecyzowujący generację (np. w
+Creative Execution):
+
+| Endpoint | Co zwraca |
+|---|---|
+| `GET /ad-frameworks` | Lista dostępnych frameworków reklamowych (statyczny JSON). |
+| `GET /creative-angels` | Lista kątów kreatywnych (statyczny JSON). |
+| `GET /execution-styles` | Lista stylów egzekucji (statyczny JSON). |
+| `GET /platforms` | Lista obsługiwanych platform reklamowych. |
+| `GET /page-sections` | Lista typów sekcji strony (używana m.in. przy Page Requirements). |
+| `GET /fact-statuses` | Wartości enuma `FactStatus`. |
+| `GET /review-statuses` | Wartości enuma `ReviewStatus`. |
+
+## Workflow weryfikacji wygenerowanych faktów (fact/review status)
+
+Insighty generowane przez LLM (`OfferInsight`, `KnowledgeInsight`, a analogicznie
+pola `TargetAudience`) mają dwa niezależne statusy do ręcznej weryfikacji przez
+użytkownika, ustawiane przez `POST /<zasob>/{id}/update`:
+
+- `FactStatus` (`domain/enums/fact_status.py`) — `VERIFIED` / `UNVERIFIED` /
+  `DISPUTED`: czy fakt jest potwierdzony. Nowo wygenerowane insighty domyślnie
+  dostają `UNVERIFIED`.
+- `ReviewStatus` (`domain/enums/review_status.py`) — `PENDING` / `APPROVED` /
+  `REJECTED`: stan ręcznego review przez człowieka.
+
+Generacja `OfferInsight` idzie przez `POST /offers/{offer_id}/insights/generate`
+z body `{types: [...]}` (lista `OfferInsightType`) — zastąpiło to starsze
+`GET /offers/{id}/suggestions` z poprzedniej wersji tego dokumentu (ten endpoint
+już nie istnieje w routingu).
+
+## Wzorzec CRUD (update/delete) dla każdego zasobu w łańcuchu
+
+Każdy generowany zasób (Offer, Knowledge, Brand Marketing, Marketing/Offer/
+Message/Ad Strategy, Creative Strategy, Ad/Creative Execution, UGC Creative,
+Page Strategy/Requirements/Blueprint/Content Plan/Copy) ma, obok `generate`/
+`create`, listy i szczegółów, także:
+
+- `POST /<zasob>/{id}/update` — częściowa edycja pól (body zwykle
+  `{fields: {...}}` jako dowolny dict nadpisywany na rekordzie; niektóre zasoby,
+  np. Target Audience, Offer/Knowledge Insight, Page Requirements, mają własny,
+  typowany request model zamiast ogólnego `fields` dicta).
+- `GET /<zasob>/{id}/delete` — oznaczone w kodzie komentarzem `# DELETE in future`
+  (są to `GET`, nie `DELETE`, celowo tymczasowo, do czasu przejścia na właściwe
+  metody HTTP).
+
 ## Uwagi architektoniczne
 
-- Każdy poziom łańcucha ma ten sam trójkowy zestaw endpointów: **`generate`**
-  (LLM + zapis do bazy), **lista dla rodzica** (`GET /<parent>/{parent_id}/<zasob>`),
-  **szczegóły po id** (`GET /<zasob>/{id}`) — konwencja spójna w całym projekcie.
-- Ścieżki `generate` w dolnych piętrach łańcucha (od `marketing-strategy` w dół)
-  kumulują w URL identyfikatory wszystkich przodków — endpoint zna pełną ścieżkę
-  przodków, mimo że realnie potrzebuje tylko bezpośredniego rodzica do zapytania
-  o dane; to celowa konwencja projektu, nie duplikacja przez pomyłkę.
+- Każdy poziom łańcucha ma zestaw endpointów: **`generate`** (LLM + zapis do
+  bazy) lub **`create`** (bez LLM, dla kroków-kontenerów), **lista dla rodzica**
+  (`GET /<parent>/{parent_id}/<zasob>`), **szczegóły po id** (`GET /<zasob>/{id}`),
+  **`update`** i **`delete`** — konwencja spójna w całym projekcie.
+- Endpointy `generate` przyjmują w URL **wyłącznie id bezpośredniego rodzica**
+  (wyjątek: `marketing-strategy/generate`, patrz wyżej) — pełny kontekst
+  przodków (aż do `knowledge`) handler odtwarza sam, chodząc w górę po relacjach
+  przez repozytoria. To ważna zmiana względem starszej wersji tego dokumentu,
+  która błędnie sugerowała kumulację wszystkich id przodków w URL.
+- Kroki-kontenery bez LLM (Ad Execution, Page Requirements, Analysis, Checklist —
+  ich `create`) służą do ustalenia parametrów wejściowych/ograniczeń **przed**
+  właściwą generacją LLM w kolejnym kroku (Creative Execution, Page Blueprint,
+  odpowiednio Analysis Answers, Checklist generate).
 - Widoczny wzorzec "od strategii do treści": kroki 5-8 (Brand/Marketing/Offer/
   Message strategy) świadomie **nie generują żadnej gotowej treści** (bez
   nagłówków, CTA, scenariuszy) — dopiero ostatnie ogniwa każdej gałęzi
-  (Ad Execution, UGC Creatives, Page Copy) produkują tekst gotowy do publikacji.
-  To rozdzielenie pozwala tej samej strategii zasilać wiele różnych egzekucji
-  (np. wiele wariantów Ad Execution z jednej Creative Strategy).
+  (Creative Execution, UGC Creatives, Page Copy) produkują tekst gotowy do
+  publikacji. To rozdzielenie pozwala tej samej strategii zasilać wiele różnych
+  egzekucji (np. wiele wariantów Ad Execution/Creative Execution z jednej
+  Creative Strategy).
 - Wszystkie generacje idą przez `ollama_service` (lokalny model LLM) i zapisują
   wynik do bazy (SQLite, `Base.metadata.create_all()` — Alembic nie jest w tym
   repo faktycznie zainicjalizowany mimo że jest zależnością).
@@ -416,3 +554,11 @@ konsumowany bezpośrednio przez frontend/renderer strony.
   budują własny `Container()`) → `application/services` / `application/assemblers`
   (logika + składanie DTO z dzieci) → `infrastructure/repositories` (SQLAlchemy) →
   `domain/models` (encje).
+- Endpoint `GET /knowledges/{knowledge_id}/advertisements/generate` (starszy,
+  równoległy generator "Advertisement" opisany w sekcji "Starszy/równoległy
+  moduł: Advertisement" wyżej) oraz `GET /knowledges/{knowledge_id}/suggestions`
+  (sugestie uzupełnień knowledge) są nadal zakomentowane w `general_routes.py` —
+  handlery i stos DTO/repo/asembler istnieją, ale route jest wyłączony.
+- Sekcja "Settings" (`GET`/`POST /settings/output-prompt`) pozwala odczytać i
+  zapisać globalny, konfigurowalny fragment promptu wyjściowego — bez LLM, poza
+  głównym łańcuchem.
