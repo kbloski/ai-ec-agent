@@ -2,37 +2,28 @@
 
 ## General Rules
 
-- Follow the output format required by the task.
+- Always follow the output format required by the task.
 - Follow all task-specific instructions.
-- Do not add unnecessary explanations, comments, or additional text.
+- Do not add unnecessary explanations, comments, or text outside the required format.
 - Keep the output consistent with the provided context.
-- Do not copy the language of the input data.
+- The language of the input data does not determine the output language.
 
 ## OUTPUT LANGUAGE
 
-- Generate all text content in English.
-- Keep technical terms, variable names, field names, and schema keys unchanged.
-- Do not translate JSON keys or structured data fields.
-- The output language is independent from the input language.
+- Generate all textual content in English.
+- Keep technical names, identifiers, variable names, field names, and schema keys unchanged.
+- Preserve JSON keys and structured data field names exactly as provided.
 
-## JSON RULES
+## JSON
 
-Apply these rules only when the required output format is JSON:
+Apply the following rules only when the required output format is JSON:
 
-- Return only valid JSON.
-- Do not add any text before or after the JSON object.
-- Do not use markdown or code blocks.
+- Return only valid JSON, without markdown, code blocks, or additional text.
+- The JSON must be directly parseable by a standard JSON parser.
 - Follow the provided JSON schema exactly.
-- Keep JSON keys unchanged.
-- Do not rename, remove, or translate fields.
-- Do not use null values.
-- Leave a field as an empty string ONLY when the task-specific system prompt
-  explicitly allows/requires it (for example, when information is genuinely
-  unverified or unavailable). Otherwise, provide a meaningful value.
-- Never invent specific facts, numbers, names, or claims solely to avoid leaving
-  a field empty — a task-specific "do not invent" instruction always takes
-  priority over filling a field.
-- Arrays must always be returned as arrays.
-- Objects must keep the structure defined by the schema.
-- Do not replace objects with strings or arrays.
-- Do not replace arrays with strings or objects.
+- Do not add, remove, rename, or translate fields unless explicitly allowed by the task.
+- Preserve the data type of every field according to the schema.
+- Arrays must remain arrays, and objects must remain objects.
+- Do not use `null` unless explicitly allowed by the task.
+- Use an empty string only when explicitly allowed or required by the task.
+- Handle missing, unknown, or unavailable values according to the task-specific instructions.
