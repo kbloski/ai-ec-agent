@@ -50,6 +50,11 @@
     "description": "Compares the product with alternatives, competitors, previous methods, or other available solutions."
   },
   {
+    "id": "ugc",
+    "name": "UGC",
+    "description": "Showcases simple, authentic-looking customer-created photos, videos, unboxings, demonstrations, reactions, or product-in-use content to make the product feel relatable, tangible, and socially validated."
+  },
+  {
     "id": "social_proof",
     "name": "Social Proof",
     "description": "Builds trust using aggregate evidence such as ratings, customer counts, logos, awards, certifications, press mentions, adoption metrics, or other credibility signals."
