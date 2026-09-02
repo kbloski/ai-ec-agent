@@ -14,7 +14,6 @@ from application.handlers.ads.list_fact_statuses_handler import list_fact_status
 from application.handlers.ads.list_review_statuses_handler import list_review_statuses_handler
 from application.handlers.offers.get_offers import get_offers
 from application.handlers.offers.create_offer import create_offer
-from application.handlers.offers.seed_full_offer import seed_full_offer
 from application.handlers.offers.get_offer import get_offer_handler
 from application.handlers.offers.delete_offer import delete_offer_handler
 from application.handlers.offers.delete_offer_item import delete_offer_item_handler
@@ -202,10 +201,6 @@ def register_general_routes(router: APIRouter):
     @router.get("/offers")
     def offers(page: int = 1):
         return get_offers( page=page )
-
-    @router.get("/offers/seed-full")
-    def seed_full(page: int = 1):
-        return seed_full_offer()
 
     # POST in future
     @router.get("/offers/create")
