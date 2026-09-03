@@ -2,34 +2,32 @@
 # opisujący przeznaczenie katalogu. Cała pozostała zawartość (w tym
 # ewentualne podkatalogi) pozostaje wyłącznie lokalna.
 
-prompts/*
-!prompts/README.md
+# prompts/*
+# !prompts/README.md
 
-memory/*
-!memory/README.md
+# memory/*
+# !memory/README.md
 
-plans/*
-!plans/README.md
+# plans/*
+# !plans/README.md
 
-decisions/*
-!decisions/README.md
+# decisions/*
+# !decisions/README.md
 
-references/*
-!references/README.md
+# references/*
+# !references/README.md
 
-templates/*
-!templates/README.md
+# templates/*
+# !templates/README.md
 
-scratch/*
-!scratch/README.md
+# scratch/*
+# !scratch/README.md
 
-output/*
-!output/README.md
+# output/*
+# !output/README.md
 
-rules/*
-!rules/README.md
+# rules/*
+# !rules/README.md
 
-# project/FreeSale to osobne repozytorium git (własna historia, własny
-# zdalny remote) — nie ma być embedowane w tym repozytorium.
-project/*
-!project/README.md
+# project/*
+# !project/README.md
