@@ -4,6 +4,32 @@ interface OutputPrompt {
   content: string
 }
 
+export interface OllamaSettingField {
+  value: string | number
+  default: string | number
+  is_override: boolean
+}
+
+export interface OllamaSettings {
+  ollama_url: OllamaSettingField
+  ollama_model: OllamaSettingField
+  ollama_timeout: OllamaSettingField
+  ollama_context_length: OllamaSettingField
+  ollama_temperature: OllamaSettingField
+}
+
+export type OllamaSettingsFields = Partial<{
+  ollama_url: string | null
+  ollama_model: string | null
+  ollama_timeout: number | null
+  ollama_context_length: number | null
+  ollama_temperature: number | null
+}>
+
+interface OllamaModelsResponse {
+  models: string[]
+}
+
 export const settingsApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getOutputPrompt: builder.query<OutputPrompt, void>({
@@ -16,7 +42,29 @@ export const settingsApi = api.injectEndpoints({
         body: { content },
       }),
     }),
+    getOllamaSettings: builder.query<OllamaSettings, void>({
+      query: () => '/settings/ollama',
+    }),
+    saveOllamaSettings: builder.mutation<OllamaSettings, OllamaSettingsFields>({
+      query: (fields) => ({
+        url: '/settings/ollama',
+        method: 'POST',
+        body: { fields },
+      }),
+    }),
+    listOllamaModels: builder.query<OllamaModelsResponse, string | undefined>({
+      query: (url) => ({
+        url: '/settings/ollama/models',
+        params: url ? { url } : undefined,
+      }),
+    }),
   }),
 })
 
-export const { useGetOutputPromptQuery, useSaveOutputPromptMutation } = settingsApi
+export const {
+  useGetOutputPromptQuery,
+  useSaveOutputPromptMutation,
+  useGetOllamaSettingsQuery,
+  useSaveOllamaSettingsMutation,
+  useListOllamaModelsQuery,
+} = settingsApi

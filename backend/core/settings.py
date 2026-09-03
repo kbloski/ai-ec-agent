@@ -25,3 +25,6 @@ class Settings:
 
     def get_ollama_num_ctx(self) -> int:
         return int(os.getenv("OLLAMA_CONTEXT_LENGTH", "131072"))
+
+    def get_ollama_timeout(self) -> int:
+        return int(os.getenv("OLLAMA_TIMEOUT", "600"))

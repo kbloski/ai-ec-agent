@@ -45,3 +45,6 @@ from domain.models.message_strategy.message_strategy import MessageStrategy
 
 # Ad strategy
 from domain.models.ad_strategy.ad_strategy import AdStrategy
+
+# App settings
+from domain.models.settings.app_ollama_settings import AppOllamaSettings

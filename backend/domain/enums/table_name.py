@@ -30,3 +30,4 @@ class TableName(str, Enum):
     PAGE_BLUEPRINT = "page_blueprint"
     PAGE_CONTENT_PLAN = "page_content_plan"
     PAGE_COPY = "page_copy"
+    APP_OLLAMA_SETTINGS = "app_ollama_settings"

@@ -15,7 +15,7 @@ Odkryte podczas pierwszej analizy 2026-09-03 (commit `b942f16`). To obserwacje, 
 - **Brak cache'owania kontekstu LLM** — każdy krok generowania odtwarza cały łańcuch przodków i wysyła go od nowa (np. `generate_page_copy_handler.py:92-124` odtwarza 7 warstw kontekstu). Stąd wymagany duży `OLLAMA_CONTEXT_LENGTH`.
 - **`fact_status`/`review_status`** (workflow weryfikacji AI-generowanych faktów) nie są programowo wymuszane — kolejne etapy pipeline'u używają danych jako kontekstu niezależnie od statusu weryfikacji.
 - **Brak testów automatycznych** — brak `pytest` w `requirements.txt`, brak plików `test_*.py`.
-- `OLLAMA_TIMEOUT` zdefiniowany w `.env`, ale nieużywany nigdzie w `Settings`/`OllamaService` — martwa zmienna.
+- ~~`OLLAMA_TIMEOUT` zdefiniowany w `.env`, ale nieużywany nigdzie w `Settings`/`OllamaService` — martwa zmienna.~~ Rozwiązane 2026-09-03: dodano `Settings.get_ollama_timeout()` i przekazywanie go do `ollama.Client(host=..., timeout=...)`.
 
 ## Frontend
 

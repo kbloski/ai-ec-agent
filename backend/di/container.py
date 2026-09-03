@@ -81,6 +81,7 @@ from application.services.page_content_plan_service import PageContentPlanServic
 from infrastructure.repositories.page_copy_repository import PageCopyRepository
 from application.assemblers.page_copy_assembler import PageCopyAssembler
 from application.services.page_copy_service import PageCopyService
+from infrastructure.repositories.app_ollama_settings_repository import AppOllamaSettingsRepository
 
 class Container(containers.DeclarativeContainer):
     db = providers.Singleton(
@@ -461,10 +462,17 @@ class Container(containers.DeclarativeContainer):
         page_section_requirements_repository=page_section_requirements_repository,
     )
 
+    app_ollama_settings_repository = providers.Singleton(
+        AppOllamaSettingsRepository,
+        logger=logger,
+        db=db
+    )
+
     ollama_service = providers.Singleton(
         OllamaService,
         logger=logger,
         settings=settings,
+        app_ollama_settings_repository=app_ollama_settings_repository,
     )
 
     ai_service =  providers.Singleton(

@@ -32,6 +32,14 @@ DTO **nie są Pydantic** — własne klasy z `JSONSerializable`. Pydantic służ
 
 Domain models = encje ORM SQLAlchemy wprost (brak oddzielenia modelu domenowego od modelu persystencji).
 
+### Konfiguracja Ollama — nadpisania per instancja (dodane 2026-09-03)
+
+`OLLAMA_URL`, `OLLAMA_LLM_MODEL`, `OLLAMA_TIMEOUT`, `OLLAMA_CONTEXT_LENGTH`, `OLLAMA_TEMPERATURE` z `.env` mogą być nadpisane z poziomu UI (`/settings/general`, sekcja „Ollama”) i zapisane trwale w bazie danych tej instancji aplikacji — tabela `app_ollama_settings` (`domain/models/settings/app_ollama_settings.py`, jeden wiersz `id=1`, wszystkie pola nullable; `NULL` = użyj wartości z `.env`).
+
+Merge logiki (baza → fallback `.env`) dzieje się w `OllamaService.__init__` (`application/services/ollama_service.py`), wstrzykiwanym `app_ollama_settings_repository`. Ponieważ `OllamaService`/`Container()` są tworzone od nowa przy każdym requeście (patrz sekcja „Warstwy per request” wyżej), nadpisania działają natychmiast bez restartu procesu.
+
+API: `GET/POST /settings/ollama` (odczyt/zapis, format zgodny z istniejącym wzorcem `UpdateFieldsRequest`: `{"fields": {...}}`, `null` w polu czyści nadpisanie), `GET /settings/ollama/models?url=` (lista modeli z działającej instancji Ollama pod danym/aktualnym adresem, przez `client.list()`).
+
 ### Integracje
 
 - **Ollama** (lokalny LLM) — jedyna integracja AI, `application/services/ollama_service.py` + `ai_service.py` (dokleja globalny prompt `output.rules.md` jako dodatkową wiadomość systemową).

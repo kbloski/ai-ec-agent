@@ -124,6 +124,9 @@ from application.handlers.page_copy.get_page_content_plan_page_copies_handler im
 from application.handlers.page_copy.delete_page_copy_handler import delete_page_copy_handler
 from application.handlers.settings.get_output_prompt_handler import get_output_prompt_handler
 from application.handlers.settings.save_output_prompt_handler import save_output_prompt_handler
+from application.handlers.settings.get_ollama_settings_handler import get_ollama_settings_handler
+from application.handlers.settings.save_ollama_settings_handler import save_ollama_settings_handler
+from application.handlers.settings.list_ollama_models_handler import list_ollama_models_handler
 
 
 class SaveOutputPromptRequest(BaseModel):
@@ -869,6 +872,18 @@ def register_general_routes(router: APIRouter):
     @router.post("/settings/output-prompt")
     def save_output_prompt_route( payload: SaveOutputPromptRequest ):
         return save_output_prompt_handler( content=payload.content )
+
+    @router.get("/settings/ollama")
+    def get_ollama_settings_route():
+        return get_ollama_settings_handler()
+
+    @router.post("/settings/ollama")
+    def save_ollama_settings_route( payload: UpdateFieldsRequest ):
+        return save_ollama_settings_handler( fields=payload.fields )
+
+    @router.get("/settings/ollama/models")
+    def list_ollama_models_route( url: Optional[str] = None ):
+        return list_ollama_models_handler( url=url )
 
 
     # -----------------------------
