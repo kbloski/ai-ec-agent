@@ -15,6 +15,19 @@ import {
   type OllamaSettingsFields,
 } from '@/features/settings/settingsApi'
 
+const CONTEXT_LENGTH_PRESETS = [
+  { label: '4k', value: 4_096 },
+  { label: '8k', value: 8_192 },
+  { label: '16k', value: 16_384 },
+  { label: '32k', value: 32_768 },
+  { label: '64k', value: 65_536 },
+  { label: '128k', value: 131_072 },
+  { label: '256k', value: 262_144 },
+  { label: '512k', value: 524_288 },
+  { label: '1M', value: 1_048_576 },
+]
+const CUSTOM_CONTEXT_LENGTH = 'custom'
+
 function OllamaSettingsSection() {
   const { data, isLoading, error } = useGetOllamaSettingsQuery()
   const [saveOllamaSettings, saveState] = useSaveOllamaSettingsMutation()
@@ -23,6 +36,7 @@ function OllamaSettingsSection() {
   const [modelValue, setModelValue] = useState('')
   const [timeoutValue, setTimeoutValue] = useState('')
   const [contextLengthValue, setContextLengthValue] = useState('')
+  const [isCustomContextLength, setIsCustomContextLength] = useState(false)
   const [temperatureValue, setTemperatureValue] = useState('')
 
   useEffect(() => {
@@ -30,7 +44,9 @@ function OllamaSettingsSection() {
     setUrlValue(String(data.ollama_url.value))
     setModelValue(String(data.ollama_model.value))
     setTimeoutValue(String(data.ollama_timeout.value))
-    setContextLengthValue(String(data.ollama_context_length.value))
+    const loadedContextLength = String(data.ollama_context_length.value)
+    setContextLengthValue(loadedContextLength)
+    setIsCustomContextLength(!CONTEXT_LENGTH_PRESETS.some((preset) => String(preset.value) === loadedContextLength))
     setTemperatureValue(String(data.ollama_temperature.value))
   }, [data])
 
@@ -149,13 +165,39 @@ function OllamaSettingsSection() {
                   <ResetFieldButton onClick={() => handleResetField('ollama_context_length')} />
                 )}
               </div>
-              <Input
-                id="ollama_context_length"
-                type="number"
-                value={contextLengthValue}
-                onChange={(e) => setContextLengthValue(e.target.value)}
-                placeholder={String(data.ollama_context_length.default)}
-              />
+              <Select
+                value={isCustomContextLength ? CUSTOM_CONTEXT_LENGTH : contextLengthValue}
+                onValueChange={(value) => {
+                  if (!value) return
+                  if (value === CUSTOM_CONTEXT_LENGTH) {
+                    setIsCustomContextLength(true)
+                  } else {
+                    setIsCustomContextLength(false)
+                    setContextLengthValue(value)
+                  }
+                }}
+              >
+                <SelectTrigger id="ollama_context_length" className="w-full">
+                  <SelectValue placeholder={String(data.ollama_context_length.default)} />
+                </SelectTrigger>
+                <SelectContent>
+                  {CONTEXT_LENGTH_PRESETS.map((preset) => (
+                    <SelectItem key={preset.value} value={String(preset.value)}>
+                      {preset.label} ({preset.value.toLocaleString('pl-PL')})
+                    </SelectItem>
+                  ))}
+                  <SelectItem value={CUSTOM_CONTEXT_LENGTH}>Inna…</SelectItem>
+                </SelectContent>
+              </Select>
+              {isCustomContextLength && (
+                <Input
+                  id="ollama_context_length_custom"
+                  type="number"
+                  value={contextLengthValue}
+                  onChange={(e) => setContextLengthValue(e.target.value)}
+                  placeholder={String(data.ollama_context_length.default)}
+                />
+              )}
             </div>
 
             <div className="space-y-1.5">
