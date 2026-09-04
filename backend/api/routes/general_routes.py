@@ -1,6 +1,6 @@
 from typing import Any, Dict, List, Optional
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from domain.enums.fact_status import FactStatus
 from domain.enums.review_status import ReviewStatus
@@ -127,6 +127,8 @@ from application.handlers.settings.save_output_prompt_handler import save_output
 from application.handlers.settings.get_ollama_settings_handler import get_ollama_settings_handler
 from application.handlers.settings.save_ollama_settings_handler import save_ollama_settings_handler
 from application.handlers.settings.list_ollama_models_handler import list_ollama_models_handler
+from application.handlers.pipeline.get_pipeline_path_handler import get_pipeline_path_handler
+from domain.enums.pipeline_entity_type import PipelineEntityType
 
 
 class SaveOutputPromptRequest(BaseModel):
@@ -135,6 +137,11 @@ class SaveOutputPromptRequest(BaseModel):
 
 class UpdateFieldsRequest(BaseModel):
     fields: Dict[str, Any]
+
+
+class PipelinePathRequest(BaseModel):
+    entity_type: PipelineEntityType
+    entity_id: int
 
 
 class PageSectionRequirementInput(BaseModel):
@@ -884,6 +891,17 @@ def register_general_routes(router: APIRouter):
     @router.get("/settings/ollama/models")
     def list_ollama_models_route( url: Optional[str] = None ):
         return list_ollama_models_handler( url=url )
+
+
+    # -----------------------------
+    # Pipeline path
+    # -----------------------------
+    @router.post("/pipeline/path")
+    def get_pipeline_path_route( payload: PipelinePathRequest ):
+        try:
+            return get_pipeline_path_handler( entity_type=payload.entity_type, entity_id=payload.entity_id )
+        except ValueError as e:
+            raise HTTPException(status_code=404, detail=str(e))
 
 
     # -----------------------------

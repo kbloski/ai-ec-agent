@@ -93,6 +93,34 @@ Cała warstwa API frontendu to RTK Query (`src/store/api.ts`, jeden wspólny `cr
 
 Każda encja ma też pełny CRUD (`get`/`update` przez `POST .../update`/`delete` przez `GET .../delete`).
 
+## Dane wejściowe — z czego dokładnie generuje każdy krok
+
+Mechanizm jest zawsze ten sam: `*_service.build_llm_context(id)` serializuje bieżącą encję **i rekurencyjnie wszystkich jej przodków w łańcuchu** (przez FK, np. `PageStrategy.message_strategy_id → MessageStrategy.offer_strategy_id → ...`) do bloków `<tag>...</tag>` wstawianych do promptu. Nic nie jest cache'owane ani skracane — im głębiej w łańcuchu, tym więcej warstw kontekstu wysyłanych na nowo przy każdym wywołaniu.
+
+| Etap | Dane wejściowe do LLM |
+|---|---|
+| Offer | brak — wpisywane ręcznie przez użytkownika (formularz) |
+| OfferInsight | Offer + wybrane typy insightów (`OfferInsightType[]`) z requestu |
+| Knowledge | Offer (cały) |
+| TargetAudience | Knowledge + już istniejące TargetAudience tej wiedzy (przez `build_uniqueness_prompt`, żeby LLM nie duplikował segmentów) |
+| Analysis / Checklist | Knowledge → pytania weryfikacyjne; odpowiedzi na pytania → checklisty jakości |
+| BrandMarketing | Knowledge |
+| MarketingStrategy | Knowledge + BrandMarketing |
+| OfferStrategy | Knowledge + BrandMarketing + MarketingStrategy |
+| MessageStrategy | Knowledge + BrandMarketing + MarketingStrategy + OfferStrategy |
+| AdStrategy | cały łańcuch wstecz: Knowledge…MessageStrategy |
+| CreativeStrategy | AdStrategy + cały łańcuch wstecz |
+| AdExecution | brak LLM — tylko parametry z requestu: `creative_type`, `platform`, `format` (walidowane wg enuma `CreativeTypes`) |
+| CreativeExecution | AdExecution + cały łańcuch wstecz + parametry z requestu: `duration_seconds`, `number_of_slides`, `ad_framework_id`, `creative_angle_id`, `execution_style_id` (te trzy ostatnie pobierane ze statycznych słowników JSON w `infrastructure/ads/*.json`) |
+| UgcCreative | MessageStrategy + cały łańcuch wstecz, z `build_uniqueness_prompt` (unikanie powtórzeń) |
+| PageStrategy | Knowledge + BrandMarketing + MarketingStrategy + OfferStrategy + MessageStrategy (bardzo rozbudowany prompt strategiczny CRO) |
+| PageRequirements | brak LLM — lista sekcji strony (`PageSectionRequirement`) wybierana ręcznie ze słownika `infrastructure/pages/page_section_types.json` |
+| PageBlueprint | PageRequirements + cały łańcuch wstecz + katalog dostępnych typów sekcji (`page_sections_service`) |
+| PageContentPlan | PageBlueprint + cały łańcuch wstecz |
+| PageCopy | PageContentPlan + PageBlueprint + PageStrategy + cały łańcuch strategii wstecz + katalog sekcji (`page_sections_service.get_all()`, do walidacji `section_type`) |
+
+Dane wysyłane do promptu to zawsze `to_content_dict()` danej encji (bez `id`/`*_id`) — surowa treść biznesowa, nie identyfikatory. `fact_status`/`review_status` (workflow weryfikacji faktów) **nie filtruje** tego, co trafia do kontekstu — patrz `known-issues.md`.
+
 ## Powiązane pliki pamięci
 
 - `architecture.md` — warstwy, stack technologiczny, DI, konfiguracja.

@@ -1,6 +1,7 @@
 import { ArrowLeft } from 'lucide-react'
 import { Link, NavLink, matchPath, useLocation, useNavigate } from 'react-router-dom'
 import { cn } from '@/lib/utils'
+import { DownloadPipelinePathButton } from '@/components/DownloadPipelinePathButton'
 
 const navLinkClassName = ({ isActive }: { isActive: boolean }) =>
   cn(
@@ -21,24 +22,24 @@ export function AppContextSidebar({ variant = 'sidebar' }: { variant?: 'sidebar'
   const navigate = useNavigate()
   const showBackButton = pathname !== '/' && pathname !== '/offers'
   const sections = [
-    { pattern: '/offers/:id/*', current: 'Oferta', process: [['knowledges', 'Knowledges']], resources: [['insights', 'Insights'], ['items', 'Elementy oferty']] },
-    { pattern: '/knowledges/:id/*', current: 'Knowledge', process: [['brand-marketing', 'Brand marketing']], knowledge: [['analyses', 'Analizy']], resources: [['insights', 'Insights'], ['target-audiences', 'Grupy docelowe']] },
+    { pattern: '/offers/:id/*', current: 'Oferta', entityType: 'offer', process: [['knowledges', 'Knowledges']], resources: [['insights', 'Insights'], ['items', 'Elementy oferty']] },
+    { pattern: '/knowledges/:id/*', current: 'Knowledge', entityType: 'knowledge', process: [['brand-marketing', 'Brand marketing']], knowledge: [['analyses', 'Analizy']], resources: [['insights', 'Insights'], ['target-audiences', 'Grupy docelowe']] },
     { pattern: '/knowledges/:knowledgeId/analysis/:id/*', current: 'Analiza', process: [['checklists', 'Checklisty']], resources: [['questions', 'Pytania']] },
     { pattern: '/knowledges/:knowledgeId/analysis/:analysisId/checklists/:id/*', current: 'Checklista', process: [], resources: [['items', 'Zadania']] },
-    { pattern: '/brand-marketing/:id/*', current: 'Brand marketing', process: [['marketing-strategies', 'Marketing strategy']], resources: [] },
-    { pattern: '/marketing-strategy/:id/*', current: 'Marketing strategy', process: [['offer-strategies', 'Offer strategy']], resources: [] },
-    { pattern: '/offer-strategy/:id/*', current: 'Offer strategy', process: [['message-strategies', 'Message strategy']], resources: [] },
-    { pattern: '/message-strategy/:id/*', current: 'Message strategy', process: [['ad-strategies', 'Ad strategy'], ['ugc-creatives', 'UGC creatives'], ['page-strategies', 'Page strategy']], resources: [] },
-    { pattern: '/ad-strategy/:id/*', current: 'Ad strategy', process: [['creative-strategies', 'Creative strategy']], resources: [] },
-    { pattern: '/creative-strategy/:id/*', current: 'Creative strategy', process: [['ad-executions', 'Ad execution']], resources: [] },
-    { pattern: '/ad-execution/:id/*', current: 'Ad execution', process: [['creative-executions', 'Creative execution']], resources: [] },
-    { pattern: '/page-strategy/:id/*', current: 'Page strategy', process: [['page-requirements', 'Page requirements']], resources: [] },
-    { pattern: '/page-requirements/:id/*', current: 'Page requirements', process: [['page-blueprints', 'Page blueprint']], resources: [] },
-    { pattern: '/page-blueprint/:id/*', current: 'Page blueprint', process: [['content-plans', 'Content plan']], resources: [] },
-    { pattern: '/page-content-plan/:id/*', current: 'Content plan', process: [['page-copies', 'Page copy']], resources: [] },
-    { pattern: '/creative-execution/:id/*', current: 'Creative execution', process: [], resources: [] },
-    { pattern: '/ugc-creatives/:id/*', current: 'UGC creative', process: [], resources: [] },
-    { pattern: '/page-copy/:id/*', current: 'Page copy', process: [], resources: [] },
+    { pattern: '/brand-marketing/:id/*', current: 'Brand marketing', entityType: 'brand_marketing', process: [['marketing-strategies', 'Marketing strategy']], resources: [] },
+    { pattern: '/marketing-strategy/:id/*', current: 'Marketing strategy', entityType: 'marketing_strategy', process: [['offer-strategies', 'Offer strategy']], resources: [] },
+    { pattern: '/offer-strategy/:id/*', current: 'Offer strategy', entityType: 'offer_strategy', process: [['message-strategies', 'Message strategy']], resources: [] },
+    { pattern: '/message-strategy/:id/*', current: 'Message strategy', entityType: 'message_strategy', process: [['ad-strategies', 'Ad strategy'], ['ugc-creatives', 'UGC creatives'], ['page-strategies', 'Page strategy']], resources: [] },
+    { pattern: '/ad-strategy/:id/*', current: 'Ad strategy', entityType: 'ad_strategy', process: [['creative-strategies', 'Creative strategy']], resources: [] },
+    { pattern: '/creative-strategy/:id/*', current: 'Creative strategy', entityType: 'creative_strategy', process: [['ad-executions', 'Ad execution']], resources: [] },
+    { pattern: '/ad-execution/:id/*', current: 'Ad execution', entityType: 'ad_execution', process: [['creative-executions', 'Creative execution']], resources: [] },
+    { pattern: '/page-strategy/:id/*', current: 'Page strategy', entityType: 'page_strategy', process: [['page-requirements', 'Page requirements']], resources: [] },
+    { pattern: '/page-requirements/:id/*', current: 'Page requirements', entityType: 'page_requirements', process: [['page-blueprints', 'Page blueprint']], resources: [] },
+    { pattern: '/page-blueprint/:id/*', current: 'Page blueprint', entityType: 'page_blueprint', process: [['content-plans', 'Content plan']], resources: [] },
+    { pattern: '/page-content-plan/:id/*', current: 'Content plan', entityType: 'page_content_plan', process: [['page-copies', 'Page copy']], resources: [] },
+    { pattern: '/creative-execution/:id/*', current: 'Creative execution', entityType: 'creative_execution', process: [], resources: [] },
+    { pattern: '/ugc-creatives/:id/*', current: 'UGC creative', entityType: 'ugc_creative', process: [], resources: [] },
+    { pattern: '/page-copy/:id/*', current: 'Page copy', entityType: 'page_copy', process: [], resources: [] },
     { pattern: '/target-audiences/:id/*', current: 'Grupa docelowa', process: [], resources: [] },
     { pattern: '/offer-insights/:id/*', current: 'Insight oferty', process: [], resources: [] },
     { pattern: '/offer-items/:id/*', current: 'Element oferty', process: [], resources: [] },
@@ -93,6 +94,11 @@ export function AppContextSidebar({ variant = 'sidebar' }: { variant?: 'sidebar'
           </p>
           <p className="mt-1 text-sm font-semibold text-foreground">{section.config.current}</p>
         </Link>
+        {'entityType' in section.config && (
+          <div className="mb-6">
+            <DownloadPipelinePathButton entityType={section.config.entityType} entityId={Number(section.match?.params.id)} />
+          </div>
+        )}
         {section.config.process.length > 0 && (
           <section>
             <h2 className="mb-2 border-b border-foreground/30 px-2 pb-2 text-xs font-semibold tracking-wide text-foreground uppercase">
